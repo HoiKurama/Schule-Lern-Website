@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geraden und Ebenen – Mathematik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#0d7a52;
+  --akzent-hell:#e7f6ef;
+  --akzent-rand:#b5e0cd;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#0b5c3e,#0d7a52);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#0b6845;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+@media (max-width:600px){
+  button{min-height:44px}
+  .regler input[type=range]{height:32px}
+  .zeile select,.eingabe select,.eingabe input[type=number]{min-height:44px}
+  #cSchn{width:24px !important;height:24px !important}
+}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Mathematik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Geraden und Ebenen – Parameterform, Normalenform und Koordinatenform</h1>
+    <div class="meta">
+      <span class="chip">Inhaltsfeld: Analytische Geometrie und Lineare Algebra</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+      <span class="chip">ca. 120 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Eine Drohne startet im Punkt <span class="m" data-tex="S(0\,|\,0\,|\,10)" data-plain="S(0|0|10)"></span>, alle Angaben sind in Metern. Sie fliegt mit gleichbleibender Geschwindigkeit: Jede Sekunde ändert sich ihre Position um den Vektor <span class="m" data-tex="\begin{pmatrix}4\\3\\1\end{pmatrix}" data-plain="(4|3|1)"></span>. Nach <span class="m" data-tex="t" data-plain="t"></span> Sekunden ist sie also im Punkt <span class="m" data-tex="(4t\,|\,3t\,|\,10 + t)" data-plain="(4t|3t|10 + t)"></span>. Für <span class="m" data-tex="t = 10" data-plain="t = 10"></span> ist das der Punkt <span class="m" data-tex="(40\,|\,30\,|\,20)" data-plain="(40|30|20)"></span>. Ob die Drohne später durch einen bestimmten Punkt fliegt, lässt sich mit dieser Beschreibung prüfen: Der Punkt <span class="m" data-tex="(30\,|\,20\,|\,18)" data-plain="(30|20|18)"></span> ist nicht dabei, denn die erste Koordinate verlangt <span class="m" data-tex="t = 7{,}5" data-plain="t = 7,5"></span> und die zweite <span class="m" data-tex="t = \tfrac{20}{3} \approx 6{,}67" data-plain="t = 20/3 ≈ 6,67"></span>.</p>
+
+  <p>Die Flugbahn ist eine <strong>Gerade</strong>, und die Zahl <span class="m" data-tex="t" data-plain="t"></span> ist ein <strong>Parameter</strong>, der jeden Punkt der Geraden abzählt. Die Drohne soll ein Garagendach inspizieren. Es ist eine ebene Fläche, die in der Ecke <span class="m" data-tex="A(0\,|\,0\,|\,3)" data-plain="A(0|0|3)"></span> beginnt. Entlang der Traufkante geht es 8 m in <span class="m" data-tex="x_1" data-plain="x₁"></span>-Richtung, entlang der Dachschräge 10 m in <span class="m" data-tex="x_2" data-plain="x₂"></span>-Richtung, dabei steigt das Dach um 4 m. Jeder Punkt des Daches entsteht, indem man von <span class="m" data-tex="A" data-plain="A"></span> aus einen Anteil <span class="m" data-tex="r" data-plain="r"></span> der Kante <span class="m" data-tex="\begin{pmatrix}8\\0\\0\end{pmatrix}" data-plain="(8|0|0)"></span> und einen Anteil <span class="m" data-tex="s" data-plain="s"></span> der Schräge <span class="m" data-tex="\begin{pmatrix}0\\10\\4\end{pmatrix}" data-plain="(0|10|4)"></span> geht, mit <span class="m" data-tex="r" data-plain="r"></span> und <span class="m" data-tex="s" data-plain="s"></span> zwischen 0 und 1. Hier brauchst du <em>zwei</em> Parameter, die Fläche ist zweidimensional.</p>
+
+  <details>
+    <summary>Warum eigentlich zwei Parameter?</summary>
+    <p>Bei einer Geraden gibt es nur eine Richtung, in der man vom Stützpunkt aus laufen kann: vor oder zurück. Bei einer Ebene kann man in zwei verschiedene Richtungen laufen, und alle Kombinationen füllen die Fläche aus. Dass die beiden Richtungen nicht parallel sein dürfen, hast du in der linearen Unabhängigkeit gesehen: Sind zwei Vektoren parallel, erreicht man mit ihnen nur eine Gerade.</p>
+  </details>
+
+  <p>In diesem Modul lernst du, wie man Geraden und Ebenen im Raum durch Gleichungen beschreibt. Du lernst drei Beschreibungen kennen, die jeweils eine andere Aufgabe gut lösen: Die <strong>Parameterform</strong> erzeugt Punkte, die <strong>Normalenform</strong> und die <strong>Koordinatenform</strong> einer Ebene prüfen Punkte. Du lernst, von einer Form zur anderen zu wechseln, und prüfst in der Simulation in Abschnitt 4, wie sich Parameterform und Normalenvektor in einer Zeichnung entsprechen.</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Drei Fragen aus dem Modul „Vektoren: Grundlagen“ und der Mittelstufe. Wenn du hier hängst, lohnt sich ein Blick zurück, bevor du weitermachst.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Welche Koordinaten hat der Mittelpunkt der Strecke <span class="m" data-tex="AB" data-plain="AB"></span> mit <span class="m" data-tex="A(2\,|\,4\,|\,{-}2)" data-plain="A(2|4|−2)"></span> und <span class="m" data-tex="B(6\,|\,0\,|\,8)" data-plain="B(6|0|8)"></span>?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span><span class="m" data-tex="(8\,|\,4\,|\,6)" data-plain="(8|4|6)"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span><span class="m" data-tex="(4\,|\,2\,|\,3)" data-plain="(4|2|3)"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span><span class="m" data-tex="(2\,|\,{-}2\,|\,5)" data-plain="(2|−2|5)"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Welche Aussage über die Vektoren <span class="m" data-tex="\vec{a} = \begin{pmatrix}2\\-4\\6\end{pmatrix}" data-plain="a→ = (2|−4|6)"></span> und <span class="m" data-tex="\vec{b} = \begin{pmatrix}-3\\6\\-9\end{pmatrix}" data-plain="b→ = (−3|6|−9)"></span> ist richtig?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span>Sie sind nicht parallel, weil die Komponenten verschiedene Vorzeichen haben.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span>Sie sind nicht parallel, weil die erste Komponente 2 ist und nicht −3.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span>Sie sind parallel, weil jede Komponente von <span class="m" data-tex="\vec{b}" data-plain="b→"></span> das (−1,5)-fache der entsprechenden Komponente von <span class="m" data-tex="\vec{a}" data-plain="a→"></span> ist.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Für welchen Wert von <span class="m" data-tex="t" data-plain="t"></span> gelten die Gleichungen <span class="m" data-tex="3 + 2t = 11" data-plain="3 + 2t = 11"></span> und <span class="m" data-tex="1 - t = {-}3" data-plain="1 − t = −3"></span> zugleich?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span><span class="m" data-tex="t = 4" data-plain="t = 4"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span><span class="m" data-tex="t = 8" data-plain="t = 8"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span><span class="m" data-tex="t = {-}4" data-plain="t = −4"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 ERKLÄRTEIL =============== -->
+<section id="parameterform">
+  <div class="stufe"><div class="nr">2</div><h2>Geraden und Ebenen in Parameterform</h2></div>
+
+  <h3>Die Gerade: Stützvektor und Richtungsvektor</h3>
+  <p>Eine Gerade ist festgelegt durch einen ihrer Punkte und durch die Richtung, in der sie verläuft. Den Punkt <span class="m" data-tex="P" data-plain="P"></span> gibst du mit seinem Ortsvektor <span class="m" data-tex="\vec{p}" data-plain="p→"></span> an, dem <strong>Stützvektor</strong>. Die Richtung gibst du mit einem Vektor <span class="m" data-tex="\vec{u} \neq \vec{0}" data-plain="u→ ≠ 0→"></span> an, dem <strong>Richtungsvektor</strong>. Von <span class="m" data-tex="P" data-plain="P"></span> aus gehst du ein beliebiges Vielfaches <span class="m" data-tex="r\cdot\vec{u}" data-plain="r·u→"></span> des Richtungsvektors, vor oder zurück. Der Punkt <span class="m" data-tex="X" data-plain="X"></span>, bei dem du ankommst, hat den Ortsvektor:</p>
+
+  <div class="m block" id="f-gerade" data-tex="\vec{x} = \vec{p} + r\cdot\vec{u}" data-plain="x→ = p→ + r·u→"></div>
+
+  <p>Die Zahl <span class="m" data-tex="r" data-plain="r"></span> heißt <strong>Parameter</strong> und durchläuft alle reellen Zahlen. Jeder Wert von <span class="m" data-tex="r" data-plain="r"></span> liefert genau einen Punkt der Geraden, und jeder Punkt der Geraden gehört zu genau einem Wert von <span class="m" data-tex="r" data-plain="r"></span>. Die Drohne aus dem Einstieg fliegt längs der Geraden <span class="m" data-tex="\vec{x} = \begin{pmatrix}0\\0\\10\end{pmatrix} + t\cdot\begin{pmatrix}4\\3\\1\end{pmatrix}" data-plain="x→ = (0|0|10) + t·(4|3|1)"></span>, und der Parameter ist dort die Zeit.</p>
+
+  <p>Zur Anschauung eine Gerade in der Ebene mit <span class="m" data-tex="\vec{p} = \begin{pmatrix}1\\1\end{pmatrix}" data-plain="p→ = (1|1)"></span> und <span class="m" data-tex="\vec{u} = \begin{pmatrix}2\\1\end{pmatrix}" data-plain="u→ = (2|1)"></span>. Für <span class="m" data-tex="r = 0" data-plain="r = 0"></span> erhältst du <span class="m" data-tex="P(1\,|\,1)" data-plain="P(1|1)"></span>, für <span class="m" data-tex="r = 1" data-plain="r = 1"></span> den Punkt <span class="m" data-tex="(3\,|\,2)" data-plain="(3|2)"></span>, für <span class="m" data-tex="r = 2" data-plain="r = 2"></span> den Punkt <span class="m" data-tex="(5\,|\,3)" data-plain="(5|3)"></span>, und für <span class="m" data-tex="r = {-}1" data-plain="r = −1"></span> geht es zurück zum Punkt <span class="m" data-tex="({-}1\,|\,0)" data-plain="(−1|0)"></span>. Die Zeichnung zeigt es.</p>
+
+  <div class="diagramme" style="max-width:420px">
+      <figure><svg viewBox="0 0 250 182" role="img" aria-label="Gerade in der Ebene durch den Punkt P(1|1) mit dem Richtungsvektor (2|1), markiert sind die Punkte für die Parameter 0, 1 und 2"><line x1="28.0" y1="160.0" x2="28.0" y2="24.0" stroke="#e2e8f0" stroke-width="1"/><line x1="62.0" y1="160.0" x2="62.0" y2="24.0" stroke="#e2e8f0" stroke-width="1"/><text x="62.0" y="172.0" font-size="8" fill="#94a3b8" text-anchor="middle">1</text><line x1="96.0" y1="160.0" x2="96.0" y2="24.0" stroke="#e2e8f0" stroke-width="1"/><text x="96.0" y="172.0" font-size="8" fill="#94a3b8" text-anchor="middle">2</text><line x1="130.0" y1="160.0" x2="130.0" y2="24.0" stroke="#e2e8f0" stroke-width="1"/><text x="130.0" y="172.0" font-size="8" fill="#94a3b8" text-anchor="middle">3</text><line x1="164.0" y1="160.0" x2="164.0" y2="24.0" stroke="#e2e8f0" stroke-width="1"/><text x="164.0" y="172.0" font-size="8" fill="#94a3b8" text-anchor="middle">4</text><line x1="198.0" y1="160.0" x2="198.0" y2="24.0" stroke="#e2e8f0" stroke-width="1"/><text x="198.0" y="172.0" font-size="8" fill="#94a3b8" text-anchor="middle">5</text><line x1="232.0" y1="160.0" x2="232.0" y2="24.0" stroke="#e2e8f0" stroke-width="1"/><text x="232.0" y="172.0" font-size="8" fill="#94a3b8" text-anchor="middle">6</text><line x1="28.0" y1="160.0" x2="232.0" y2="160.0" stroke="#e2e8f0" stroke-width="1"/><line x1="28.0" y1="126.0" x2="232.0" y2="126.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="129.0" font-size="8" fill="#94a3b8" text-anchor="end">1</text><line x1="28.0" y1="92.0" x2="232.0" y2="92.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="95.0" font-size="8" fill="#94a3b8" text-anchor="end">2</text><line x1="28.0" y1="58.0" x2="232.0" y2="58.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="61.0" font-size="8" fill="#94a3b8" text-anchor="end">3</text><line x1="28.0" y1="24.0" x2="232.0" y2="24.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="27.0" font-size="8" fill="#94a3b8" text-anchor="end">4</text><line x1="24.0" y1="160.0" x2="236.0" y2="160.0" stroke="#94a3b8" stroke-width="1.3"/><polygon points="242.0,160.0 236.0,157.5 236.0,162.5" fill="#94a3b8"/><line x1="28.0" y1="164.0" x2="28.0" y2="20.0" stroke="#94a3b8" stroke-width="1.3"/><polygon points="28.0,14.0 25.5,20.0 30.5,20.0" fill="#94a3b8"/><text x="238.0" y="172.0" font-size="9" fill="#94a3b8" text-anchor="start">x</text><text x="34.0" y="16.0" font-size="9" fill="#94a3b8" text-anchor="start">y</text><line x1="28.0" y1="143.0" x2="232.0" y2="41.0" stroke="#0f2135" stroke-width="1.6"/><line x1="28.0" y1="160.0" x2="57.1" y2="130.9" stroke="#64748b" stroke-width="1.8" stroke-dasharray="4 3"/><polygon points="62.0,126.0 55.0,128.9 59.1,133.0" fill="#64748b"/><line x1="62.0" y1="126.0" x2="122.0" y2="96.0" stroke="#0d7a52" stroke-width="3"/><polygon points="130.0,92.0 120.3,92.6 123.6,99.4" fill="#0d7a52"/><circle cx="62.0" cy="126.0" r="2.8" fill="#0f2135"/><text x="68.0" y="142.0" font-size="9" fill="#0f2135" text-anchor="start" font-weight="700">r = 0</text><circle cx="130.0" cy="92.0" r="2.8" fill="#0f2135"/><text x="136.0" y="108.0" font-size="9" fill="#0f2135" text-anchor="start" font-weight="700">r = 1</text><circle cx="198.0" cy="58.0" r="2.8" fill="#0f2135"/><text x="204.0" y="74.0" font-size="9" fill="#0f2135" text-anchor="start" font-weight="700">r = 2</text><text x="53.0" y="155.0" font-size="10" fill="#64748b" text-anchor="start" font-weight="700">p→</text><text x="90.0" y="101.0" font-size="10" fill="#0d7a52" text-anchor="end" font-weight="700">u→</text><text x="228.0" y="33.0" font-size="11" fill="#0f2135" text-anchor="end" font-weight="700">g</text></svg><figcaption>Gerade g: x→ = (1|1) + r·(2|1) mit Stützvektor p→ (grau) und Richtungsvektor u→ (grün)</figcaption></figure>
+  </div>
+
+  <p>Aus der Schule kennst du Geraden als Graphen von Funktionen, <span class="m" data-tex="y = mx + b" data-plain="y = mx + b"></span>. Das ist ein Sonderfall: Mit <span class="m" data-tex="\vec{p} = \begin{pmatrix}0\\b\end{pmatrix}" data-plain="p→ = (0|b)"></span> und <span class="m" data-tex="\vec{u} = \begin{pmatrix}1\\m\end{pmatrix}" data-plain="u→ = (1|m)"></span> beschreibt die Parameterform genau diese Gerade. Die Parameterform kann mehr, denn sie funktioniert auch für senkrechte Geraden und im Raum, wo es keine Gleichung <span class="m" data-tex="y = mx + b" data-plain="y = mx + b"></span> gibt.</p>
+
+  <h3>Die Gerade durch zwei Punkte</h3>
+  <p>Oft sind statt Stützpunkt und Richtung zwei Punkte <span class="m" data-tex="A" data-plain="A"></span> und <span class="m" data-tex="B" data-plain="B"></span> der Geraden gegeben. Dann ist <span class="m" data-tex="A" data-plain="A"></span> der Stützpunkt und der Vektor von <span class="m" data-tex="A" data-plain="A"></span> nach <span class="m" data-tex="B" data-plain="B"></span> ein Richtungsvektor, der Vektor „Spitze minus Fuß“ <span class="m" data-tex="\overrightarrow{AB} = \vec{b} - \vec{a}" data-plain="AB→ = b→ − a→"></span>:</p>
+
+  <div class="m block" id="f-zweipunkt" data-tex="\vec{x} = \vec{a} + r\cdot\overrightarrow{AB}" data-plain="x→ = a→ + r·AB→"></div>
+
+  <p>Ein Beispiel im Raum: Für <span class="m" data-tex="A(1\,|\,2\,|\,3)" data-plain="A(1|2|3)"></span> und <span class="m" data-tex="B(5\,|\,0\,|\,9)" data-plain="B(5|0|9)"></span> ist <span class="m" data-tex="\overrightarrow{AB} = \begin{pmatrix}4\\-2\\6\end{pmatrix}" data-plain="AB→ = (4|−2|6)"></span> und die Gerade lautet <span class="m" data-tex="g\colon\ \vec{x} = \begin{pmatrix}1\\2\\3\end{pmatrix} + r\cdot\begin{pmatrix}4\\-2\\6\end{pmatrix}" data-plain="g: x→ = (1|2|3) + r·(4|−2|6)"></span>. Für <span class="m" data-tex="r = 0" data-plain="r = 0"></span> erhältst du <span class="m" data-tex="A" data-plain="A"></span>, für <span class="m" data-tex="r = 1" data-plain="r = 1"></span> den Punkt <span class="m" data-tex="B" data-plain="B"></span>. Für Werte zwischen 0 und 1 liegt der Punkt auf der <strong>Strecke</strong> <span class="m" data-tex="AB" data-plain="AB"></span>, für <span class="m" data-tex="r = \tfrac{1}{2}" data-plain="r = ½"></span> ist es der Mittelpunkt <span class="m" data-tex="M(3\,|\,1\,|\,6)" data-plain="M(3|1|6)"></span>, und alle anderen Werte liefern Punkte der Geraden außerhalb der Strecke.</p>
+
+  <div class="hinweis">
+    <strong>Die Gleichung ist nicht eindeutig.</strong> Als Stützpunkt kann jeder Punkt der Geraden dienen, und jedes Vielfache ungleich null eines Richtungsvektors ist wieder ein Richtungsvektor. Die Gerade <span class="m" data-tex="g" data-plain="g"></span> von eben lässt sich deshalb auch als <span class="m" data-tex="\vec{x} = \begin{pmatrix}5\\0\\9\end{pmatrix} + t\cdot\begin{pmatrix}2\\-1\\3\end{pmatrix}" data-plain="x→ = (5|0|9) + t·(2|−1|3)"></span> schreiben: Stützpunkt ist jetzt <span class="m" data-tex="B" data-plain="B"></span>, und der Richtungsvektor ist die Hälfte von <span class="m" data-tex="\overrightarrow{AB}" data-plain="AB→"></span>. Zwei verschieden aussehende Gleichungen können dieselbe Gerade beschreiben. Wie man das prüft, klärst du im Modul über Lagebeziehungen.
+  </div>
+
+  <h3>Die Punktprobe bei einer Geraden</h3>
+  <p>Liegt ein gegebener Punkt auf der Geraden? Du setzt den Ortsvektor des Punktes gleich der Geradengleichung und bestimmst den Parameter. Für <span class="m" data-tex="P(9\,|\,{-}2\,|\,15)" data-plain="P(9|−2|15)"></span> und die Gerade <span class="m" data-tex="g" data-plain="g"></span> von oben lautet der Ansatz komponentenweise <span class="m" data-tex="1 + 4r = 9" data-plain="1 + 4r = 9"></span>, <span class="m" data-tex="2 - 2r = {-}2" data-plain="2 − 2r = −2"></span> und <span class="m" data-tex="3 + 6r = 15" data-plain="3 + 6r = 15"></span>. Die erste Gleichung liefert <span class="m" data-tex="r = 2" data-plain="r = 2"></span>, und dieser Wert erfüllt auch die beiden anderen. Also liegt <span class="m" data-tex="P" data-plain="P"></span> auf <span class="m" data-tex="g" data-plain="g"></span>.</p>
+
+  <p>Für <span class="m" data-tex="Q(9\,|\,{-}2\,|\,14)" data-plain="Q(9|−2|14)"></span> liefern die ersten beiden Gleichungen wieder <span class="m" data-tex="r = 2" data-plain="r = 2"></span>, aber die dritte lautet <span class="m" data-tex="3 + 6r = 14" data-plain="3 + 6r = 14"></span> und verlangt <span class="m" data-tex="r = \tfrac{11}{6}" data-plain="r = 11/6"></span>. Ein einziger Wert von <span class="m" data-tex="r" data-plain="r"></span> muss alle drei Gleichungen erfüllen. Das ist hier nicht der Fall, also liegt <span class="m" data-tex="Q" data-plain="Q"></span> nicht auf <span class="m" data-tex="g" data-plain="g"></span>.</p>
+
+  <h3>Die Ebene: ein Punkt und zwei Richtungen</h3>
+  <p>Eine Ebene ist festgelegt durch einen Punkt <span class="m" data-tex="P" data-plain="P"></span> und zwei Richtungen. Statt eines Richtungsvektors gibt es zwei <strong>Spannvektoren</strong> <span class="m" data-tex="\vec{u}" data-plain="u→"></span> und <span class="m" data-tex="\vec{v}" data-plain="v→"></span>, und man geht von <span class="m" data-tex="P" data-plain="P"></span> aus ein Vielfaches <span class="m" data-tex="r\cdot\vec{u}" data-plain="r·u→"></span> in die eine und ein Vielfaches <span class="m" data-tex="s\cdot\vec{v}" data-plain="s·v→"></span> in die andere Richtung:</p>
+
+  <div class="m block" id="f-ebene" data-tex="\vec{x} = \vec{p} + r\cdot\vec{u} + s\cdot\vec{v}" data-plain="x→ = p→ + r·u→ + s·v→"></div>
+
+  <p>Dabei sind <span class="m" data-tex="r" data-plain="r"></span> und <span class="m" data-tex="s" data-plain="s"></span> beliebige reelle Zahlen. Die beiden Spannvektoren müssen <strong>linear unabhängig</strong> sein, sie dürfen also nicht parallel sein und keiner darf der Nullvektor sein. Sind sie parallel, liegen alle Punkte auf einer Geraden, und es entsteht keine Ebene.</p>
+
+  <p>Das Garagendach aus dem Einstieg ist ein Stück der Ebene <span class="m" data-tex="E\colon\ \vec{x} = \begin{pmatrix}0\\0\\3\end{pmatrix} + r\cdot\begin{pmatrix}8\\0\\0\end{pmatrix} + s\cdot\begin{pmatrix}0\\10\\4\end{pmatrix}" data-plain="E: x→ = (0|0|3) + r·(8|0|0) + s·(0|10|4)"></span>. Das Dach selbst entsteht für <span class="m" data-tex="r" data-plain="r"></span> und <span class="m" data-tex="s" data-plain="s"></span> zwischen 0 und 1, die Ebene reicht dagegen unbegrenzt weit. Die Ecken sind <span class="m" data-tex="A(0\,|\,0\,|\,3)" data-plain="A(0|0|3)"></span> für <span class="m" data-tex="r = s = 0" data-plain="r = s = 0"></span>, <span class="m" data-tex="B(8\,|\,0\,|\,3)" data-plain="B(8|0|3)"></span> für <span class="m" data-tex="r = 1,\ s = 0" data-plain="r = 1, s = 0"></span>, <span class="m" data-tex="D(0\,|\,10\,|\,7)" data-plain="D(0|10|7)"></span> für <span class="m" data-tex="r = 0,\ s = 1" data-plain="r = 0, s = 1"></span> und <span class="m" data-tex="C(8\,|\,10\,|\,7)" data-plain="C(8|10|7)"></span> für <span class="m" data-tex="r = s = 1" data-plain="r = s = 1"></span>.</p>
+
+  <div class="diagramme" style="max-width:460px">
+      <figure><svg viewBox="0 0 360 255" role="img" aria-label="Garagendach als Parallelogramm im Schrägbild mit den Ecken A, B, C und D, den Spannvektoren u und v und dem Punkt P in der Mitte"><polygon points="125.0,105.0 57.0,173.0 227.0,105.0 295.0,37.0" fill="#dbeafe" fill-opacity="0.75" stroke="#93c5fd" stroke-width="1.4"/><line x1="125.0" y1="156.0" x2="52.7" y2="228.3" stroke="#94a3b8" stroke-width="1.3"/><polygon points="48.5,232.5 54.5,230.0 51.0,226.5" fill="#94a3b8"/><line x1="125.0" y1="156.0" x2="306.0" y2="156.0" stroke="#94a3b8" stroke-width="1.3"/><polygon points="312.0,156.0 306.0,153.5 306.0,158.5" fill="#94a3b8"/><line x1="125.0" y1="156.0" x2="125.0" y2="26.0" stroke="#94a3b8" stroke-width="1.3"/><polygon points="125.0,20.0 122.5,26.0 127.5,26.0" fill="#94a3b8"/><text x="46.5" y="244.5" font-size="9" fill="#94a3b8" text-anchor="middle">x₁</text><text x="316.0" y="160.0" font-size="9" fill="#94a3b8" text-anchor="start">x₂</text><text x="130.0" y="22.0" font-size="9" fill="#94a3b8" text-anchor="start">x₃</text><line x1="91.0" y1="139.0" x2="176.0" y2="105.0" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/><line x1="210.0" y1="71.0" x2="176.0" y2="105.0" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3 3"/><line x1="125.0" y1="105.0" x2="63.4" y2="166.6" stroke="#0d7a52" stroke-width="2.6"/><polygon points="57.0,173.0 66.0,169.3 60.7,164.0" fill="#0d7a52"/><line x1="125.0" y1="105.0" x2="286.6" y2="40.3" stroke="#c2410c" stroke-width="2.6"/><polygon points="295.0,37.0 285.2,36.8 288.0,43.9" fill="#c2410c"/><circle cx="125.0" cy="105.0" r="2.6" fill="#0f2135"/><circle cx="57.0" cy="173.0" r="2.6" fill="#0f2135"/><circle cx="227.0" cy="105.0" r="2.6" fill="#0f2135"/><circle cx="295.0" cy="37.0" r="2.6" fill="#0f2135"/><circle cx="176.0" cy="105.0" r="3.4" fill="#0f2135"/><text x="119.0" y="117.0" font-size="9" fill="#0f2135" text-anchor="end" font-weight="700">A(0|0|3)</text><text x="57.0" y="188.0" font-size="9" fill="#0f2135" text-anchor="middle" font-weight="700">B(8|0|3)</text><text x="233.0" y="108.0" font-size="9" fill="#0f2135" text-anchor="start" font-weight="700">C(8|10|7)</text><text x="301.0" y="40.0" font-size="9" fill="#0f2135" text-anchor="start" font-weight="700">D(0|10|7)</text><text x="182.0" y="119.0" font-size="9" fill="#0f2135" text-anchor="start" font-weight="700">P(4|5|5)</text><text x="89.0" y="132.0" font-size="10" fill="#0d7a52" text-anchor="end" font-weight="700">u→</text><text x="212.0" y="85.0" font-size="10" fill="#c2410c" text-anchor="start" font-weight="700">v→</text></svg><figcaption>Dach als Stück der Ebene x→ = (0|0|3) + r·(8|0|0) + s·(0|10|4): Spannvektoren u→ (grün) und v→ (orange), P liegt für r = s = ½ in der Mitte</figcaption></figure>
+  </div>
+
+  <h3>Die Ebene durch drei Punkte</h3>
+  <p>Sind drei Punkte <span class="m" data-tex="A" data-plain="A"></span>, <span class="m" data-tex="B" data-plain="B"></span> und <span class="m" data-tex="C" data-plain="C"></span> gegeben, nimmst du <span class="m" data-tex="A" data-plain="A"></span> als Stützpunkt und die Vektoren von <span class="m" data-tex="A" data-plain="A"></span> zu den beiden anderen Punkten als Spannvektoren:</p>
+
+  <div class="m block" id="f-dreipunkt" data-tex="\vec{x} = \vec{a} + r\cdot\overrightarrow{AB} + s\cdot\overrightarrow{AC}" data-plain="x→ = a→ + r·AB→ + s·AC→"></div>
+
+  <p>Das funktioniert nur, wenn die drei Punkte nicht auf einer Geraden liegen, denn dann wären <span class="m" data-tex="\overrightarrow{AB}" data-plain="AB→"></span> und <span class="m" data-tex="\overrightarrow{AC}" data-plain="AC→"></span> parallel. Ein Beispiel: Für <span class="m" data-tex="A(1\,|\,0\,|\,2)" data-plain="A(1|0|2)"></span>, <span class="m" data-tex="B(3\,|\,1\,|\,3)" data-plain="B(3|1|3)"></span> und <span class="m" data-tex="C(2\,|\,3\,|\,4)" data-plain="C(2|3|4)"></span> ist <span class="m" data-tex="\overrightarrow{AB} = \begin{pmatrix}2\\1\\1\end{pmatrix}" data-plain="AB→ = (2|1|1)"></span> und <span class="m" data-tex="\overrightarrow{AC} = \begin{pmatrix}1\\3\\2\end{pmatrix}" data-plain="AC→ = (1|3|2)"></span>. Diese Vektoren sind nicht parallel, denn ein Faktor <span class="m" data-tex="k" data-plain="k"></span> mit <span class="m" data-tex="2k = 1" data-plain="2k = 1"></span> und <span class="m" data-tex="k = 3" data-plain="k = 3"></span> gleichzeitig existiert nicht. Die Ebene lautet <span class="m" data-tex="\vec{x} = \begin{pmatrix}1\\0\\2\end{pmatrix} + r\cdot\begin{pmatrix}2\\1\\1\end{pmatrix} + s\cdot\begin{pmatrix}1\\3\\2\end{pmatrix}" data-plain="x→ = (1|0|2) + r·(2|1|1) + s·(1|3|2)"></span>.</p>
+
+  <h3>Die Punktprobe bei einer Ebene</h3>
+  <p>Bei einer Ebene gibt es zu jeder Koordinate eine Gleichung, aber nur zwei Parameter. Du löst zwei der drei Gleichungen nach <span class="m" data-tex="r" data-plain="r"></span> und <span class="m" data-tex="s" data-plain="s"></span> und prüfst in der dritten, ob die Werte passen. Für das Dach und <span class="m" data-tex="P(4\,|\,5\,|\,5)" data-plain="P(4|5|5)"></span> lauten die Gleichungen <span class="m" data-tex="8r = 4" data-plain="8r = 4"></span>, <span class="m" data-tex="10s = 5" data-plain="10s = 5"></span> und <span class="m" data-tex="3 + 4s = 5" data-plain="3 + 4s = 5"></span>. Die ersten beiden ergeben <span class="m" data-tex="r = \tfrac{1}{2}" data-plain="r = ½"></span> und <span class="m" data-tex="s = \tfrac{1}{2}" data-plain="s = ½"></span>, die dritte ist mit <span class="m" data-tex="3 + 4\cdot\tfrac{1}{2} = 5" data-plain="3 + 4·½ = 5"></span> erfüllt: <span class="m" data-tex="P" data-plain="P"></span> liegt in der Ebene, genauer in der Mitte des Daches. Für <span class="m" data-tex="Q(4\,|\,5\,|\,6)" data-plain="Q(4|5|6)"></span> ergeben sich dieselben Werte, aber die dritte Gleichung verlangt <span class="m" data-tex="3 + 4\cdot\tfrac{1}{2} = 6" data-plain="3 + 4·½ = 6"></span>, was falsch ist. <span class="m" data-tex="Q" data-plain="Q"></span> liegt einen Meter höher als der Punkt des Daches, der senkrecht darunter liegt.</p>
+
+  <p>Ein Beispiel mit weniger Nullen: Liegt <span class="m" data-tex="D(5\,|\,7\,|\,7)" data-plain="D(5|7|7)"></span> in der Ebene durch <span class="m" data-tex="A" data-plain="A"></span>, <span class="m" data-tex="B" data-plain="B"></span> und <span class="m" data-tex="C" data-plain="C"></span> von oben? Mit <span class="m" data-tex="\vec{d} - \vec{a} = \begin{pmatrix}4\\7\\5\end{pmatrix}" data-plain="d→ − a→ = (4|7|5)"></span> lautet das System <span class="m" data-tex="2r + s = 4" data-plain="2r + s = 4"></span>, <span class="m" data-tex="r + 3s = 7" data-plain="r + 3s = 7"></span> und <span class="m" data-tex="r + 2s = 5" data-plain="r + 2s = 5"></span>. Die zweite minus die dritte Gleichung gibt <span class="m" data-tex="s = 2" data-plain="s = 2"></span>, damit ist <span class="m" data-tex="r = 1" data-plain="r = 1"></span>, und die erste Gleichung ist mit <span class="m" data-tex="2\cdot 1 + 2 = 4" data-plain="2·1 + 2 = 4"></span> erfüllt. Also liegt <span class="m" data-tex="D" data-plain="D"></span> in der Ebene.</p>
+
+  <div class="merksatz">
+    <b>Was die Parameterform kann</b>
+    Die Parameterform <em>erzeugt</em> Punkte: Jede Wahl der Parameter liefert einen Punkt der Geraden oder der Ebene. Das ist ideal, um Punkte zu berechnen und Stücke wie eine Strecke oder ein Dach durch Einschränken der Parameter zu beschreiben. Umgekehrt ist die Punktprobe aufwendiger, denn sie verlangt ein Gleichungssystem. Für Ebenen gibt es deshalb noch eine zweite Beschreibung, die genau diese Probe einfach macht. Sie folgt im nächsten Abschnitt.
+  </div>
+</section>
+
+<!-- =============== 3 VERTIEFUNG =============== -->
+<section id="normalenform">
+  <div class="stufe"><div class="nr">3</div><h2>Normalenform und Koordinatenform</h2></div>
+
+  <h3>Das Skalarprodukt: Werkzeug für „senkrecht“</h3>
+  <p>Die zweite Beschreibung einer Ebene arbeitet mit einem Vektor, der senkrecht auf ihr steht. Um „senkrecht“ rechnerisch zu fassen, brauchst du das <strong>Skalarprodukt</strong>. Hier lernst du nur, was dafür nötig ist. Im Modul über Abstände und Winkel wird es weiter ausgebaut. Das Skalarprodukt zweier Vektoren ist eine <em>Zahl</em>, nicht wieder ein Vektor: Du multiplizierst die Komponenten paarweise und addierst die Produkte.</p>
+
+  <div class="m block" id="f-skalar" data-tex="\vec{a}\circ\vec{b} = a_1b_1 + a_2b_2 + a_3b_3" data-plain="a→∘b→ = a₁b₁ + a₂b₂ + a₃b₃"></div>
+
+  <p>Ein Beispiel: <span class="m" data-tex="\begin{pmatrix}2\\1\\0\end{pmatrix}\circ\begin{pmatrix}1\\1\\1\end{pmatrix} = 2\cdot 1 + 1\cdot 1 + 0\cdot 1 = 3" data-plain="(2|1|0)∘(1|1|1) = 2·1 + 1·1 + 0·1 = 3"></span>. Für <span class="m" data-tex="\begin{pmatrix}1\\2\\3\end{pmatrix}\circ\begin{pmatrix}4\\-5\\2\end{pmatrix}" data-plain="(1|2|3)∘(4|−5|2)"></span> ergibt sich <span class="m" data-tex="4 - 10 + 6 = 0" data-plain="4 − 10 + 6 = 0"></span>. Dieser Wert null hat eine Bedeutung:</p>
+
+  <div class="m block" id="f-ortho" data-tex="\vec{a}\circ\vec{b} = 0" data-plain="a→∘b→ = 0"></div>
+
+  <p>Zwei Vektoren, die nicht der Nullvektor sind, stehen genau dann senkrecht aufeinander (man sagt auch: sie sind <strong>orthogonal</strong>), wenn ihr Skalarprodukt null ist. Die beiden Vektoren aus dem Beispiel stehen also senkrecht aufeinander, das erste Paar nicht.</p>
+
+  <details>
+    <summary>Begründung: Warum ein Skalarprodukt von null „senkrecht“ bedeutet</summary>
+    <p><strong>Schritt 1 – Das Quadrat der Differenz.</strong> Ausmultiplizieren der Komponenten gibt <span class="m" data-tex="\left|\vec{a} - \vec{b}\right|^{2} = (a_1 - b_1)^{2} + (a_2 - b_2)^{2} + (a_3 - b_3)^{2} = \left|\vec{a}\right|^{2} + \left|\vec{b}\right|^{2} - 2\,\vec{a}\circ\vec{b}" data-plain="|a→ − b→|² = (a₁ − b₁)² + (a₂ − b₂)² + (a₃ − b₃)² = |a→|² + |b→|² − 2·a→∘b→"></span>.</p>
+    <p><strong>Schritt 2 – Der Satz des Pythagoras.</strong> Zeichnest du <span class="m" data-tex="\vec{a}" data-plain="a→"></span> und <span class="m" data-tex="\vec{b}" data-plain="b→"></span> vom selben Anfangspunkt aus, ist <span class="m" data-tex="\vec{a} - \vec{b}" data-plain="a→ − b→"></span> die dritte Seite des Dreiecks. Dieses Dreieck hat an dem gemeinsamen Anfangspunkt genau dann einen rechten Winkel, wenn <span class="m" data-tex="\left|\vec{a} - \vec{b}\right|^{2} = \left|\vec{a}\right|^{2} + \left|\vec{b}\right|^{2}" data-plain="|a→ − b→|² = |a→|² + |b→|²"></span> gilt. Das sind der Satz des Pythagoras und seine Umkehrung.</p>
+    <p><strong>Schritt 3 – Vergleichen.</strong> Aus beiden Schritten folgt: Der Winkel ist genau dann ein rechter, wenn <span class="m" data-tex="-2\,\vec{a}\circ\vec{b} = 0" data-plain="−2·a→∘b→ = 0"></span> gilt, also wenn das Skalarprodukt null ist.</p>
+  </details>
+
+  <h3>Der Normalenvektor einer Ebene</h3>
+  <p>Ein <strong>Normalenvektor</strong> <span class="m" data-tex="\vec{n}" data-plain="n→"></span> einer Ebene ist ein Vektor ungleich dem Nullvektor, der senkrecht auf der Ebene steht, das heißt senkrecht auf jedem Vektor, der in der Ebene verläuft. Um ihn zu bestimmen, genügt es, die Orthogonalität zu den beiden Spannvektoren zu verlangen: <span class="m" data-tex="\vec{n}\circ\vec{u} = 0" data-plain="n→∘u→ = 0"></span> und <span class="m" data-tex="\vec{n}\circ\vec{v} = 0" data-plain="n→∘v→ = 0"></span>.</p>
+
+  <details>
+    <summary>Begründung: Warum Orthogonalität zu zwei Spannvektoren genügt</summary>
+    <p>Jeder Vektor <span class="m" data-tex="\vec{w}" data-plain="w→"></span>, der in der Ebene verläuft, lässt sich als <span class="m" data-tex="\vec{w} = r\,\vec{u} + s\,\vec{v}" data-plain="w→ = r·u→ + s·v→"></span> schreiben. Das Skalarprodukt lässt sich wie ein Produkt auseinanderziehen, das rechnet man mit den Komponenten nach: <span class="m" data-tex="\vec{n}\circ\vec{w} = r\,(\vec{n}\circ\vec{u}) + s\,(\vec{n}\circ\vec{v})" data-plain="n→∘w→ = r·(n→∘u→) + s·(n→∘v→)"></span>. Sind beide Klammern null, ist auch <span class="m" data-tex="\vec{n}\circ\vec{w} = 0" data-plain="n→∘w→ = 0"></span>, also steht <span class="m" data-tex="\vec{n}" data-plain="n→"></span> auf jedem solchen <span class="m" data-tex="\vec{w}" data-plain="w→"></span> senkrecht.</p>
+  </details>
+
+  <p>Beim Dach aus dem Einstieg ist <span class="m" data-tex="\vec{u} = \begin{pmatrix}8\\0\\0\end{pmatrix}" data-plain="u→ = (8|0|0)"></span> und <span class="m" data-tex="\vec{v} = \begin{pmatrix}0\\10\\4\end{pmatrix}" data-plain="v→ = (0|10|4)"></span>. Mit <span class="m" data-tex="\vec{n} = \begin{pmatrix}n_1\\n_2\\n_3\end{pmatrix}" data-plain="n→ = (n₁|n₂|n₃)"></span> lauten die beiden Bedingungen <span class="m" data-tex="8n_1 = 0" data-plain="8n₁ = 0"></span> und <span class="m" data-tex="10n_2 + 4n_3 = 0" data-plain="10n₂ + 4n₃ = 0"></span>. Die erste gibt <span class="m" data-tex="n_1 = 0" data-plain="n₁ = 0"></span>. Die zweite hat unendlich viele Lösungen, du darfst eine Unbekannte frei wählen. Mit <span class="m" data-tex="n_3 = {-}5" data-plain="n₃ = −5"></span> folgt <span class="m" data-tex="10n_2 = 20" data-plain="10n₂ = 20"></span>, also <span class="m" data-tex="n_2 = 2" data-plain="n₂ = 2"></span>, und ein Normalenvektor ist <span class="m" data-tex="\vec{n} = \begin{pmatrix}0\\2\\-5\end{pmatrix}" data-plain="n→ = (0|2|−5)"></span>. Zwei Gleichungen für drei Unbekannte lassen eine Unbekannte offen, das ist so gewollt: Jedes Vielfache ungleich null eines Normalenvektors ist wieder einer, <span class="m" data-tex="\begin{pmatrix}0\\-2\\5\end{pmatrix}" data-plain="(0|−2|5)"></span> und <span class="m" data-tex="\begin{pmatrix}0\\4\\-10\end{pmatrix}" data-plain="(0|4|−10)"></span> sind ebenso richtig.</p>
+
+  <h3>Die Normalenform</h3>
+  <p>Ein Punkt <span class="m" data-tex="X" data-plain="X"></span> liegt in der Ebene durch <span class="m" data-tex="P" data-plain="P"></span> mit Normalenvektor <span class="m" data-tex="\vec{n}" data-plain="n→"></span>, wenn der Vektor von <span class="m" data-tex="P" data-plain="P"></span> nach <span class="m" data-tex="X" data-plain="X"></span> in der Ebene verläuft, also senkrecht zu <span class="m" data-tex="\vec{n}" data-plain="n→"></span> steht. Das ist die <strong>Normalenform</strong>:</p>
+
+  <div class="m block" id="f-normalen" data-tex="\vec{n}\circ\left(\vec{x} - \vec{p}\right) = 0" data-plain="n→∘(x→ − p→) = 0"></div>
+
+  <p>Beim Dach ist <span class="m" data-tex="\vec{p} = \begin{pmatrix}0\\0\\3\end{pmatrix}" data-plain="p→ = (0|0|3)"></span> und <span class="m" data-tex="\vec{n} = \begin{pmatrix}0\\2\\-5\end{pmatrix}" data-plain="n→ = (0|2|−5)"></span>. Die Normalenform lautet <span class="m" data-tex="\begin{pmatrix}0\\2\\-5\end{pmatrix}\circ\begin{pmatrix}x_1\\x_2\\x_3-3\end{pmatrix} = 0" data-plain="(0|2|−5)∘(x₁|x₂|x₃ − 3) = 0"></span>.</p>
+
+  <details>
+    <summary>Begründung: Warum die Normalenform genau die Punkte der Ebene beschreibt</summary>
+    <p><strong>Schritt 1 – Jeder Punkt der Ebene erfüllt sie.</strong> Liegt <span class="m" data-tex="X" data-plain="X"></span> in der Ebene, ist <span class="m" data-tex="\vec{x} - \vec{p} = r\,\vec{u} + s\,\vec{v}" data-plain="x→ − p→ = r·u→ + s·v→"></span>, und nach der Begründung oben ist das Skalarprodukt mit <span class="m" data-tex="\vec{n}" data-plain="n→"></span> gleich null.</p>
+    <p><strong>Schritt 2 – Nur Punkte der Ebene erfüllen sie.</strong> Alle Vektoren, die auf <span class="m" data-tex="\vec{n}" data-plain="n→"></span> senkrecht stehen, bilden im Raum genau eine Ebene durch den Ursprung. In ihr liegen <span class="m" data-tex="\vec{u}" data-plain="u→"></span> und <span class="m" data-tex="\vec{v}" data-plain="v→"></span>, und ihre Linearkombinationen füllen diese Ebene schon aus, weil <span class="m" data-tex="\vec{u}" data-plain="u→"></span> und <span class="m" data-tex="\vec{v}" data-plain="v→"></span> linear unabhängig sind. Jeder Vektor <span class="m" data-tex="\vec{x} - \vec{p}" data-plain="x→ − p→"></span> mit dem Skalarprodukt null ist also von der Form <span class="m" data-tex="r\,\vec{u} + s\,\vec{v}" data-plain="r·u→ + s·v→"></span>, und <span class="m" data-tex="X" data-plain="X"></span> liegt in der Ebene.</p>
+  </details>
+
+  <h3>Die Koordinatenform</h3>
+  <p>Multiplizierst du die Normalenform aus, entsteht eine Gleichung ohne Vektoren. Aus <span class="m" data-tex="\vec{n}\circ\vec{x} - \vec{n}\circ\vec{p} = 0" data-plain="n→∘x→ − n→∘p→ = 0"></span> wird, wenn du die Zahl <span class="m" data-tex="d = \vec{n}\circ\vec{p}" data-plain="d = n→∘p→"></span> auf die rechte Seite bringst, die <strong>Koordinatenform</strong>:</p>
+
+  <div class="m block" id="f-koord" data-tex="n_1x_1 + n_2x_2 + n_3x_3 = d" data-plain="n₁x₁ + n₂x₂ + n₃x₃ = d"></div>
+
+  <p>Beim Dach ist <span class="m" data-tex="d = 0\cdot 0 + 2\cdot 0 + ({-}5)\cdot 3 = {-}15" data-plain="d = 0·0 + 2·0 + (−5)·3 = −15"></span>, und die Koordinatenform lautet <span class="m" data-tex="2x_2 - 5x_3 = {-}15" data-plain="2x₂ − 5x₃ = −15"></span>. Die Koeffizienten von <span class="m" data-tex="x_1,\,x_2,\,x_3" data-plain="x₁, x₂, x₃"></span> sind die Komponenten eines Normalenvektors, du kannst ihn also direkt ablesen. Dass hier <span class="m" data-tex="x_1" data-plain="x₁"></span> nicht vorkommt, passt zum Dach: Die Traufkante verläuft in <span class="m" data-tex="x_1" data-plain="x₁"></span>-Richtung, die Ebene ist parallel zur <span class="m" data-tex="x_1" data-plain="x₁"></span>-Achse.</p>
+
+  <p>Die Punktprobe wird jetzt zum Einsetzen. Für <span class="m" data-tex="P(4\,|\,5\,|\,5)" data-plain="P(4|5|5)"></span> ist <span class="m" data-tex="2\cdot 5 - 5\cdot 5 = {-}15" data-plain="2·5 − 5·5 = −15"></span>, die Gleichung stimmt, <span class="m" data-tex="P" data-plain="P"></span> liegt in der Ebene. Für <span class="m" data-tex="Q(4\,|\,5\,|\,6)" data-plain="Q(4|5|6)"></span> ist <span class="m" data-tex="2\cdot 5 - 5\cdot 6 = {-}20" data-plain="2·5 − 5·6 = −20"></span> und damit ungleich <span class="m" data-tex="-15" data-plain="−15"></span>, <span class="m" data-tex="Q" data-plain="Q"></span> liegt nicht in der Ebene. Das Ergebnis kennst du schon aus Abschnitt 2, nur ohne Gleichungssystem.</p>
+
+  <h3>Besondere Lagen und Spurpunkte</h3>
+  <p>Die Koordinatengleichung verrät die Lage der Ebene im Koordinatensystem, ohne dass du zeichnen musst.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Was in der Gleichung auffällt</th><th>Lage der Ebene</th><th>Beispiel</th></tr>
+    <tr><td>Die rechte Seite ist <span class="m" data-tex="d = 0" data-plain="d = 0"></span></td><td>Die Ebene enthält den Ursprung.</td><td><span class="m" data-tex="x_1 + x_2 - 2x_3 = 0" data-plain="x₁ + x₂ − 2x₃ = 0"></span></td></tr>
+    <tr><td>Ein Koeffizient ist 0, zum Beispiel <span class="m" data-tex="n_1 = 0" data-plain="n₁ = 0"></span></td><td>Die Ebene ist parallel zur zugehörigen Achse, hier zur <span class="m" data-tex="x_1" data-plain="x₁"></span>-Achse.</td><td><span class="m" data-tex="2x_2 - 5x_3 = {-}15" data-plain="2x₂ − 5x₃ = −15"></span></td></tr>
+    <tr><td>Zwei Koeffizienten sind 0</td><td>Die Ebene ist parallel zu einer Koordinatenebene.</td><td><span class="m" data-tex="x_3 = 4" data-plain="x₃ = 4"></span> (waagerecht)</td></tr>
+  </table>
+  </div>
+
+  <p>Die Schnittpunkte mit den Koordinatenachsen heißen <strong>Spurpunkte</strong>. Du erhältst sie, indem du zwei der drei Koordinaten null setzt. Für die Ebene <span class="m" data-tex="E\colon\ 2x_1 + x_2 + 2x_3 = 6" data-plain="E: 2x₁ + x₂ + 2x₃ = 6"></span> ergibt sich <span class="m" data-tex="x_2 = x_3 = 0" data-plain="x₂ = x₃ = 0"></span> <span class="m" data-tex="\Rightarrow\ 2x_1 = 6" data-plain="⇒ 2x₁ = 6"></span>, also <span class="m" data-tex="S_1(3\,|\,0\,|\,0)" data-plain="S₁(3|0|0)"></span>, entsprechend <span class="m" data-tex="S_2(0\,|\,6\,|\,0)" data-plain="S₂(0|6|0)"></span> und <span class="m" data-tex="S_3(0\,|\,0\,|\,3)" data-plain="S₃(0|0|3)"></span>. Das Dreieck der drei Spurpunkte zeigt die Lage der Ebene im Schrägbild. Der Normalenvektor <span class="m" data-tex="\vec{n} = \begin{pmatrix}2\\1\\2\end{pmatrix}" data-plain="n→ = (2|1|2)"></span> steht darauf senkrecht, auch wenn das im Schrägbild nicht so aussieht, denn ein Schrägbild verzerrt rechte Winkel.</p>
+
+  <div class="diagramme" style="max-width:380px">
+      <figure><svg viewBox="0 0 335 215" role="img" aria-label="Ebene durch die drei Spurpunkte S1, S2 und S3 im Schrägbild mit einem Normalenvektor"><polygon points="55.0,185.0 280.0,140.0 100.0,50.0" fill="#dbeafe" fill-opacity="0.75" stroke="#93c5fd" stroke-width="1.4"/><line x1="100.0" y1="140.0" x2="44.2" y2="195.8" stroke="#94a3b8" stroke-width="1.3"/><polygon points="40.0,200.0 46.0,197.5 42.5,194.0" fill="#94a3b8"/><line x1="100.0" y1="140.0" x2="304.0" y2="140.0" stroke="#94a3b8" stroke-width="1.3"/><polygon points="310.0,140.0 304.0,137.5 304.0,142.5" fill="#94a3b8"/><line x1="100.0" y1="140.0" x2="100.0" y2="26.0" stroke="#94a3b8" stroke-width="1.3"/><polygon points="100.0,20.0 97.5,26.0 102.5,26.0" fill="#94a3b8"/><text x="38.0" y="212.0" font-size="9" fill="#94a3b8" text-anchor="middle">x₁</text><text x="314.0" y="144.0" font-size="9" fill="#94a3b8" text-anchor="start">x₂</text><text x="105.0" y="22.0" font-size="9" fill="#94a3b8" text-anchor="start">x₃</text><line x1="145.0" y1="125.0" x2="145.0" y2="104.0" stroke="#1d4ed8" stroke-width="2.8"/><polygon points="145.0,95.0 141.2,104.0 148.8,104.0" fill="#1d4ed8"/><circle cx="55.0" cy="185.0" r="3" fill="#0f2135"/><circle cx="280.0" cy="140.0" r="3" fill="#0f2135"/><circle cx="100.0" cy="50.0" r="3" fill="#0f2135"/><circle cx="145.0" cy="125.0" r="2.6" fill="#1d4ed8"/><text x="55.0" y="200.0" font-size="9" fill="#0f2135" text-anchor="middle" font-weight="700">S₁(3|0|0)</text><text x="282.0" y="154.0" font-size="9" fill="#0f2135" text-anchor="end" font-weight="700">S₂(0|6|0)</text><text x="106.0" y="46.0" font-size="9" fill="#0f2135" text-anchor="start" font-weight="700">S₃(0|0|3)</text><text x="152.0" y="98.0" font-size="11" fill="#1d4ed8" text-anchor="start" font-weight="700">n→</text></svg><figcaption>Ebene 2x₁ + x₂ + 2x₃ = 6 mit den Spurpunkten und dem Normalenvektor n→ = (2|1|2) (blau)</figcaption></figure>
+  </div>
+
+  <h3>Von der Koordinatenform zur Parameterform</h3>
+  <p>Es gibt zwei einfache Wege. Erstens über Punkte: Die drei Spurpunkte aus dem Beispiel liegen in der Ebene, mit <span class="m" data-tex="S_1" data-plain="S₁"></span> als Stützpunkt ist <span class="m" data-tex="\overrightarrow{S_1S_2} = \begin{pmatrix}-3\\6\\0\end{pmatrix}" data-plain="S₁S₂→ = (−3|6|0)"></span> und <span class="m" data-tex="\overrightarrow{S_1S_3} = \begin{pmatrix}-3\\0\\3\end{pmatrix}" data-plain="S₁S₃→ = (−3|0|3)"></span>, und die Ebene lautet <span class="m" data-tex="\vec{x} = \begin{pmatrix}3\\0\\0\end{pmatrix} + r\cdot\begin{pmatrix}-3\\6\\0\end{pmatrix} + s\cdot\begin{pmatrix}-3\\0\\3\end{pmatrix}" data-plain="x→ = (3|0|0) + r·(−3|6|0) + s·(−3|0|3)"></span>.</p>
+
+  <p>Zweitens über freie Parameter: Du löst die Gleichung nach einer Koordinate auf und nennst die beiden anderen <span class="m" data-tex="r" data-plain="r"></span> und <span class="m" data-tex="s" data-plain="s"></span>. Aus <span class="m" data-tex="2x_1 + x_2 + 2x_3 = 6" data-plain="2x₁ + x₂ + 2x₃ = 6"></span> wird mit <span class="m" data-tex="x_2 = r" data-plain="x₂ = r"></span> und <span class="m" data-tex="x_3 = s" data-plain="x₃ = s"></span> die Gleichung <span class="m" data-tex="x_1 = 3 - \tfrac{1}{2}r - s" data-plain="x₁ = 3 − ½r − s"></span>. Als Vektorgleichung geschrieben ist das <span class="m" data-tex="\vec{x} = \begin{pmatrix}3\\0\\0\end{pmatrix} + r\cdot\begin{pmatrix}-\tfrac{1}{2}\\1\\0\end{pmatrix} + s\cdot\begin{pmatrix}-1\\0\\1\end{pmatrix}" data-plain="x→ = (3|0|0) + r·(−½|1|0) + s·(−1|0|1)"></span>. Zur Probe: <span class="m" data-tex="\begin{pmatrix}2\\1\\2\end{pmatrix}\circ\begin{pmatrix}-\tfrac{1}{2}\\1\\0\end{pmatrix} = {-}1 + 1 + 0 = 0" data-plain="(2|1|2)∘(−½|1|0) = −1 + 1 + 0 = 0"></span> und <span class="m" data-tex="\begin{pmatrix}2\\1\\2\end{pmatrix}\circ\begin{pmatrix}-1\\0\\1\end{pmatrix} = {-}2 + 0 + 2 = 0" data-plain="(2|1|2)∘(−1|0|1) = −2 + 0 + 2 = 0"></span>.</p>
+
+  <h3>Welche Form für welche Aufgabe?</h3>
+  <div class="tabelle">
+  <table>
+    <tr><th>Aufgabe</th><th>Günstige Form</th><th>Grund</th></tr>
+    <tr><td>Punkte der Geraden oder Ebene berechnen, eine Strecke beschreiben</td><td>Parameterform</td><td>Jede Wahl der Parameter liefert einen Punkt, Einschränken der Parameter gibt Teilstücke.</td></tr>
+    <tr><td>Punktprobe bei einer Geraden</td><td>Parameterform</td><td>Es gibt keine einzelne Gleichung, die eine Gerade im Raum beschreibt.</td></tr>
+    <tr><td>Punktprobe bei einer Ebene</td><td>Koordinatenform</td><td>Einsetzen statt Gleichungssystem.</td></tr>
+    <tr><td>Normalenvektor und Lage der Ebene erkennen</td><td>Koordinatenform</td><td>Der Normalenvektor steht in den Koeffizienten.</td></tr>
+    <tr><td>Ebene durch drei Punkte aufstellen</td><td>zuerst Parameterform</td><td>Stützpunkt und zwei Spannvektoren sind sofort da. Danach bei Bedarf umwandeln.</td></tr>
+  </table>
+  </div>
+
+  <div class="hinweis">
+    <strong>Gerade im Raum, Gerade in der Ebene.</strong> Im Raum beschreibt eine einzelne Gleichung mit den Unbekannten <span class="m" data-tex="x_1,\,x_2,\,x_3" data-plain="x₁, x₂, x₃"></span> immer eine Ebene. Eine Gerade im Raum hat deshalb keine Koordinatenform mit einer Gleichung, sondern nur die Parameterform (oder zwei Gleichungen zugleich). In der Ebene gilt dagegen: Eine Gleichung <span class="m" data-tex="ax_1 + bx_2 = c" data-plain="ax₁ + bx₂ = c"></span> beschreibt eine Gerade, und <span class="m" data-tex="\begin{pmatrix}a\\b\end{pmatrix}" data-plain="(a|b)"></span> ist ein Normalenvektor dieser Geraden. Für <span class="m" data-tex="b \neq 0" data-plain="b ≠ 0"></span> ergibt Auflösen nach <span class="m" data-tex="x_2" data-plain="x₂"></span> die bekannte Form <span class="m" data-tex="y = mx + n" data-plain="y = mx + n"></span> mit <span class="m" data-tex="m = {-}\tfrac{a}{b}" data-plain="m = −a/b"></span>.
+  </div>
+</section>
+
+<!-- =============== 4 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">4</div><h2>Die Ebene erkunden: Parameter, Normalenvektor, Probepunkt</h2></div>
+
+  <p>Die Simulation zeigt eine Ebene <span class="m" data-tex="\vec{x} = \vec{p} + r\,\vec{u} + s\,\vec{v}" data-plain="x→ = p→ + r·u→ + s·v→"></span> im Schrägbild. Der Stützpunkt <span class="m" data-tex="P" data-plain="P"></span> ist grau markiert, die Spannvektoren <span class="m" data-tex="\vec{u}" data-plain="u→"></span> und <span class="m" data-tex="\vec{v}" data-plain="v→"></span> sind dünn grün und orange eingezeichnet. Das hellblaue Parallelogramm ist der Ausschnitt der Ebene für <span class="m" data-tex="r" data-plain="r"></span> und <span class="m" data-tex="s" data-plain="s"></span> zwischen −2 und 2. Mit den Reglern bewegst du den Punkt <span class="m" data-tex="X" data-plain="X"></span>: Die dicke Kette zeigt erst <span class="m" data-tex="r\,\vec{u}" data-plain="r·u→"></span> (grün) und dann <span class="m" data-tex="s\,\vec{v}" data-plain="s·v→"></span> (orange). Der blaue Pfeil ist ein Normalenvektor <span class="m" data-tex="\vec{n}" data-plain="n→"></span>, von <span class="m" data-tex="P" data-plain="P"></span> aus gezeichnet. Die goldene Raute <span class="m" data-tex="Q" data-plain="Q"></span> ist ein <strong>Probepunkt</strong>, von dem du herausfinden sollst, ob er in der Ebene liegt. Das Bild ist ein Schrägbild wie in Abschnitt 2, deshalb verlässt du dich auf die angezeigten Zahlen und nicht auf den Augenschein.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    1. Wähle „Datensatz 1“ und beobachte die Anzeige „n∘X“, während du <span class="m" data-tex="r" data-plain="r"></span> und <span class="m" data-tex="s" data-plain="s"></span> veränderst. Notiere, was du siehst. Vergleiche mit der Anzeige „n∘Q“ für den Probepunkt Q.<br>
+    2. Klicke auf „Probepunkt wechseln“ und vergleiche wieder „n∘X“ und „n∘Q“. Versuche, X auf Q zu legen (Abstand 0,00 LE). Gelingt das bei beiden Probepunkten? Klicke erst danach auf „Punktprobe zeigen“.<br>
+    3. Wiederhole beides für „Datensatz 2“ und „Datensatz 3“. Lies in jedem Datensatz die Anzeigen „n∘u“ und „n∘v“ ab. Was fällt dir auf, und was heißt das für den Normalenvektor?
+  </div>
+
+  <div class="sim">
+    <canvas id="cvE" width="760" height="520" role="img" aria-label="Schrägbild einer Ebene mit Stützpunkt, zwei Spannvektoren, Normalenvektor, Punkt X und Probepunkt Q"></canvas>
+
+    <div style="padding:10px 16px 12px;font-size:14px;line-height:1.75;color:var(--grau)">
+      <strong style="color:var(--text)">Dünn:</strong> die Spannvektoren
+      <b style="color:#0d7a52">u→</b> und <b style="color:#c2410c">v→</b> am Stützpunkt P.
+      <strong style="color:var(--text)">Dick:</strong> die Kette
+      <b style="color:#0d7a52">r·u→</b>, <b style="color:#c2410c">s·v→</b>.
+      <b style="color:#1d4ed8">Blau:</b> Normalenvektor n→. Schwarzer Punkt: X. Goldene Raute: Probepunkt Q.
+      <b style="color:#b91c1c">Rot gestrichelt:</b> Abstand von X zu Q.
+    </div>
+
+    <div class="anzeige">
+      <div>Stützpunkt P<span id="aP">–</span></div>
+      <div>Spannvektor u→<span id="aU">–</span></div>
+      <div>Spannvektor v→<span id="aV">–</span></div>
+      <div>Normalenvektor n→<span id="aN">–</span></div>
+      <div>Orthogonalität<span id="aNuv">–</span></div>
+      <div>Einstellung (r | s)<span id="aEin">–</span></div>
+      <div>Punkt X<span id="aX">–</span></div>
+      <div>n∘X<span id="aNX">–</span></div>
+      <div>Probepunkt Q<span id="aQ">–</span></div>
+      <div>n∘Q<span id="aNQ">–</span></div>
+      <div>Abstand X–Q<span id="aAbst">–</span></div>
+      <div>Punktprobe<span id="aProbe">–</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label for="sDaten">Datensatz</label>
+          <select id="sDaten" style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px;background:#fff">
+            <option value="0">Datensatz 1</option>
+            <option value="1">Datensatz 2</option>
+            <option value="2">Datensatz 3</option>
+          </select>
+        </div>
+        <div>
+          <label for="rR">Parameter r <b id="lR">0</b></label>
+          <input type="range" id="rR" min="-2" max="2" step="0.5" value="0">
+        </div>
+        <div>
+          <label for="rS">Parameter s <b id="lS">0</b></label>
+          <input type="range" id="rS" min="-2" max="2" step="0.5" value="0">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button id="bQ">Probepunkt wechseln</button>
+        <button class="primaer" id="bProbe">Punktprobe zeigen</button>
+        <button id="bReset">Zurücksetzen</button>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px;margin-left:6px">
+          <input type="checkbox" id="cLot" checked style="accent-color:var(--akzent);width:16px;height:16px">
+          Senkrechte Hilfslinien zeigen
+        </label>
+      </div>
+      <p id="simHinweis" aria-live="polite" style="margin:10px 0 0;font-size:14px;color:var(--grau)"></p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Du bewegst X mit den Reglern über die Ebene. Der Wert „n∘X“ ändert sich dabei nicht. Für einen Probepunkt Q zeigt die Anzeige „n∘Q“ aber einen anderen Wert. Was schließt du daraus?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>Q liegt in der Ebene, aber so weit außen, dass die Regler (−2 bis 2) ihn nicht erreichen.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>Q liegt nicht in der Ebene. Auch mit beliebig großen Werten von <span class="m" data-tex="r" data-plain="r"></span> und <span class="m" data-tex="s" data-plain="s"></span> würde X den Punkt Q nie treffen.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>Q liegt in der Ebene, der andere Wert zeigt nur, dass Q auf der anderen Seite des Stützpunktes liegt.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">In jedem Datensatz zeigt die Anzeige <span class="m" data-tex="\vec{n}\circ\vec{u} = 0" data-plain="n→∘u→ = 0"></span> und <span class="m" data-tex="\vec{n}\circ\vec{v} = 0" data-plain="n→∘v→ = 0"></span>. Warum steht <span class="m" data-tex="\vec{n}" data-plain="n→"></span> damit auf <em>jedem</em> Vektor senkrecht, der in der Ebene verläuft, auch auf solchen, die weder <span class="m" data-tex="\vec{u}" data-plain="u→"></span> noch <span class="m" data-tex="\vec{v}" data-plain="v→"></span> sind?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>Das tut er nicht. <span class="m" data-tex="\vec{n}" data-plain="n→"></span> steht nur auf <span class="m" data-tex="\vec{u}" data-plain="u→"></span> und <span class="m" data-tex="\vec{v}" data-plain="v→"></span> senkrecht, für andere Vektoren der Ebene muss das nicht gelten.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span>Weil die Länge von <span class="m" data-tex="\vec{n}" data-plain="n→"></span> größer als die von <span class="m" data-tex="\vec{u}" data-plain="u→"></span> und <span class="m" data-tex="\vec{v}" data-plain="v→"></span> ist, steht er auf allen kürzeren Vektoren senkrecht.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>Weil sich jeder Vektor der Ebene als <span class="m" data-tex="r\,\vec{u} + s\,\vec{v}" data-plain="r·u→ + s·v→"></span> schreiben lässt und das Skalarprodukt mit <span class="m" data-tex="\vec{n}" data-plain="n→"></span> dann <span class="m" data-tex="r\cdot 0 + s\cdot 0 = 0" data-plain="r·0 + s·0 = 0"></span> ergibt.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+</section>
+
+<!-- =============== 5 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">5</div><h2>Übungen</h2></div>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Die Gerade <span class="m" data-tex="g" data-plain="g"></span> verläuft durch die Punkte <span class="m" data-tex="A(2\,|\,{-}1\,|\,4)" data-plain="A(2|−1|4)"></span> und <span class="m" data-tex="B(5\,|\,3\,|\,10)" data-plain="B(5|3|10)"></span>. Welche <span class="m" data-tex="x_3" data-plain="x₃"></span>-Koordinate hat der Punkt von <span class="m" data-tex="g" data-plain="g"></span>, dessen <span class="m" data-tex="x_2" data-plain="x₂"></span>-Koordinate 11 ist?</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Zuerst brauchst du eine Gleichung der Geraden. Mit ihr bestimmst du den Parameter aus der Zeile, in der die bekannte Koordinate steht, und rechnest dann mit diesem Parameter die gesuchte Koordinate aus.</div>
+    <div class="hilfe-text" data-stufe="2">Nimm <span class="m" data-tex="A" data-plain="A"></span> als Stützpunkt und <span class="m" data-tex="\overrightarrow{AB} = \vec{b} - \vec{a}" data-plain="AB→ = b→ − a→"></span> als Richtungsvektor. Die Zeile für <span class="m" data-tex="x_2" data-plain="x₂"></span> gleich 11 gesetzt liefert den Parameter, die Zeile für <span class="m" data-tex="x_3" data-plain="x₃"></span> dann die gesuchte Koordinate.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\overrightarrow{AB} = \begin{pmatrix}3\\4\\6\end{pmatrix}" data-plain="AB→ = (3|4|6)"></span>, also <span class="m" data-tex="g\colon\ \vec{x} = \begin{pmatrix}2\\-1\\4\end{pmatrix} + r\cdot\begin{pmatrix}3\\4\\6\end{pmatrix}" data-plain="g: x→ = (2|−1|4) + r·(3|4|6)"></span>. Zeile für <span class="m" data-tex="x_2" data-plain="x₂"></span>: <span class="m" data-tex="-1 + 4r = 11" data-plain="−1 + 4r = 11"></span>, also <span class="m" data-tex="r = 3" data-plain="r = 3"></span>. Zeile für <span class="m" data-tex="x_3" data-plain="x₃"></span>: <span class="m" data-tex="4 + 6\cdot 3 = 22" data-plain="4 + 6·3 = 22"></span>. Der Punkt ist <span class="m" data-tex="(11\,|\,11\,|\,22)" data-plain="(11|11|22)"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Die Ebene <span class="m" data-tex="E" data-plain="E"></span> enthält den Punkt <span class="m" data-tex="P(1\,|\,2\,|\,3)" data-plain="P(1|2|3)"></span> und hat den Normalenvektor <span class="m" data-tex="\vec{n} = \begin{pmatrix}2\\-1\\4\end{pmatrix}" data-plain="n→ = (2|−1|4)"></span>. Ihre Koordinatengleichung lautet <span class="m" data-tex="2x_1 - x_2 + 4x_3 = d" data-plain="2x₁ − x₂ + 4x₃ = d"></span>. Bestimme <span class="m" data-tex="d" data-plain="d"></span>.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Der Punkt <span class="m" data-tex="P" data-plain="P"></span> liegt in der Ebene, seine Koordinaten müssen die Gleichung also erfüllen. Setze sie auf der linken Seite ein.</div>
+    <div class="hilfe-text" data-stufe="2">Die Zahl <span class="m" data-tex="d" data-plain="d"></span> ist das Skalarprodukt aus dem Normalenvektor und dem Ortsvektor von <span class="m" data-tex="P" data-plain="P"></span>. Rechne die drei Produkte komponentenweise aus und addiere sie. Achte auf das Vorzeichen bei der zweiten Komponente.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="d = \vec{n}\circ\vec{p} = 2\cdot 1 + ({-}1)\cdot 2 + 4\cdot 3 = 2 - 2 + 12 = 12" data-plain="d = n→∘p→ = 2·1 + (−1)·2 + 4·3 = 2 − 2 + 12 = 12"></span>. Die Koordinatengleichung ist <span class="m" data-tex="2x_1 - x_2 + 4x_3 = 12" data-plain="2x₁ − x₂ + 4x₃ = 12"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Jede der vier Ebenen unten ist durch eine Koordinatengleichung gegeben. Ordne jeder Ebene die Aussage zu, die genau auf sie zutrifft.</div>
+
+    <ul style="margin:0 0 14px;padding-left:20px">
+      <li><strong>A</strong> – Die Ebene enthält den Ursprung.</li>
+      <li><strong>B</strong> – Die Ebene ist parallel zur <span class="m" data-tex="x_3" data-plain="x₃"></span>-Achse und enthält sie nicht.</li>
+      <li><strong>C</strong> – Die Ebene ist parallel zur <span class="m" data-tex="x_1x_2" data-plain="x₁x₂"></span>-Ebene.</li>
+      <li><strong>D</strong> – Die Ebene schneidet jede der drei Koordinatenachsen in einem Punkt, der nicht der Ursprung ist.</li>
+    </ul>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="C"><span><span class="m" data-tex="x_3 = 3" data-plain="x₃ = 3"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="A"><span><span class="m" data-tex="2x_1 - x_2 + 3x_3 = 0" data-plain="2x₁ − x₂ + 3x₃ = 0"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="D"><span><span class="m" data-tex="2x_1 + 3x_2 + x_3 = 6" data-plain="2x₁ + 3x₂ + x₃ = 6"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="B"><span><span class="m" data-tex="x_1 + 2x_2 = 4" data-plain="x₁ + 2x₂ = 4"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Schau bei jeder Gleichung zuerst auf die rechte Seite und dann darauf, ob alle drei Variablen auf der linken Seite vorkommen.</div>
+    <div class="hilfe-text" data-stufe="2">Ist die rechte Seite null, geht die Ebene durch den Ursprung. Fehlt eine Variable, ist die Ebene parallel zur Achse dieser Variablen. Die Spurpunkte erhältst du, indem du zwei Koordinaten null setzt.</div>
+    <div class="hilfe-text" data-stufe="3">Die Gleichung <span class="m" data-tex="x_3 = 3" data-plain="x₃ = 3"></span> enthält nur <span class="m" data-tex="x_3" data-plain="x₃"></span>, ihr Normalenvektor ist <span class="m" data-tex="\begin{pmatrix}0\\0\\1\end{pmatrix}" data-plain="(0|0|1)"></span>: parallel zur <span class="m" data-tex="x_1x_2" data-plain="x₁x₂"></span>-Ebene, also C. Die Gleichung <span class="m" data-tex="2x_1 - x_2 + 3x_3 = 0" data-plain="2x₁ − x₂ + 3x₃ = 0"></span> hat die rechte Seite 0: Der Ursprung gehört zur Ebene, also A. Die Gleichung <span class="m" data-tex="2x_1 + 3x_2 + x_3 = 6" data-plain="2x₁ + 3x₂ + x₃ = 6"></span> hat die Spurpunkte <span class="m" data-tex="(3\,|\,0\,|\,0)" data-plain="(3|0|0)"></span>, <span class="m" data-tex="(0\,|\,2\,|\,0)" data-plain="(0|2|0)"></span> und <span class="m" data-tex="(0\,|\,0\,|\,6)" data-plain="(0|0|6)"></span>, also D. Die Gleichung <span class="m" data-tex="x_1 + 2x_2 = 4" data-plain="x₁ + 2x₂ = 4"></span> enthält kein <span class="m" data-tex="x_3" data-plain="x₃"></span>, die Ebene ist parallel zur <span class="m" data-tex="x_3" data-plain="x₃"></span>-Achse, und weil die rechte Seite nicht null ist, enthält sie die Achse nicht: B.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Gegeben ist die Ebene <span class="m" data-tex="E\colon\ \vec{x} = \begin{pmatrix}1\\0\\2\end{pmatrix} + r\cdot\begin{pmatrix}2\\1\\0\end{pmatrix} + s\cdot\begin{pmatrix}-1\\0\\1\end{pmatrix}" data-plain="E: x→ = (1|0|2) + r·(2|1|0) + s·(−1|0|1)"></span>. Für welchen Wert von <span class="m" data-tex="a" data-plain="a"></span> liegt der Punkt <span class="m" data-tex="P(a\,|\,3\,|\,5)" data-plain="P(a|3|5)"></span> in <span class="m" data-tex="E" data-plain="E"></span>?</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Ein Punkt liegt in der Ebene, wenn es Werte für <span class="m" data-tex="r" data-plain="r"></span> und <span class="m" data-tex="s" data-plain="s"></span> gibt, die alle drei Koordinatengleichungen erfüllen. Zwei der Zeilen enthalten nur jeweils einen Parameter.</div>
+    <div class="hilfe-text" data-stufe="2">Schreibe <span class="m" data-tex="\vec{p} = \vec{x}" data-plain="p→ = x→"></span> komponentenweise: <span class="m" data-tex="a = 1 + 2r - s" data-plain="a = 1 + 2r − s"></span>, <span class="m" data-tex="3 = r" data-plain="3 = r"></span> und <span class="m" data-tex="5 = 2 + s" data-plain="5 = 2 + s"></span>. Bestimme <span class="m" data-tex="r" data-plain="r"></span> und <span class="m" data-tex="s" data-plain="s"></span> aus den letzten beiden Zeilen und setze beide in die erste ein.</div>
+    <div class="hilfe-text" data-stufe="3">Zweite Zeile: <span class="m" data-tex="r = 3" data-plain="r = 3"></span>. Dritte Zeile: <span class="m" data-tex="5 = 2 + s" data-plain="5 = 2 + s"></span>, also <span class="m" data-tex="s = 3" data-plain="s = 3"></span>. Erste Zeile: <span class="m" data-tex="a = 1 + 2\cdot 3 - 3 = 4" data-plain="a = 1 + 2·3 − 3 = 4"></span>. Der Punkt ist <span class="m" data-tex="P(4\,|\,3\,|\,5)" data-plain="P(4|3|5)"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die Punkte <span class="m" data-tex="A(2\,|\,0\,|\,1)" data-plain="A(2|0|1)"></span>, <span class="m" data-tex="B(3\,|\,1\,|\,3)" data-plain="B(3|1|3)"></span> und <span class="m" data-tex="C(2\,|\,2\,|\,0)" data-plain="C(2|2|0)"></span> liegen in einer Ebene <span class="m" data-tex="E" data-plain="E"></span>. Ein Normalenvektor von <span class="m" data-tex="E" data-plain="E"></span> hat die Form <span class="m" data-tex="\vec{n} = \begin{pmatrix}5\\n_2\\n_3\end{pmatrix}" data-plain="n→ = (5|n₂|n₃)"></span>. Bestimme <span class="m" data-tex="n_2" data-plain="n₂"></span>.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Der Normalenvektor steht senkrecht auf allen Vektoren, die in der Ebene verlaufen. Zwei solche Vektoren kannst du aus den drei Punkten bilden.</div>
+    <div class="hilfe-text" data-stufe="2">Berechne <span class="m" data-tex="\overrightarrow{AB}" data-plain="AB→"></span> und <span class="m" data-tex="\overrightarrow{AC}" data-plain="AC→"></span> und stelle die Gleichungen <span class="m" data-tex="\vec{n}\circ\overrightarrow{AB} = 0" data-plain="n→∘AB→ = 0"></span> und <span class="m" data-tex="\vec{n}\circ\overrightarrow{AC} = 0" data-plain="n→∘AC→ = 0"></span> auf. Das sind zwei Gleichungen für <span class="m" data-tex="n_2" data-plain="n₂"></span> und <span class="m" data-tex="n_3" data-plain="n₃"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\overrightarrow{AB} = \begin{pmatrix}1\\1\\2\end{pmatrix}" data-plain="AB→ = (1|1|2)"></span> und <span class="m" data-tex="\overrightarrow{AC} = \begin{pmatrix}0\\2\\-1\end{pmatrix}" data-plain="AC→ = (0|2|−1)"></span>. Daraus <span class="m" data-tex="5 + n_2 + 2n_3 = 0" data-plain="5 + n₂ + 2n₃ = 0"></span> und <span class="m" data-tex="2n_2 - n_3 = 0" data-plain="2n₂ − n₃ = 0"></span>. Die zweite gibt <span class="m" data-tex="n_3 = 2n_2" data-plain="n₃ = 2n₂"></span>, in die erste eingesetzt: <span class="m" data-tex="5 + 5n_2 = 0" data-plain="5 + 5n₂ = 0"></span>, also <span class="m" data-tex="n_2 = {-}1" data-plain="n₂ = −1"></span> und <span class="m" data-tex="n_3 = {-}2" data-plain="n₃ = −2"></span>. Probe: <span class="m" data-tex="d = \vec{n}\circ\vec{a} = 10 + 0 - 2 = 8" data-plain="d = n→∘a→ = 10 + 0 − 2 = 8"></span>, und <span class="m" data-tex="B" data-plain="B"></span> erfüllt <span class="m" data-tex="5x_1 - x_2 - 2x_3 = 8" data-plain="5x₁ − x₂ − 2x₃ = 8"></span> mit <span class="m" data-tex="15 - 1 - 6 = 8" data-plain="15 − 1 − 6 = 8"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a6">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Ein Mitschüler soll die Ebene durch die Punkte <span class="m" data-tex="A(1\,|\,0\,|\,2)" data-plain="A(1|0|2)"></span>, <span class="m" data-tex="B(3\,|\,1\,|\,3)" data-plain="B(3|1|3)"></span> und <span class="m" data-tex="C(7\,|\,3\,|\,5)" data-plain="C(7|3|5)"></span> aufstellen. Er schreibt <span class="m" data-tex="\vec{x} = \vec{a} + r\cdot\overrightarrow{AB} + s\cdot\overrightarrow{AC}" data-plain="x→ = a→ + r·AB→ + s·AC→"></span> und rechnet weiter. Beurteile sein Vorgehen und begründe deine Entscheidung.</div>
+    <textarea placeholder="Deine Beurteilung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a6">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Das Vorgehen führt nicht zum Ziel. Es ist <span class="m" data-tex="\overrightarrow{AB} = \begin{pmatrix}2\\1\\1\end{pmatrix}" data-plain="AB→ = (2|1|1)"></span> und <span class="m" data-tex="\overrightarrow{AC} = \begin{pmatrix}6\\3\\3\end{pmatrix}" data-plain="AC→ = (6|3|3)"></span>, also <span class="m" data-tex="\overrightarrow{AC} = 3\cdot\overrightarrow{AB}" data-plain="AC→ = 3·AB→"></span>. Die beiden Spannvektoren sind parallel und damit linear abhängig, und die drei Punkte liegen auf einer Geraden.</p>
+      <p>Die Gleichung <span class="m" data-tex="\vec{x} = \vec{a} + r\cdot\overrightarrow{AB} + s\cdot 3\overrightarrow{AB} = \vec{a} + (r + 3s)\cdot\overrightarrow{AB}" data-plain="x→ = a→ + r·AB→ + s·3·AB→ = a→ + (r + 3s)·AB→"></span> beschreibt nur die Gerade durch <span class="m" data-tex="A" data-plain="A"></span> und <span class="m" data-tex="B" data-plain="B"></span>, keine Ebene. Dass es keine eindeutige Ebene durch die drei Punkte gibt, ist auch geometrisch klar: Jede Ebene, die die Gerade <span class="m" data-tex="AB" data-plain="AB"></span> enthält, enthält auch <span class="m" data-tex="C" data-plain="C"></span>, und es gibt unendlich viele solche Ebenen, wie die Seiten eines aufgeschlagenen Buches, die sich in der Buchkante treffen.</p>
+      <p>Der Fehler liegt darin, nicht zu prüfen, ob die Spannvektoren linear unabhängig sind. Richtig wäre, zuerst <span class="m" data-tex="\overrightarrow{AB}" data-plain="AB→"></span> und <span class="m" data-tex="\overrightarrow{AC}" data-plain="AC→"></span> auf Parallelität zu untersuchen und bei parallelen Vektoren festzustellen, dass die Aufgabe keine eindeutige Lösung hat.</p>
+      <p><strong>Bewertungskriterien.</strong> Vorgehen als nicht ausreichend erkannt · beide Spannvektoren berechnet · Vielfaches <span class="m" data-tex="\overrightarrow{AC} = 3\cdot\overrightarrow{AB}" data-plain="AC→ = 3·AB→"></span> festgestellt · Folgerung, dass die Punkte auf einer Geraden liegen und die Gleichung nur diese beschreibt · Hinweis auf die fehlende Eindeutigkeit der Ebene oder auf die lineare Abhängigkeit als Fehlerquelle.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-num="a7">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Gegeben sind die drei Gleichungen <span class="m" data-tex="E_1\colon\ x_1 - 2x_2 + 2x_3 = 3" data-plain="E₁: x₁ − 2x₂ + 2x₃ = 3"></span>, <span class="m" data-tex="E_2\colon\ 2x_1 - 4x_2 + 4x_3 = 6" data-plain="E₂: 2x₁ − 4x₂ + 4x₃ = 6"></span> und <span class="m" data-tex="E_3\colon\ 2x_1 - 4x_2 + 4x_3 = 5" data-plain="E₃: 2x₁ − 4x₂ + 4x₃ = 5"></span>. Untersuche, welche dieser Gleichungen dieselbe Ebene beschreiben. Begründe mit Normalenvektoren und einer Punktprobe.</div>
+    <textarea placeholder="Deine Begründung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a7">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Die Normalenvektoren lesen sich aus den Koeffizienten ab: <span class="m" data-tex="\vec{n}_1 = \begin{pmatrix}1\\-2\\2\end{pmatrix}" data-plain="n→₁ = (1|−2|2)"></span>, <span class="m" data-tex="\vec{n}_2 = \begin{pmatrix}2\\-4\\4\end{pmatrix}" data-plain="n→₂ = (2|−4|4)"></span> und <span class="m" data-tex="\vec{n}_3 = \begin{pmatrix}2\\-4\\4\end{pmatrix}" data-plain="n→₃ = (2|−4|4)"></span>. Alle drei sind Vielfache voneinander, die Ebenen haben also dieselbe Richtung.</p>
+      <p>Die Gleichung <span class="m" data-tex="E_2" data-plain="E₂"></span> entsteht aus <span class="m" data-tex="E_1" data-plain="E₁"></span>, indem man beide Seiten mit 2 multipliziert. Eine Äquivalenzumformung ändert die Lösungsmenge nicht, deshalb beschreiben <span class="m" data-tex="E_1" data-plain="E₁"></span> und <span class="m" data-tex="E_2" data-plain="E₂"></span> dieselbe Ebene. Dagegen stimmt bei <span class="m" data-tex="E_3" data-plain="E₃"></span> nur die linke Seite mit <span class="m" data-tex="E_2" data-plain="E₂"></span> überein, rechts steht 5 statt 6. Der Punkt <span class="m" data-tex="(3\,|\,0\,|\,0)" data-plain="(3|0|0)"></span> liegt in <span class="m" data-tex="E_1" data-plain="E₁"></span> (<span class="m" data-tex="3 = 3" data-plain="3 = 3"></span>), aber nicht in <span class="m" data-tex="E_3" data-plain="E₃"></span>, denn <span class="m" data-tex="2\cdot 3 = 6 \neq 5" data-plain="2·3 = 6 ≠ 5"></span>. Also ist <span class="m" data-tex="E_3" data-plain="E₃"></span> eine andere Ebene. Sie hat keinen Punkt mit <span class="m" data-tex="E_1" data-plain="E₁"></span> gemeinsam, denn aus 6 = 5 folgt ein Widerspruch: Die Ebenen sind parallel, aber verschieden.</p>
+      <p>Das Beispiel zeigt allgemein: Parallele Normalenvektoren heißen nur, dass die Ebenen parallel oder gleich sind. Welcher der beiden Fälle vorliegt, entscheidet eine Punktprobe oder der Vergleich der rechten Seiten, nachdem die linken Seiten gleich gemacht wurden.</p>
+      <p><strong>Bewertungskriterien.</strong> Normalenvektoren abgelesen und als Vielfache erkannt · <span class="m" data-tex="E_1" data-plain="E₁"></span> und <span class="m" data-tex="E_2" data-plain="E₂"></span> als gleich begründet (Multiplikation mit 2) · Punktprobe mit einem Punkt von <span class="m" data-tex="E_1" data-plain="E₁"></span> in <span class="m" data-tex="E_3" data-plain="E₃"></span> · Schluss, dass <span class="m" data-tex="E_3" data-plain="E₃"></span> parallel, aber verschieden ist · allgemeine Aussage über parallele Normalenvektoren.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 6 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">6</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Das Wichtigste in sechs Sätzen</h3>
+    <ul>
+      <li>Eine Gerade hat die Parameterform <span class="m" data-tex="\vec{x} = \vec{p} + r\cdot\vec{u}" data-plain="x→ = p→ + r·u→"></span> mit Stützvektor <span class="m" data-tex="\vec{p}" data-plain="p→"></span>, Richtungsvektor <span class="m" data-tex="\vec{u} \neq \vec{0}" data-plain="u→ ≠ 0→"></span> und dem Parameter <span class="m" data-tex="r" data-plain="r"></span>. Durch zwei Punkte <span class="m" data-tex="A" data-plain="A"></span> und <span class="m" data-tex="B" data-plain="B"></span> geht <span class="m" data-tex="\vec{x} = \vec{a} + r\cdot\overrightarrow{AB}" data-plain="x→ = a→ + r·AB→"></span>, und die Parameter von 0 bis 1 liefern die Strecke.</li>
+      <li>Eine Ebene hat die Parameterform <span class="m" data-tex="\vec{x} = \vec{p} + r\cdot\vec{u} + s\cdot\vec{v}" data-plain="x→ = p→ + r·u→ + s·v→"></span>, wobei die Spannvektoren linear unabhängig sein müssen. Durch drei Punkte, die nicht auf einer Geraden liegen, geht <span class="m" data-tex="\vec{x} = \vec{a} + r\cdot\overrightarrow{AB} + s\cdot\overrightarrow{AC}" data-plain="x→ = a→ + r·AB→ + s·AC→"></span>.</li>
+      <li>Die Punktprobe in Parameterform ist ein Gleichungssystem: Ein einziger Wert pro Parameter muss alle Koordinatengleichungen erfüllen. Gleichungen sind nicht eindeutig, Stützpunkt und Richtungsvektoren lassen sich vielfältig wählen.</li>
+      <li>Das Skalarprodukt <span class="m" data-tex="\vec{a}\circ\vec{b} = a_1b_1 + a_2b_2 + a_3b_3" data-plain="a→∘b→ = a₁b₁ + a₂b₂ + a₃b₃"></span> ist eine Zahl. Zwei Vektoren ungleich dem Nullvektor stehen genau dann senkrecht aufeinander, wenn es null ist.</li>
+      <li>Ein Normalenvektor <span class="m" data-tex="\vec{n}" data-plain="n→"></span> steht auf beiden Spannvektoren senkrecht, <span class="m" data-tex="\vec{n}\circ\vec{u} = 0" data-plain="n→∘u→ = 0"></span> und <span class="m" data-tex="\vec{n}\circ\vec{v} = 0" data-plain="n→∘v→ = 0"></span>, und liefert die Normalenform <span class="m" data-tex="\vec{n}\circ(\vec{x} - \vec{p}) = 0" data-plain="n→∘(x→ − p→) = 0"></span>.</li>
+      <li>Ausmultipliziert ergibt sie die Koordinatenform <span class="m" data-tex="n_1x_1 + n_2x_2 + n_3x_3 = d" data-plain="n₁x₁ + n₂x₂ + n₃x₃ = d"></span> mit <span class="m" data-tex="d = \vec{n}\circ\vec{p}" data-plain="d = n→∘p→"></span>: Die Punktprobe wird zum Einsetzen, der Normalenvektor steht in den Koeffizienten, und die Spurpunkte erhältst du durch Nullsetzen zweier Koordinaten.</li>
+    </ul>
+  </div>
+
+  <div class="hinweis">
+    <strong>Blick aufs Zentralabitur.</strong> Geraden und Ebenen sind das Gerüst der Aufgaben zur analytischen Geometrie. Diese Gestalten begegnen dir typischerweise:
+    <ul style="margin:8px 0 0">
+      <li>eine Flugbahn, ein Lichtstrahl oder ein Seil als Gerade und ein Dach, ein Hang oder eine Fläche als Ebene in einem Sachzusammenhang, von dem Punkte gegeben sind;</li>
+      <li>das Aufstellen einer Geraden oder Ebene durch gegebene Punkte und der Wechsel zwischen den Formen, besonders von der Parameterform zur Koordinatenform;</li>
+      <li>die Frage, ob ein Punkt auf einer Geraden oder in einer Ebene liegt, und die Bestimmung eines Parameters, damit ein Punkt zu einer Gerade oder Ebene gehört;</li>
+      <li>Spurpunkte und die Lage einer Ebene im Koordinatensystem, auch als Skizze im Schrägbild;</li>
+      <li>die Begründung, warum zwei Gleichungen dieselbe oder verschiedene Ebenen beschreiben.</li>
+    </ul>
+    <p style="margin:8px 0 0">Ob du für Gleichungssysteme und Rechnungen ein digitales Hilfsmittel nutzen darfst, hängt vom Aufgabenteil ab. Die Ansätze und die Begründungen musst du in jedem Fall selbst aufstellen.</p>
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Ich kann …</h3>
+    <div class="check">
+      <label><input type="checkbox"><span>… eine Gerade in Parameterform aufstellen, aus Stützpunkt und Richtung oder aus zwei Punkten, und eine Strecke durch Einschränken des Parameters beschreiben.</span></label>
+      <label><input type="checkbox"><span>… prüfen, ob ein Punkt auf einer Geraden liegt, und einen Parameter so bestimmen, dass ein Punkt zur Geraden gehört.</span></label>
+      <label><input type="checkbox"><span>… eine Ebene in Parameterform aus einem Punkt und zwei Spannvektoren oder aus drei Punkten aufstellen und begründen, warum die Spannvektoren linear unabhängig sein müssen.</span></label>
+      <label><input type="checkbox"><span>… das Skalarprodukt berechnen und damit prüfen, ob zwei Vektoren senkrecht aufeinander stehen.</span></label>
+      <label><input type="checkbox"><span>… einen Normalenvektor einer Ebene bestimmen und die Normalen- und die Koordinatenform aufstellen.</span></label>
+      <label><input type="checkbox"><span>… Spurpunkte berechnen, aus der Koordinatengleichung die Lage der Ebene ablesen und in die Parameterform umwandeln.</span></label>
+    </div>
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnis als Text kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+
+  <details class="lehrer">
+    <summary>Didaktische Hinweise (Lehrkraft)</summary>
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Analytische Geometrie und Lineare Algebra“ (Kernlehrplan Mathematik, gymnasiale Oberstufe NRW). Das Modul baut auf „Vektoren: Grundlagen“ auf. Es deckt ab: Parameterform von Gerade und Ebene, Gerade und Ebene durch Punkte, Punktprobe, Skalarprodukt in dem Umfang, den die Normalenform braucht (Definition mit Komponenten und Orthogonalitätskriterium), Normalenvektor, Normalenform und Koordinatenform, Spurpunkte, besondere Lagen und den Wechsel zwischen den Formen. Prozessbezogene Schwerpunkte sind <em>Darstellen</em> (drei Beschreibungen desselben Objekts, Schrägbild), <em>Argumentieren</em> (Begründungen zur Orthogonalität und zur Normalenform, Aufgaben a6 und a7), <em>Modellieren</em> (Drohne und Garagendach), <em>Werkzeuge nutzen</em> (die Simulation) und <em>Kommunizieren</em> (Aufgaben a3, a6 und a7). Vorausgesetzt werden die Inhalte von „Vektoren: Grundlagen“, besonders Verbindungsvektor, Vielfaches und lineare Unabhängigkeit, sowie der Satz des Pythagoras.</p>
+    <p><strong>Offene Punkte.</strong> Nicht geklärt ist, an welcher Stelle der Unterrichtsfolge das Skalarprodukt eingeführt wird. Die Planung dieses Projekts nennt es erst im Modul über Abstände und Winkel; für die Normalenform braucht man es aber schon hier. Das Modul führt es deshalb minimal ein (Komponentenformel und Orthogonalitätskriterium, ohne Winkel und Projektion) und verweist auf das Folgemodul. Wenn eure Fachschaft zuerst Koordinatenform ohne Skalarprodukt behandelt (Eliminieren der Parameter), muss Abschnitt 3 anders aufgebaut werden. Ebenfalls offen ist, ob das Vektorprodukt (Kreuzprodukt) zum Pflichtinhalt gehört; das Modul benutzt es nicht und bestimmt den Normalenvektor aus zwei Gleichungen. Weiter ist nicht geklärt, ob die Achsenabschnittsform verlangt wird; das Modul behandelt Spurpunkte nur als Schnittpunkte. Es wurden keine Kernlehrplan-Zitate eingetragen, die sich nicht belegen ließen. Die Schreibweise (Spannvektoren, Stützvektor, Normalenvektor, Spurpunkte) ist gebräuchlich, eure Schule kann andere Namen vereinbart haben.</p>
+    <p><strong>Zeitbedarf.</strong> Abschnitte 1 und 2 etwa 35 Minuten, Abschnitt 3 etwa 35 Minuten, Simulation mit Beobachtungsauftrag 20 Minuten, Übungen 30 Minuten. Die beiden Aufgaben im Anforderungsbereich III eignen sich für eine Hausaufgabe oder eine Partnerarbeit mit anschließendem Vergleich der Musterlösung.</p>
+    <p><strong>Typische Hürden.</strong> Erstens Stützvektor und Richtungsvektor verwechseln oder bei zwei Punkten den Ortsvektor von B als Richtungsvektor nehmen (Aufgabe a1). Zweitens bei der Punktprobe den Parameter nur in einer Zeile bestimmen und die anderen nicht prüfen. Drittens Spannvektoren wählen, die parallel sind (Aufgabe a6). Viertens das Skalarprodukt mit einem Vektor verwechseln oder Vorzeichen falsch rechnen (Aufgabe a2). Fünftens den Normalenvektor aus zwei Gleichungen für drei Unbekannte „nicht eindeutig“ finden und deshalb abbrechen; die freie Wahl einer Komponente ist gewollt (Aufgabe a5). Sechstens die Koeffizienten der Koordinatenform nicht als Normalenvektor lesen. Siebtens die Gleichung einer Ebene mit einer Zahl multiplizieren und für eine neue Ebene halten, oder umgekehrt zwei Gleichungen mit gleicher linker Seite für dieselbe Ebene (Aufgabe a7). Achtens eine einzelne Gleichung im Raum als Gerade deuten. Neuntens im Schrägbild Orthogonalität am Bild ablesen wollen.</p>
+    <p><strong>Modellgrenzen.</strong> Die Simulation zeigt nur Ebenen, keine Geraden. Die Parameter laufen von −2 bis 2 in Schritten von 0,5, das hellblaue Stück ist nur ein Ausschnitt der unbegrenzten Ebene. Die drei Datensätze sind konstruiert: Datensatz 1 schneidet alle drei Achsen, Datensatz 2 ist parallel zur <span class="m" data-tex="x_3" data-plain="x₃"></span>-Achse, Datensatz 3 hat einen Normalenvektor mit einer negativen Komponente. Das Schrägbild ist mehrdeutig, deshalb werden alle wichtigen Größen als Zahlen angezeigt. Die Simulation löst die Punktprobe, zeigt aber nicht, wie man das Gleichungssystem von Hand löst. Der angezeigte Normalenvektor ist von der Länge her nicht normiert; die Hessesche Normalform folgt in einem späteren Modul.</p>
+    <p><strong>Formelleiste.</strong> Aufgenommen sind die vier Parameterformen, das Skalarprodukt, das Orthogonalitätskriterium, die Normalenform und die Koordinatenform. Nicht aufgenommen sind die Umrechnungsverfahren und die Spurpunkte, weil sie Verfahren und keine Formeln sind, sowie Formeln, die nur in Aufgaben und Musterlösungen auftreten. Die Vorwissensfragen (Mittelpunkt, parallele Vektoren, ein Gleichungssystem) fragen nach nichts, was die Leiste erklärt. Die Leiste nennt Normalen- und Koordinatenform, sagt aber nicht ausdrücklich, dass <span class="m" data-tex="\vec{n}\circ\vec{x}" data-plain="n→∘x→"></span> für alle Punkte der Ebene denselben Wert hat. Das ist der Kern der ersten Simulationsfrage.</p>
+    <p><strong>Experimentbezug.</strong> Sinnvoll sind ein Blatt Papier oder eine Pappe auf Stäben (Normalenvektor), Schaschlikspieße im Knetwürfel für Geraden im Raum, ein Faden, der eine Gerade zwischen zwei Punkten spannt, und eine 3D-Darstellung in einer Geometriesoftware, in der der Normalenvektor am Stützpunkt angesetzt wird. Die Software ist keine Voraussetzung.</p>
+    <p><strong>Differenzierung.</strong> Das dreistufige Hilfesystem trägt die Binnendifferenzierung. Schnelle Gruppen können zeigen, dass der Abstand einer Ebene vom Ursprung aus <span class="m" data-tex="d" data-plain="d"></span> und der Länge des Normalenvektors folgt, oder eine Gerade im Raum als Schnitt zweier Ebenen beschreiben. Unsichere Gruppen bearbeiten zuerst die Aufgaben a1, a2 und a4 und spielen die Simulation zunächst nur mit Datensatz 1.</p>
+  </details>
+
+  <footer>
+    Mathematik LK Q1 · Geraden und Ebenen · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/baustein-formelleiste.md
+var formelDaten = [
+  {abschnitt:"parameterform", titel:"Geraden und Ebenen in Parameterform", formeln:[
+    {id:"gerade", ziel:"f-gerade", tex:"\\vec{x} = \\vec{p} + r\\cdot\\vec{u}", plain:"x→ = p→ + r·u→",
+     zeichen:[
+       {tex:"\\vec{x}", plain:"x→", text:"Ortsvektor eines beliebigen Punktes X der Geraden"},
+       {tex:"\\vec{p}", plain:"p→", text:"Stützvektor, Ortsvektor eines festen Punktes der Geraden"},
+       {tex:"\\vec{u}", plain:"u→", text:"Richtungsvektor, ein Vektor ungleich dem Nullvektor, der entlang der Geraden zeigt"},
+       {tex:"r", plain:"r", text:"Parameter, eine beliebige reelle Zahl"}],
+     gilt:"Gilt für Geraden im Raum und in der Ebene. Jede reelle Zahl r liefert genau einen Punkt der Geraden, und jeder Punkt der Geraden gehört zu genau einem r. Stütz- und Richtungsvektor sind nicht eindeutig.",
+     fehler:"Den Parameter weglassen. Dann beschreibt die Gleichung nur den einen Punkt P und keine Gerade."},
+    {id:"zweipunkt", ziel:"f-zweipunkt", tex:"\\vec{x} = \\vec{a} + r\\cdot\\overrightarrow{AB}", plain:"x→ = a→ + r·AB→",
+     zeichen:[
+       {tex:"\\vec{a}", plain:"a→", text:"Ortsvektor des Punktes A, hier der Stützvektor"},
+       {tex:"\\overrightarrow{AB}", plain:"AB→", text:"Vektor von A nach B, hier der Richtungsvektor"},
+       {tex:"r", plain:"r", text:"Parameter, eine beliebige reelle Zahl"}],
+     gilt:"Gilt für zwei verschiedene Punkte A und B. Für r = 0 erhältst du A, für r = 1 den Punkt B, und nur für r zwischen 0 und 1 liegt der Punkt auf der Strecke AB.",
+     fehler:"Als Richtungsvektor den Ortsvektor von B nehmen. Der Richtungsvektor muss von A nach B zeigen."},
+    {id:"ebene", ziel:"f-ebene", tex:"\\vec{x} = \\vec{p} + r\\cdot\\vec{u} + s\\cdot\\vec{v}", plain:"x→ = p→ + r·u→ + s·v→",
+     zeichen:[
+       {tex:"\\vec{x}", plain:"x→", text:"Ortsvektor eines beliebigen Punktes X der Ebene"},
+       {tex:"\\vec{p}", plain:"p→", text:"Stützvektor, Ortsvektor eines festen Punktes der Ebene"},
+       {tex:"\\vec{u},\\ \\vec{v}", plain:"u→, v→", text:"die beiden Spannvektoren (Richtungsvektoren) der Ebene"},
+       {tex:"r,\\ s", plain:"r, s", text:"Parameter, zwei beliebige reelle Zahlen"}],
+     gilt:"Gilt für Ebenen im Raum. Die beiden Spannvektoren müssen linear unabhängig sein, also nicht parallel und keiner der Nullvektor, sonst entsteht nur eine Gerade.",
+     fehler:"Zwei parallele Spannvektoren wählen. Dann wird nur eine Gerade erzeugt und keine Ebene."},
+    {id:"dreipunkt", ziel:"f-dreipunkt", tex:"\\vec{x} = \\vec{a} + r\\cdot\\overrightarrow{AB} + s\\cdot\\overrightarrow{AC}", plain:"x→ = a→ + r·AB→ + s·AC→",
+     zeichen:[
+       {tex:"\\vec{a}", plain:"a→", text:"Ortsvektor von A, hier der Stützvektor"},
+       {tex:"\\overrightarrow{AB},\\ \\overrightarrow{AC}", plain:"AB→, AC→", text:"die Vektoren von A zu den beiden anderen Punkten, hier die Spannvektoren"},
+       {tex:"r,\\ s", plain:"r, s", text:"Parameter, zwei beliebige reelle Zahlen"}],
+     gilt:"Gilt für drei Punkte A, B und C, die nicht auf einer gemeinsamen Geraden liegen. Dann sind AB→ und AC→ linear unabhängig. Die Wahl von A als Stützpunkt ist willkürlich, jeder der drei Punkte geht.",
+     fehler:"Die Ortsvektoren von B und C als Spannvektoren nehmen. Die Spannvektoren müssen von A aus zu B und C zeigen."}
+  ]},
+  {abschnitt:"normalenform", titel:"Normalenform und Koordinatenform", formeln:[
+    {id:"skalar", ziel:"f-skalar", tex:"\\vec{a}\\circ\\vec{b} = a_1b_1 + a_2b_2 + a_3b_3", plain:"a→∘b→ = a₁b₁ + a₂b₂ + a₃b₃",
+     zeichen:[
+       {tex:"\\vec{a}\\circ\\vec{b}", plain:"a→∘b→", text:"Skalarprodukt, eine reelle Zahl und kein Vektor"},
+       {tex:"a_1,\\,a_2,\\,a_3", plain:"a₁, a₂, a₃", text:"die Komponenten von a→"},
+       {tex:"b_1,\\,b_2,\\,b_3", plain:"b₁, b₂, b₃", text:"die Komponenten von b→"}],
+     gilt:"Gilt für Vektoren im Raum. In der Ebene entfällt der dritte Summand. Das Ergebnis ist eine Zahl.",
+     fehler:"Die Komponenten nur addieren oder den Vektor als Ergebnis angeben. Das Skalarprodukt multipliziert zuerst Komponente mit Komponente und addiert dann die Produkte."},
+    {id:"ortho", ziel:"f-ortho", tex:"\\vec{a}\\circ\\vec{b} = 0", plain:"a→∘b→ = 0",
+     zeichen:[
+       {tex:"\\vec{a},\\ \\vec{b}", plain:"a→, b→", text:"zwei Vektoren, keiner davon der Nullvektor"},
+       {tex:"0", plain:"0", text:"die Zahl null, nicht der Nullvektor"}],
+     gilt:"Gilt für zwei Vektoren, die nicht der Nullvektor sind: Sie stehen genau dann senkrecht aufeinander (sind orthogonal), wenn ihr Skalarprodukt null ist. Der Nullvektor erfüllt die Gleichung mit jedem Vektor.",
+     fehler:"Aus einem Skalarprodukt ungleich null auf Orthogonalität schließen oder das Ergebnis mit dem Nullvektor verwechseln. Das Skalarprodukt ist eine Zahl."},
+    {id:"normalen", ziel:"f-normalen", tex:"\\vec{n}\\circ\\left(\\vec{x} - \\vec{p}\\right) = 0", plain:"n→∘(x→ − p→) = 0",
+     zeichen:[
+       {tex:"\\vec{n}", plain:"n→", text:"Normalenvektor der Ebene, ein Vektor ungleich dem Nullvektor, der senkrecht auf der Ebene steht"},
+       {tex:"\\vec{x}", plain:"x→", text:"Ortsvektor eines beliebigen Punktes X"},
+       {tex:"\\vec{p}", plain:"p→", text:"Ortsvektor eines festen Punktes P der Ebene"}],
+     gilt:"Gilt für Ebenen im Raum. Der Normalenvektor ist nicht eindeutig, jedes Vielfache ungleich null ist ebenfalls ein Normalenvektor. Ohne dritte Dimension (in der Ebene) beschreibt dieselbe Form eine Gerade.",
+     fehler:"Den Vektor x→ − p→ weglassen und nur n→∘x→ = 0 schreiben. Dann beschreibt die Gleichung immer eine Ebene durch den Ursprung."},
+    {id:"koord", ziel:"f-koord", tex:"n_1x_1 + n_2x_2 + n_3x_3 = d", plain:"n₁x₁ + n₂x₂ + n₃x₃ = d",
+     zeichen:[
+       {tex:"n_1,\\,n_2,\\,n_3", plain:"n₁, n₂, n₃", text:"Komponenten eines Normalenvektors der Ebene"},
+       {tex:"x_1,\\,x_2,\\,x_3", plain:"x₁, x₂, x₃", text:"Koordinaten eines beliebigen Punktes X"},
+       {tex:"d", plain:"d", text:"feste Zahl, die man erhält, wenn man die Koordinaten eines Punktes der Ebene einsetzt"}],
+     gilt:"Gilt für Ebenen im Raum. Ein Punkt liegt in der Ebene, wenn seine Koordinaten die Gleichung erfüllen. Die Zahl d ist das Skalarprodukt aus Normalenvektor und Stützvektor.",
+     fehler:"Für d die Koordinaten eines Punktes einsetzen, der nicht in der Ebene liegt, oder die Koeffizienten nicht als Normalenvektor lesen."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{"r": 1, "fb": ["(8|4|6) ist die Summe der Koordinaten der beiden Endpunkte: 2 + 6 = 8, 4 + 0 = 4, −2 + 8 = 6. Der Mittelpunkt liegt genau in der Mitte, es fehlt das Halbieren.", "Richtig. Der Mittelwert je Koordinate ist (2 + 6)/2 = 4, (4 + 0)/2 = 2 und (−2 + 8)/2 = 3, der Mittelpunkt ist M(4|2|3). Du kannst den Mittelpunkt auch als Punkt sehen, den man von A aus nach der Hälfte der Strecke erreicht. Genau diese Sicht brauchst du gleich bei Geraden.", "(2|−2|5) ist der halbe Vektor von A nach B: AB = (4|−4|10), und die Hälfte davon ist (2|−2|5). Das ist eine Verschiebung und kein Punkt. Den Mittelpunkt erhältst du, indem du diese halbe Verschiebung an A ansetzt: (2|4|−2) + (2|−2|5) = (4|2|3)."]},
+  vw2:{"r": 2, "fb": ["Verschiedene Vorzeichen allein sagen nichts. Wenn alle Komponenten mit demselben negativen Faktor multipliziert werden, wechseln sie alle ihr Vorzeichen, und die Vektoren sind trotzdem parallel (nur entgegengesetzt gerichtet).", "Dass 2 ≠ −3 gilt, ist kein Argument: Parallele Vektoren müssen nicht gleiche Komponenten haben, sondern der eine ist ein Vielfaches des anderen. Entscheidend ist, ob es für alle Komponenten denselben Faktor gibt.", "Richtig. Es ist (−1,5)·2 = −3, (−1,5)·(−4) = 6 und (−1,5)·6 = −9, der Faktor −1,5 passt für alle drei Komponenten. Dass er negativ ist, heißt nur, dass die Vektoren entgegengesetzt gerichtet sind. Bei Geraden entscheidet dieselbe Frage, ob zwei Richtungsvektoren dieselbe Richtung haben."]},
+  vw3:{"r": 0, "fb": ["Richtig. Aus 3 + 2t = 11 folgt 2t = 8, also t = 4, und aus 1 − t = −3 folgt t = 4. Der Wert muss in beiden Gleichungen dasselbe t liefern. Mit genau diesem Gedanken prüfst du gleich, ob ein Punkt auf einer Geraden liegt.", "Probe in der ersten Gleichung: 3 + 2·8 = 19 und nicht 11. Aus 2t = 8 folgt erst durch das Teilen durch 2 der Wert t = 4. In der zweiten Gleichung gilt 1 − 8 = −7 und nicht −3.", "Bei t = −4 stimmt keine der beiden Gleichungen: 3 + 2·(−4) = −5 und 1 − (−4) = 5. Das Vorzeichen in der zweiten Gleichung ging verloren: Aus 1 − t = −3 folgt −t = −4 und damit t = +4."]},
+  sim1:{"r": 1, "fb": ["Die Ebene reicht unbegrenzt weit, der gezeichnete Ausschnitt zeigt nur r und s zwischen −2 und 2. Für jeden Punkt der Ebene, auch außerhalb des Ausschnitts, hat n∘X denselben Wert. Ein anderer Wert für Q kann also nicht an den Reglergrenzen liegen.", "Richtig. Für jedes r und s hat n∘X denselben Wert, auch für Punkte weit außerhalb des gezeichneten Ausschnitts. Hat Q einen anderen Wert, trifft kein Punkt X der Ebene auf Q: Q liegt neben der Ebene, auf der einen oder der anderen Seite. Der Abstand X–Q bleibt bei jeder Einstellung über null.", "Der Wert verrät nicht, auf welcher Seite Q liegt, sondern ob Q in der Ebene liegt. Für alle Punkte der Ebene ist er derselbe. Weicht er ab, liegt Q neben der Ebene, und kein Punkt X der Ebene trifft Q."]},
+  sim2:{"r": 2, "fb": ["Zwei senkrechte Vektoren reichen schon. Jeder Vektor w der Ebene lässt sich als w = r·u + s·v schreiben, und das Skalarprodukt lässt sich auseinanderziehen: n∘w = r·(n∘u) + s·(n∘v). Beide Summanden sind null, also steht n auch auf w senkrecht.", "Die Länge von n spielt keine Rolle. Auch ein sehr kurzer Normalenvektor steht senkrecht, wenn sein Skalarprodukt mit den Spannvektoren null ist. Entscheidend ist die Eigenschaft n∘u = 0 und n∘v = 0.", "Richtig. Jeder Vektor w der Ebene lässt sich als w = r·u + s·v schreiben, und es ist n∘w = r·(n∘u) + s·(n∘v) = r·0 + s·0 = 0. Es genügt also, die Orthogonalität zu den beiden Spannvektoren zu prüfen. Deshalb kann man den Normalenvektor aus zwei Gleichungen bestimmen."]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{"wert": 22, "einheit": "ohne Einheit", "tol": 0.05, "ok": "Richtig. Der Richtungsvektor ist AB = (3|4|6). Die Zeile für x₂ lautet −1 + 4r = 11, also r = 3. Damit ist die x₃-Koordinate 4 + 6·3 = 22.", "falschEinheit": "Der Zahlenwert passt. Eine Koordinate ist hier eine Zahl ohne Einheit. LE wäre eine Länge, LE² ein Flächeninhalt und ° ein Winkel.", "nah": "Der Parameter r gehört zu einem bestimmten Stützvektor. Hast du r = 3 mit A als Stützvektor bestimmt, aber bei B als Stützvektor eingesetzt (oder umgekehrt), gehört r zu einem anderen Punkt. Behalte den Stützvektor bei.", "weit": "Sehr große oder sehr kleine Werte entstehen, wenn die Zahl 11 als Parameter r eingesetzt wird. 11 ist die x₂-Koordinate des gesuchten Punktes. Bestimme zuerst aus der x₂-Zeile den Parameter und rechne dann die x₃-Koordinate aus. Die Hilfen führen dich."},
+  a2:{"wert": 12, "einheit": "ohne Einheit", "tol": 0.01, "ok": "Richtig. Es ist d = n∘p = 2·1 + (−1)·2 + 4·3 = 2 − 2 + 12 = 12. Die Koordinatengleichung lautet 2x₁ − x₂ + 4x₃ = 12.", "falschEinheit": "Der Zahlenwert passt. Die Zahl d ist eine reine Zahl. LE wäre eine Länge, LE² ein Flächeninhalt und ° ein Winkel.", "nah": "Prüfe das Vorzeichen bei x₂: Die zweite Komponente von n ist −1, der Beitrag ist (−1)·2 = −2 und nicht +2. Auch ein vergessener oder falsch gerechneter Summand verschiebt das Ergebnis nur ein Stück.", "weit": "Weit entfernte Werte entstehen, wenn die Komponenten multipliziert statt als Produkte addiert werden oder wenn nur ein Teil des Skalarprodukts berechnet wird. Das Skalarprodukt ist die Summe der drei Produkte n₁p₁ + n₂p₂ + n₃p₃. Die Hilfen führen dich."},
+  a4:{"wert": 4, "einheit": "ohne Einheit", "tol": 0.01, "ok": "Richtig. Die zweite Zeile liefert r = 3, die dritte 2 + s = 5, also s = 3. Weil a nur in der ersten Zeile vorkommt, legen die beiden anderen Zeilen die Parameter fest, und die erste ergibt a = 1 + 2·3 − 3 = 4.", "falschEinheit": "Der Zahlenwert passt. Die Koordinate a ist eine reine Zahl. LE wäre eine Länge, LE² ein Flächeninhalt und ° ein Winkel.", "nah": "Prüfe die erste Zeile genau: x₁ = 1 + 2r − s. Wer den Summanden mit s weglässt oder sein Vorzeichen vertauscht, landet in der Nähe des Ergebnisses, aber nicht beim richtigen Wert.", "weit": "Weit entfernte Werte entstehen, wenn r und s vertauscht werden oder wenn Koordinaten statt der Parameter eingesetzt werden. Bestimme zuerst aus den Zeilen für x₂ und x₃ die Parameter r und s und setze sie dann in die Zeile für x₁ ein. Die Hilfen führen dich."},
+  a5:{"wert": -1, "einheit": "ohne Einheit", "tol": 0.01, "ok": "Richtig. Aus n∘AB = 0 folgt 5 + n₂ + 2n₃ = 0, aus n∘AC = 0 folgt 2n₂ − n₃ = 0. Also ist n₃ = 2n₂ und 5 + n₂ + 4n₂ = 0, das ergibt n₂ = −1 (und n₃ = −2). Ein Normalenvektor ist (5|−1|−2).", "falschEinheit": "Der Zahlenwert passt. Eine Komponente eines Vektors ist hier eine reine Zahl. LE wäre eine Länge, LE² ein Flächeninhalt und ° ein Winkel.", "nah": "Das Vorzeichen ist falsch. Aus 5 + 5n₂ = 0 folgt 5n₂ = −5 und damit n₂ = −1. Die 5 darf nur mit umgekehrtem Vorzeichen auf die andere Seite.", "weit": "Werte wie 5 oder 0 entstehen, wenn n₂ mit der vorgegebenen ersten Komponente verwechselt wird oder nur eine der beiden Gleichungen benutzt wird. Der Normalenvektor muss auf AB und auf AC senkrecht stehen, beide Gleichungen gelten gleichzeitig. Die Hilfen führen dich."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.a3 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier richtig. Zwei Fragen an die Koordinatengleichung genügen meist: Ist die rechte Seite null, enthält die Ebene den Ursprung. Fehlt eine Variable auf der linken Seite, ist die Ebene parallel zur Achse dieser Variablen, und fehlen zwei, ist sie parallel zu einer Koordinatenebene. Stehen alle drei da und ist d nicht null, schneidet sie jede Achse in einem Punkt außerhalb des Ursprungs.";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Prüfe bei jeder Gleichung: Ist die rechte Seite null? Fehlt eine der Variablen x₁, x₂ oder x₃ auf der linken Seite? Eine fehlende Variable bedeutet, dass die Ebene parallel zur zugehörigen Achse ist. Fehlen zwei Variablen, ist sie parallel zu einer Koordinatenebene. Sind alle drei Variablen da und d ist nicht null, schneidet die Ebene jede Achse außerhalb des Ursprungs.";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: Ebene in Parameterform, Normalenvektor und Probepunkt ============ */
+(function(){
+  var cv = document.getElementById("cvE"), ctx = cv.getContext("2d");
+  var $ = function(id){ return document.getElementById(id); };
+  var W = cv.width, H = cv.height;
+
+  // Schrägbild wie im Unterricht: x2 nach rechts, x3 nach oben, x1 nach links unten, je Einheit die halbe Kästchendiagonale.
+  // Maßstab und Mitte werden je Datensatz so gewählt, dass Ausschnitt, Probepunkte und Normalenvektor ins Bild passen.
+  var U = 46, OX = 330, OY = 260;
+  var farbU = "#0d7a52", farbV = "#c2410c", farbN = "#1d4ed8", farbQ = "#8a6100", farbX = "#0f2135", farbD = "#b91c1c";
+  var farbT = "#5b6b7f", farbEbene = "rgba(29,78,216,0.10)", farbRand = "#93c5fd", farbLinie = "#bfdbfe";
+
+  var DATEN = [{"id": "d1", "titel": "Datensatz 1", "p": [3, 0, 0], "u": [-1, 2, 0], "v": [-1, 0, 1], "n": [2, 1, 2], "q": [[1, 2, 1], [2, 1, 1]]}, {"id": "d2", "titel": "Datensatz 2", "p": [4, 0, 0], "u": [-2, 1, 0], "v": [0, 0, 1], "n": [1, 2, 0], "q": [[2, 1, 2], [3, 1, 1]]}, {"id": "d3", "titel": "Datensatz 3", "p": [3, 0, 0], "u": [2, 1, 0], "v": [0, 1, 1], "n": [1, -2, 2], "q": [[5, 2, 1], [3, 2, 1]]}];
+  var RMAX = 2;
+
+  var ds = 0, qi = 0, kr = 0, ks = 0, lot = true, zeigeProbe = false;
+
+  function d(){ return DATEN[ds]; }
+  function punktQ(){ return d().q[qi]; }
+  function fmt(z, n){ return z.toFixed(n).replace(".", ","); }
+  function minus(s){ return s.replace("-", "−"); }
+  function kurz(v){ return Math.abs(v - Math.round(v)) < 1e-9 ? minus(String(Math.round(v))) : minus(fmt(v, 1)); }
+  function vek(v){ return "(" + v.map(kurz).join(" | ") + ")"; }
+  function skalar(a, b){ return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+
+  /* ---------- Rechnung ---------- */
+  function pps(r, s){
+    var e = d();
+    return [0, 1, 2].map(function(i){ return e.p[i] + r * e.u[i] + s * e.v[i]; });
+  }
+  function punktX(){ return pps(kr, ks); }
+  function abstand(){
+    var x = punktX(), q = punktQ();
+    return Math.sqrt(Math.pow(x[0] - q[0], 2) + Math.pow(x[1] - q[1], 2) + Math.pow(x[2] - q[2], 2));
+  }
+  // Q = p + r*u + s*v als Gleichungssystem mit drei Zeilen und zwei Unbekannten: zwei Zeilen lösen, die dritte prüfen
+  function loeseQ(){
+    var e = d(), q = punktQ(), w = [q[0] - e.p[0], q[1] - e.p[1], q[2] - e.p[2]];
+    var paare = [[0, 1], [0, 2], [1, 2]], best = null, bd = 0, k;
+    for(k = 0; k < paare.length; k++){
+      var i = paare[k][0], j = paare[k][1], det = e.u[i] * e.v[j] - e.u[j] * e.v[i];
+      if(Math.abs(det) > Math.abs(bd)){ bd = det; best = paare[k]; }
+    }
+    var a = best[0], b = best[1];
+    var r = (w[a] * e.v[b] - w[b] * e.v[a]) / bd, s = (e.u[a] * w[b] - e.u[b] * w[a]) / bd;
+    var x = pps(r, s), fehl = Math.abs(x[0] - q[0]) + Math.abs(x[1] - q[1]) + Math.abs(x[2] - q[2]);
+    return {r: r, s: s, drin: fehl < 1e-9};
+  }
+
+  /* ---------- Ansicht ---------- */
+  function ansicht(){
+    var e = d(), pts = [[0, 0, 0], e.p, [e.p[0] + e.n[0], e.p[1] + e.n[1], e.p[2] + e.n[2]]];
+    [-RMAX, RMAX].forEach(function(r){ [-RMAX, RMAX].forEach(function(s){ pts.push(pps(r, s)); }); });
+    e.q.forEach(function(z){ pts.push(z); });
+    var amin = 1e9, amax = -1e9, bmin = 1e9, bmax = -1e9;
+    pts.forEach(function(z){
+      var a = z[1] - 0.5 * z[0], b = z[2] - 0.5 * z[0];
+      amin = Math.min(amin, a); amax = Math.max(amax, a); bmin = Math.min(bmin, b); bmax = Math.max(bmax, b);
+    });
+    var rand = 58;
+    U = Math.min(54, (W - 2 * rand) / Math.max(amax - amin, 1), (H - 2 * rand) / Math.max(bmax - bmin, 1));
+    OX = W / 2 - U * (amin + amax) / 2;
+    OY = H / 2 + U * (bmin + bmax) / 2;
+  }
+
+  /* ---------- Zeichnen ---------- */
+  function P(x1, x2, x3){ return [OX + U * (x2 - 0.5 * x1), OY - U * (x3 - 0.5 * x1)]; }
+  function PV(v){ return P(v[0], v[1], v[2]); }
+  function strecke(p, r, farbe, breite, strich){
+    ctx.strokeStyle = farbe; ctx.lineWidth = breite; ctx.setLineDash(strich || []);
+    ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(r[0], r[1]); ctx.stroke(); ctx.setLineDash([]);
+  }
+  function pfeil(p, r, farbe, breite, kopf){
+    var dx = r[0] - p[0], dy = r[1] - p[1], l = Math.sqrt(dx * dx + dy * dy);
+    if(l < 2) return;
+    var ux = dx / l, uy = dy / l, k = Math.min(kopf, l * 0.6);
+    ctx.strokeStyle = farbe; ctx.lineWidth = breite; ctx.beginPath();
+    ctx.moveTo(p[0], p[1]); ctx.lineTo(r[0] - ux * k * 0.6, r[1] - uy * k * 0.6); ctx.stroke();
+    ctx.fillStyle = farbe; ctx.beginPath(); ctx.moveTo(r[0], r[1]);
+    ctx.lineTo(r[0] - ux * k + uy * k * 0.45, r[1] - uy * k - ux * k * 0.45);
+    ctx.lineTo(r[0] - ux * k - uy * k * 0.45, r[1] - uy * k + ux * k * 0.45);
+    ctx.closePath(); ctx.fill();
+  }
+  function punkt(p, rad, fuell, rand){
+    ctx.fillStyle = fuell; ctx.strokeStyle = rand; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(p[0], p[1], rad, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+  }
+  function raute(p, rad, fuell, rand){
+    ctx.fillStyle = fuell; ctx.strokeStyle = rand; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(p[0], p[1] - rad); ctx.lineTo(p[0] + rad, p[1]); ctx.lineTo(p[0], p[1] + rad); ctx.lineTo(p[0] - rad, p[1]);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+  }
+  function text(s, x, y, ausr, farbe, font){
+    ctx.fillStyle = farbe || farbT; ctx.font = font || "14px sans-serif";
+    ctx.textAlign = ausr || "left"; ctx.textBaseline = "alphabetic"; ctx.fillText(s, x, y);
+  }
+  function fuss(v, farbe){
+    var o = PV(v), u = P(v[0], v[1], 0);
+    strecke(o, u, farbe, 1.5, [3, 4]);
+    ctx.strokeStyle = farbe; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(u[0], u[1], 4, 0, 2 * Math.PI); ctx.stroke();
+  }
+  // wie viele Einheiten die Achse in Richtung (dx, dy) im Bild verläuft, bevor sie den Bildrand erreicht
+  function reich(dx, dy){
+    var m = 22, t = 1e9;
+    if(dx > 1e-9) t = Math.min(t, (W - m - OX) / dx); else if(dx < -1e-9) t = Math.min(t, (m - OX) / dx);
+    if(dy > 1e-9) t = Math.min(t, (H - m - OY) / dy); else if(dy < -1e-9) t = Math.min(t, (m - OY) / dy);
+    return Math.max(0, Math.floor(t * 2) / 2);
+  }
+  function achse(ri, name, farbe){
+    // ri: Richtung der Achse als Einheitsschritt (x1, x2, x3)
+    var dx = P(ri[0], ri[1], ri[2])[0] - OX, dy = P(ri[0], ri[1], ri[2])[1] - OY;
+    var tp = reich(dx, dy), tn = reich(-dx, -dy), t, a;
+    tp = Math.min(tp, ri[0] === 1 ? 8.5 : 9); tn = Math.min(tn, 9);
+    strecke([OX - tn * dx, OY - tn * dy], [OX + tp * dx, OY + tp * dy], farbe, 1.6);
+    pfeil([OX + (tp - 0.4) * dx, OY + (tp - 0.4) * dy], [OX + (tp + 0.35) * dx, OY + (tp + 0.35) * dy], farbe, 1.6, 10);
+    for(t = -Math.floor(tn); t <= Math.floor(tp); t++){
+      if(t === 0) continue;
+      a = [OX + t * dx, OY + t * dy];
+      strecke([a[0], a[1] - 3], [a[0], a[1] + 3], farbe, 1.2);
+      if(ri[2] === 1) text(minus(String(t)), a[0] - 8, a[1] + 4, "right", farbT, "11px sans-serif");
+      else if(ri[0] === 1) text(minus(String(t)), a[0] - 9, a[1] + 14, "right", farbT, "11px sans-serif");
+      else text(minus(String(t)), a[0], a[1] + 16, "center", farbT, "11px sans-serif");
+    }
+    text(name, OX + (tp + 0.45) * dx + (ri[2] === 1 ? 6 : 0), OY + (tp + 0.45) * dy + (ri[2] === 1 ? 4 : 14), "left", farbT, "600 15px sans-serif");
+  }
+
+  function zeichne(){
+    var e = d(), i, r, s;
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+
+    // Achsen
+    achse([1, 0, 0], "x₁", farbT); achse([0, 1, 0], "x₂", farbT); achse([0, 0, 1], "x₃", farbT);
+    text("0", OX + 9, OY + 16, "left", farbT, "11px sans-serif");
+
+    // Ausschnitt der Ebene für r und s von −2 bis 2, mit Parameterlinien
+    var c1 = PV(pps(-RMAX, -RMAX)), c2 = PV(pps(RMAX, -RMAX)), c3 = PV(pps(RMAX, RMAX)), c4 = PV(pps(-RMAX, RMAX));
+    ctx.fillStyle = farbEbene; ctx.beginPath(); ctx.moveTo(c1[0], c1[1]); ctx.lineTo(c2[0], c2[1]); ctx.lineTo(c3[0], c3[1]); ctx.lineTo(c4[0], c4[1]); ctx.closePath(); ctx.fill();
+    for(i = -RMAX + 1; i <= RMAX - 1; i++){
+      strecke(PV(pps(i, -RMAX)), PV(pps(i, RMAX)), farbLinie, 1);
+      strecke(PV(pps(-RMAX, i)), PV(pps(RMAX, i)), farbLinie, 1);
+    }
+    strecke(c1, c2, farbRand, 1.6); strecke(c2, c3, farbRand, 1.6); strecke(c3, c4, farbRand, 1.6); strecke(c4, c1, farbRand, 1.6);
+
+    // Stützpunkt, Spannvektoren (blass) und Normalenvektor
+    var pp = PV(e.p), pu = PV(pps(1, 0)), pv = PV(pps(0, 1));
+    ctx.globalAlpha = 0.5;
+    pfeil(pp, pu, farbU, 2, 10); pfeil(pp, pv, farbV, 2, 10);
+    ctx.globalAlpha = 1;
+    pfeil(pp, PV([e.p[0] + e.n[0], e.p[1] + e.n[1], e.p[2] + e.n[2]]), farbN, 3, 13);
+    var pn = PV([e.p[0] + e.n[0], e.p[1] + e.n[1], e.p[2] + e.n[2]]);
+    text("n", pn[0] + 8, pn[1] - 4, "left", farbN, "700 16px sans-serif");
+    text("u", pu[0] + 6, pu[1] - 6, "left", farbU, "700 15px sans-serif");
+    text("v", pv[0] + 6, pv[1] - 6, "left", farbV, "700 15px sans-serif");
+    punkt(pp, 4.5, farbT, "#fff"); text("P", pp[0] - 14, pp[1] + 16, "right", farbT, "700 15px sans-serif");
+
+    // Hilfslinien
+    var x = punktX(), q = punktQ();
+    if(lot){ fuss(q, farbQ); fuss(x, farbX); }
+
+    // Kette: erst r*u, dann s*v
+    var a0 = pp, a1 = PV(pps(kr, 0)), a2 = PV(x);
+    if(kr !== 0) pfeil(a0, a1, farbU, 5, 15);
+    if(ks !== 0) pfeil(a1, a2, farbV, 5, 15);
+
+    // Abstandslinie, Probepunkt und X
+    if(abstand() > 0.005) strecke(a2, PV(q), farbD, 2, [7, 5]);
+    raute(PV(q), 10, farbQ, "#fff"); text("Q", PV(q)[0] + 14, PV(q)[1] - 10, "left", farbQ, "700 17px sans-serif");
+    punkt(a2, 7, farbX, "#fff"); text("X", a2[0] + 12, a2[1] + 18, "left", farbX, "700 17px sans-serif");
+  }
+
+  /* ---------- Anzeigen ---------- */
+  function anzeigen(){
+    var e = d(), x = punktX(), q = punktQ(), ab = abstand();
+    $("aP").textContent = vek(e.p); $("aU").textContent = vek(e.u); $("aV").textContent = vek(e.v);
+    $("aN").textContent = vek(e.n);
+    $("aNuv").textContent = "n∘u = " + kurz(skalar(e.n, e.u)) + ", n∘v = " + kurz(skalar(e.n, e.v));
+    $("aEin").textContent = "(" + kurz(kr) + " | " + kurz(ks) + ")";
+    $("aX").textContent = vek(x);
+    $("aNX").textContent = kurz(skalar(e.n, x));
+    $("aQ").textContent = vek(q);
+    $("aNQ").textContent = kurz(skalar(e.n, q));
+    $("aAbst").textContent = fmt(ab < 0.005 ? 0 : ab, 2) + " LE";
+    var l = loeseQ();
+    if(zeigeProbe) $("aProbe").textContent = l.drin ? "Q liegt in E (r = " + kurz(l.r) + ", s = " + kurz(l.s) + ")" : "Q liegt nicht in E";
+    else $("aProbe").textContent = "–";
+
+    var h = "";
+    if(ab < 0.005) h = "Treffer: X liegt auf dem Probepunkt Q.";
+    else if(zeigeProbe && !l.drin) h = "Das Gleichungssystem für r und s hat keine Lösung: Kein Punkt X der Ebene trifft Q.";
+    $("simHinweis").textContent = h;
+  }
+
+  function beschriftung(){
+    $("lR").textContent = kurz(kr); $("lS").textContent = kurz(ks);
+    $("bProbe").textContent = zeigeProbe ? "Punktprobe verbergen" : "Punktprobe zeigen";
+  }
+  function alles(){ beschriftung(); zeichne(); anzeigen(); }
+
+  function setze(i){
+    ds = i; qi = 0; kr = 0; ks = 0; zeigeProbe = false;
+    $("rR").value = 0; $("rS").value = 0;
+    ansicht();
+    alles();
+  }
+
+  $("sDaten").addEventListener("change", function(){ setze(parseInt(this.value, 10)); });
+  [["rR", function(v){ kr = v; }], ["rS", function(v){ ks = v; }]].forEach(function(p){
+    $(p[0]).addEventListener("input", function(){ p[1](parseFloat(this.value)); alles(); });
+  });
+  $("bQ").addEventListener("click", function(){ qi = 1 - qi; zeigeProbe = false; alles(); });
+  $("bProbe").addEventListener("click", function(){ zeigeProbe = !zeigeProbe; alles(); });
+  $("bReset").addEventListener("click", function(){ setze(ds); });
+  $("cLot").addEventListener("change", function(){ lot = this.checked; alles(); });
+
+  setze(0);
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1 – Mittelpunkt einer Strecke",
+    vw2:"Vorwissen 2 – parallele Vektoren",
+    vw3:"Vorwissen 3 – Gleichungssystem",
+    sim1:"Simulation 1 – Probepunkt neben der Ebene",
+    sim2:"Simulation 2 – Normalenvektor senkrecht zur Ebene",
+    a1:"Aufgabe 1 – Punkt auf einer Geraden",
+    a2:"Aufgabe 2 – Koordinatengleichung aufstellen",
+    a3:"Aufgabe 3 – Zuordnung Gleichung und Lage",
+    a4:"Aufgabe 4 – Punktprobe in Parameterform",
+    a5:"Aufgabe 5 – Normalenvektor bestimmen",
+    a6:"Aufgabe 6 – Ebene durch drei Punkte beurteilen",
+    a7:"Aufgabe 7 – gleiche Ebene oder nicht"
+  };
+  var zeilen = ["Geraden und Ebenen – Mathematik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Aufgabe " + (i + 6) + " (offen):\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>

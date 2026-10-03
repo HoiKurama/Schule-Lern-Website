@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interaktive Lernseiten – Qualifikationsphase 1</title>
+
+<style>
+:root{
+  --akzent:#334155;
+  --akzent-hell:#f1f5f9;
+  --akzent-rand:#cbd5e1;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --radius:10px;
+
+  /* Fachfarben, identisch zu den Modulen */
+  --physik:#1d4ed8;      --physik-hell:#eff6ff;   --physik-rand:#bfdbfe;
+  --mathe:#0d7a52;       --mathe-hell:#e7f6ef;    --mathe-rand:#b5e0cd;
+  --info:#b45309;        --info-hell:#fef6e7;     --info-rand:#f3ddb3;
+  --ek:#6d28d9;          --ek-hell:#f4eeff;       --ek-rand:#d9c9f5;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#0f172a,#334155);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+header.kopf p{margin:0;max-width:62ch;opacity:.92;font-size:15px}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Ablauf einer Seite ---------- */
+.ablauf{margin:0 0 26px;padding:16px 18px;background:var(--flaeche);border:1px solid var(--linie);border-radius:var(--radius)}
+.ablauf h2{margin:0 0 10px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--grau)}
+.ablauf ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;counter-reset:st}
+.ablauf li{counter-increment:st;font-size:13.5px;line-height:1.45;color:var(--grau)}
+.ablauf li b{display:block;color:var(--text);font-size:14px}
+.ablauf li b::before{content:counter(st);display:inline-block;width:20px;height:20px;line-height:20px;text-align:center;
+  border-radius:50%;background:var(--akzent);color:#fff;font-size:12px;margin-right:7px}
+.ablauf p{margin:12px 0 0;font-size:13.5px;color:var(--grau)}
+
+/* ---------- Filter ---------- */
+.filter{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  margin:0 0 28px;padding:14px 16px;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:var(--radius);
+}
+.filter b{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--grau);margin-right:4px}
+.filter .trenn{flex:1 1 20px}
+button{
+  font:inherit;font-size:14px;padding:7px 14px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s;min-height:38px
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button[aria-pressed="true"]{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button[data-fach="physik"][aria-pressed="true"]{background:var(--physik);border-color:var(--physik)}
+button[data-fach="mathe"][aria-pressed="true"]{background:var(--mathe);border-color:var(--mathe)}
+button[data-fach="info"][aria-pressed="true"]{background:var(--info);border-color:var(--info)}
+
+/* ---------- Fachblöcke ---------- */
+section{margin:0 0 40px}
+section[hidden]{display:none}
+.fachkopf{display:flex;align-items:baseline;gap:11px;margin:0 0 4px}
+.fachkopf h2{margin:0;font-size:21px;letter-spacing:-.01em}
+.fachkopf .zahl{font-size:14px;color:var(--grau)}
+.fachkopf::before{
+  content:"";flex:0 0 auto;width:11px;height:11px;border-radius:3px;background:var(--akzent);
+  align-self:center
+}
+section[data-fach="physik"]{--fc:var(--physik);--fc-hell:var(--physik-hell);--fc-rand:var(--physik-rand)}
+section[data-fach="mathe"]{--fc:var(--mathe);--fc-hell:var(--mathe-hell);--fc-rand:var(--mathe-rand)}
+section[data-fach="info"]{--fc:var(--info);--fc-hell:var(--info-hell);--fc-rand:var(--info-rand)}
+.fachkopf::before{background:var(--fc,var(--akzent))}
+.inhaltsfeld{margin:0 0 6px;font-size:14px;color:var(--grau)}
+
+/* ---------- Lernpfad je Inhaltsfeld ---------- */
+.gruppe{margin:22px 0 0}
+.gruppe[hidden]{display:none}
+.gruppe h3{margin:0 0 12px;font-size:16px;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.gruppe h3 small{font-size:13px;font-weight:400;color:var(--grau)}
+ol.pfad{list-style:none;margin:0 0 0 16px;padding:0 0 0 34px;border-left:2px solid var(--fc-rand);counter-reset:schritt}
+li.schritt{position:relative;counter-increment:schritt;margin:0 0 14px}
+li.schritt[hidden]{display:none}
+li.schritt::before{
+  content:counter(schritt);position:absolute;left:-51px;top:12px;width:32px;height:32px;
+  line-height:28px;text-align:center;font-weight:600;font-size:15px;border-radius:50%;
+  background:var(--fc);color:#fff;border:2px solid #fff;box-shadow:0 0 0 2px var(--fc-rand)
+}
+li.schritt.geplant::before{background:#fff;color:var(--grau);box-shadow:0 0 0 2px var(--linie)}
+
+a.kachel,.plan{
+  display:flex;flex-direction:column;gap:6px;
+  border:1px solid var(--linie);border-left:4px solid var(--fc);
+  border-radius:var(--radius);padding:14px 18px;background:#fff;
+}
+a.kachel{text-decoration:none;color:inherit;transition:.14s}
+a.kachel:hover{border-color:var(--fc-rand);border-left-color:var(--fc);background:var(--fc-hell);
+  box-shadow:0 2px 10px rgba(15,33,53,.08);transform:translateY(-1px)}
+.plan{background:var(--flaeche);border-left-color:var(--linie);padding:10px 18px}
+.titel{font-weight:600;font-size:17px;line-height:1.3}
+.plan .titel{font-size:15px;color:var(--grau)}
+.thema{font-size:14px;color:var(--grau)}
+.fuss{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:12.5px;color:var(--grau)}
+.baut{font-size:12.5px;color:var(--grau);border-top:1px dashed var(--linie);padding-top:6px}
+.baut::before{content:"Voraussetzung: ";font-weight:600}
+.marke{
+  display:inline-block;border-radius:999px;padding:2px 9px;font-size:11px;
+  letter-spacing:.05em;text-transform:uppercase;
+  background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e
+}
+.marke.offen{background:#fff;border-color:var(--linie);color:var(--grau)}
+.marke.arbeit{background:#fef6e7;border-color:#f3ddb3;color:#8a5a00}
+
+.leer{padding:22px;text-align:center;color:var(--grau);border:1px dashed var(--linie);border-radius:var(--radius)}
+.leer[hidden]{display:none}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau);margin-top:36px}
+footer p{margin:0 0 6px}
+
+@media (max-width:520px){
+  ol.pfad{margin-left:14px;padding-left:26px}
+  li.schritt::before{left:-43px}
+}
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .filter,.plan,li.geplant,.ablauf{display:none !important}
+  li.schritt::before{box-shadow:none;border:1px solid #000;background:none;color:#000}
+  a.kachel{break-inside:avoid;page-break-inside:avoid}
+  a.kachel::after{content:" (" attr(href) ")";font-size:9pt;color:#555}
+  body{font-size:11.5pt}
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Gymnasiale Oberstufe · Nordrhein-Westfalen</div>
+    <h1>Interaktive Lernseiten · Qualifikationsphase 1</h1>
+    <p>Jede Seite läuft ohne Installation im Browser – am Schulrechner, am Tablet, zu Hause. Sie enthält einen Erklärteil, eine Simulation zum Ausprobieren, gestufte Übungen mit dreistufigen Hilfen und lässt sich als Arbeitsblatt ausdrucken. Nichts wird gespeichert; Ergebnisse verlassen die Seite nur über den Kopieren-Knopf.</p>
+    <div class="meta">
+      <span class="chip">Leistungskurs</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+      <span class="chip" id="chipAnzahl">10 Module verfügbar</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="ablauf">
+    <h2>So läuft jede Seite ab</h2>
+    <ol>
+      <li><b>Einstieg</b>Ein Beispiel aus dem Alltag und drei Fragen, die zeigen, was du schon weißt.</li>
+      <li><b>Erklären</b>Schritt für Schritt, Herleitungen zum Aufklappen, Merksätze zum Mitnehmen.</li>
+      <li><b>Ausprobieren</b>Eine Simulation mit Beobachtungsauftrag – erst beobachten, dann antworten.</li>
+      <li><b>Üben</b>Aufgaben in drei Anforderungsbereichen, bei Bedarf mit Tipp, Ansatz und Lösungsweg.</li>
+      <li><b>Abschließen</b>Zusammenfassung, Selbstcheck und Export deiner Ergebnisse.</li>
+    </ol>
+    <p>Die Kacheln unten sind als <strong>Lernpfad</strong> geordnet: Wo ein Schritt auf einem früheren aufbaut, steht es dabei. Jede Seite bleibt auch einzeln benutzbar – die Reihenfolge ist eine Empfehlung, kein Zwang.</p>
+  </div>
+
+  <div class="filter">
+    <b>Fach</b>
+    <button data-fach="alle" aria-pressed="true">Alle</button>
+    <button data-fach="physik" aria-pressed="false">Physik</button>
+    <button data-fach="mathe" aria-pressed="false">Mathematik</button>
+    <button data-fach="info" aria-pressed="false">Informatik</button>
+    <span class="trenn"></span>
+    <button id="bPlan" aria-pressed="true" title="Zeigt oder verbirgt die Module, die noch nicht fertig sind">Geplante Module zeigen</button>
+  </div>
+
+  <!-- =============== PHYSIK =============== -->
+  <section data-fach="physik">
+    <div class="fachkopf"><h2>Physik</h2><span class="zahl"></span></div>
+    <p class="inhaltsfeld">Kernlehrplan Physik, Leistungskurs Q1 – zwei Inhaltsfelder, jeweils als eigener Pfad.</p>
+
+    <div class="gruppe">
+      <h3>Ladungen, Felder und Induktion <small class="dauer"></small></h3>
+      <ol class="pfad">
+        <li class="schritt"><a class="kachel" href="module/physik-q1-elektrisches-feld.html" data-min="135">
+          <span class="titel">Das elektrische Feld</span>
+          <span class="thema">Feldbegriff, Feldlinien, Plattenkondensator und Kapazität. Feld und Feldlinien selbst erkunden.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 135 Minuten</span>
+          <span class="baut">Kraft, Energie und Arbeit aus der EF</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/physik-q1-geladene-teilchen-e-feld.html" data-min="135">
+          <span class="titel">Geladene Teilchen im elektrischen Feld</span>
+          <span class="thema">Beschleunigung und Ablenkung im Kondensator, Millikan-Versuch. Zwei Simulationen: Strahl im Querfeld und schwebende Öltröpfchen.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 135 Minuten</span>
+          <span class="baut">Das elektrische Feld</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/physik-q1-magnetisches-feld.html" data-min="135">
+          <span class="titel">Magnetisches Feld und Lorentzkraft</span>
+          <span class="thema">Kraft auf bewegte Ladungen, Kreisbahn, Wien-Filter und Massenspektrometer. Mit Fadenstrahlrohr-Simulation.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 135 Minuten</span>
+          <span class="baut">Geladene Teilchen im elektrischen Feld (Beschleunigung mit q·U = ½·m·v², Wien-Filter mit E = U/d)</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/physik-q1-induktion.html" data-min="90">
+          <span class="titel">Elektromagnetische Induktion</span>
+          <span class="thema">Magnetischer Fluss, Induktionsgesetz und Lenzsche Regel. Leiterschleife durchs Feld ziehen, Diagramme entstehen mit.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 90 Minuten</span>
+          <span class="baut">Magnetisches Feld und Lorentzkraft</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/physik-q1-selbstinduktion.html" data-min="120">
+          <span class="titel">Selbstinduktion</span>
+          <span class="thema">Induktivität, Ein- und Ausschaltvorgang im RL-Kreis, Energie im Magnetfeld. Mit Simulation: Glimmlampe, Schutzwiderstand und Funke.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 120 Minuten</span>
+          <span class="baut">Elektromagnetische Induktion</span></a></li>
+      </ol>
+    </div>
+
+    <div class="gruppe">
+      <h3>Schwingende Systeme und Wellen <small class="dauer"></small></h3>
+      <ol class="pfad">
+        <li class="schritt"><a class="kachel" href="module/physik-q1-mechanische-schwingungen.html" data-min="150">
+          <span class="titel">Mechanische Schwingungen</span>
+          <span class="thema">Feder- und Fadenpendel, Dämpfung und erzwungene Schwingung mit Resonanz. Mit Simulation: Federpendel ziehen, dämpfen und anregen.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 150 Minuten</span>
+          <span class="baut">Kraft und Energie aus der EF</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/physik-q1-schwingkreis.html" data-min="120">
+          <span class="titel">Elektromagnetischer Schwingkreis</span>
+          <span class="thema">Kondensator und Spule schwingen, Thomsonsche Formel, Dämpfung, Rückkopplung und Resonanz. Mit Simulation: Schaltbild, Energiediagramm und Resonanzkurve.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 120 Minuten</span>
+          <span class="baut">Selbstinduktion und Mechanische Schwingungen</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/physik-q1-wellen.html" data-min="120">
+          <span class="titel">Wellen</span>
+          <span class="thema">Ausbreitung, Wellenfunktion, Überlagerung und Interferenz, Reflexion, stehende Wellen auf Saite und Pfeife. Simulation: Seilwelle mit laufender, überlagerter und stehender Welle.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 120 Minuten</span>
+          <span class="baut">Mechanische Schwingungen</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/physik-q1-doppelspalt-gitter.html" data-min="120">
+          <span class="titel">Doppelspalt und Gitter</span>
+          <span class="thema">Beugung, Huygens’sches Prinzip, Gangunterschied in der Ebene, Maxima und Minima am Doppelspalt, Gitter, Spektren und Wellenlängenbestimmung. Simulation: Wellenwanne mit zwei Quellen, Doppelspalt und Gitter mit Schirmbild.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 120 Minuten</span>
+          <span class="baut">Wellen</span></a></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- =============== MATHEMATIK =============== -->
+  <section data-fach="mathe">
+    <div class="fachkopf"><h2>Mathematik</h2><span class="zahl"></span></div>
+    <p class="inhaltsfeld">Kernlehrplan Mathematik, Leistungskurs Q1 – zwei Inhaltsfelder, jeweils als eigener Pfad.</p>
+
+    <div class="gruppe">
+      <h3>Funktionen und Analysis <small class="dauer"></small></h3>
+      <ol class="pfad">
+        <li class="schritt"><a class="kachel" href="module/mathe-q1-ableitungsregeln.html" data-min="90">
+          <span class="titel">Produkt-, Ketten- und Quotientenregel</span>
+          <span class="thema">Ableitungsregeln herleiten, verknüpfen und in Sachzusammenhängen anwenden.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 90 Minuten</span>
+          <span class="baut">Ableitungsbegriff und Grundregeln aus der EF</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/mathe-q1-funktionsuntersuchung.html" data-min="130">
+          <span class="titel">Funktionsuntersuchung</span>
+          <span class="thema">Extrem- und Wendestellen, Funktionsscharen und Ortskurven. Simulation mit drei Scharen.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 130 Minuten</span>
+          <span class="baut">Produkt-, Ketten- und Quotientenregel</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/mathe-q1-integral-rekonstruktion.html" data-min="90">
+          <span class="titel">Rekonstruktion von Beständen</span>
+          <span class="thema">Von der Änderungsrate zum Bestand. Ober- und Untersumme als Einschachtelung, Streifenzahl regelbar – der Weg zum bestimmten Integral.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 90 Minuten</span>
+          <span class="baut">Funktionsuntersuchung. Bewusst vor dem Hauptsatz, damit dessen Pointe sichtbar bleibt</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/mathe-q1-hauptsatz.html" data-min="90">
+          <span class="titel">Hauptsatz der Differential- und Integralrechnung</span>
+          <span class="thema">Stammfunktion, Integralfunktion und der Zusammenhang von Ableiten und Integrieren.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 90 Minuten</span>
+          <span class="baut">Rekonstruktion von Beständen</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/mathe-q1-flaechen-zwischen-graphen.html" data-min="90">
+          <span class="titel">Flächen zwischen Kurven</span>
+          <span class="thema">Bilanz und Flächeninhalt unterscheiden, Schnittstellen als Grenzen, Vorzeichenwechsel. Simulation mit drei Graphenpaaren.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 90 Minuten</span>
+          <span class="baut">Hauptsatz der Differential- und Integralrechnung</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/mathe-q1-exponentialfunktionen.html" data-min="135">
+          <span class="titel">Exponentialfunktionen</span>
+          <span class="thema">e-Funktion und ihre Ableitung, Wachstum und Zerfall, Differentialgleichung f′ = k·f. Simulation: Modelle an Messwerten prüfen.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 135 Minuten</span>
+          <span class="baut">Produkt-, Ketten- und Quotientenregel; die Stellung im Schuljahr ist schulintern verschiebbar</span></a></li>
+      </ol>
+    </div>
+
+    <div class="gruppe">
+      <h3>Analytische Geometrie und Lineare Algebra <small class="dauer"></small></h3>
+      <ol class="pfad">
+        <li class="schritt"><a class="kachel" href="module/mathe-q1-vektoren-grundlagen.html" data-min="120">
+          <span class="titel">Vektoren: Grundlagen</span>
+          <span class="thema">Vektoren als Verschiebungen im Raum, Betrag, Mittelpunkt und Parallelität, Linearkombination und lineare Unabhängigkeit. Simulation: Pfeilkette im Schrägbild.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 120 Minuten</span>
+          <span class="baut">Koordinatensystem und Geometrie der Sekundarstufe I</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/mathe-q1-geraden-ebenen.html" data-min="120">
+          <span class="titel">Geraden und Ebenen</span>
+          <span class="thema">Parameterform von Gerade und Ebene, Skalarprodukt und Normalenvektor, Normalen- und Koordinatenform, Spurpunkte. Simulation: Ebene im Schrägbild mit Probepunkt.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 120 Minuten</span>
+          <span class="baut">Vektoren: Grundlagen</span></a></li>
+        <li class="schritt"><a class="kachel" href="module/mathe-q1-lagebeziehungen.html" data-min="120">
+          <span class="titel">Lagebeziehungen</span>
+          <span class="thema">Lage zweier Geraden (identisch, parallel, schneidend, windschief), Gerade und Ebene, Ebene und Ebene, Schnittpunkt und Schnittgerade. Simulation: Gerade und Ebene im Schrägbild.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 120 Minuten</span>
+          <span class="baut">Geraden und Ebenen</span></a></li>
+        <li class="schritt geplant"><div class="plan">
+          <span class="titel">Abstände und Winkel</span>
+          <span class="fuss"><span class="marke offen">geplant</span> Skalarprodukt, Lotfußpunkt, Hessesche Normalform</span>
+          <span class="baut">Lagebeziehungen</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- =============== INFORMATIK =============== -->
+  <section data-fach="info">
+    <div class="fachkopf"><h2>Informatik</h2><span class="zahl"></span></div>
+    <p class="inhaltsfeld">Kernlehrplan Informatik, Leistungskurs Q1 – Programmiersprache Java, Umgebung BlueJ.</p>
+
+    <div class="gruppe">
+      <h3>Daten und ihre Strukturierung <small class="dauer"></small></h3>
+      <ol class="pfad">
+        <li class="schritt geplant"><div class="plan">
+          <span class="titel">Objekte und Klassen</span>
+          <span class="fuss"><span class="marke offen">geplant</span> Objekte, Klassen, Vererbung, UML-Klassendiagramm</span></div></li>
+        <li class="schritt"><a class="kachel" href="module/info-q1-lineare-strukturen.html" data-min="135">
+          <span class="titel">Lineare Datenstrukturen</span>
+          <span class="thema">Liste, Schlange und Stapel als verkettete Knoten. Operationen Schritt für Schritt, mit sichtbar umgebogenen Referenzen.</span>
+          <span class="fuss"><span class="marke">fertig</span> ca. 135 Minuten · Java / BlueJ</span>
+          <span class="baut">Objektorientierte Modellierung: Klasse, Objekt, Referenz</span></a></li>
+        <li class="schritt geplant"><div class="plan">
+          <span class="titel">Bäume</span>
+          <span class="fuss"><span class="marke offen">geplant</span> Binärbaum, binärer Suchbaum, Traversierungen</span>
+          <span class="baut">Lineare Datenstrukturen</span></div></li>
+        <li class="schritt geplant"><div class="plan">
+          <span class="titel">ER-Modell</span>
+          <span class="fuss"><span class="marke offen">geplant</span> Datenmodellierung, ER-Diagramm, Normalformen</span></div></li>
+        <li class="schritt geplant"><div class="plan">
+          <span class="titel">SQL</span>
+          <span class="fuss"><span class="marke offen">geplant</span> Abfragen auf einer Beispieldatenbank</span>
+          <span class="baut">ER-Modell</span></div></li>
+      </ol>
+    </div>
+
+    <div class="gruppe">
+      <h3>Algorithmen <small class="dauer"></small></h3>
+      <ol class="pfad">
+        <li class="schritt geplant"><div class="plan">
+          <span class="titel">Sortieralgorithmen</span>
+          <span class="fuss"><span class="marke offen">geplant</span> Sortierverfahren im Vergleich, Laufzeitverhalten</span></div></li>
+        <li class="schritt geplant"><div class="plan">
+          <span class="titel">Suchalgorithmen</span>
+          <span class="fuss"><span class="marke offen">geplant</span> Lineare und binäre Suche, Komplexitätsbetrachtung</span>
+          <span class="baut">Sortieralgorithmen</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <p class="leer" id="leer" hidden>Für dieses Fach ist noch kein Modul fertig.</p>
+
+  <footer>
+    <p>Erstellt für den Unterricht in der Qualifikationsphase 1 nach dem Kernlehrplan Nordrhein-Westfalen für die gymnasiale Oberstufe.</p>
+    <p>Jede Seite funktioniert eigenständig und ohne Netzverbindung; Formeln bleiben auch dann lesbar, wenn das Schul-WLAN den Formelsatz blockiert.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var knoepfe = document.querySelectorAll(".filter button[data-fach]");
+  var bPlan = document.getElementById("bPlan");
+  var bloecke = document.querySelectorAll("section[data-fach]");
+  var leer = document.getElementById("leer");
+  var fach = "alle", planZeigen = true;
+
+  function minText(min){
+    var h = Math.floor(min / 60), m = min % 60;
+    return "ca. " + (h ? h + " Std. " : "") + (m ? m + " Min." : "");
+  }
+
+  /* Zähler und Zeiten werden aus dem Markup gerechnet, damit nichts von Hand nachgeführt wird. */
+  bloecke.forEach(function(s){
+    var fertig = s.querySelectorAll("a.kachel").length;
+    var gesamt = s.querySelectorAll("li.schritt").length;
+    s.querySelector(".zahl").textContent = fertig + " von " + gesamt + " Modulen fertig";
+    s.querySelectorAll(".gruppe").forEach(function(g){
+      var n = 0, min = 0;
+      g.querySelectorAll("a.kachel").forEach(function(a){ n++; min += parseInt(a.getAttribute("data-min"), 10) || 0; });
+      var d = g.querySelector(".dauer");
+      d.textContent = n ? n + " von " + g.querySelectorAll("li.schritt").length + " fertig" + (min ? " · " + minText(min) : "") : "";
+    });
+  });
+
+  function anwenden(){
+    knoepfe.forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-fach") === fach ? "true" : "false"); });
+    bPlan.setAttribute("aria-pressed", planZeigen ? "true" : "false");
+    bPlan.textContent = planZeigen ? "Geplante Module zeigen" : "Nur fertige Module";
+    var sichtbar = 0;
+    bloecke.forEach(function(s){
+      var passt = (fach === "alle" || s.getAttribute("data-fach") === fach);
+      var inhalt = 0;
+      s.querySelectorAll(".gruppe").forEach(function(g){
+        g.querySelectorAll("li.geplant").forEach(function(li){ li.hidden = !planZeigen; });
+        var hat = g.querySelector("li.schritt:not([hidden])") !== null;
+        g.hidden = !hat;
+        if(hat) inhalt++;
+      });
+      s.hidden = !(passt && inhalt > 0);
+      if(!s.hidden) sichtbar++;
+    });
+    leer.hidden = (sichtbar > 0);
+  }
+
+  knoepfe.forEach(function(b){
+    b.addEventListener("click", function(){ fach = b.getAttribute("data-fach"); anwenden(); });
+  });
+  bPlan.addEventListener("click", function(){ planZeigen = !planZeigen; anwenden(); });
+
+  var n = document.querySelectorAll("a.kachel").length;
+  document.getElementById("chipAnzahl").textContent = n === 1 ? "1 Modul verfügbar" : n + " Module verfügbar";
+  anwenden();
+})();
+</script>
+</body>
+</html>

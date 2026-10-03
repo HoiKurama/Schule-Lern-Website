@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flächen zwischen Kurven – Mathematik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#0d7a52;
+  --akzent-hell:#e7f6ef;
+  --akzent-rand:#b5e0cd;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#0b5c3e,#0d7a52);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#0b6845;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+@media (max-width:600px){
+  button{min-height:44px}
+  .regler input[type=range]{height:32px}
+  .zeile select,.eingabe select,.eingabe input[type=number]{min-height:44px}
+  #cSchn{width:24px !important;height:24px !important}
+}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Mathematik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Flächen zwischen Kurven – Vorzeichenwechsel und Schnittstellen</h1>
+    <div class="meta">
+      <span class="chip">Inhaltsfeld: Funktionen und Analysis</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+      <span class="chip">ca. 90 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Für eine neue Umgehungsstraße legt das Planungsbüro einen Querschnitt durch das Gelände: eine Kurve für die Geländeoberfläche (<em>G</em>), darunter oder darüber eine fast gerade Linie für die geplante Trasse (<em>T</em>). Wo das Gelände höher liegt als die Straße, muss Boden abgetragen werden – ein <strong>Einschnitt</strong>. Wo es tiefer liegt, muss aufgeschüttet werden – ein <strong>Damm</strong>. Für die Kalkulation will der Bauleiter zwei Zahlen: Wie viel Erde bleibt am Ende übrig oder fehlt (das bestimmt, ob Lastwagen Boden abfahren oder anliefern müssen), und wie viel Erde wird insgesamt bewegt (das bestimmt, wie lange die Bagger laufen).</p>
+
+  <p>Aus der letzten Einheit kennst du ein Werkzeug, das die erste Zahl sofort liefert: <span class="m" data-tex="\int (G-T)\,\mathrm{d}x" data-plain="∫ (G − T) dx"></span> zählt jeden Einschnitt positiv und jeden Damm negativ. Fällt beides gleich groß aus, steht dort eine glatte Null – und der Bauleiter würde meinen, die Baustelle bewege gar keine Erde, obwohl wochenlang Lastwagen fahren. Das Integral rechnet also korrekt und beantwortet trotzdem nicht die Frage nach dem Aufwand. Diese Einheit klärt, wie du aus der Bilanz einen ehrlichen Flächeninhalt machst, wo du dafür die Grenzen hernimmst – nämlich dort, wo sich die beiden Kurven schneiden – und warum nicht jede Schnittstelle dazugehört.</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Zwei Fragen aus der Einführungsphase, eine aus der letzten Einheit. Wenn du hier hängst, lohnt sich ein Blick zurück, bevor du weitermachst.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Wo schneiden sich die Graphen von <span class="m" data-tex="f(x)=x^2" data-plain="f(x) = x²"></span> und <span class="m" data-tex="g(x)=x+2" data-plain="g(x) = x + 2"></span>?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span>bei <span class="m" data-tex="x=1" data-plain="x = 1"></span> und <span class="m" data-tex="x=-2" data-plain="x = −2"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span>bei <span class="m" data-tex="x=-1" data-plain="x = −1"></span> und <span class="m" data-tex="x=2" data-plain="x = 2"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span>nur bei <span class="m" data-tex="x=2" data-plain="x = 2"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Bekannt sind <span class="m" data-tex="\int_0^2 f(x)\,\mathrm{d}x = 5" data-plain="∫₀² f(x) dx = 5"></span> und <span class="m" data-tex="\int_0^2 g(x)\,\mathrm{d}x = 2" data-plain="∫₀² g(x) dx = 2"></span>. Wie groß ist <span class="m" data-tex="\int_0^2 \bigl(f(x)-2\,g(x)\bigr)\,\mathrm{d}x" data-plain="∫₀² (f(x) − 2·g(x)) dx"></span>?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span><span class="m" data-tex="1" data-plain="1"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span><span class="m" data-tex="3" data-plain="3"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span><span class="m" data-tex="9" data-plain="9"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Wie viele Nullstellen hat <span class="m" data-tex="f(x)=x^3-3x" data-plain="f(x) = x³ − 3x"></span>?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span>eine, nämlich <span class="m" data-tex="x=0" data-plain="x = 0"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span>zwei, nämlich <span class="m" data-tex="x=\sqrt{3}" data-plain="x = √3"></span> und <span class="m" data-tex="x=-\sqrt{3}" data-plain="x = −√3"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span>drei, nämlich <span class="m" data-tex="x=-\sqrt{3}" data-plain="x = −√3"></span>, <span class="m" data-tex="x=0" data-plain="x = 0"></span> und <span class="m" data-tex="x=\sqrt{3}" data-plain="x = √3"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 BILANZ ≠ FLÄCHENINHALT =============== -->
+<section id="bilanz">
+  <div class="stufe"><div class="nr">2</div><h2>Bilanz ist nicht Flächeninhalt</h2></div>
+
+  <h3 style="margin-top:0">Ein Integral, das nicht die Fläche misst</h3>
+
+  <p>Wir arbeiten mit einer einzigen Funktion, bis die Idee sitzt: <span class="m" data-tex="f(x)=x^3-4x^2+3x=x\,(x-1)(x-3)" data-plain="f(x) = x³ − 4x² + 3x = x·(x − 1)·(x − 3)"></span>, betrachtet auf dem Intervall <span class="m" data-tex="[0;\,3]" data-plain="[0; 3]"></span>.</p>
+
+  <p>Ausklammern liefert die Nullstellen sofort: <span class="m" data-tex="x=0" data-plain="x = 0"></span>, <span class="m" data-tex="x=1" data-plain="x = 1"></span>, <span class="m" data-tex="x=3" data-plain="x = 3"></span>. Zwischen 0 und 1 liegt der Graph oberhalb der Achse (Probe <span class="m" data-tex="f(0{,}5)=0{,}5\cdot(-0{,}5)\cdot(-2{,}5)=+0{,}625" data-plain="f(0,5) = 0,5·(−0,5)·(−2,5) = +0,625"></span>), zwischen 1 und 3 unterhalb (Probe <span class="m" data-tex="f(2)=2\cdot 1\cdot(-1)=-2" data-plain="f(2) = 2·1·(−1) = −2"></span>). Es gibt also zwei Flächenstücke, ein positives und ein negatives.</p>
+
+  <p>Mit der Stammfunktion <span class="m" data-tex="F(x)=\tfrac{x^4}{4}-\tfrac{4}{3}x^3+\tfrac{3}{2}x^2" data-plain="F(x) = x⁴/4 − (4/3)·x³ + (3/2)·x²"></span> (Probe: <span class="m" data-tex="F&#x27;(x)=x^3-4x^2+3x" data-plain="F′(x) = x³ − 4x² + 3x"></span> ✓) rechnest du:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th><span class="m" data-tex="x" data-plain="x"></span></th><th><span class="m" data-tex="0" data-plain="0"></span></th><th><span class="m" data-tex="1" data-plain="1"></span></th><th><span class="m" data-tex="3" data-plain="3"></span></th></tr>
+    <tr><td><span class="m" data-tex="F(x)" data-plain="F(x)"></span></td><td><span class="m" data-tex="0" data-plain="0"></span></td><td><span class="m" data-tex="\tfrac{5}{12}\approx 0{,}4167" data-plain="5/12 ≈ 0,4167"></span></td><td><span class="m" data-tex="-\tfrac{9}{4}=-2{,}25" data-plain="−9/4 = −2,25"></span></td></tr>
+  </table>
+  </div>
+
+  <p>Damit:</p>
+  <ul>
+    <li>oberes Stück: <span class="m" data-tex="\int_0^1 f\,\mathrm{d}x=F(1)-F(0)=\tfrac{5}{12}\approx 0{,}4167" data-plain="∫₀¹ f dx = F(1) − F(0) = 5/12 ≈ 0,4167"></span></li>
+    <li>unteres Stück: <span class="m" data-tex="\int_1^3 f\,\mathrm{d}x=F(3)-F(1)=-\tfrac{9}{4}-\tfrac{5}{12}=-\tfrac{32}{12}=-\tfrac{8}{3}\approx -2{,}6667" data-plain="∫₁³ f dx = F(3) − F(1) = −9/4 − 5/12 = −32/12 = −8/3 ≈ −2,6667"></span></li>
+    <li>Integralwert insgesamt: <span class="m" data-tex="\int_0^3 f\,\mathrm{d}x=F(3)-F(0)=-\tfrac{9}{4}=-2{,}25" data-plain="∫₀³ f dx = F(3) − F(0) = −9/4 = −2,25"></span></li>
+  </ul>
+
+  <p>Ein Flächeninhalt kann nicht negativ sein, und −2,25 ist es trotzdem. Schlimmer: Selbst der Betrag 2,25 ist <strong>nicht</strong> der Flächeninhalt. Das obere Stück (0,4167) und das untere (2,6667) haben sich im Integral teilweise weggerechnet. Tatsächlich bedeckt der Graph mit der Achse <span class="m" data-tex="\tfrac{5}{12}+\tfrac{8}{3}=\tfrac{5}{12}+\tfrac{32}{12}=\tfrac{37}{12}\approx 3{,}0833" data-plain="5/12 + 8/3 = 5/12 + 32/12 = 37/12 ≈ 3,0833"></span> Flächeneinheiten.</p>
+
+  <h3>Bilanz und Flächeninhalt – zwei Wörter, zwei Zahlen</h3>
+
+  <p>Damit du beides sauber auseinanderhältst, bekommen die beiden Größen Namen. In dieser Einheit gilt strikt: <strong>Bilanz</strong> heißt das gewöhnliche Integral (orientierter Flächeninhalt, Teile oberhalb der Achse positiv, unterhalb negativ), <strong>Flächeninhalt</strong> heißt das Integral über den Betrag.</p>
+
+  <div class="merksatz">
+    <b>Definition</b>
+    <span class="m block" id="f-flaeche-betrag" data-tex="A=\int_a^b |f(x)|\,\mathrm{d}x" data-plain="A = ∫ von a bis b |f(x)| dx"></span>
+    <em>f</em> sei auf <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span> stetig. Dann heißt <em>A</em> der <strong>Flächeninhalt</strong> zwischen dem Graphen von <em>f</em> und der <em>x</em>-Achse über <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span>. Das gewöhnliche Integral <span class="m" data-tex="\int_a^b f(x)\,\mathrm{d}x" data-plain="∫ₐᵇ f(x) dx"></span> heißt dagegen die <strong>Bilanz</strong>.
+  </div>
+
+  <p>Bezeichnet <span class="m" data-tex="P" data-plain="P"></span> die Summe aller Flächenstücke <em>oberhalb</em> der Achse und <span class="m" data-tex="N" data-plain="N"></span> die aller Stücke <em>unterhalb</em> (beide positiv gezählt), dann gilt</p>
+
+  <div class="m block" id="f-bilanz-flaeche" data-tex="\text{Bilanz}=P-N \qquad\text{und}\qquad \text{Flächeninhalt}=P+N" data-plain="Bilanz = P − N     und     Flächeninhalt = P + N"></div>
+  <p>Für unser Beispiel: <span class="m" data-tex="P=\tfrac{5}{12}" data-plain="P = 5/12"></span>, <span class="m" data-tex="N=\tfrac{8}{3}" data-plain="N = 8/3"></span>, also Bilanz <span class="m" data-tex="\tfrac{5}{12}-\tfrac{32}{12}=-\tfrac{27}{12}=-\tfrac{9}{4}" data-plain="5/12 − 32/12 = −27/12 = −9/4"></span> ✓ und Flächeninhalt <span class="m" data-tex="\tfrac{37}{12}" data-plain="37/12"></span> ✓. Daraus folgt eine Beziehung, die die Simulation später zeigt:</p>
+
+  <div class="m block" data-tex="\text{Flächeninhalt}-|\text{Bilanz}|=2\cdot\min(P,\,N)" data-plain="Flächeninhalt − |Bilanz| = 2 · min(P, N)"></div>
+  <p>Im Beispiel: <span class="m" data-tex="\tfrac{37}{12}-\tfrac{27}{12}=\tfrac{10}{12}=2\cdot\tfrac{5}{12}" data-plain="37/12 − 27/12 = 10/12 = 2·(5/12)"></span> ✓. Die Differenz ist also <strong>doppelt so groß wie das kleinere der beiden Stücke</strong> – das Stück, das sich in der Bilanz vollständig „versteckt“.</p>
+
+  <details>
+    <summary>Warum <span class="m" data-tex="\int|f|" data-plain="∫|f|"></span> der Flächeninhalt ist – und warum man an Nullstellen zerlegt</summary>
+    <p><strong>Schritt 1 – oberhalb der Achse.</strong> Ist <span class="m" data-tex="f\ge 0" data-plain="f ≥ 0"></span> auf <span class="m" data-tex="[u;\,v]" data-plain="[u; v]"></span>, dann ist der Flächeninhalt unter dem Graphen nach der Definition über Ober- und Untersummen genau <span class="m" data-tex="\int_u^v f\,\mathrm{d}x" data-plain="∫ᵤᵛ f dx"></span>. Hier ist nichts zu zeigen.</p>
+    <p><strong>Schritt 2 – unterhalb der Achse.</strong> Ist <span class="m" data-tex="f\le 0" data-plain="f ≤ 0"></span> auf <span class="m" data-tex="[u;\,v]" data-plain="[u; v]"></span>, dann ist <span class="m" data-tex="-f\ge 0" data-plain="−f ≥ 0"></span>, und der Graph von <span class="m" data-tex="-f" data-plain="−f"></span> entsteht durch Spiegelung an der <em>x</em>-Achse. Die Spiegelung ändert weder Breite noch Höhe eines Streifens und damit keinen Flächeninhalt; auch für die Summen gilt das sichtbar: Die Untersumme von <span class="m" data-tex="-f" data-plain="−f"></span> ist das Negative der Obersumme von <span class="m" data-tex="f" data-plain="f"></span> (das Minimum von <span class="m" data-tex="-f" data-plain="−f"></span> ist das Negative des Maximums von <span class="m" data-tex="f" data-plain="f"></span>). Also <span class="m" data-tex="\int_u^v(-f)\,\mathrm{d}x=-\int_u^v f\,\mathrm{d}x" data-plain="∫ᵤᵛ (−f) dx = −∫ᵤᵛ f dx"></span>, und der Flächeninhalt ist <span class="m" data-tex="-\int_u^v f\,\mathrm{d}x=\bigl|\int_u^v f\,\mathrm{d}x\bigr|" data-plain="−∫ᵤᵛ f dx = |∫ᵤᵛ f dx|"></span>, denn <span class="m" data-tex="\int_u^v f\,\mathrm{d}x\le 0" data-plain="∫ᵤᵛ f dx ≤ 0"></span>.</p>
+    <p><strong>Schritt 3 – Zerlegen.</strong> Hat die stetige Funktion <span class="m" data-tex="f" data-plain="f"></span> auf <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span> genau die Nullstellen <span class="m" data-tex="a&lt;z_1&lt;z_2&lt;\dots&lt;z_k&lt;b" data-plain="a &lt; z₁ &lt; z₂ &lt; … &lt; zₖ &lt; b"></span> mit Vorzeichenwechsel, so hat <span class="m" data-tex="f" data-plain="f"></span> auf jedem Teilintervall <span class="m" data-tex="[z_i;\,z_{i+1}]" data-plain="[zᵢ; zᵢ₊₁]"></span> ein festes Vorzeichen (Zwischenwertsatz: ein Vorzeichenwechsel ohne Nullstelle ist bei stetigem <span class="m" data-tex="f" data-plain="f"></span> unmöglich). Auf jedem Stück gilt Schritt 1 oder 2, und die Intervalladditivität setzt zusammen:</p>
+    <div class="m block" id="f-zerlegung" data-tex="A=\Bigl|\int_a^{z_1}f\Bigr|+\Bigl|\int_{z_1}^{z_2}f\Bigr|+\dots+\Bigl|\int_{z_k}^{b}f\Bigr|" data-plain="A = |∫ von a bis z₁ f| + |∫ von z₁ bis z₂ f| + … + |∫ von zₖ bis b f|"></div>
+    <p><strong>Schritt 4 – warum nicht einfach <span class="m" data-tex="|\int_a^b f|" data-plain="|∫ₐᵇ f|"></span>.</strong> Für jedes stetige <span class="m" data-tex="f" data-plain="f"></span> gilt die Dreiecksungleichung für Integrale <span class="m" data-tex="\bigl|\int_a^b f\bigr|\le\int_a^b|f|" data-plain="|∫ₐᵇ f| ≤ ∫ₐᵇ |f|"></span>, denn <span class="m" data-tex="-|f|\le f\le|f|" data-plain="−|f| ≤ f ≤ |f|"></span> und das Integral erhält Ungleichungen. Gleichheit gilt genau dann, wenn <span class="m" data-tex="f" data-plain="f"></span> auf <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span> nirgends das Vorzeichen wechselt. Sobald Stücke mit verschiedenem Vorzeichen da sind, ist die rechte Seite <em>echt</em> größer – im Beispiel <span class="m" data-tex="2{,}25&lt;3{,}0833" data-plain="2,25 &lt; 3,0833"></span>. ∎</p>
+    <p><strong>Wo genau die Stetigkeit gebraucht wird.</strong> In Schritt 3: Nur weil <span class="m" data-tex="f" data-plain="f"></span> zwischen zwei aufeinander folgenden Nullstellen nicht springen kann, ist das Vorzeichen dort konstant und der Betrag lässt sich abspalten. Für Funktionen mit Sprungstellen müsstest du die Sprungstellen wie Nullstellen behandeln.</p>
+  </details>
+
+  <div class="merksatz">
+    <b>Kernaussage 1</b>
+    Das Integral ist eine <strong>Bilanz</strong>, der Flächeninhalt eine <strong>Summe von Beträgen</strong>. Ein Integralwert von null sagt nur, dass sich Flächenstücke aufheben – nie, dass keine Fläche da ist. Deshalb gilt: <strong>Die Nullstellen mit Vorzeichenwechsel sind die Integrationsgrenzen des Flächeninhalts.</strong>
+  </div>
+
+  <p>So gehst du vor:</p>
+  <ol>
+    <li><strong>Skizze oder Vorzeichenbild</strong> – wo liegt der Graph oberhalb, wo unterhalb der Achse?</li>
+    <li><strong>Nullstellen im Intervall bestimmen</strong> – alle, aber nur die mit Vorzeichenwechsel zählen als Grenzen. Nullstellen <em>außerhalb</em> von <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span> spielen keine Rolle.</li>
+    <li><strong>Eine</strong> Stammfunktion <span class="m" data-tex="F" data-plain="F"></span> bilden und ihre Werte an allen Grenzen <span class="m" data-tex="a,\,z_1,\,\dots,\,z_k,\,b" data-plain="a, z₁, …, zₖ, b"></span> in einer Tabelle festhalten. Die Teilintegrale sind dann die Differenzen benachbarter Tabellenwerte.</li>
+    <li><strong>Beträge der Teilintegrale addieren.</strong> Nie das Gesamtintegral mit Betragsstrichen versehen.</li>
+  </ol>
+
+  <p>Im Beispiel: <span class="m" data-tex="A=|F(1)-F(0)|+|F(3)-F(1)|=\bigl|\tfrac{5}{12}\bigr|+\bigl|-\tfrac{32}{12}\bigr|=\tfrac{37}{12}" data-plain="A = |F(1) − F(0)| + |F(3) − F(1)| = |5/12| + |−32/12| = 37/12"></span>. Die Tabelle oben war schon Schritt 3.</p>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Ich rechne das Integral aus, wenn es negativ ist, lasse ich das Minus weg – fertig.“ Das klingt vernünftig und ist trotzdem falsch, sobald der Graph die Achse schneidet. Der Betrag gehört <strong>um jedes Teilstück</strong>, nicht um die Summe. In unserem Beispiel liefert die Betragsstrich-Abkürzung <span class="m" data-tex="|-2{,}25|=2{,}25" data-plain="|−2,25| = 2,25"></span>, der Flächeninhalt ist aber 3,08 – fast ein Drittel mehr. Und der Extremfall: Bei <span class="m" data-tex="f(x)=x^3" data-plain="f(x) = x³"></span> auf <span class="m" data-tex="[-1;\,1]" data-plain="[−1; 1]"></span> steht die Bilanz auf 0, der Flächeninhalt ist <span class="m" data-tex="\tfrac12" data-plain="1/2"></span>. Wer bei „Ergebnis null“ schließt, die Kurve habe keine Fläche mit der Achse, hat die Bilanz mit dem Flächeninhalt verwechselt.<br>
+    <strong>Merkhilfe für die Klausur:</strong> Steht in einer Aufgabe „Flächeninhalt“, „umschlossene Fläche“ oder „Flächenstück“, lautet die erste Zeile deiner Rechnung <strong>nicht</strong> <span class="m" data-tex="\int\dots\,\mathrm{d}x" data-plain="∫ … dx"></span>, sondern eine Nullstellenrechnung.
+  </div>
+
+  <h3>Zwei Kurven, die sich aufbauen – Anschluss an den Hauptsatz</h3>
+
+  <p>Die Bilanzkurve und die Flächenkurve wachsen mit der oberen Grenze <span class="m" data-tex="x" data-plain="x"></span>:</p>
+  <div class="m block" data-tex="B(x)=\int_a^x f(t)\,\mathrm{d}t \qquad\text{und}\qquad A(x)=\int_a^x |f(t)|\,\mathrm{d}t" data-plain="B(x) = ∫ von a bis x f(t) dt     und     A(x) = ∫ von a bis x |f(t)| dt"></div>
+  <p>Nach Teil 1 des Hauptsatzes gilt <span class="m" data-tex="B&#x27;(x)=f(x)" data-plain="B′(x) = f(x)"></span>. Auch <span class="m" data-tex="|f|" data-plain="|f|"></span> ist stetig, also gilt ebenso <span class="m" data-tex="A&#x27;(x)=|f(x)|" data-plain="A′(x) = |f(x)|"></span>. Daraus lesen wir ab, ohne zu rechnen:</p>
+  <ul>
+    <li><span class="m" data-tex="A" data-plain="A"></span> ist <strong>nie fallend</strong>: <span class="m" data-tex="A&#x27;=|f|\ge 0" data-plain="A′ = |f| ≥ 0"></span>. Flächeninhalt kann nur wachsen.</li>
+    <li><span class="m" data-tex="B" data-plain="B"></span> <strong>steigt</strong>, wo <span class="m" data-tex="f&gt;0" data-plain="f &gt; 0"></span>, und <strong>fällt</strong>, wo <span class="m" data-tex="f&lt;0" data-plain="f &lt; 0"></span>. Bei einem Vorzeichenwechsel von <span class="m" data-tex="f" data-plain="f"></span> hat <span class="m" data-tex="B" data-plain="B"></span> einen Extrempunkt.</li>
+    <li>Dort, wo <span class="m" data-tex="f" data-plain="f"></span> das Vorzeichen wechselt, <strong>trennen sich die beiden Kurven</strong>: Bis zur ersten Nullstelle gilt <span class="m" data-tex="A(x)=|B(x)|" data-plain="A(x) = |B(x)|"></span>, danach wächst <span class="m" data-tex="A" data-plain="A"></span> weiter, während <span class="m" data-tex="B" data-plain="B"></span> umkehrt.</li>
+  </ul>
+  <p>Genau diese beiden Kurven baut die Simulation in Abschnitt 4 vor deinen Augen auf.</p>
+</section>
+
+<!-- =============== 3 ZWISCHEN ZWEI GRAPHEN =============== -->
+<section id="zwischen">
+  <div class="stufe"><div class="nr">3</div><h2>Zwischen zwei Graphen: Schnittstellen als Grenzen</h2></div>
+
+  <h3 style="margin-top:0">Von der Achse zu zwei Graphen</h3>
+
+  <p>Die <em>x</em>-Achse ist selbst ein Graph, nämlich der von <span class="m" data-tex="g(x)=0" data-plain="g(x) = 0"></span>. Die Aufgabe „Fläche zwischen <span class="m" data-tex="f" data-plain="f"></span> und der Achse“ ist damit ein Sonderfall der Aufgabe „Fläche zwischen <span class="m" data-tex="f" data-plain="f"></span> und <span class="m" data-tex="g" data-plain="g"></span>“. Der Trick des Abschnitts: Man führt den allgemeinen Fall auf den Sonderfall zurück, indem man die <strong>Differenzfunktion</strong></p>
+  <div class="m block" data-tex="h(x)=f(x)-g(x)" data-plain="h(x) = f(x) − g(x)"></div>
+  <p>bildet. Sie misst den senkrechten Abstand der Graphen, mit Vorzeichen: <span class="m" data-tex="h&gt;0" data-plain="h &gt; 0"></span> heißt „<span class="m" data-tex="f" data-plain="f"></span> liegt oben“, <span class="m" data-tex="h&lt;0" data-plain="h &lt; 0"></span> heißt „<span class="m" data-tex="g" data-plain="g"></span> liegt oben“, <span class="m" data-tex="h=0" data-plain="h = 0"></span> heißt „die Graphen treffen sich“.</p>
+
+  <div class="merksatz">
+    <b>Satz (Fläche zwischen zwei Graphen)</b>
+    <span class="m" data-tex="f" data-plain="f"></span> und <span class="m" data-tex="g" data-plain="g"></span> seien auf <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span> stetig. Dann ist der Flächeninhalt zwischen den Graphen über <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span>
+    <span class="m block" id="f-zwischen-graphen" data-tex="A=\int_a^b \bigl|\,f(x)-g(x)\,\bigr|\,\mathrm{d}x" data-plain="A = ∫ von a bis b |f(x) − g(x)| dx"></span>
+    Gilt <span class="m" data-tex="f\ge g" data-plain="f ≥ g"></span> auf ganz <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span>, so vereinfacht sich das zu <span class="m" id="f-obere-minus-untere" data-tex="A=\int_a^b\bigl(f(x)-g(x)\bigr)\,\mathrm{d}x" data-plain="A = ∫ₐᵇ (f(x) − g(x)) dx"></span> – und es ist gleichgültig, wie die Graphen zur <em>x</em>-Achse liegen.
+  </div>
+
+  <p>Das Wörtchen „gleichgültig“ ist der überraschende Teil: Die Fläche zwischen zwei Graphen hängt nicht davon ab, ob sie über, unter oder quer zur Achse liegen. Das liefert die folgende Herleitung. Die Reihenfolge von <span class="m" data-tex="f" data-plain="f"></span> und <span class="m" data-tex="g" data-plain="g"></span> ist wegen des Betrags ebenfalls gleichgültig: Wer einen negativen Wert erhält, hat schlicht <span class="m" data-tex="g-f" data-plain="g − f"></span> integriert.</p>
+
+  <details>
+    <summary>Warum <span class="m" data-tex="\int(f-g)" data-plain="∫(f − g)"></span> die Fläche zwischen den Graphen ist – auch unterhalb der Achse</summary>
+    <p><strong>Voraussetzung.</strong> <span class="m" data-tex="f\ge g" data-plain="f ≥ g"></span> auf <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span>, beide stetig.</p>
+    <p><strong>Schritt 1 – beide Graphen über die Achse heben.</strong> <span class="m" data-tex="g" data-plain="g"></span> ist stetig auf dem abgeschlossenen Intervall <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span> und hat dort ein Minimum <span class="m" data-tex="m" data-plain="m"></span> (Satz vom Minimum und Maximum). Wähle <span class="m" data-tex="c=|m|" data-plain="c = |m|"></span>. Dann gilt <span class="m" data-tex="g(x)+c\ge 0" data-plain="g(x) + c ≥ 0"></span> für alle <span class="m" data-tex="x\in[a;\,b]" data-plain="x ∈ [a; b]"></span> und erst recht <span class="m" data-tex="f(x)+c\ge g(x)+c\ge 0" data-plain="f(x) + c ≥ g(x) + c ≥ 0"></span>.</p>
+    <p><strong>Schritt 2 – die Verschiebung ändert die Fläche nicht.</strong> Die senkrechte Verschiebung beider Graphen um <span class="m" data-tex="c" data-plain="c"></span> nach oben ist eine Kongruenzabbildung. Das Flächenstück zwischen den Graphen wird dabei nur verschoben, sein Inhalt bleibt gleich.</p>
+    <p><strong>Schritt 3 – Fläche als Differenz zweier Flächen „unter“ den Graphen.</strong> Nach Schritt 1 liegen beide verschobenen Graphen oberhalb der Achse, und der Graph von <span class="m" data-tex="g+c" data-plain="g + c"></span> liegt unter dem von <span class="m" data-tex="f+c" data-plain="f + c"></span>. Das Flächenstück dazwischen ist deshalb die Fläche unter <span class="m" data-tex="f+c" data-plain="f + c"></span> <strong>minus</strong> die Fläche unter <span class="m" data-tex="g+c" data-plain="g + c"></span>. Beide sind nach Definition Integrale:</p>
+    <div class="m block" data-tex="A=\int_a^b(f+c)\,\mathrm{d}x-\int_a^b(g+c)\,\mathrm{d}x" data-plain="A = ∫ₐᵇ (f + c) dx − ∫ₐᵇ (g + c) dx"></div>
+    <p><strong>Schritt 4 – rechnen.</strong> Wegen der Linearität des Integrals (vw2!) gilt <span class="m" data-tex="\int(f+c)-\int(g+c)=\int\bigl((f+c)-(g+c)\bigr)=\int(f-g)" data-plain="∫(f + c) − ∫(g + c) = ∫((f + c) − (g + c)) = ∫(f − g)"></span>. Die Konstante <span class="m" data-tex="c" data-plain="c"></span> kürzt sich heraus:</p>
+    <div class="m block" data-tex="A=\int_a^b\bigl(f(x)-g(x)\bigr)\,\mathrm{d}x" data-plain="A = ∫ₐᵇ (f(x) − g(x)) dx"></div>
+    <p><strong>Schritt 5 – ohne Voraussetzung <span class="m" data-tex="f\ge g" data-plain="f ≥ g"></span>.</strong> Ist nicht überall <span class="m" data-tex="f\ge g" data-plain="f ≥ g"></span>, so zerlegt man an den Stellen, wo <span class="m" data-tex="h=f-g" data-plain="h = f − g"></span> das Vorzeichen wechselt. Auf jedem Stück ist entweder <span class="m" data-tex="f\ge g" data-plain="f ≥ g"></span> (Schritt 1–4 direkt) oder <span class="m" data-tex="g\ge f" data-plain="g ≥ f"></span> (Rollen tauschen, Ergebnis <span class="m" data-tex="\int(g-f)=-\int(f-g)" data-plain="∫(g − f) = −∫(f − g)"></span>). Auf jedem Stück steht damit <span class="m" data-tex="|\int h|" data-plain="|∫ h|"></span>, und Zusammensetzen ergibt <span class="m" data-tex="A=\int|h|" data-plain="A = ∫ |h|"></span> – genau das Ergebnis aus Abschnitt 2, nur mit <span class="m" data-tex="h" data-plain="h"></span> statt <span class="m" data-tex="f" data-plain="f"></span>. ∎</p>
+    <p><strong>Was die Herleitung zeigt.</strong> Die Fläche zwischen zwei Graphen ist die Fläche zwischen <em>einem</em> Graphen, dem von <span class="m" data-tex="h" data-plain="h"></span>, und der Achse. Alles aus Abschnitt 2 gilt deshalb unverändert weiter: Bilanz und Flächeninhalt, die vier Schritte, die Beträge um die Teilstücke.</p>
+  </details>
+
+  <h3>Schnittstellen als Integrationsgrenzen</h3>
+
+  <p>Die Nullstellen von <span class="m" data-tex="h" data-plain="h"></span> sind die Stellen mit <span class="m" data-tex="f(x)=g(x)" data-plain="f(x) = g(x)"></span> – die <strong>Schnittstellen</strong> der beiden Graphen. Sie liefern die Integrationsgrenzen. Das Verfahren aus Abschnitt 2, in die Sprache der zwei Graphen übersetzt:</p>
+
+  <div class="merksatz">
+    <b>Kernaussage 2</b>
+    Der Flächeninhalt zwischen zwei Graphen wird in fünf Schritten berechnet:
+    <ol style="margin:8px 0 0">
+      <li><strong>Differenzfunktion</strong> <span class="m" data-tex="h=f-g" data-plain="h = f − g"></span> bilden und so weit wie möglich vereinfachen (ausklammern, faktorisieren).</li>
+      <li><strong>Schnittstellen</strong> bestimmen: <span class="m" data-tex="h(x)=0" data-plain="h(x) = 0"></span> lösen, alle reellen Lösungen.</li>
+      <li><strong>Grenzen festlegen.</strong> Ist ein Intervall <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span> vorgegeben, zählen nur die Schnittstellen in seinem Inneren, und nur solche mit <strong>Vorzeichenwechsel von <span class="m" data-tex="h" data-plain="h"></span></strong>. Heißt es „die Graphen schließen eine Fläche ein“, sind es die Schnittstellen selbst, jeweils zwei benachbarte.</li>
+      <li><strong>Eine</strong> Stammfunktion <span class="m" data-tex="H" data-plain="H"></span> von <span class="m" data-tex="h" data-plain="h"></span> bilden, <span class="m" data-tex="H" data-plain="H"></span> an allen Grenzen auswerten.</li>
+      <li><strong>Beträge</strong> der Teilintegrale <span class="m" data-tex="|H(z_{i+1})-H(z_i)|" data-plain="|H(zᵢ₊₁) − H(zᵢ)|"></span> addieren.</li>
+    </ol>
+  </div>
+
+  <p><strong>Durchgerechnetes Beispiel.</strong> Gegeben sind <span class="m" data-tex="f(x)=x^3-3x^2" data-plain="f(x) = x³ − 3x²"></span> und <span class="m" data-tex="g(x)=x^2+7x-10" data-plain="g(x) = x² + 7x − 10"></span>. Die Graphen schließen eine Fläche ein. Bestimme ihren Inhalt.</p>
+
+  <p><em>Schritt 1.</em> <span class="m" data-tex="h(x)=f(x)-g(x)=x^3-3x^2-x^2-7x+10=x^3-4x^2-7x+10" data-plain="h(x) = f(x) − g(x) = x³ − 3x² − x² − 7x + 10 = x³ − 4x² − 7x + 10"></span>.</p>
+
+  <p><em>Schritt 2.</em> Ein Wert zum Raten: <span class="m" data-tex="h(1)=1-4-7+10=0" data-plain="h(1) = 1 − 4 − 7 + 10 = 0"></span>. Polynomdivision durch <span class="m" data-tex="(x-1)" data-plain="(x − 1)"></span> gibt <span class="m" data-tex="h(x)=(x-1)(x^2-3x-10)=(x-1)(x-5)(x+2)" data-plain="h(x) = (x − 1)(x² − 3x − 10) = (x − 1)(x − 5)(x + 2)"></span>. Schnittstellen also <span class="m" data-tex="x=-2" data-plain="x = −2"></span>, <span class="m" data-tex="x=1" data-plain="x = 1"></span>, <span class="m" data-tex="x=5" data-plain="x = 5"></span>. Probe an den Funktionstermen: <span class="m" data-tex="f(-2)=-20=g(-2)" data-plain="f(−2) = −20 = g(−2)"></span>, <span class="m" data-tex="f(1)=-2=g(1)" data-plain="f(1) = −2 = g(1)"></span>, <span class="m" data-tex="f(5)=50=g(5)" data-plain="f(5) = 50 = g(5)"></span> ✓.</p>
+
+  <p><em>Schritt 3.</em> Es sind drei Schnittstellen, also zwei Teilflächen. Ob <span class="m" data-tex="h" data-plain="h"></span> an allen Stellen das Vorzeichen wechselt, prüfst du mit dem Vorzeichenbild: <span class="m" data-tex="h(-3)=(-4)(-8)(-1)=-32&lt;0" data-plain="h(−3) = (−4)(−8)(−1) = −32 &lt; 0"></span>, <span class="m" data-tex="h(0)=10&gt;0" data-plain="h(0) = 10 &gt; 0"></span>, <span class="m" data-tex="h(3)=2\cdot(-2)\cdot 5=-20&lt;0" data-plain="h(3) = 2·(−2)·5 = −20 &lt; 0"></span>, <span class="m" data-tex="h(6)=5\cdot 1\cdot 8=40&gt;0" data-plain="h(6) = 5·1·8 = 40 &gt; 0"></span>. Auf <span class="m" data-tex="(-2;\,1)" data-plain="(−2; 1)"></span> liegt <span class="m" data-tex="f" data-plain="f"></span> oben, auf <span class="m" data-tex="(1;\,5)" data-plain="(1; 5)"></span> liegt <span class="m" data-tex="g" data-plain="g"></span> oben. (Bei einfachen Nullstellen wechselt <span class="m" data-tex="h" data-plain="h"></span> immer das Vorzeichen.)</p>
+
+  <p><em>Schritt 4.</em> <span class="m" data-tex="H(x)=\tfrac{x^4}{4}-\tfrac{4}{3}x^3-\tfrac{7}{2}x^2+10x" data-plain="H(x) = x⁴/4 − (4/3)·x³ − (7/2)·x² + 10x"></span>. Tabelle:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th><span class="m" data-tex="x" data-plain="x"></span></th><th><span class="m" data-tex="-2" data-plain="−2"></span></th><th><span class="m" data-tex="1" data-plain="1"></span></th><th><span class="m" data-tex="5" data-plain="5"></span></th></tr>
+    <tr><td><span class="m" data-tex="H(x)" data-plain="H(x)"></span></td><td><span class="m" data-tex="-\tfrac{58}{3}\approx -19{,}3333" data-plain="−58/3 ≈ −19,3333"></span></td><td><span class="m" data-tex="\tfrac{65}{12}\approx 5{,}4167" data-plain="65/12 ≈ 5,4167"></span></td><td><span class="m" data-tex="-\tfrac{575}{12}\approx -47{,}9167" data-plain="−575/12 ≈ −47,9167"></span></td></tr>
+  </table>
+  </div>
+
+  <p><em>Schritt 5.</em> <span class="m" data-tex="H(1)-H(-2)=\tfrac{65}{12}+\tfrac{232}{12}=\tfrac{297}{12}=\tfrac{99}{4}=24{,}75" data-plain="H(1) − H(−2) = 65/12 + 232/12 = 297/12 = 99/4 = 24,75"></span> (<span class="m" data-tex="f" data-plain="f"></span> oben) und <span class="m" data-tex="H(5)-H(1)=-\tfrac{575}{12}-\tfrac{65}{12}=-\tfrac{640}{12}=-\tfrac{160}{3}\approx -53{,}3333" data-plain="H(5) − H(1) = −575/12 − 65/12 = −640/12 = −160/3 ≈ −53,3333"></span> (<span class="m" data-tex="g" data-plain="g"></span> oben). Der Flächeninhalt ist</p>
+  <div class="m block" data-tex="A=\tfrac{99}{4}+\tfrac{160}{3}=\tfrac{297}{12}+\tfrac{640}{12}=\tfrac{937}{12}\approx 78{,}0833\ \text{FE}" data-plain="A = 99/4 + 160/3 = 297/12 + 640/12 = 937/12 ≈ 78,0833 FE"></div>
+  <p>Die Bilanz wäre dagegen <span class="m" data-tex="\tfrac{99}{4}-\tfrac{160}{3}=\tfrac{297}{12}-\tfrac{640}{12}=-\tfrac{343}{12}\approx -28{,}5833" data-plain="99/4 − 160/3 = 297/12 − 640/12 = −343/12 ≈ −28,5833"></span>. Die Abkürzung „Betrag der Bilanz“ ist hier um fast zwei Drittel zu klein: 63,4 %. Das größere Stück ist so viel größer, dass die Bilanz sein Vorzeichen bekommt – und vom kleineren Stück bleibt in der Bilanz nichts zu sehen.</p>
+
+  <p><strong>Und wenn ein Intervall vorgegeben ist?</strong> Soll dieselbe Aufgabe nur auf <span class="m" data-tex="[0;\,4]" data-plain="[0; 4]"></span> gelten, liegt <span class="m" data-tex="x=-2" data-plain="x = −2"></span> außerhalb und ist bedeutungslos, und <span class="m" data-tex="x=5" data-plain="x = 5"></span> liegt rechts des Intervalls. Übrig bleibt die Grenze <span class="m" data-tex="x=1" data-plain="x = 1"></span>: <span class="m" data-tex="\int_0^1 h=H(1)-H(0)=\tfrac{65}{12}" data-plain="∫₀¹ h = H(1) − H(0) = 65/12"></span>, <span class="m" data-tex="\int_1^4 h=H(4)-H(1)=-\tfrac{112}{3}-\tfrac{65}{12}=-\tfrac{513}{12}=-\tfrac{171}{4}" data-plain="∫₁⁴ h = H(4) − H(1) = −112/3 − 65/12 = −513/12 = −171/4"></span>, also <span class="m" data-tex="A=\tfrac{65}{12}+\tfrac{513}{12}=\tfrac{578}{12}=\tfrac{289}{6}\approx 48{,}1667" data-plain="A = 65/12 + 513/12 = 578/12 = 289/6 ≈ 48,1667"></span> FE bei einer Bilanz von <span class="m" data-tex="\tfrac{65}{12}-\tfrac{513}{12}=-\tfrac{448}{12}=-\tfrac{112}{3}\approx -37{,}3333" data-plain="65/12 − 513/12 = −448/12 = −112/3 ≈ −37,3333"></span>. (Tabellenwerte <span class="m" data-tex="H(0)=0" data-plain="H(0) = 0"></span>, <span class="m" data-tex="H(1)=\tfrac{65}{12}" data-plain="H(1) = 65/12"></span>, <span class="m" data-tex="H(4)=-\tfrac{112}{3}" data-plain="H(4) = −112/3"></span>.)</p>
+
+  <h3>Nicht jede Schnittstelle ist eine Grenze</h3>
+
+  <div class="hinweis">
+    <p>Die zweite Fehlvorstellung dieser Einheit ist das Gegenstück der ersten: „Jede Schnittstelle zerlegt.“ Sie stimmt nur bei Schnittstellen, an denen <span class="m" data-tex="h" data-plain="h"></span> das <strong>Vorzeichen wechselt</strong>.</p>
+    <p>Nimm <span class="m" data-tex="f(x)=x^2" data-plain="f(x) = x²"></span> und <span class="m" data-tex="g(x)=2x-1" data-plain="g(x) = 2x − 1"></span>. Dann ist <span class="m" data-tex="h(x)=x^2-2x+1=(x-1)^2" data-plain="h(x) = x² − 2x + 1 = (x − 1)²"></span>. Die Graphen haben genau einen gemeinsamen Punkt bei <span class="m" data-tex="x=1" data-plain="x = 1"></span> – sie <strong>berühren</strong> sich, die Parabel liegt danach weiter oberhalb der Geraden. <span class="m" data-tex="h" data-plain="h"></span> hat eine doppelte Nullstelle, aber <strong>keinen</strong> Vorzeichenwechsel: <span class="m" data-tex="h\ge 0" data-plain="h ≥ 0"></span> überall. Für <span class="m" data-tex="[-1;\,3]" data-plain="[−1; 3]"></span> gilt daher ohne jede Zerlegung</p>
+    <div class="m block" data-tex="A=\int_{-1}^{3}(x-1)^2\,\mathrm{d}x=\Bigl[\tfrac{(x-1)^3}{3}\Bigr]_{-1}^{3}=\tfrac{8}{3}-\bigl(-\tfrac{8}{3}\bigr)=\tfrac{16}{3}\approx 5{,}3333\ \text{FE}" data-plain="A = ∫ von −1 bis 3 (x − 1)² dx = [(x − 1)³/3] = 8/3 − (−8/3) = 16/3 ≈ 5,3333 FE"></div>
+    <p>Würdest du bei <span class="m" data-tex="x=1" data-plain="x = 1"></span> trotzdem teilen, käme <span class="m" data-tex="\tfrac{8}{3}+\tfrac{8}{3}=\tfrac{16}{3}" data-plain="8/3 + 8/3 = 16/3"></span> heraus – dasselbe, nur mit mehr Arbeit. Kein Schaden, aber ein Zeichen, dass das Kriterium noch nicht sitzt.</p>
+    <p><strong>Kriterium</strong> (für ganzrationale Funktionen). Eine Nullstelle von <span class="m" data-tex="h" data-plain="h"></span> mit <strong>ungerader</strong> Vielfachheit (einfach, dreifach, …) ist ein Vorzeichenwechsel und damit eine Integrationsgrenze. Eine mit <strong>gerader</strong> Vielfachheit (doppelt, vierfach, …) ist eine Berührstelle und braucht keine Zerlegung.</p>
+    <p><strong>Eine dritte Falle: Symmetrie ohne Beweis.</strong> Für <span class="m" data-tex="f(x)=x^3" data-plain="f(x) = x³"></span> und <span class="m" data-tex="g(x)=x" data-plain="g(x) = x"></span> ist <span class="m" data-tex="h(x)=x^3-x=x(x-1)(x+1)" data-plain="h(x) = x³ − x = x(x − 1)(x + 1)"></span> punktsymmetrisch zum Ursprung, und <span class="m" data-tex="\int_{-1}^{1}h\,\mathrm{d}x=0" data-plain="∫ von −1 bis 1 h dx = 0"></span>. Der Flächeninhalt ist <span class="m" data-tex="2\int_0^1(x-x^3)\,\mathrm{d}x=2\bigl(\tfrac12-\tfrac14\bigr)=\tfrac12" data-plain="2·∫₀¹ (x − x³) dx = 2·(1/2 − 1/4) = 1/2"></span>. Die Symmetrie darf man nutzen, um die Rechnung zu halbieren – nie, um sie zu ersetzen.</p>
+  </div>
+
+  <details>
+    <summary>Zusatz: Fläche zwischen Parabel und Gerade (oder zwei Parabeln) in einer Zeile</summary>
+    <p>Hat <span class="m" data-tex="h" data-plain="h"></span> genau zwei Nullstellen <span class="m" data-tex="x_1&lt;x_2" data-plain="x₁ &lt; x₂"></span> und ist <span class="m" data-tex="h(x)=\alpha(x-x_1)(x-x_2)" data-plain="h(x) = α·(x − x₁)(x − x₂)"></span>, so gilt für die von den Graphen eingeschlossene Fläche</p>
+    <div class="m block" id="f-parabelformel" data-tex="A=\frac{|\alpha|\,(x_2-x_1)^3}{6}" data-plain="A = |α| · (x₂ − x₁)³ / 6"></div>
+    <p><em>Herleitung.</em> Mit <span class="m" data-tex="u=x-x_1" data-plain="u = x − x₁"></span> und <span class="m" data-tex="d=x_2-x_1" data-plain="d = x₂ − x₁"></span> ist <span class="m" data-tex="x-x_2=u-d" data-plain="x − x₂ = u − d"></span>, und <span class="m" data-tex="\int_{x_1}^{x_2}(x-x_1)(x-x_2)\,\mathrm{d}x=\int_0^d u(u-d)\,\mathrm{d}u=\Bigl[\tfrac{u^3}{3}-\tfrac{d\,u^2}{2}\Bigr]_0^d=\tfrac{d^3}{3}-\tfrac{d^3}{2}=-\tfrac{d^3}{6}" data-plain="∫ von x₁ bis x₂ (x − x₁)(x − x₂) dx = ∫₀ᵈ u·(u − d) du = [u³/3 − d·u²/2] = d³/3 − d³/2 = −d³/6"></span>. Der Betrag liefert <span class="m" data-tex="|\alpha|\,d^3/6" data-plain="|α|·d³/6"></span>. ∎</p>
+    <p><em>Beispiel</em> (führt in Aufgabe a2): <span class="m" data-tex="h(x)=-2x^2+4x+2" data-plain="h(x) = −2x² + 4x + 2"></span> hat die Nullstellen <span class="m" data-tex="1\pm\sqrt2" data-plain="1 ± √2"></span>, also <span class="m" data-tex="d=2\sqrt2" data-plain="d = 2√2"></span>, <span class="m" data-tex="\alpha=-2" data-plain="α = −2"></span> und <span class="m" data-tex="A=\tfrac{2\,(2\sqrt2)^3}{6}=\tfrac{2\cdot16\sqrt2}{6}=\tfrac{16\sqrt2}{3}\approx 7{,}5425" data-plain="A = 2·(2√2)³/6 = 2·16√2/6 = 16√2/3 ≈ 7,5425"></span>.</p>
+  </details>
+
+  <h3>Nicht immer lassen sich Schnittstellen exakt angeben</h3>
+
+  <div class="hinweis">
+    Bei Exponential- und trigonometrischen Funktionen ist <span class="m" data-tex="h(x)=0" data-plain="h(x) = 0"></span> oft nur mit dem Logarithmus oder gar nur numerisch lösbar. Beispiel aus dem Zufluss der Vorgängereinheit: Zufluss <span class="m" data-tex="z(t)=4\,e^{-0{,}3t}" data-plain="z(t) = 4·e^(−0,3t)"></span> gegen einen konstanten Abfluss von 1,5 (beide in L/min). Die Schnittstelle ist die Lösung von <span class="m" data-tex="4\,e^{-0{,}3t}=1{,}5" data-plain="4·e^(−0,3t) = 1,5"></span>, also <span class="m" data-tex="e^{-0{,}3t}=\tfrac38" data-plain="e^(−0,3t) = 3/8"></span> und <span class="m" data-tex="t=\tfrac{\ln(8/3)}{0{,}3}\approx 3{,}2694\ \text{min}" data-plain="t = ln(8/3)/0,3 ≈ 3,2694 min"></span>. Mehr als eine exakte Schnittstelle braucht es nicht: Die Simulation im nächsten Abschnitt macht daraus eine Aufgabe zum Ausprobieren, Aufgabe a4 rechnet ein verwandtes Beispiel durch. Probe: <span class="m" data-tex="4\,e^{-0{,}3\cdot 3{,}2694}=4\cdot 0{,}375=1{,}5" data-plain="4·e^(−0,3·3,2694) = 4·0,375 = 1,5"></span> ✓.
+  </div>
+
+  <div class="merksatz">
+    <b>Kernaussage 3</b>
+    Der Flächeninhalt zwischen zwei Graphen ist <span class="m" data-tex="\int|f-g|\,\mathrm{d}x" data-plain="∫ |f − g| dx"></span>. Berechnet wird er stückweise: Die Grenzen sind die <strong>Schnittstellen mit Vorzeichenwechsel</strong>, die Teilstücke tragen Betragsstriche, und es genügt <strong>eine</strong> Stammfunktion von <span class="m" data-tex="f-g" data-plain="f − g"></span>. Ob <span class="m" data-tex="f" data-plain="f"></span> oder <span class="m" data-tex="g" data-plain="g"></span> oben liegt, ist gleichgültig; ob die Graphen die Achse schneiden, ebenfalls.
+  </div>
+</section>
+
+<!-- =============== 4 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">4</div><h2>Wo Bilanz und Flächeninhalt auseinanderlaufen</h2></div>
+
+  <p>Oben siehst du die Graphen zweier Funktionen <span class="m" data-tex="f" data-plain="f"></span> (grün) und <span class="m" data-tex="g" data-plain="g"></span> (dunkelgrau). Der Bereich zwischen der unteren Grenze <span class="m" data-tex="a" data-plain="a"></span> und der oberen Grenze <span class="m" data-tex="b" data-plain="b"></span> ist eingefärbt: <span style="color:#0d7a52;font-weight:600">grün</span>, wo <span class="m" data-tex="f" data-plain="f"></span> oben liegt, <span style="color:#dc2626;font-weight:600">rot</span>, wo <span class="m" data-tex="g" data-plain="g"></span> oben liegt. Unten bauen sich die zwei Kurven aus Abschnitt 2 auf: die <span style="color:#1d4ed8;font-weight:600">Bilanz</span> <span class="m" data-tex="B(x)=\int_a^x(f-g)\,\mathrm{d}t" data-plain="B(x) = ∫ von a bis x (f − g) dt"></span> und der <span style="color:#b45309;font-weight:600">Flächeninhalt</span> <span class="m" data-tex="A(x)=\int_a^x|f-g|\,\mathrm{d}t" data-plain="A(x) = ∫ von a bis x |f − g| dt"></span>. Beide beginnen bei <span class="m" data-tex="x=a" data-plain="x = a"></span> im Nullpunkt, sind bis zur Grenze <span class="m" data-tex="b" data-plain="b"></span> durchgezogen und laufen danach hellgrau gestrichelt weiter. Die senkrechte Linie bei <span class="m" data-tex="b" data-plain="b"></span> läuft durch beide Diagramme: So siehst du, welche Stelle oben zu welchem Wert unten gehört.</p>
+
+  <p>Drei Paare stehen zur Auswahl. Bei <strong>Paar A</strong> verraten wir dir die Funktionsterme nicht – die Simulation ist dein Messgerät. Paar B (<em>Berührung</em>) und Paar C (<em>Zufluss gegen Abfluss</em>) kennst du aus dem Erklärteil. Bei Paar C ist <span class="m" data-tex="f" data-plain="f"></span> der Zufluss <span class="m" data-tex="z" data-plain="z"></span> und <span class="m" data-tex="g" data-plain="g"></span> der Abfluss, die Größe <span class="m" data-tex="x" data-plain="x"></span> ist die Zeit <span class="m" data-tex="t" data-plain="t"></span> in Minuten. Die Zahlenwerte sind Flächeninhalte in Flächeneinheiten (FE), bei Paar C in Litern. Wundere dich nicht, wenn du bei Paar B die orange Kurve nicht siehst: Sie liegt genau unter der blauen, weil Bilanz und Flächeninhalt dort gleich sind.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    Stelle <b>Paar A</b> ein und setze <span class="m" data-tex="a=-1{,}50" data-plain="a = −1,50"></span>. Zieh <span class="m" data-tex="b" data-plain="b"></span> langsam von ganz links nach rechts und beobachte die Kurven im <em>unteren</em> Diagramm sowie die Felder „Bilanz“, „Flächeninhalt“ und „Differenz“.<br>
+    Notiere drei Dinge: <b>(1)</b> die Stellen <span class="m" data-tex="b" data-plain="b"></span>, an denen die blaue Kurve ihre Richtung wechselt, und was das Feld „f(b) − g(b)“ dort zeigt; <b>(2)</b> die Bereiche von <span class="m" data-tex="b" data-plain="b"></span>, in denen die Differenz <em>nicht</em> wächst, obwohl <span class="m" data-tex="b" data-plain="b"></span> weiterläuft, samt ihren Werten; <b>(3)</b> bis zu welcher Stelle die orange Kurve das <em>Spiegelbild</em> der blauen an der Achse ist.<br>
+    Formuliere daraus einen Satz, der beschreibt, wann „Flächeninhalt = Betrag der Bilanz“ gilt und wann nicht. Prüfe deinen Satz zum Schluss an <b>Paar B</b> mit <span class="m" data-tex="a=-1{,}00" data-plain="a = −1,00"></span> und <span class="m" data-tex="b" data-plain="b"></span> von <span class="m" data-tex="-0{,}90" data-plain="−0,90"></span> bis <span class="m" data-tex="3{,}00" data-plain="3,00"></span>: Was sagt er voraus – und stimmt es?
+  </div>
+
+  <div class="sim">
+    <canvas id="cvSim" width="1000" height="690" style="touch-action:none" role="img" aria-label="Oben die Graphen von f und g mit eingefärbter Fläche, unten die Kurven für Bilanz und Flächeninhalt"></canvas>
+
+    <div class="anzeige">
+      <div>untere Grenze a<span id="lA">−1,50</span></div>
+      <div>obere Grenze b<span id="lB">3,50</span></div>
+      <div>f(b) − g(b)<span id="lH">3,38</span></div>
+      <div>Fläche, f oben (P)<span id="lP">11,97 FE</span></div>
+      <div>Fläche, g oben (N)<span id="lN">2,39 FE</span></div>
+      <div>Bilanz<span id="lBil">9,58 FE</span></div>
+      <div>Flächeninhalt<span id="lFl">14,36 FE</span></div>
+      <div>Differenz<span id="lDiff">4,78 FE</span></div>
+      <div>Vorzeichenwechsel in (a; b)<span id="lNs">3</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label>untere Grenze a <b><span id="wA">−1,50</span></b></label>
+          <input type="range" id="rA" min="0" max="490" value="0">
+        </div>
+        <div>
+          <label>obere Grenze b <b><span id="wB">3,50</span></b></label>
+          <input type="range" id="rB" min="10" max="500" value="500">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button class="primaer" data-paar="A">Paar A – drei Schnittstellen</button>
+        <button data-paar="B">Paar B – Berührung</button>
+        <button data-paar="C">Paar C – Zufluss gegen Abfluss</button>
+        <button id="bPlay">▶ Abspielen</button>
+        <button id="bReset">Zurücksetzen</button>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px;margin-left:6px">
+          <input type="checkbox" id="cSchn" style="accent-color:var(--akzent);width:16px;height:16px">
+          Schnittstellen markieren
+        </label>
+      </div>
+      <p style="margin:10px 0 0;font-size:14px;color:var(--grau)">Du kannst die Grenzen auch direkt im Bild ziehen: Es wird immer die näher liegende der beiden senkrechten Linien <b>a</b> oder <b>b</b> gegriffen, in beiden Diagrammen gleichermaßen.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Stell <b>Paar A</b> ein, setze <span class="m" data-tex="b=3{,}50" data-plain="b = 3,50"></span> und verschiebe <em>nur</em> <span class="m" data-tex="a" data-plain="a"></span>. Bei welcher der drei Einstellungen zeigt das Feld „Bilanz“ den größten Wert?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>bei <span class="m" data-tex="a=-1{,}50" data-plain="a = −1,50"></span>, denn dann ist am meisten Fläche dabei.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>bei <span class="m" data-tex="a=-1{,}00" data-plain="a = −1,00"></span>, denn dort wechselt <span class="m" data-tex="f-g" data-plain="f − g"></span> das Vorzeichen.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>bei <span class="m" data-tex="a=3{,}00" data-plain="a = 3,00"></span>, denn das ist die letzte Schnittstelle.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Stell <b>Paar A</b> ein und setze <span class="m" data-tex="a=-1{,}50" data-plain="a = −1,50"></span>. Zieh <span class="m" data-tex="b" data-plain="b"></span> von links nach rechts. Bei welchem <span class="m" data-tex="b" data-plain="b"></span> steht die Bilanz nach dem Start zum ersten Mal wieder auf (etwa) <span class="m" data-tex="0{,}00" data-plain="0,00"></span>?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>bei <span class="m" data-tex="b=-1{,}00" data-plain="b = −1,00"></span>, denn dort schneiden sich die Graphen.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span>bei <span class="m" data-tex="b=-0{,}50" data-plain="b = −0,50"></span>, denn das ist von der Schnittstelle genauso weit entfernt wie <span class="m" data-tex="a" data-plain="a"></span>.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>bei <span class="m" data-tex="b=-0{,}38" data-plain="b = −0,38"></span>, denn dort hat sich das Stück oberhalb der Achse gegen das Stück unterhalb aufgehoben.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+</section>
+
+<!-- =============== 5 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">5</div><h2>Übungen</h2></div>
+
+  <p>Bevor du a1 anfängst: Was ist die linkeste und was die rechteste Grenze? Wo kommen sie her? Die Ränder des Intervalls sind genauso Grenzen wie die Nullstellen.</p>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Gegeben ist <span class="m" data-tex="f(x)=x^2-4x+3" data-plain="f(x) = x² − 4x + 3"></span>. Berechne den Flächeninhalt, den der Graph von <span class="m" data-tex="f" data-plain="f"></span> über dem Intervall <span class="m" data-tex="[0;\,4]" data-plain="[0; 4]"></span> mit der <em>x</em>-Achse einschließt. Gib das Ergebnis in Flächeneinheiten (FE) an.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="FE">FE</option>
+        <option value="LE">LE</option>
+        <option value="FE²">FE²</option>
+        <option value="m³">m³</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Skizziere die nach oben geöffnete Parabel und frag dich, auf wie vielen Stücken des Intervalls sie über beziehungsweise unter der Achse verläuft – erst dann wird integriert.</div>
+    <div class="hilfe-text" data-stufe="2">Die Nullstellen von <span class="m" data-tex="f" data-plain="f"></span> sind die Grenzen der Teilstücke; sie folgen aus <span class="m" data-tex="x^2-4x+3=0" data-plain="x² − 4x + 3 = 0"></span>. Bilde <strong>eine</strong> Stammfunktion <span class="m" data-tex="F" data-plain="F"></span> und halte <span class="m" data-tex="F" data-plain="F"></span> an allen Grenzen in einer Tabelle fest; die Teilintegrale sind die Differenzen benachbarter Werte, und um jedes kommt ein Betrag.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="x^2-4x+3=(x-1)(x-3)=0" data-plain="x² − 4x + 3 = (x − 1)(x − 3) = 0"></span>, Nullstellen <span class="m" data-tex="x=1" data-plain="x = 1"></span> und <span class="m" data-tex="x=3" data-plain="x = 3"></span>, beide in <span class="m" data-tex="(0;\,4)" data-plain="(0; 4)"></span> mit Vorzeichenwechsel. Vorzeichen: <span class="m" data-tex="f(0)=3&gt;0" data-plain="f(0) = 3 &gt; 0"></span>, <span class="m" data-tex="f(2)=-1&lt;0" data-plain="f(2) = −1 &lt; 0"></span>, <span class="m" data-tex="f(4)=3&gt;0" data-plain="f(4) = 3 &gt; 0"></span>. <span class="m" data-tex="F(x)=\tfrac{x^3}{3}-2x^2+3x" data-plain="F(x) = x³/3 − 2x² + 3x"></span> (Probe: <span class="m" data-tex="F&#x27;=x^2-4x+3" data-plain="F′ = x² − 4x + 3"></span> ✓). <span class="m" data-tex="F(0)=0" data-plain="F(0) = 0"></span>, <span class="m" data-tex="F(1)=\tfrac13-2+3=\tfrac43" data-plain="F(1) = 1/3 − 2 + 3 = 4/3"></span>, <span class="m" data-tex="F(3)=9-18+9=0" data-plain="F(3) = 9 − 18 + 9 = 0"></span>, <span class="m" data-tex="F(4)=\tfrac{64}{3}-32+12=\tfrac43" data-plain="F(4) = 64/3 − 32 + 12 = 4/3"></span>. <span class="m" data-tex="\int_0^1f=\tfrac43-0=\tfrac43" data-plain="∫₀¹ f = 4/3 − 0 = 4/3"></span>, <span class="m" data-tex="\int_1^3f=0-\tfrac43=-\tfrac43" data-plain="∫₁³ f = 0 − 4/3 = −4/3"></span>, <span class="m" data-tex="\int_3^4f=\tfrac43-0=\tfrac43" data-plain="∫₃⁴ f = 4/3 − 0 = 4/3"></span>. <span class="m" data-tex="A=\tfrac43+\tfrac43+\tfrac43=4\ \text{FE}" data-plain="A = 4/3 + 4/3 + 4/3 = 4 FE"></span>. Die <strong>Bilanz</strong> wäre <span class="m" data-tex="F(4)-F(0)=\tfrac43\approx 1{,}33" data-plain="F(4) − F(0) = 4/3 ≈ 1,33"></span> – ein Drittel des Flächeninhalts.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die Öffnung eines Zierfensters wird oben vom Graphen von <span class="m" data-tex="f(x)=-x^2+3x+2" data-plain="f(x) = −x² + 3x + 2"></span> und unten vom Graphen von <span class="m" data-tex="g(x)=x^2-x" data-plain="g(x) = x² − x"></span> begrenzt (1 LE = 1 dm). Berechne die Glasfläche, die von beiden Graphen eingeschlossen wird. Runde auf zwei Nachkommastellen.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="dm²">dm²</option>
+        <option value="cm²">cm²</option>
+        <option value="dm³">dm³</option>
+        <option value="dm">dm</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Wo das Fenster links und rechts endet, sagt dir der Text nicht – es sind die Stellen, an denen sich die Graphen treffen.</div>
+    <div class="hilfe-text" data-stufe="2">Bilde <span class="m" data-tex="h=f-g" data-plain="h = f − g"></span>, setze <span class="m" data-tex="h(x)=0" data-plain="h(x) = 0"></span> und löse mit der Lösungsformel. Da <span class="m" data-tex="f" data-plain="f"></span> oben liegt, ist der Flächeninhalt <span class="m" data-tex="\int h\,\mathrm{d}x" data-plain="∫ h dx"></span> zwischen den beiden Lösungen. Als Stammfunktion von <span class="m" data-tex="h" data-plain="h"></span> nimmst du <span class="m" data-tex="H(x)" data-plain="H(x)"></span>; die Formel für den Flächeninhalt ist <span class="m" data-tex="H(x_2)-H(x_1)" data-plain="H(x₂) − H(x₁)"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="h(x)=-x^2+3x+2-x^2+x=-2x^2+4x+2" data-plain="h(x) = −x² + 3x + 2 − x² + x = −2x² + 4x + 2"></span>. <span class="m" data-tex="-2x^2+4x+2=0\ \mid :(-2)" data-plain="−2x² + 4x + 2 = 0 | : (−2)"></span> ⟹ <span class="m" data-tex="x^2-2x-1=0" data-plain="x² − 2x − 1 = 0"></span> ⟹ <span class="m" data-tex="x=1\pm\sqrt{1+1}=1\pm\sqrt2" data-plain="x = 1 ± √(1 + 1) = 1 ± √2"></span>, also <span class="m" data-tex="x_1=1-\sqrt2\approx -0{,}4142" data-plain="x₁ = 1 − √2 ≈ −0,4142"></span> und <span class="m" data-tex="x_2=1+\sqrt2\approx 2{,}4142" data-plain="x₂ = 1 + √2 ≈ 2,4142"></span>. Vorzeichen: <span class="m" data-tex="h(1)=-2+4+2=4&gt;0" data-plain="h(1) = −2 + 4 + 2 = 4 &gt; 0"></span>, <span class="m" data-tex="f" data-plain="f"></span> liegt oben (Probe: <span class="m" data-tex="f(1)=4" data-plain="f(1) = 4"></span>, <span class="m" data-tex="g(1)=0" data-plain="g(1) = 0"></span>). <span class="m" data-tex="H(x)=-\tfrac23x^3+2x^2+2x" data-plain="H(x) = −(2/3)·x³ + 2x² + 2x"></span>. <span class="m" data-tex="H(x_2)=7{,}1046" data-plain="H(x₂) = 7,1046"></span>, <span class="m" data-tex="H(x_1)=-0{,}4379" data-plain="H(x₁) = −0,4379"></span>. <span class="m" data-tex="A=H(x_2)-H(x_1)=7{,}1046+0{,}4379=7{,}5425\ \text{dm}^2\approx 7{,}54\ \text{dm}^2" data-plain="A = H(x₂) − H(x₁) = 7,1046 + 0,4379 = 7,5425 dm² ≈ 7,54 dm²"></span> (exakt <span class="m" data-tex="16\sqrt2/3" data-plain="16·√2/3"></span>). <em>Kontrolle mit der Parabelformel aus Abschnitt 3:</em> <span class="m" data-tex="|\alpha|\,d^3/6" data-plain="|α|·d³/6"></span> mit <span class="m" data-tex="\alpha=-2" data-plain="α = −2"></span>, <span class="m" data-tex="d=2\sqrt2" data-plain="d = 2√2"></span>: <span class="m" data-tex="2\cdot(2{,}8284)^3/6=2\cdot 22{,}6274/6=7{,}5425" data-plain="2·(2,8284)³/6 = 2·22,6274/6 = 7,5425"></span> ✓. In Quadratzentimetern: 754,25 cm².</div>
+  </div>
+
+  <div class="aufgabe">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die vier Diagramme A bis D zeigen jeweils denselben Graphen <span class="m" data-tex="g(x)=2" data-plain="g(x) = 2"></span> (gestrichelt) und einen Graphen <span class="m" data-tex="f" data-plain="f"></span> (durchgezogen) auf dem Intervall <span class="m" data-tex="[0;\,6]" data-plain="[0; 6]"></span>. Die Funktionsterme stehen unter den Diagrammen. Ordne jeder Aussage das passende Diagramm zu. Rechne, wo du dir nicht sicher bist – die Bilanz <span class="m" data-tex="\int_0^6(f-g)\,\mathrm{d}x" data-plain="∫₀⁶ (f − g) dx"></span> und der Flächeninhalt <span class="m" data-tex="\int_0^6|f-g|\,\mathrm{d}x" data-plain="∫₀⁶ |f − g| dx"></span> lassen sich in allen vier Fällen im Kopf oder mit wenigen Zeilen bestimmen.</div>
+
+    <div class="diagramme">
+      <figure>
+        <svg viewBox="0 0 160 90" role="img" aria-label="Diagramm A"><line x1="12" y1="71" x2="156" y2="71" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="84" stroke="#94a3b8"/><line x1="18" y1="53" x2="150" y2="53" stroke="#475569" stroke-width="2" stroke-dasharray="5 4"/><polyline points="18.0,17.0 29.0,29.4 40.0,39.5 51.0,47.4 62.0,53.0 73.0,56.4 84.0,57.5 95.0,56.4 106.0,53.0 117.0,47.4 128.0,39.5 139.0,29.4 150.0,17.0" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>A: <span class="m" data-tex="f(x)=2+0{,}5(x-2)(x-4)" data-plain="f(x) = 2 + 0,5·(x − 2)(x − 4)"></span></figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 160 90" role="img" aria-label="Diagramm B"><line x1="12" y1="71" x2="156" y2="71" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="84" stroke="#94a3b8"/><line x1="18" y1="53" x2="150" y2="53" stroke="#475569" stroke-width="2" stroke-dasharray="5 4"/><polyline points="18.0,27.8 29.0,32.8 40.0,36.8 51.0,39.9 62.0,42.2 73.0,43.6 84.0,44.0 95.0,43.6 106.0,42.2 117.0,39.9 128.0,36.8 139.0,32.8 150.0,27.8" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>B: <span class="m" data-tex="f(x)=3+0{,}2(x-3)^2" data-plain="f(x) = 3 + 0,2·(x − 3)²"></span></figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 160 90" role="img" aria-label="Diagramm C"><line x1="12" y1="71" x2="156" y2="71" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="84" stroke="#94a3b8"/><line x1="18" y1="53" x2="150" y2="53" stroke="#475569" stroke-width="2" stroke-dasharray="5 4"/><polyline points="18.0,28.7 29.0,36.1 40.0,42.2 51.0,46.9 62.0,50.3 73.0,52.3 84.0,53.0 95.0,52.3 106.0,50.3 117.0,46.9 128.0,42.2 139.0,36.1 150.0,28.7" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>C: <span class="m" data-tex="f(x)=2+0{,}3(x-3)^2" data-plain="f(x) = 2 + 0,3·(x − 3)²"></span></figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 160 90" role="img" aria-label="Diagramm D"><line x1="12" y1="71" x2="156" y2="71" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="84" stroke="#94a3b8"/><line x1="18" y1="53" x2="150" y2="53" stroke="#475569" stroke-width="2" stroke-dasharray="5 4"/><polyline points="18.0,74.6 150.0,31.4" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>D: <span class="m" data-tex="f(x)=2+0{,}8(x-3)" data-plain="f(x) = 2 + 0,8·(x − 3)"></span></figcaption>
+      </figure>
+    </div>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="C"><span>Der Flächeninhalt zwischen den Graphen lässt sich mit einem einzigen Integral <span class="m" data-tex="\int(f-g)" data-plain="∫(f − g)"></span> berechnen, obwohl die Graphen einen gemeinsamen Punkt haben.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="D"><span>Die Bilanz <span class="m" data-tex="\int_0^6(f-g)\,\mathrm{d}x" data-plain="∫₀⁶ (f − g) dx"></span> ist null, der Flächeninhalt aber nicht.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="A"><span>Der Flächeninhalt ist größer als der Betrag der Bilanz, und die Bilanz ist nicht null.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="B"><span>Die Graphen haben keinen gemeinsamen Punkt, und der Flächeninhalt ist gleich der Bilanz.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Frag bei jedem Diagramm zuerst, ob <span class="m" data-tex="f-g" data-plain="f − g"></span> sein Vorzeichen wechselt – und wie oft.</div>
+    <div class="hilfe-text" data-stufe="2">Wechselt <span class="m" data-tex="f-g" data-plain="f − g"></span> nie das Vorzeichen, sind Bilanz und Flächeninhalt gleich (bis auf das Vorzeichen). Wechselt es, ist der Flächeninhalt größer als <span class="m" data-tex="|\text{Bilanz}|" data-plain="|Bilanz|"></span>. Eine Bilanz von null entsteht nur, wenn sich Stücke genau aufheben; dann hilft die Symmetrie des Graphen von <span class="m" data-tex="f-g" data-plain="f − g"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="h=f-g" data-plain="h = f − g"></span> in jedem Diagramm:<br>
+      <strong>A:</strong> <span class="m" data-tex="h=0{,}5(x-2)(x-4)" data-plain="h = 0,5·(x − 2)(x − 4)"></span>, Nullstellen 2 und 4, beide mit Vorzeichenwechsel. <span class="m" data-tex="\int_0^2h=\tfrac{10}{3}" data-plain="∫₀² h = 10/3"></span>, <span class="m" data-tex="\int_2^4h=-\tfrac23" data-plain="∫₂⁴ h = −2/3"></span>, <span class="m" data-tex="\int_4^6h=\tfrac{10}{3}" data-plain="∫₄⁶ h = 10/3"></span>. Bilanz 6, Flächeninhalt <span class="m" data-tex="\tfrac{22}{3}\approx 7{,}33" data-plain="22/3 ≈ 7,33"></span>.<br>
+      <strong>B:</strong> <span class="m" data-tex="h=0{,}2(x-3)^2+1&gt;0" data-plain="h = 0,2·(x − 3)² + 1 &gt; 0"></span> überall, keine Nullstelle. Bilanz und Flächeninhalt sind beide 9,6.<br>
+      <strong>C:</strong> <span class="m" data-tex="h=0{,}3(x-3)^2" data-plain="h = 0,3·(x − 3)²"></span>, doppelte Nullstelle bei 3 ohne Vorzeichenwechsel. Bilanz = Flächeninhalt = <span class="m" data-tex="0{,}3\cdot 18=5{,}4" data-plain="0,3·18 = 5,4"></span>; ein Integral genügt.<br>
+      <strong>D:</strong> <span class="m" data-tex="h=0{,}8(x-3)" data-plain="h = 0,8·(x − 3)"></span>, Vorzeichenwechsel bei 3, punktsymmetrisch. <span class="m" data-tex="\int_0^3h=-3{,}6" data-plain="∫₀³ h = −3,6"></span>, <span class="m" data-tex="\int_3^6h=+3{,}6" data-plain="∫₃⁶ h = +3,6"></span>. Bilanz 0, Flächeninhalt 7,2.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">In einen Tank fließt Wasser mit der Rate <span class="m" data-tex="z(t)=4\,e^{-0{,}3t}" data-plain="z(t) = 4·e^(−0,3t)"></span> (in L/min, <span class="m" data-tex="t" data-plain="t"></span> in min) zu, gleichzeitig läuft ständig 2 L/min ab. Im Zeitraum <span class="m" data-tex="0\le t\le 8" data-plain="0 ≤ t ≤ 8"></span> gibt es zwei Phasen: erst fließt mehr zu als ab, dann mehr ab als zu. Bestimme die <strong>Summe der beiden Nettomengen</strong> – jede als positive Zahl gezählt, also den Flächeninhalt zwischen den Graphen von <span class="m" data-tex="z" data-plain="z"></span> und der Konstanten 2. Runde auf zwei Nachkommastellen.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="L">L</option>
+        <option value="m³">m³</option>
+        <option value="L/min">L/min</option>
+        <option value="min">min</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Zu welchem Zeitpunkt ist der Zufluss gerade so groß wie der Abfluss? Dieser Zeitpunkt teilt das Intervall – und er ergibt sich aus einer Gleichung, in der ein Logarithmus vorkommt.</div>
+    <div class="hilfe-text" data-stufe="2">Löse <span class="m" data-tex="4\,e^{-0{,}3t}=2" data-plain="4·e^(−0,3t) = 2"></span> nach <span class="m" data-tex="t" data-plain="t"></span> auf, das ist die Schnittstelle <span class="m" data-tex="t^*" data-plain="t*"></span>. Eine Stammfunktion von <span class="m" data-tex="z(t)-2" data-plain="z(t) − 2"></span> ist <span class="m" data-tex="Z(t)=-\tfrac{40}{3}e^{-0{,}3t}-2t" data-plain="Z(t) = −(40/3)·e^(−0,3t) − 2t"></span>; kontrolliere sie durch Ableiten. Dann <span class="m" data-tex="A=\bigl(Z(t^*)-Z(0)\bigr)+\bigl(Z(t^*)-Z(8)\bigr)" data-plain="A = (Z(t*) − Z(0)) + (Z(t*) − Z(8))"></span>, denn im zweiten Stück ist <span class="m" data-tex="z-2" data-plain="z − 2"></span> negativ.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="4\,e^{-0{,}3t}=2" data-plain="4·e^(−0,3t) = 2"></span> ⟹ <span class="m" data-tex="e^{-0{,}3t}=\tfrac12" data-plain="e^(−0,3t) = 1/2"></span> ⟹ <span class="m" data-tex="-0{,}3\,t=-\ln 2" data-plain="−0,3·t = −ln 2"></span> ⟹ <span class="m" data-tex="t^*=\ln2/0{,}3=2{,}3105\ \text{min}" data-plain="t* = ln 2/0,3 = 2,3105 min"></span>. Probe der Stammfunktion: <span class="m" data-tex="Z&#x27;(t)=-\tfrac{40}{3}\cdot(-0{,}3)\,e^{-0{,}3t}-2=4\,e^{-0{,}3t}-2" data-plain="Z′(t) = −(40/3)·(−0,3)·e^(−0,3t) − 2 = 4·e^(−0,3t) − 2"></span> ✓. <span class="m" data-tex="Z(0)=-40/3=-13{,}3333" data-plain="Z(0) = −40/3 = −13,3333"></span>. <span class="m" data-tex="Z(t^*)=-\tfrac{40}{3}\cdot\tfrac12-2\cdot2{,}3105=-6{,}6667-4{,}6210=-11{,}2876" data-plain="Z(t*) = −(40/3)·(1/2) − 2·2,3105 = −6,6667 − 4,6210 = −11,2876"></span> (denn <span class="m" data-tex="e^{-0{,}3t^*}=\tfrac12" data-plain="e^(−0,3t*) = 1/2"></span>). <span class="m" data-tex="Z(8)=-\tfrac{40}{3}e^{-2{,}4}-16=-13{,}3333\cdot0{,}090718-16=-1{,}2096-16=-17{,}2096" data-plain="Z(8) = −(40/3)·e^(−2,4) − 16 = −13,3333·0,090718 − 16 = −1,2096 − 16 = −17,2096"></span>. Erste Phase: <span class="m" data-tex="Z(t^*)-Z(0)=-11{,}2876+13{,}3333=2{,}0457\ \text{L}" data-plain="Z(t*) − Z(0) = −11,2876 + 13,3333 = 2,0457 L"></span> (Netto-Zunahme). Zweite Phase: <span class="m" data-tex="Z(8)-Z(t^*)=-17{,}2096+11{,}2876=-5{,}9219" data-plain="Z(8) − Z(t*) = −17,2096 + 11,2876 = −5,9219"></span>, Betrag 5,9219 L (Netto-Abnahme). <span class="m" data-tex="A=2{,}0457+5{,}9219=7{,}9676\ \text{L}\approx 7{,}97\ \text{L}" data-plain="A = 2,0457 + 5,9219 = 7,9676 L ≈ 7,97 L"></span>. <em>Nebenbei:</em> Die Bilanz ist <span class="m" data-tex="2{,}0457-5{,}9219=-3{,}8762\ \text{L}" data-plain="2,0457 − 5,9219 = −3,8762 L"></span>: Der Tank hat am Ende 3,88 L weniger als am Anfang – obwohl er in der ersten Phase 2,05 L gewonnen hat.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Für eine Umgehungsstraße liegt ein Querschnitt vor. Das Gelände wird beschrieben durch <span class="m" data-tex="G(x)=0{,}5x^3-x^2-3x+7" data-plain="G(x) = 0,5x³ − x² − 3x + 7"></span>, die geplante Trasse durch <span class="m" data-tex="T(x)=4-0{,}5x" data-plain="T(x) = 4 − 0,5x"></span>, jeweils für <span class="m" data-tex="-2\le x\le 3" data-plain="−2 ≤ x ≤ 3"></span>. Dabei ist <span class="m" data-tex="x" data-plain="x"></span> in <strong>Dekametern</strong> (1 Einheit = 10 m) und der Funktionswert in <strong>Metern</strong> angegeben. Wo das Gelände über der Trasse liegt, wird Boden abgetragen (Einschnitt), wo es darunter liegt, wird aufgeschüttet (Damm). Bestimme die gesamte Querschnittsfläche, die insgesamt abgetragen oder aufgeschüttet wird, in Quadratmetern. Runde auf zwei Nachkommastellen.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="m²">m²</option>
+        <option value="m³">m³</option>
+        <option value="FE">FE</option>
+        <option value="m">m</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Bevor du integrierst: Was bedeutet <strong>eine</strong> Flächeneinheit in diesem Koordinatensystem in Quadratmetern, wenn die beiden Achsen verschieden skaliert sind?</div>
+    <div class="hilfe-text" data-stufe="2"><span class="m" data-tex="h=G-T" data-plain="h = G − T"></span> bilden; die Schnittstellen liegen bei ganzen Zahlen (ausprobieren, die Randwerte helfen). Danach <span class="m" data-tex="H" data-plain="H"></span> als Stammfunktion, Vorzeichen von <span class="m" data-tex="h" data-plain="h"></span> in den Teilintervallen prüfen, Beträge der Teilintegrale addieren und zum Schluss die Einheit umrechnen.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="h(x)=0{,}5x^3-x^2-3x+7-4+0{,}5x=0{,}5x^3-x^2-2{,}5x+3=\tfrac12(x+2)(x-1)(x-3)" data-plain="h(x) = 0,5x³ − x² − 3x + 7 − 4 + 0,5x = 0,5x³ − x² − 2,5x + 3 = ½·(x + 2)(x − 1)(x − 3)"></span>. Probe der Faktorisierung: <span class="m" data-tex="(x+2)(x-1)(x-3)=x^3-2x^2-5x+6" data-plain="(x + 2)(x − 1)(x − 3) = x³ − 2x² − 5x + 6"></span>, halbiert ✓. Schnittstellen <span class="m" data-tex="x=-2" data-plain="x = −2"></span>, <span class="m" data-tex="x=1" data-plain="x = 1"></span>, <span class="m" data-tex="x=3" data-plain="x = 3"></span> (an den Rändern <span class="m" data-tex="G(-2)=T(-2)=5" data-plain="G(−2) = T(−2) = 5"></span> und <span class="m" data-tex="G(3)=T(3)=2{,}5" data-plain="G(3) = T(3) = 2,5"></span>). Vorzeichen: <span class="m" data-tex="h(0)=3&gt;0" data-plain="h(0) = 3 &gt; 0"></span> (Einschnitt auf <span class="m" data-tex="(-2;\,1)" data-plain="(−2; 1)"></span>), <span class="m" data-tex="h(2)=\tfrac12\cdot4\cdot1\cdot(-1)=-2&lt;0" data-plain="h(2) = ½·4·1·(−1) = −2 &lt; 0"></span> (Damm auf <span class="m" data-tex="(1;\,3)" data-plain="(1; 3)"></span>). <span class="m" data-tex="H(x)=\tfrac{x^4}{8}-\tfrac{x^3}{3}-\tfrac54x^2+3x" data-plain="H(x) = x⁴/8 − x³/3 − (5/4)·x² + 3x"></span>. <span class="m" data-tex="H(-2)=2+\tfrac83-5-6=-\tfrac{19}{3}" data-plain="H(−2) = 2 + 8/3 − 5 − 6 = −19/3"></span>, <span class="m" data-tex="H(1)=\tfrac18-\tfrac13-\tfrac54+3=\tfrac{37}{24}" data-plain="H(1) = 1/8 − 1/3 − 5/4 + 3 = 37/24"></span>, <span class="m" data-tex="H(3)=\tfrac{81}{8}-9-\tfrac{45}{4}+9=-\tfrac98" data-plain="H(3) = 81/8 − 9 − 45/4 + 9 = −9/8"></span>. Einschnitt: <span class="m" data-tex="H(1)-H(-2)=\tfrac{37}{24}+\tfrac{152}{24}=\tfrac{189}{24}=\tfrac{63}{8}=7{,}875\ \text{FE}" data-plain="H(1) − H(−2) = 37/24 + 152/24 = 189/24 = 63/8 = 7,875 FE"></span>. Damm: <span class="m" data-tex="|H(3)-H(1)|=\bigl|-\tfrac{27}{24}-\tfrac{37}{24}\bigr|=\tfrac{64}{24}=\tfrac83\approx 2{,}6667\ \text{FE}" data-plain="|H(3) − H(1)| = |−27/24 − 37/24| = 64/24 = 8/3 ≈ 2,6667 FE"></span>. Zusammen <span class="m" data-tex="\tfrac{63}{8}+\tfrac83=\tfrac{253}{24}\approx 10{,}5417\ \text{FE}" data-plain="63/8 + 8/3 = 253/24 ≈ 10,5417 FE"></span>. <strong>Einheit:</strong> 1 FE = 1 dam · 1 m = 10 m · 1 m = <strong>10 m²</strong> (nicht 100 m²). <span class="m" data-tex="\tfrac{253}{24}\ \text{FE}\cdot 10\,\tfrac{\text{m}^2}{\text{FE}}=105{,}4167\ \text{m}^2\approx 105{,}42\ \text{m}^2" data-plain="253/24 FE · 10 m²/FE = 105,4167 m² ≈ 105,42 m²"></span>. (Einschnitt 78,75 m², Damm 26,67 m²; die Bilanz <span class="m" data-tex="\tfrac{63}{8}-\tfrac83=\tfrac{125}{24}\ \text{FE}=52{,}08\ \text{m}^2" data-plain="63/8 − 8/3 = 125/24 FE = 52,08 m²"></span> ist ein Überschuss an Boden.) Der Querschnitt beträgt 105,42 m²; je Meter Trassenlänge sind das 105,42 m³ Boden.</div>
+  </div>
+
+  <div class="aufgabe">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Für den Querschnitt aus Aufgabe a5 hat der Bauleiter das Integral über das ganze Gelände ausgewertet und notiert: „<span class="m" data-tex="\int(G-T)\,\mathrm{d}x" data-plain="∫ (G − T) dx"></span> ergibt 52,08 m². Wir müssen also je Meter Trasse nur gut 52 m³ Boden bewegen (1 m² Querschnitt je Meter Trasse sind 1 m³), den Rest gleicht das Gelände von selbst aus.“ Beurteile diese Aussage. Gehe dabei ein auf (i) was die Zahl 52,08 m² tatsächlich beschreibt, (ii) welche Größe für den Aufwand der Bagger und Lastwagen maßgeblich ist und wie sie sich berechnet (Einschnitt 78,75 m², Damm 26,67 m²), (iii) eine Frage, bei der der Bauleiter mit der Bilanz doch die richtige Zahl benutzt, und (iv) eine Grenze des Modells.</div>
+    <textarea placeholder="Deine Stellungnahme…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a6">Musterlösung anzeigen</button></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Frag nicht, ob die Zahl stimmt – sie stimmt –, sondern <strong>wofür</strong> sie stimmt.</div>
+    <div class="hilfe-text" data-stufe="2">Trenne drei Mengen: den Boden, der ausgehoben wird, den Boden, der eingebaut wird, und den Boden, der am Ende übrig bleibt oder fehlt. Ordne jeder eine der Zahlen 78,75, 26,67, 52,08 zu.</div>
+    <div class="hilfe-text" data-stufe="3">(1) Die Bilanz ist <span class="m" data-tex="P-N" data-plain="P − N"></span> mit <span class="m" data-tex="P=78{,}75\ \text{m}^2" data-plain="P = 78,75 m²"></span> (Einschnitt, <span class="m" data-tex="G&gt;T" data-plain="G &gt; T"></span>) und <span class="m" data-tex="N=26{,}67\ \text{m}^2" data-plain="N = 26,67 m²"></span> (Damm, <span class="m" data-tex="G&lt;T" data-plain="G &lt; T"></span>). (2) Aufwand wird durch <span class="m" data-tex="P+N=105{,}42\ \text{m}^2" data-plain="P + N = 105,42 m²"></span> gemessen, nicht durch <span class="m" data-tex="P-N" data-plain="P − N"></span>. (3) Die Bilanz beantwortet: Wie viel Boden fällt insgesamt ab oder fehlt? (4) Modellgrenze benennen, zum Beispiel Auflockerung.</div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Die Aussage ist <strong>zur Hälfte richtig</strong>. Die Zahl 52,08 m² stimmt: Sie ist das Integral von <span class="m" data-tex="G-T" data-plain="G − T"></span>, also die Bilanz <span class="m" data-tex="78{,}75-26{,}67=52{,}08\ \text{m}^2" data-plain="78,75 − 26,67 = 52,08 m²"></span>. Sie beschreibt, wie viel Boden je Meter Trasse <strong>übrig bleibt</strong>: Der Einschnitt liefert 78,75 m², der Damm braucht nur 26,67 m², und die Differenz von 52,08 m² muss abgefahren werden (oder an anderer Stelle verbaut). Für <em>diese</em> Frage – Mengenbilanz, Anzahl der Abfuhrfahrten – ist die Bilanz die richtige Größe.</p>
+      <p>Falsch ist der Schluss, nur 52 m³ je Meter Trasse seien zu bewegen (Querschnitt 52,08 m² mal 1 m). Ausgehoben werden 78,75 m² (Bagger im Einschnitt) und eingebaut werden 26,67 m² (Damm schütten, verdichten); zusammen ist die Querschnittsfläche, die bearbeitet wird, <span class="m" data-tex="78{,}75+26{,}67=105{,}42\ \text{m}^2" data-plain="78,75 + 26,67 = 105,42 m²"></span>, also gut das Doppelte der Bilanz. Die Bilanz ist so klein, weil sich Einschnitt und Damm im Integral teilweise aufheben – genau wie ein positives und ein negatives Flächenstück. Das Gelände gleicht <strong>nichts</strong> von selbst aus: Ein Bagger, der im Einschnitt abträgt, arbeitet unabhängig davon, ob anderswo aufgeschüttet wird. Für den Aufwand zählt deshalb der Flächeninhalt zwischen den Graphen, <span class="m" data-tex="\int|G-T|\,\mathrm{d}x" data-plain="∫ |G − T| dx"></span>, mit den Schnittstellen <span class="m" data-tex="x=-2,\ 1,\ 3" data-plain="x = −2, 1, 3"></span> als Grenzen.</p>
+      <p>Ein sinnvoller Nutzen der Zerlegung: Der Damm kann mit dem Aushub aus dem Einschnitt gebaut werden, soweit der Transportweg kurz ist; 26,67 m² lassen sich so intern decken, 52,08 m² müssen abgefahren werden. Beide Zahlen – Bilanz und Flächeninhalt – brauchst du, aber für verschiedene Fragen.</p>
+      <p>Modellgrenzen (eine genügt): Der Boden wird beim Lösen aufgelockert und nimmt je nach Bodenart ein größeres Volumen ein als im gewachsenen Zustand; im Damm wird er wieder verdichtet. Die Rechnung mit Querschnittsflächen setzt außerdem einen über die Trassenlänge konstanten Querschnitt voraus; in der Realität ändert er sich, und die Massen werden aus vielen Querschnitten aufsummiert. Ebenso ignoriert das Modell Transportwege von Einschnitt zu Damm.</p>
+      <p><strong>Bewertungskriterien.</strong> Aussage differenziert beurteilt (nicht nur „richtig“ oder „falsch“) · 52,08 korrekt als Bilanz (Überschuss) gedeutet · Aufwandsmaß <span class="m" data-tex="\int|G-T|" data-plain="∫|G − T|"></span> mit Wert 105,42 m² genannt und begründet, warum sich Einschnitt und Damm im Integral aufheben · Schnittstellen −2, 1, 3 als Grenzen benannt · Beispiel für eine Frage, bei der die Bilanz richtig ist (Abfuhr, Überschuss) · Modellgrenze sachlich benannt.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Drei Lernende bearbeiten Flächenaufgaben zu <span class="m" data-tex="f(x)=x^3" data-plain="f(x) = x³"></span> und <span class="m" data-tex="g(x)=x" data-plain="g(x) = x"></span>. Beurteile jede Aussage und begründe.
+      <p style="font-weight:400;margin:10px 0 6px"><strong>Anna:</strong> <em>„Die Graphen schneiden sich bei −1, 0 und 1. Ich rechne <span class="m" data-tex="\int_{-1}^{1}(x^3-x)\,\mathrm{d}x=\bigl[\tfrac{x^4}{4}-\tfrac{x^2}{2}\bigr]_{-1}^{1}=0" data-plain="∫ von −1 bis 1 (x³ − x) dx = [x⁴/4 − x²/2] von −1 bis 1 = 0"></span>. Also schließen die beiden Graphen keine Fläche ein.“</em></p>
+      <p style="font-weight:400;margin:0 0 6px"><strong>Ben:</strong> <em>„Die Funktion <span class="m" data-tex="x^3-x" data-plain="x³ − x"></span> ist punktsymmetrisch zum Ursprung. Also rechne ich <span class="m" data-tex="2\int_0^1(x^3-x)\,\mathrm{d}x=2\cdot\bigl(-\tfrac14\bigr)=-\tfrac12" data-plain="2·∫₀¹ (x³ − x) dx = 2·(−1/4) = −1/2"></span>. Eine Fläche kann nicht negativ sein, also ist sie 1/2.“</em></p>
+      <p style="font-weight:400;margin:0 0 6px"><strong>Carla</strong> (zu <span class="m" data-tex="f(x)=x^2" data-plain="f(x) = x²"></span>, <span class="m" data-tex="g(x)=2x-1" data-plain="g(x) = 2x − 1"></span> auf <span class="m" data-tex="[-1;\,3]" data-plain="[−1; 3]"></span>): <em>„An jeder Schnittstelle wechselt der obere Graph. Deshalb muss man an jeder Schnittstelle teilen – hier bei <span class="m" data-tex="x=1" data-plain="x = 1"></span>.“</em></p>
+      <p style="font-weight:400;margin:0">a) Bestimme den richtigen Flächeninhalt für Annas Aufgabe und zeige, wo ihr Schluss versagt.<br>b) Ben kommt auf das richtige Ergebnis. Prüfe, ob seine Begründung trägt.<br>c) Nimm zu Carlas Regel Stellung und stelle sie richtig.</p>
+    </div>
+    <textarea placeholder="Deine Beurteilung zu a), b) und c)…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a7">Musterlösung anzeigen</button></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Bei Anna und Ben hilft dieselbe Skizze: <span class="m" data-tex="x^3-x" data-plain="x³ − x"></span> hat drei Nullstellen, und zwischen je zwei benachbarten liegt ein Stück. Bei Carla lohnt es, <span class="m" data-tex="f-g" data-plain="f − g"></span> auszurechnen und zu faktorisieren.</div>
+    <div class="hilfe-text" data-stufe="2">a) Zerlege an den Nullstellen von <span class="m" data-tex="h=x^3-x" data-plain="h = x³ − x"></span> und addiere die Beträge. b) Frag, aus welcher Eigenschaft folgt, dass beide Stücke gleich groß sind – und wo im Rechenweg der Betrag steht. c) Wechselt <span class="m" data-tex="f-g" data-plain="f − g"></span> bei <span class="m" data-tex="x=1" data-plain="x = 1"></span> das Vorzeichen?</div>
+    <div class="hilfe-text" data-stufe="3">a) <span class="m" data-tex="h=x(x-1)(x+1)" data-plain="h = x(x − 1)(x + 1)"></span>; <span class="m" data-tex="\int_{-1}^0h=\tfrac14" data-plain="∫ von −1 bis 0 h = 1/4"></span>, <span class="m" data-tex="\int_0^1h=-\tfrac14" data-plain="∫₀¹ h = −1/4"></span>; <span class="m" data-tex="A=\tfrac12" data-plain="A = 1/2"></span>, Bilanz 0. b) Punktsymmetrie ⟹ <span class="m" data-tex="\int_{-1}^0h=-\int_0^1h" data-plain="∫ von −1 bis 0 h = −∫₀¹ h"></span>; die Stücke sind betragsgleich. c) <span class="m" data-tex="h=(x-1)^2" data-plain="h = (x − 1)²"></span>, doppelte Nullstelle, kein Vorzeichenwechsel.</div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>a)</strong> Annas Rechnung ist richtig, ihr Schluss falsch. <span class="m" data-tex="h(x)=x^3-x=x(x-1)(x+1)" data-plain="h(x) = x³ − x = x(x − 1)(x + 1)"></span> hat die einfachen Nullstellen −1, 0, 1 und wechselt an jeder das Vorzeichen: <span class="m" data-tex="h(-0{,}5)=+0{,}375&gt;0" data-plain="h(−0,5) = +0,375 &gt; 0"></span>, <span class="m" data-tex="h(0{,}5)=-0{,}375&lt;0" data-plain="h(0,5) = −0,375 &lt; 0"></span>. Also liegt auf <span class="m" data-tex="[-1;\,0]" data-plain="[−1; 0]"></span> der Graph von <span class="m" data-tex="f" data-plain="f"></span> oben, auf <span class="m" data-tex="[0;\,1]" data-plain="[0; 1]"></span> der von <span class="m" data-tex="g" data-plain="g"></span>. <span class="m" data-tex="\int_{-1}^0h=\bigl[\tfrac{x^4}{4}-\tfrac{x^2}{2}\bigr]_{-1}^0=0-\bigl(\tfrac14-\tfrac12\bigr)=\tfrac14" data-plain="∫ von −1 bis 0 h = [x⁴/4 − x²/2] von −1 bis 0 = 0 − (1/4 − 1/2) = 1/4"></span> und <span class="m" data-tex="\int_0^1h=\bigl(\tfrac14-\tfrac12\bigr)-0=-\tfrac14" data-plain="∫₀¹ h = (1/4 − 1/2) − 0 = −1/4"></span>. Die Stücke sind gleich groß und heben sich in der Bilanz auf. Der Flächeninhalt ist <span class="m" data-tex="\tfrac14+\tfrac14=\tfrac12" data-plain="1/4 + 1/4 = 1/2"></span>. Die Bilanz 0 zeigt nur die Auslöschung, nicht das Fehlen von Fläche.</p>
+      <p><strong>b)</strong> Ergebnis richtig, Begründung lückenhaft. Ben nutzt die Symmetrie ohne Nachweis: Aus <span class="m" data-tex="h(-x)=-h(x)" data-plain="h(−x) = −h(x)"></span> folgt <span class="m" data-tex="\int_{-1}^0h=-\int_0^1h=\tfrac14" data-plain="∫ von −1 bis 0 h = −∫₀¹ h = 1/4"></span>, die beiden Stücke sind also betragsgleich, und deshalb <span class="m" data-tex="A=2\,\bigl|\int_0^1h\bigr|" data-plain="A = 2·|∫₀¹ h|"></span>. Sein Term <span class="m" data-tex="2\int_0^1h=-\tfrac12" data-plain="2·∫₀¹ h = −1/2"></span> ist <strong>nicht</strong> der Flächeninhalt; er wird erst durch den Betrag zu einem, und Bens Begründung („Fläche nicht negativ“) ist kein Argument, sondern eine Reparatur nach dem Ergebnis. Richtiger Ansatz: <span class="m" data-tex="A=2\,\bigl|\int_0^1h\bigr|" data-plain="A = 2·|∫₀¹ h|"></span> mit Symmetrie als Begründung. Wer stattdessen rechnet <span class="m" data-tex="2\int_0^1(x-x^3)\,\mathrm{d}x" data-plain="2·∫₀¹ (x − x³) dx"></span>, erhält ohne Nachbesserung 1/2 – aber nur, weil er vorher schon wusste, dass <span class="m" data-tex="g" data-plain="g"></span> auf <span class="m" data-tex="[0;\,1]" data-plain="[0; 1]"></span> oben liegt.</p>
+      <p><strong>c)</strong> Carlas Aussage ist falsch. <span class="m" data-tex="h(x)=x^2-2x+1=(x-1)^2" data-plain="h(x) = x² − 2x + 1 = (x − 1)²"></span> hat bei <span class="m" data-tex="x=1" data-plain="x = 1"></span> eine doppelte Nullstelle <strong>ohne</strong> Vorzeichenwechsel; die Graphen berühren sich, die Parabel bleibt oberhalb der Geraden. Der obere Graph wechselt dort nicht. Man <em>darf</em> teilen – <span class="m" data-tex="\tfrac83+\tfrac83=\tfrac{16}{3}" data-plain="8/3 + 8/3 = 16/3"></span> –, muss es aber nicht; ein Integral <span class="m" data-tex="\int_{-1}^{3}(x-1)^2\,\mathrm{d}x=\tfrac{16}{3}" data-plain="∫ von −1 bis 3 (x − 1)² dx = 16/3"></span> genügt. Richtig: Man teilt an den Nullstellen von <span class="m" data-tex="f-g" data-plain="f − g"></span>, an denen das Vorzeichen wechselt (ungerade Vielfachheit); an Berührstellen (gerade Vielfachheit) ist das nicht nötig.</p>
+      <p><strong>Bewertungskriterien.</strong> a) Zerlegung an −1, 0, 1 · Teilintegrale 1/4 und −1/4 · Flächeninhalt 1/2 · Bilanz 0 als Auslöschung erklärt · b) Symmetrie-Argument <span class="m" data-tex="h(-x)=-h(x)" data-plain="h(−x) = −h(x)"></span> genannt · Betrag am richtigen Ort erkannt (um das Teilstück, nicht um die fertige Summe) · c) <span class="m" data-tex="h=(x-1)^2" data-plain="h = (x − 1)²"></span> faktorisiert · doppelte Nullstelle ohne Vorzeichenwechsel erkannt · Regel richtiggestellt (Vorzeichenwechsel, nicht Schnittstelle) · erkannt, dass Teilen an der Berührstelle nicht falsch, nur überflüssig ist.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 6 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">6</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="merksatz">
+    <b>Kernaussage 1 – Bilanz und Flächeninhalt</b>
+    <strong>Das Integral ist eine Bilanz, der Flächeninhalt eine Summe von Beträgen.</strong> Bezeichnen <span class="m" data-tex="P" data-plain="P"></span> und <span class="m" data-tex="N" data-plain="N"></span> die Summen der Flächenstücke oberhalb und unterhalb der Achse (beide positiv gezählt), so gilt <span class="m" data-tex="\int_a^b f\,\mathrm{d}x=P-N" data-plain="∫ₐᵇ f dx = P − N"></span> und <span class="m" data-tex="\int_a^b|f|\,\mathrm{d}x=P+N" data-plain="∫ₐᵇ |f| dx = P + N"></span>. Ein Integralwert von null heißt deshalb nie „keine Fläche“, sondern „die Stücke heben sich auf“. Der Unterschied <span class="m" data-tex="\text{Flächeninhalt}-|\text{Bilanz}|" data-plain="Flächeninhalt − |Bilanz|"></span> ist genau <span class="m" data-tex="2\min(P,\,N)" data-plain="2·min(P, N)"></span>.
+  </div>
+
+  <div class="merksatz">
+    <b>Kernaussage 2 – Grenzen</b>
+    <strong>Die Grenzen des Flächeninhalts sind die Nullstellen mit Vorzeichenwechsel.</strong> Zwischen Graph und Achse zerlegst du an den Nullstellen von <span class="m" data-tex="f" data-plain="f"></span>, zwischen zwei Graphen an den Nullstellen der Differenzfunktion <span class="m" data-tex="h=f-g" data-plain="h = f − g"></span>, also an den Schnittstellen. Praktisch: <strong>eine</strong> Stammfunktion, ihre Werte an allen Grenzen in einer Tabelle, dann die Beträge der Differenzen benachbarter Werte addieren. Der Betrag gehört um jedes Teilstück, nie um die Summe.
+  </div>
+
+  <div class="merksatz">
+    <b>Kernaussage 3 – Zwei Graphen sind ein Graph</b>
+    <strong><span class="m" data-tex="A=\int|f-g|\,\mathrm{d}x" data-plain="A = ∫ |f − g| dx"></span>.</strong> Verschiebt man beide Graphen senkrecht über die Achse, ändert das die Fläche dazwischen nicht, und die Konstante kürzt sich in <span class="m" data-tex="\int(f+c)-\int(g+c)" data-plain="∫(f + c) − ∫(g + c)"></span> heraus. Deshalb ist es gleichgültig, welcher Graph oben liegt und wie die Graphen zur Achse stehen; der Fall „Graph und Achse“ ist der Sonderfall <span class="m" data-tex="g=0" data-plain="g = 0"></span>.
+  </div>
+
+  <div class="merksatz">
+    <b>Kernaussage 4 – Nicht jede Schnittstelle ist eine Grenze</b>
+    Nur ein <strong>Vorzeichenwechsel</strong> von <span class="m" data-tex="f-g" data-plain="f − g"></span> (bei ganzrationalen Funktionen: Nullstelle ungerader Vielfachheit) trennt Flächenstücke; an einer Berührstelle (bei ganzrationalen Funktionen: gerade Vielfachheit) bleibt ein Integral. Nach dem Hauptsatz ist <span class="m" data-tex="B&#x27;=f-g" data-plain="B′ = f − g"></span> für die Bilanzkurve und <span class="m" data-tex="A&#x27;=|f-g|" data-plain="A′ = |f − g|"></span> für die Flächenkurve: <span class="m" data-tex="A" data-plain="A"></span> fällt nie, <span class="m" data-tex="B" data-plain="B"></span> hat an jedem Vorzeichenwechsel einen Extrempunkt, und dort trennen sich die beiden Kurven.
+  </div>
+
+  <div class="hinweis">
+    <strong>Blick aufs Zentralabitur.</strong> Flächen zwischen Graphen sind kein eigenes Thema, sondern kommen als Rechen- und Deutungsteil in Analysis-Aufgaben vor. Diese Gestalten begegnen dir regelmäßig:
+    <ul style="margin:8px 0 8px">
+      <li><strong>Flächeninhalt berechnen:</strong> „Berechne den Inhalt der Fläche, die die Graphen von <span class="m" data-tex="f" data-plain="f"></span> und <span class="m" data-tex="g" data-plain="g"></span> einschließen.“ Erwartet werden Differenzfunktion, Schnittstellen, Stammfunktion, Teilintegrale mit Betrag. Eine Skizze verhindert die meisten Vorzeichenfehler, und es lohnt sich, die Schnittstellen vor dem Integrieren ausdrücklich hinzuschreiben.</li>
+      <li><strong>Bilanz gegen Flächeninhalt im Sachkontext:</strong> Aus einer Änderungsrate soll ein Bestand (Bilanz, „Zunahme insgesamt“) und eine bewegte Menge (Flächeninhalt, „Wie viel wurde insgesamt zu- und abgeführt?“) bestimmt und gedeutet werden – genau die Unterscheidung aus a4 bis a6.</li>
+      <li><strong>Parameteraufgaben:</strong> „Bestimme <span class="m" data-tex="k" data-plain="k"></span> so, dass die Fläche zwischen <span class="m" data-tex="f_k" data-plain="f_k"></span> und <span class="m" data-tex="g" data-plain="g"></span> den Inhalt 36 hat.“ Die Fläche wird in Abhängigkeit von <span class="m" data-tex="k" data-plain="k"></span> aufgestellt und dann nach <span class="m" data-tex="k" data-plain="k"></span> aufgelöst.</li>
+      <li><strong>Begründen und Bewerten:</strong> „Ein Schüler behauptet, die Fläche sei null, weil das Integral null ist. Nimm Stellung.“ – genau der Aufgabentyp von a6 und a7.</li>
+      <li><strong>Graphenzuordnung:</strong> Zugeordnet wird ein Graph zu einer Flächenaussage (Bilanz, Betrag, Zerlegung), wie in a3.</li>
+    </ul>
+    Welche Aufgaben in welchem Abiturjahrgang hilfsmittelfrei (ohne GTR/CAS) und welche mit Hilfsmitteln bearbeitet werden und wie die Operatoren im jeweiligen Jahr formuliert sind, entnimmst du den aktuellen Vorgaben des Schulministeriums NRW; das ist hier nicht wiedergegeben.
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Selbstcheck</h3>
+    <p style="color:var(--grau);font-size:15px">Hak ehrlich ab. Was du hier nicht ankreuzen kannst, holst du besser jetzt nach als in der Klausur.</p>
+    <div class="check">
+      <label><input type="checkbox"><span>Ich kann zwischen der Bilanz <span class="m" data-tex="\int f" data-plain="∫f"></span> und dem Flächeninhalt <span class="m" data-tex="\int|f|" data-plain="∫|f|"></span> unterscheiden, erklären, warum ein Integralwert von null nicht „keine Fläche“ bedeutet, und beide an einem Beispiel berechnen.</span></label>
+      <label><input type="checkbox"><span>Ich kann begründen, warum der Flächeninhalt zwischen Graph und Achse <span class="m" data-tex="\int|f|" data-plain="∫|f|"></span> ist – Spiegelung unterhalb der Achse, Zerlegung an Nullstellen mit Vorzeichenwechsel – und warum <span class="m" data-tex="|\int f|" data-plain="|∫f|"></span> im Allgemeinen zu klein ist.</span></label>
+      <label><input type="checkbox"><span>Ich kann den Flächeninhalt zwischen zwei Graphen als <span class="m" data-tex="\int|f-g|" data-plain="∫|f − g|"></span> ansetzen und die Formel über die senkrechte Verschiebung beider Graphen herleiten.</span></label>
+      <label><input type="checkbox"><span>Ich kann Schnittstellen bestimmen – auch irrationale und solche, die einen Logarithmus verlangen – und entscheiden, welche davon Integrationsgrenzen sind: nur die im Intervall, nur die mit Vorzeichenwechsel, nicht die Berührstellen.</span></label>
+      <label><input type="checkbox"><span>Ich kann Flächeninhalte mit <strong>einer</strong> Stammfunktion, einer Wertetabelle und den Beträgen der Teilintegrale berechnen und das Ergebnis durch Skizze und Überschlag kontrollieren.</span></label>
+      <label><input type="checkbox"><span>Ich kann in einem Sachzusammenhang Bilanz und Flächeninhalt deuten (Bestandsänderung gegen bewegte Menge), Einheiten bei verschieden skalierten Achsen umrechnen und eine Aussage über eine Bilanz begründet bewerten.</span></label>
+    </div>
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnisse kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+  <p style="font-size:14px;color:var(--grau)">Es wird nichts gespeichert: Deine Ergebnisse verlassen diese Seite nur, wenn du sie kopierst.</p>
+
+  <div class="hinweis">
+    <strong>Wie es weitergeht.</strong> Mit diesem Modul ist die Integralrechnung der Q1 abgeschlossen: Bilanz, Hauptsatz, Flächeninhalt zwischen Graphen. Nach der Verteilung dieses Projekts folgt in Q1 die analytische Geometrie. Weitere Integralthemen – mittlere Werte, Rotationskörper, Integrale über unbeschränkte Intervalle – sind nicht Teil dieses Moduls; ob und wann sie in Q1 oder Q2 kommen, legt der schulinterne Lehrplan fest.
+  </div>
+
+  <details class="lehrer">
+    <summary>Für die Lehrkraft</summary>
+
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Funktionen und Analysis“ (Kernlehrplan Mathematik, gymnasiale Oberstufe NRW). Q1 umfasst laut Verteilung dieses Projekts die Integralrechnung bis zum Hauptsatz und zu Flächen zwischen Graphen; dieses Modul deckt den letzten Teil ab: Flächeninhalt zwischen Graph und Achse, zwischen zwei Graphen, Zerlegung an Nullstellen und Schnittstellen, Deutung von Bilanz und Flächeninhalt im Sachkontext. Prozessbezogene Schwerpunkte sind <em>Argumentieren</em> (Herleitungen in Abschnitt 2 und 3, Aufgaben a6 und a7), <em>Modellieren</em> (a4, a5, a6, Einstieg), <em>Werkzeuge nutzen</em> (die Simulation als Messinstrument, Verzicht auf den Rechner in a1 bis a3) und <em>Kommunizieren</em> (Skizze und Wertetabelle als Darstellungsmittel). Vorausgesetzt werden aus dem Vorgängermodul <code>mathe-q1-hauptsatz</code> Hauptsatz, Stammfunktion, Grundintegrale, lineare Substitution, Intervalladditivität und die Integralfunktion; aus früherer Zeit Nullstellenbestimmung, Polynomdivision, Monotonie. Ohne die Integralfunktion und <span class="m" data-tex="I&#x27;=f" data-plain="I′ = f"></span> verliert der Abschnitt „Zwei Kurven, die sich aufbauen“ seine Pointe.</p>
+    <p><em>Offen markiert:</em> Die Unterscheidung der Wörter „Bilanz“ (orientierter Flächeninhalt) und „Flächeninhalt“ ist eine didaktische Setzung dieses Moduls, keine Vorgabe des Kernlehrplans; im Unterricht und in Schulbüchern heißt die Bilanz oft „Integralwert“ oder „orientierter Flächeninhalt“. Ebenfalls Setzung: dass der Satz vom Minimum und Maximum in der Herleitung benutzt, aber nicht bewiesen wird.</p>
+
+    <p><strong>Zeitbedarf.</strong> Ausgelegt auf eine Doppelstunde von 90 Minuten:</p>
+    <div class="tabelle">
+    <table>
+      <tr><th>Abschnitt</th><th>Zeit</th><th>Sozialform</th></tr>
+      <tr><td>1 Einstieg (Straßenschnitt, drei Vorwissensfragen)</td><td>8 min</td><td>Plenum, Fragen in Einzelarbeit</td></tr>
+      <tr><td>2 Bilanz gegen Flächeninhalt, Beweis, Verfahren</td><td>18 min</td><td>lehrergelenkt, Details-Block je nach Kurs</td></tr>
+      <tr><td>3 Zwei Graphen, Schnittstellen, Berührstelle</td><td>20 min</td><td>Plenum mit Sicherungsphase</td></tr>
+      <tr><td>4 Simulation mit Beobachtungsauftrag und zwei MC-Fragen</td><td>20 min</td><td>Partnerarbeit am Gerät</td></tr>
+      <tr><td>5 Übungen (Auswahl, siehe Differenzierung)</td><td>20 min</td><td>Einzel- oder Partnerarbeit</td></tr>
+      <tr><td>6 Abschluss, Selbstcheck, Export</td><td>4 min</td><td>Plenum</td></tr>
+    </table>
+    </div>
+    <p>Summe 8 + 18 + 20 + 20 + 20 + 4 = 90 min. Realistisch in 90 Minuten schaffbar sind die Abschnitte 1 bis 4 sowie a1 und a2. a3 bis a7 sind Hausaufgabe oder Material für die Folgestunde; a6 und a7 eignen sich als Einstieg der Folgestunde, weil sie ein Streitgespräch auslösen. Wird die Herleitung in Abschnitt 3 im Plenum entwickelt (Verschiebungsargument), fallen dafür 8 bis 10 Minuten an, und der Übungsteil schrumpft entsprechend.</p>
+
+    <p><strong>Typische Schülerfehler – und wo anzuhalten ist.</strong></p>
+    <ol>
+      <li><strong>„Integral negativ – also Betrag drübersetzen.“</strong> Der Leitfehler dieses Moduls. Das Ergebnis sieht plausibel aus, ist aber nur bei Graphen ohne Vorzeichenwechsel richtig. <em>Anhalten</em> am Ende des ersten Beispiels in Abschnitt 2, bevor die Definition kommt. Frage an den Kurs: „Der Graph liegt teils über, teils unter der Achse – was rechnet das Integral mit dem Stück darunter?“ Dann die zwei Zahlen an die Tafel: <span class="m" data-tex="|\int_0^3f|=2{,}25" data-plain="|∫₀³ f| = 2,25"></span>, <span class="m" data-tex="\int_0^3|f|=3{,}08" data-plain="∫₀³ |f| = 3,08"></span>. Fehlerkasten und Aufgabe a1 (Bilanz 1,33 gegen Flächeninhalt 4) prüfen es.</li>
+      <li><strong>„Ergebnis null – keine Fläche.“</strong> Wird an <span class="m" data-tex="x^3" data-plain="x³"></span> auf <span class="m" data-tex="[-1;\,1]" data-plain="[−1; 1]"></span> sofort sichtbar. <em>Anhalten</em> im Fehlerkasten. Die Simulation liefert das Bild dazu: Bilanz praktisch null bei deutlich größerem Flächeninhalt auf einem einzigen Bildschirm (Paar A, <span class="m" data-tex="a=-1{,}50" data-plain="a = −1,50"></span>, <span class="m" data-tex="b" data-plain="b"></span> kurz rechts der ersten Schnittstelle).</li>
+      <li><strong>Betrag in die Stammfunktion gesetzt.</strong> <span class="m" data-tex="\int|f|=|F|" data-plain="∫|f| = |F|"></span> oder <span class="m" data-tex="\bigl[|F(x)|\bigr]_a^b" data-plain="[|F(x)|] von a bis b"></span>. Ursache ist, dass der Betrag als „letzter Schritt“ gelernt wurde. <em>Anhalten</em> bei Schritt 4 der Herleitung: <span class="m" data-tex="|\int f|\le\int|f|" data-plain="|∫f| ≤ ∫|f|"></span>. Die Gleichheit gilt nur ohne Vorzeichenwechsel; a7a zeigt, dass Annas Rechnung genau daran scheitert.</li>
+      <li><strong>Verlorene Schnittstelle.</strong> Durch <span class="m" data-tex="x" data-plain="x"></span> gekürzt statt ausgeklammert; ein negativer Wert verworfen, weil „Fläche nicht negativ sein kann“. <em>Anhalten</em> direkt nach vw1 und vw3 (dort sind die Fälle vorgeformt). Regel für den Kurs: <strong>Ausklammern, nie kürzen.</strong></li>
+      <li><strong>Jede Schnittstelle als Grenze – oder keine Berührstelle erkannt.</strong> Das Vorzeichenbild wird nicht angelegt. <em>Anhalten</em> im Kasten zur Berührstelle bei <span class="m" data-tex="h=(x-1)^2" data-plain="h = (x − 1)²"></span>. Frage: „Wechselt der obere Graph bei <span class="m" data-tex="x=1" data-plain="x = 1"></span>?“ Die Simulation (Paar B) zeigt „f(b) − g(b)“ = 0,00 bei gleichzeitig „Vorzeichenwechsel“ = 0. a3 und a7c prüfen es. Beachte: Teilen an einer Berührstelle ist nicht falsch, nur überflüssig – ein Unterschied, den Lernende oft als „falsch“ hören und sich dann nicht mehr trauen zu teilen.</li>
+      <li><strong>Schnittstellen außerhalb des Intervalls oder Randstück vergessen.</strong> In a1 fehlt oft das Stück von 3 bis 4, weil „nach der letzten Nullstelle nichts mehr kommt“; im durchgerechneten Beispiel wird <span class="m" data-tex="x=-2" data-plain="x = −2"></span> mitgenommen, obwohl das Intervall bei 0 beginnt. <em>Anhalten</em> vor a1: „Was ist die linkeste und die rechteste Grenze? Wo kommen sie her?“ – Randwerte des Intervalls sind genauso Grenzen wie Nullstellen.</li>
+      <li><strong><span class="m" data-tex="f-g" data-plain="f − g"></span> in falscher Reihenfolge, negativer Flächeninhalt.</strong> Aufgabe a2 (Rückmeldung bei grobem Fehler) fängt es ab. Die Reihenfolge ist gleichgültig, weil der Betrag steht; wer einen negativen Wert erhält, hat schlicht <span class="m" data-tex="g-f" data-plain="g − f"></span> integriert.</li>
+      <li><strong>Bilanz als Aufwand gedeutet.</strong> „52 m³ – mehr müssen wir nicht bewegen.“ Verwandt mit Nr. 2. <em>Anhalten</em> bei a5 vor der Eingabe: „Wer bezahlt den Baggerführer – nach der Bilanz oder nach dem Flächeninhalt?“ a6 vertieft die Bewertung. Bei a5 fällt außerdem die Einheit auf: 1 FE = 10 m², nicht 100 m² – ein Fehler, den man nur findet, wenn man beide Achsenmaßstäbe einzeln liest.</li>
+      <li><strong>Für jedes Teilstück eine eigene Stammfunktion – mit verschiedenen Konstanten.</strong> Führt zu Sprüngen in der Rechnung, die man später nicht mehr findet. Regel für den Kurs: <strong>Eine</strong> Stammfunktion, Wertetabelle an allen Grenzen.</li>
+    </ol>
+
+    <p><strong>Differenzierung.</strong></p>
+    <ul>
+      <li><strong>Schnellere Lernende – Parameteraufgabe:</strong> Bestimme <span class="m" data-tex="k&gt;0" data-plain="k &gt; 0"></span> so, dass die Parabel <span class="m" data-tex="f(x)=x^2" data-plain="f(x) = x²"></span> und die Gerade <span class="m" data-tex="g_k(x)=kx" data-plain="g_k(x) = k·x"></span> eine Fläche vom Inhalt 36 einschließen. Lösung: <span class="m" data-tex="h=kx-x^2" data-plain="h = kx − x²"></span>, Schnittstellen 0 und <span class="m" data-tex="k" data-plain="k"></span>, <span class="m" data-tex="A=\int_0^k(kx-x^2)\,\mathrm{d}x=\tfrac{k^3}{2}-\tfrac{k^3}{3}=\tfrac{k^3}{6}=36" data-plain="A = ∫₀ᵏ (kx − x²) dx = k³/2 − k³/3 = k³/6 = 36"></span> ⟹ <span class="m" data-tex="k^3=216" data-plain="k³ = 216"></span>, <span class="m" data-tex="k=6" data-plain="k = 6"></span>.</li>
+      <li><strong>Beweis der Beziehung</strong> <span class="m" data-tex="\text{Flächeninhalt}-|\text{Bilanz}|=2\min(P,N)" data-plain="Flächeninhalt − |Bilanz| = 2·min(P, N)"></span> aus <span class="m" data-tex="A=P+N" data-plain="A = P + N"></span> und <span class="m" data-tex="B=P-N" data-plain="B = P − N"></span>: <span class="m" data-tex="|B|=\max-\min" data-plain="|B| = max − min"></span>, also <span class="m" data-tex="A-|B|=P+N-\max+\min=2\min" data-plain="A − |B| = P + N − max + min = 2·min"></span>.</li>
+      <li><strong>Differenzierbarkeit von <span class="m" data-tex="|B|" data-plain="|B|"></span>:</strong> In der Simulation hat <span class="m" data-tex="|B|" data-plain="|B|"></span> an der Nullstelle von <span class="m" data-tex="B" data-plain="B"></span> einen Knick, weil <span class="m" data-tex="B&#x27;=h\ne0" data-plain="B′ = h ≠ 0"></span> dort (das Feld „f(b) − g(b)“ zeigt dort einen deutlich von null verschiedenen Wert). <span class="m" data-tex="A" data-plain="A"></span> hat keinen Knick, weil <span class="m" data-tex="A&#x27;=|h|" data-plain="A′ = |h|"></span> stetig ist. Begründe den Unterschied.</li>
+      <li><strong>Ausblick unbeschränktes Intervall:</strong> Der Zufluss <span class="m" data-tex="4\,e^{-0{,}3t}" data-plain="4·e^(−0,3t)"></span> hat auf <span class="m" data-tex="[0;\infty)" data-plain="[0; ∞)"></span> das Integral <span class="m" data-tex="40/3" data-plain="40/3"></span>; die Fläche zwischen Zufluss und Abfluss 1,5 dagegen wächst ohne Grenze, weil <span class="m" data-tex="g" data-plain="g"></span> nicht abklingt. Warum? (Einordnung offen.)</li>
+      <li><strong>Lernende, die mehr Zeit brauchen:</strong> Pflichtteil sind a1, a2 und a3. a1 ist reines Handwerk und hat bewusst drei gleich große Stücke, damit die Wertetabelle sichtbar trägt; a2 ist dasselbe mit zwei Graphen; a3 verlangt kaum Rechnung, trägt aber die zentrale Einsicht. Das Verfahren aus Abschnitt 2 und 3 als Merkblatt kopieren, mit einer leeren Wertetabelle zum Ausfüllen. Von den beiden AB-III-Aufgaben genügt a7a. Die Herleitung in Abschnitt 3 kann übersprungen werden; die Simulation trägt die Einsicht „Fläche = Betrag der Bilanz, solange kein Vorzeichenwechsel“ auch allein.</li>
+    </ul>
+
+    <p><strong>Bezug zu Realexperimenten und Daten.</strong></p>
+    <ul>
+      <li><strong>Wiegen statt integrieren.</strong> Auf gleichmäßigem Karton oder Millimeterpapier wird die Fläche zwischen zwei Kurven in ihre Stücke zerschnitten: Stücke, in denen <span class="m" data-tex="f" data-plain="f"></span> oben liegt, und Stücke, in denen <span class="m" data-tex="g" data-plain="g"></span> oben liegt. Auf einer Küchenwaage: <span class="m" data-tex="m_{\text{oben}}-m_{\text{unten}}" data-plain="m_oben − m_unten"></span> entspricht der Bilanz, <span class="m" data-tex="m_{\text{oben}}+m_{\text{unten}}" data-plain="m_oben + m_unten"></span> dem Flächeninhalt. Aufwand: 15 Minuten und ein Bogen Karton. Der Vergleich mit der Rechnung ist die schönste Bestätigung von Kernaussage 1, weil die Lernenden die Auslöschung buchstäblich in der Hand haben.</li>
+      <li><strong>Geländeschnitt.</strong> Ein Schnitt durch das Schulgelände mit Nivelliergerät oder Höhendaten aus dem Open-Data-Angebot des Landes NRW liefert eine echte Geländekurve; die Trasse legen die Lernenden selbst (Gerade). Aus Einschnitt und Damm folgt der Massenausgleich – Aufgabe a5 mit eigenen Daten. Welche Höhendaten bereitstehen, prüft die Lehrkraft vorab.</li>
+      <li><strong>Photovoltaik und Haushaltsverbrauch.</strong> Zwei Tageskurven (Erzeugung, Verbrauch), etwa aus dem Smart-Meter oder aus veröffentlichten Lastprofilen: Die Fläche, in der die Erzeugung oben liegt, ist die Einspeisung, die andere der Netzbezug; die Bilanz ist der Saldo der Stromrechnung. Passt zu a4 mit anderen Namen. Eine Absprache mit Physik lohnt sich (Leistung gegen Energie).</li>
+      <li><strong>Physik: Arbeit im Kraft-Weg-Diagramm.</strong> Die Fläche unter <span class="m" data-tex="F(s)" data-plain="F(s)"></span> ist die Arbeit; ein Bereich, in dem die Kraft entgegen der Bewegung wirkt, zählt negativ. Bilanz gegen Betrag ist dort der Unterschied zwischen „Nettoarbeit“ und „insgesamt verrichteter Arbeit“.</li>
+      <li><strong>CAS/GTR.</strong> Sinnvoll erst nach diesem Modul: <code>fnInt(abs(f(x) − g(x)), x, a, b)</code> liefert den Flächeninhalt in einer Zeile, verschleiert aber, dass die Nullstellen das eigentliche Problem sind. Als Kontrolle der eigenen Rechnung (Bilanz gegen Flächeninhalt am Rechner vergleichen) ist es ideal und führt direkt zurück zu Kernaussage 1.</li>
+    </ul>
+
+    <p><strong>Erwartungswerte der Simulation (nur für die Lehrkraft).</strong> Beobachtungsauftrag, Paar A, <span class="m" data-tex="a=-1{,}50" data-plain="a = −1,50"></span>: (1) Die blaue Kurve wechselt bei <span class="m" data-tex="b=-1{,}00" data-plain="b = −1,00"></span> (Tiefpunkt, Bilanz −1,81), <span class="m" data-tex="b=2{,}00" data-plain="b = 2,00"></span> (Hochpunkt, 9,44) und <span class="m" data-tex="b=3{,}00" data-plain="b = 3,00"></span> (Tiefpunkt, 8,86); an allen drei Stellen zeigt „f(b) − g(b)“ den Wert 0,00 – die Steigung der blauen Kurve ist <span class="m" data-tex="f-g" data-plain="f − g"></span>. (2) Die Differenz ist 0,00 bis <span class="m" data-tex="b=-1{,}00" data-plain="b = −1,00"></span>, wächst dann bis <span class="m" data-tex="b=-0{,}37" data-plain="b = −0,37"></span> auf 3,61 (dort ist das zweite Stück so groß wie das erste geworden; bei −0,38 zeigt das Feld 3,57), bleibt auf 3,61 bis <span class="m" data-tex="b=2{,}00" data-plain="b = 2,00"></span>, wächst bis <span class="m" data-tex="b=3{,}00" data-plain="b = 3,00"></span> auf 4,78 und bleibt danach dort; sie ist <span class="m" data-tex="2\min(P,N)" data-plain="2·min(P, N)"></span>. (3) Bis <span class="m" data-tex="b=-1{,}00" data-plain="b = −1,00"></span>, der ersten Schnittstelle rechts von <span class="m" data-tex="a" data-plain="a"></span>, ist die orange Kurve das Spiegelbild der blauen. Sinngemäßer Satz: <em>Flächeninhalt und Betrag der Bilanz stimmen genau so lange überein, bis <span class="m" data-tex="b" data-plain="b"></span> die erste Schnittstelle mit Vorzeichenwechsel überschreitet; danach ist der Flächeninhalt größer, und der Unterschied ist das Doppelte des kleineren Teilstücks.</em> Prüfung an Paar B: Die Differenz bleibt durchgehend 0,00, weil <span class="m" data-tex="f-g" data-plain="f − g"></span> sein Vorzeichen nie wechselt, obwohl „f(b) − g(b)“ bei <span class="m" data-tex="b=1{,}00" data-plain="b = 1,00"></span> den Wert 0,00 zeigt; die Anzeige der Vorzeichenwechsel bleibt bei 0.</p>
+  </details>
+
+  <footer>
+    Mathematik LK Q1 · Flächeninhalt zwischen Graphen, Vorzeichenwechsel und Schnittstellen · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/baustein-formelleiste.md
+var formelDaten = [
+  {abschnitt:"bilanz", titel:"Bilanz ist nicht Flächeninhalt", formeln:[
+    {id:"flaeche-betrag", ziel:"f-flaeche-betrag", tex:"A=\\int_a^b |f(x)|\\,\\mathrm{d}x", plain:"A = ∫ von a bis b |f(x)| dx",
+     zeichen:[
+       {tex:"A", plain:"A", text:"Flächeninhalt zwischen dem Graphen von f und der x-Achse"},
+       {tex:"a,\\ b", plain:"a, b", text:"Integrationsgrenzen"},
+       {tex:"|f(x)|", plain:"|f(x)|", text:"Betrag der Funktionswerte, immer nicht negativ"}],
+     gilt:"f ist auf [a; b] stetig. Der Betrag im Integranden sorgt dafür, dass alle Stücke positiv zählen. Zum Rechnen zerlegt man an den Nullstellen.",
+     fehler:"Den Betrag außen um das ganze Integral setzen, also |∫ f| rechnen. Dann heben sich Stücke oberhalb und unterhalb der Achse gegeneinander auf."},
+    {id:"bilanz-flaeche", ziel:"f-bilanz-flaeche", tex:"\\text{Bilanz}=P-N", plain:"Bilanz = P − N",
+     zeichen:[
+       {tex:"P", plain:"P", text:"Inhalt aller Flächenstücke oberhalb der x-Achse"},
+       {tex:"N", plain:"N", text:"Inhalt aller Flächenstücke unterhalb der x-Achse, als positive Zahl gerechnet"}],
+     gilt:"f ist auf [a; b] stetig. Die Bilanz ist das Integral ∫ f. Der Flächeninhalt ist dagegen P + N, also die Summe der Beträge der Teilstücke.",
+     fehler:"Die Stücke unterhalb der Achse bei der Flächenrechnung mit negativem Vorzeichen mitnehmen. Ein Flächeninhalt ist nie negativ, nur eine Bilanz kann es sein."},
+    {id:"zerlegung", ziel:"f-zerlegung", tex:"A=\\Bigl|\\int_a^{z_1}f\\Bigr|+\\Bigl|\\int_{z_1}^{z_2}f\\Bigr|+\\dots+\\Bigl|\\int_{z_k}^{b}f\\Bigr|", plain:"A = |∫ von a bis z₁ f| + |∫ von z₁ bis z₂ f| + … + |∫ von zₖ bis b f|",
+     zeichen:[
+       {tex:"z_1,\\ \\dots,\\ z_k", plain:"z₁, …, zₖ", text:"Nullstellen von f, an denen das Vorzeichen wechselt, zwischen a und b"},
+       {tex:"\\int_{z_i}^{z_{i+1}} f", plain:"∫ von zᵢ bis zᵢ₊₁ f", text:"Integral über ein Teilstück ohne Vorzeichenwechsel"}],
+     gilt:"Zwischen zwei aufeinanderfolgenden Nullstellen hat f ein festes Vorzeichen. Deshalb darf der Betrag pro Teilstück außen stehen.",
+     fehler:"Eine Nullstelle ohne Vorzeichenwechsel, etwa eine berührende, als Grenze verwenden oder eine Nullstelle mit Wechsel vergessen. Vorher an der Skizze oder am Vorzeichen von f prüfen."}
+  ]},
+  {abschnitt:"zwischen", titel:"Zwischen zwei Graphen: Schnittstellen als Grenzen", formeln:[
+    {id:"zwischen-graphen", ziel:"f-zwischen-graphen", tex:"A=\\int_a^b \\bigl|\\,f(x)-g(x)\\,\\bigr|\\,\\mathrm{d}x", plain:"A = ∫ von a bis b |f(x) − g(x)| dx",
+     zeichen:[
+       {tex:"A", plain:"A", text:"Inhalt der von beiden Graphen eingeschlossenen Fläche"},
+       {tex:"f,\\ g", plain:"f, g", text:"die beiden Funktionen"},
+       {tex:"a,\\ b", plain:"a, b", text:"Grenzen, in der Regel Schnittstellen der Graphen"}],
+     gilt:"f und g sind stetig. Kreuzen sich die Graphen zwischen a und b, wird an den Schnittstellen zerlegt.",
+     fehler:"Als Grenzen irgendwelche Nullstellen nehmen. Zwischen zwei Graphen begrenzen die Schnittstellen die Fläche, nicht die Nullstellen."},
+    {id:"obere-minus-untere", ziel:"f-obere-minus-untere", tex:"A=\\int_a^b\\bigl(f(x)-g(x)\\bigr)\\,\\mathrm{d}x", plain:"A = ∫ₐᵇ (f(x) − g(x)) dx",
+     zeichen:[
+       {tex:"f(x)", plain:"f(x)", text:"obere Funktion auf ganz [a; b]"},
+       {tex:"g(x)", plain:"g(x)", text:"untere Funktion auf ganz [a; b]"}],
+     gilt:"Nur wenn f(x) ≥ g(x) auf dem ganzen Intervall [a; b] gilt. Ein Vorzeichenwechsel von f oder g einzeln spielt dabei keine Rolle, nur ihre Reihenfolge.",
+     fehler:"Die Reihenfolge der Funktionen nicht prüfen. Steht die untere Funktion vorn, ergibt sich eine negative Zahl, die kein Flächeninhalt sein kann."},
+    {id:"parabelformel", ziel:"f-parabelformel", tex:"A=\\dfrac{|\\alpha|\\,(x_2-x_1)^3}{6}", plain:"A = |α| · (x₂ − x₁)³ / 6",
+     zeichen:[
+       {tex:"\\alpha", plain:"α", text:"Betrag des Leitkoeffizienten von f − g"},
+       {tex:"x_1,\\ x_2", plain:"x₁, x₂", text:"die beiden Schnittstellen"}],
+     gilt:"f − g ist eine quadratische Funktion mit genau zwei Nullstellen x₁ und x₂. Für andere Fälle gilt die Formel nicht.",
+     fehler:"Die Formel auf Kurven dritten Grades oder auf Fälle mit mehr als zwei Schnittstellen anwenden."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{r:1, fb:[
+    "Vorzeichenfehler beim Umformen. Aus x² = x + 2 folgt x² − x − 2 = 0; deine beiden Werte lösen dagegen x² + x − 2 = 0, also x² = 2 − x – das ist die Schnittstellengleichung mit der fallenden Geraden y = 2 − x. Probe: f(1) = 1, aber g(1) = 3; keine Schnittstelle.",
+    "Richtig. x² − x − 2 = (x − 2)(x + 1) = 0. Probe: f(−1) = 1 = g(−1) und f(2) = 4 = g(2). Merk dir das Vorgehen – Funktionsterme gleichsetzen, auf null bringen, lösen: Es ist der erste Schritt jeder Flächenaufgabe dieser Einheit.",
+    "Die negative Lösung wurde verworfen, vermutlich weil „Fläche nicht negativ sein kann“. Die Frage betrifft aber Schnittstellen, nicht Flächen: f(−1) = 1 = g(−1), also ist x = −1 ebenfalls eine. Hier ist das später besonders bitter – eine verlorene Schnittstelle ist eine verlorene Integrationsgrenze."
+  ]},
+  vw2:{r:0, fb:[
+    "Richtig. Das Integral ist linear: ∫ (f − 2g) = ∫ f − 2·∫ g = 5 − 4 = 1. Genau diese Zeile trägt später die Formel ∫ (f − g) für die Fläche zwischen zwei Graphen.",
+    "Du hast 5 − 2 gerechnet, also den Faktor 2 vor g nicht mitgenommen. Konstante Faktoren gehören zum Integral: ∫ 2g = 2·∫ g = 4. Probe mit g = 1 auf [0; 2]: ∫ 2·1 dx = 4, nicht 2.",
+    "Aus dem Minuszeichen wurde ein Pluszeichen: 5 + 2·2 = 9 wäre ∫ (f + 2g). Die Differenz zweier Funktionen wird zur Differenz der Integrale – und genau das Vorzeichen entscheidet später darüber, welcher Graph „oben“ liegt."
+  ]},
+  vw3:{r:2, fb:[
+    "x = 0 ist eine Nullstelle, aber nicht die einzige. x³ − 3x = x·(x² − 3): Ein Produkt ist null, wenn ein Faktor null ist – der zweite Faktor liefert x² = 3, also x = ±√3. Rechne jeden Faktor einzeln durch.",
+    "Du hast beide Seiten durch x geteilt und damit die Nullstelle x = 0 verloren. Bei Nullstellen wird ausgeklammert, nicht gekürzt: x·(x² − 3) = 0 hat drei Lösungen. In dieser Einheit wäre jede verlorene Nullstelle eine verlorene Integrationsgrenze.",
+    "Richtig, x·(x² − 3) = 0 liefert 0 und ±√3. Ausklammern statt kürzen – und alle drei Nullstellen sind hier Kandidaten für Integrationsgrenzen."
+  ]},
+  sim1:{r:1, fb:[
+    "Mehr Fläche heißt nicht mehr Bilanz. Zwischen −1,50 und −1,00 liegt g oben (f − g < 0), dieses Stück wird abgezogen: Die Anzeige zeigt 9,58, bei a = −1,00 dagegen 11,39 – Differenz genau das Stück 1,81. Eine Bilanz wächst nur, wenn du Stücke mit f − g > 0 mitnimmst.",
+    "Richtig. Bei a = −1,00 beginnt die Integration genau dort, wo f − g von negativ auf positiv wechselt, und die Anzeige zeigt 11,39 (bei −1,50: 9,58, bei 3,00: 0,72). Verschiebst du a von dort nach links oder rechts, sinkt die Bilanz. Grund: Die Ableitung von ∫ₐᵇ h nach a ist −h(a) – die Bilanz hat als Funktion von a dort ein Maximum, wo h von − nach + wechselt.",
+    "a = 3,00 ist eine Schnittstelle, und die Bilanz ist dort tatsächlich ein lokales Maximum – aber nur ein lokales: Sie zeigt 0,72. Von 3,00 bis 3,50 ist nur ein schmales Stück dabei, und das große Stück von −1,00 bis 2,00 (11,25) fehlt. Eine Schnittstelle ist nur ein Kandidat; welche die größte Bilanz liefert, entscheidet der Vergleich der Anzeigen."
+  ]},
+  sim2:{r:2, fb:[
+    "Die Schnittstelle bei −1,00 ist die Stelle, an der die Bilanzkurve umkehrt, nicht die, an der sie null erreicht: Die Anzeige zeigt dort −1,81, den tiefsten Wert. Um wieder bei null anzukommen, muss die Kurve das bis dahin Abgezogene erst wieder aufholen. Nullstelle der Differenzfunktion und Nullstelle der Bilanz sind zwei verschiedene Dinge.",
+    "Du hast gespiegelt: gleicher Abstand rechts und links der Schnittstelle. Das würde klappen, wenn f − g punktsymmetrisch zu −1 verliefe. Tut es nicht: Im Abstand 0,4 links der Schnittstelle (b = −1,40) zeigt das Feld „f(b) − g(b)“ −5,98, im gleichen Abstand rechts (b = −0,60) nur +3,74. Das rechte Stück ist deshalb kleiner als das linke (1,22 gegen 1,81), und die Anzeige steht bei b = −0,50 noch auf −0,58. Es muss weiter nach rechts gehen, bis das rechte Stück aufgeholt hat.",
+    "Richtig. Bei b = −0,38 zeigt die Anzeige −0,02, bei b = −0,37 schon +0,03; der Nulldurchgang liegt bei b ≈ −0,376. Dort ist das Stück oberhalb (P = 1,79) praktisch so groß geworden wie das Stück unterhalb (N = 1,81). Und: Der Flächeninhalt steht dort auf 3,59, nicht bei null – Bilanz null heißt nicht „keine Fläche“."
+  ]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{wert:4, einheit:"FE", tol:0.05,
+      ok:"Richtig. Nullstellen 1 und 3 teilen [0; 4] in drei Stücke mit den Beträgen 4/3, 4/3, 4/3; Summe 4 FE. Die Bilanz allein hätte nur 4/3 geliefert.",
+      falschEinheit:"Der Zahlenwert stimmt. Ein Flächeninhalt zwischen Graph und Achse wird in Flächeneinheiten (FE) angegeben – Länge mal Länge. LE misst Längen, FE² wäre eine vierdimensionale Größe, und m³ ist ein Volumen.",
+      nah:"2,67 (= 8/3) bekommt, wer nur zwei der drei Stücke addiert – meist fehlt das letzte Stück von 3 bis 4, weil nach der zweiten Nullstelle „nichts mehr passiert“. Doch das Intervall reicht bis 4, und dort liegt der Graph wieder oberhalb der Achse.",
+      weit:"Je nach Wert: 1,33 (= 4/3) ist die Bilanz F(4) − F(0) – du hast ohne Zerlegung integriert, und die Stücke haben sich zum Teil weggerechnet. Der Flächeninhalt braucht die Nullstellen als Grenzen. 0 ist typisch, wenn du nur F(4) − F(1) bildest. Die Hilfen führen dich durch."},
+  a2:{wert:7.54, einheit:"dm²", tol:0.05, alt:{wert:754, einheit:"cm²"},
+      ok:"Richtig. h = −2x² + 4x + 2 hat die Nullstellen 1 ± √2, und H(x₂) − H(x₁) = 16·√2/3 ≈ 7,54 dm² (rund 754 cm²).",
+      falschEinheit:"Der Zahlenwert stimmt. Fläche in dm² (oder 754 cm²) – dm wäre eine Länge, dm³ ein Volumen. Beim Umrechnen: 1 dm² = 100 cm², nicht 10.",
+      nah:"Falls dein Wert negativ war: Ein negativer Wert wie −7,54 entsteht, wenn g − f statt f − g integriert wird: Der Betrag ist richtig, das Vorzeichen zeigt nur, dass g unten liegt; ein Flächeninhalt ist nie negativ. Falls dein Wert positiv war (Vergleichswerte in dm², 1 dm² = 100 cm²): 6,00 bekommt, wer die Grenzen 0 und 3 „geraten“ hat, weil die Schnittstellen krumm sind – sie sind aber 1 ± √2 und stehen so in der Lösungsformel. 11,31 ist ein Rechteck aus der Breite x₂ − x₁ = 2,83 und der größten Lücke h(1) = 4; die Lücke ist aber nur in der Mitte so groß, überall sonst kleiner. 5,66 ist das Dreieck aus derselben Breite und Höhe – die Lückenfunktion h ist eine nach unten geöffnete Parabel und liegt oberhalb der Dreiecksseiten. Die echte Fläche liegt zwischen beiden (genauer: zwei Drittel des Rechtecks, 2/3·11,31 = 7,54) und muss integriert werden.",
+      weit:"Das passt noch nicht. Sehr kleine Werte wie 2,83 sind die Breite x₂ − x₁ – davon hast du noch nicht integriert. Die Hilfen führen Schritt für Schritt: Differenzfunktion, Schnittstellen 1 ± √2, Stammfunktion, Differenz der Werte."},
+  a4:{wert:7.97, einheit:"L", tol:0.05, alt:{wert:0.00797, einheit:"m³"},
+      ok:"Richtig. t* = ln 2/0,3 = 2,31 min; erste Phase 2,05 L, zweite Phase 5,92 L, Summe 7,97 L (rund 0,008 m³).",
+      falschEinheit:"Der Zahlenwert stimmt. Rate mal Zeit ergibt Menge: L/min · min = L – herausgekommen ist ein Volumen, keine Rate und keine Zeit. In Kubikmetern wären es 0,00797 m³.",
+      nah:"5,92 L ist nur die zweite Phase; die erste Phase (2,05 L) fehlt – du hast die Schnittstelle gefunden, aber nur ein Teilintegral berechnet. 12,12 L ist ∫₀⁸ z dt, der gesamte Zufluss: Der Abfluss von 2 L/min wurde nicht abgezogen. Gefragt ist der Abstand zwischen den Graphen, nicht die Fläche unter z.",
+      weit:"3,88 L ist der Betrag der Bilanz (2,05 − 5,92 = −3,88): Du hast über das ganze Intervall integriert und dann den Betrag genommen. Die beiden Phasen heben sich teilweise auf; der Flächeninhalt zählt sie beide positiv. 2,05 L ist nur die erste Phase. Die Hilfen führen dich durch die Zerlegung bei t*."},
+  a5:{wert:105.42, einheit:"m²", tol:0.05,
+      ok:"Richtig. Einschnitt 7,875 FE, Damm 2,667 FE, zusammen 10,54 FE, und wegen 1 FE = 10 m · 1 m = 10 m² sind das 105,42 m² Querschnitt, je Meter Trassenlänge also 105,42 m³ Boden.",
+      falschEinheit:"Der Zahlenwert stimmt. Gefragt ist eine Querschnittsfläche in m². Kubikmeter bekämst du erst, wenn du mit der Länge der Trasse multiplizierst; FE hat hier keine SI-Bedeutung, weil die Achsen verschieden skaliert sind.",
+      nah:"Falls du etwa 78 erhalten hast: 78,75 m² ist nur der Einschnitt – der Damm (26,67 m²) fehlt, denn aufgeschüttet wird auch Boden, und der wird bewegt. Falls du 105 eingegeben hast (auf ganze Quadratmeter gerundet): Das liegt 0,42 m² daneben und fällt aus der Toleranz – verlangt sind zwei Nachkommastellen.",
+      weit:"Falls du etwa 52 erhalten hast: 52,08 m² ist die Bilanz ∫ (G − T) dx – der Überschuss, nicht der Aufwand: Einschnitt und Damm haben sich teilweise aufgehoben. Bei 10,54 fehlt die Umrechnung der Flächeneinheiten (Faktor 10 vergessen); 1054,17 entsteht, wenn du 1 FE = 100 m² setzt, als wären beide Achsen in Dekametern skaliert. 26,67 wäre nur der Damm."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.a3 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier richtig. Entscheidend war jedes Mal die Frage, ob f − g sein Vorzeichen wechselt: Ohne Wechsel (B, C) sind Bilanz und Flächeninhalt gleich, auch wenn sich die Graphen berühren (C). Mit Wechsel ist der Flächeninhalt größer als der Betrag der Bilanz (A) – im Extremfall bleibt von der Bilanz nichts übrig (D).";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Geh jede Aussage in derselben Reihenfolge durch: Erstens – haben die Graphen gemeinsame Punkte? Zweitens – wenn ja, wechseln die Graphen dort die Lage (oben/unten) oder berühren sie sich nur? Drittens – wenn sie die Lage wechseln, heben sich die Stücke ganz auf oder nur teilweise? Wer nur auf die Zahl der Schnittpunkte schaut, verwechselt Berühren mit Kreuzen.";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: Flächen zwischen zwei Graphen ============ */
+(function(){
+  var cv = document.getElementById("cvSim"), ctx = cv.getContext("2d");
+  var rA = document.getElementById("rA"), rB = document.getElementById("rB");
+  var wA = document.getElementById("wA"), wB = document.getElementById("wB");
+  var lA = document.getElementById("lA"), lB = document.getElementById("lB"), lH = document.getElementById("lH");
+  var lP = document.getElementById("lP"), lN = document.getElementById("lN");
+  var lBil = document.getElementById("lBil"), lFl = document.getElementById("lFl");
+  var lDiff = document.getElementById("lDiff"), lNs = document.getElementById("lNs");
+  var bPlay = document.getElementById("bPlay"), bReset = document.getElementById("bReset");
+  var cSchn = document.getElementById("cSchn");
+
+  /* ---------- Maßstäbe (interne Canvas-Pixel, Canvas 1000 × 690) ----------
+     Beide Diagramme teilen die x-Pixel 70 … 970 (900 px):
+       xPx(x) = PX_LI + (x − lo) · pxProEinheit,   pxProEinheit = 900 / (hi − lo)
+     oberes Diagramm (Graphen f und g):        y-Pixel 40 … 280 (240 px hoch)
+     unteres Diagramm (Bilanz, Flächeninhalt): y-Pixel 370 … 610 (240 px hoch)
+     Die y-Bereiche stehen je Paar in "paare"; px je Einheit = 240 / (max − min).
+     Regler und Raster: Schrittweite 0,01, also a = lo + ja/100 und b = lo + jb/100. */
+  var PX_LI = 70, PX_RE = 970;
+  var O_OBEN = 40, O_UNTEN = 280;
+  var U_OBEN = 370, U_UNTEN = 610;
+  var MIN_ABSTAND = 10;            // b − a ≥ 0,10, also mindestens 10 Rasterzellen
+
+  var paare = {
+    A:{ f:function(x){ return x*x*x - 2*x*x; }, g:function(x){ return 2*x*x - x - 6; },
+        lo:-1.5, hi:3.5, oMin:-10, oMax:20, oSchritt:5, uMin:-4, uMax:16, uSchritt:4, xSchritt:1,
+        einheit:"FE", hEinheit:"", xName:"x", xEinheit:"", titel:"Graphen von f und g" },
+    B:{ f:function(x){ return x*x; }, g:function(x){ return 2*x - 1; },
+        lo:-1, hi:3, oMin:-4, oMax:10, oSchritt:2, uMin:-1, uMax:6, uSchritt:1, xSchritt:1,
+        einheit:"FE", hEinheit:"", xName:"x", xEinheit:"", titel:"f(x) = x²,  g(x) = 2x − 1" },
+    C:{ f:function(x){ return 4*Math.exp(-0.3*x); }, g:function(){ return 1.5; },
+        lo:0, hi:10, oMin:-0.5, oMax:4.5, oSchritt:1, uMin:-7, uMax:10, uSchritt:2, xSchritt:2,
+        einheit:"L", hEinheit:"L/min", xName:"t in min", xEinheit:" min", titel:"f = Zufluss z(t) = 4·e^(−0,3t),  g = Abfluss 1,5" }
+  };
+  var schluessel = "A", p = paare.A;
+  var n = 500, ja = 0, jb = 500;
+  var nullst = [], bc = [], ac = [];
+  var laeuft = false, bF = 0, letzteZeit = null, greift = null;
+
+  function fmt(z, st){
+    if(!isFinite(z)) z = 0;
+    if(Math.abs(z) < 0.5 * Math.pow(10, -st)) z = 0;             // "−0,00" vermeiden
+    return z.toFixed(st).replace(".", ",").replace("-", "−");
+  }
+  function h(x){ return p.f(x) - p.g(x); }
+
+  /* ---------- Rechnung: Nullstellen mit Vorzeichenwechsel, dann Tabellen ---------- */
+  function nullstellen(){
+    var N = 4000, r = [], letzte = 0, letzteX = 0;
+    for(var i = 0; i <= N; i++){
+      var x = p.lo + (p.hi - p.lo) * i / N, v = h(x);
+      var s = Math.abs(v) < 1e-12 ? 0 : (v > 0 ? 1 : -1);
+      if(s === 0) continue;                                    // Nullstelle selbst überspringen
+      if(letzte !== 0 && s !== letzte){                        // Vorzeichenwechsel zwischen letzteX und x
+        var lo = letzteX, hi = x;
+        for(var k = 0; k < 60; k++){                           // Bisektion
+          var m = (lo + hi) / 2, vm = h(m);
+          if(Math.abs(vm) < 1e-13){ lo = hi = m; break; }
+          if((vm > 0) === (letzte > 0)) lo = m; else hi = m;
+        }
+        r.push((lo + hi) / 2);
+      }
+      letzte = s; letzteX = x;
+    }
+    return r;                                                  // Berührstellen fehlen absichtlich
+  }
+  function simpson(fn, a, b, m){                               // m gerade
+    var hh = (b - a) / m, s = fn(a) + fn(b);
+    for(var k = 1; k < m; k++) s += (k % 2 ? 4 : 2) * fn(a + k * hh);
+    return s * hh / 3;
+  }
+  function tabellen(){
+    n = Math.round((p.hi - p.lo) * 100);
+    bc = [0]; ac = [0];
+    for(var j = 0; j < n; j++){
+      var u = p.lo + j / 100, v = p.lo + (j + 1) / 100, st = [u], db = 0, da = 0, k;
+      for(k = 0; k < nullst.length; k++) if(nullst[k] > u + 1e-9 && nullst[k] < v - 1e-9) st.push(nullst[k]);
+      st.push(v);
+      for(k = 0; k < st.length - 1; k++){
+        var val = simpson(h, st[k], st[k + 1], 8);
+        db += val; da += Math.abs(val);
+      }
+      bc.push(bc[j] + db); ac.push(ac[j] + da);
+    }
+  }
+  function xJ(j){ return p.lo + j / 100; }
+
+  /* ---------- Umrechnung ---------- */
+  function ppx(){ return (PX_RE - PX_LI) / (p.hi - p.lo); }
+  function xPx(x){ return PX_LI + (x - p.lo) * ppx(); }
+  function pxX(q){ return p.lo + (q - PX_LI) / ppx(); }
+  function yO(v){ return O_UNTEN - (v - p.oMin) * (O_UNTEN - O_OBEN) / (p.oMax - p.oMin); }
+  function yU(v){ return U_UNTEN - (v - p.uMin) * (U_UNTEN - U_OBEN) / (p.uMax - p.uMin); }
+
+  /* ---------- Zeichnen ---------- */
+  // Schriftfaktor: auf schmalen Bildschirmen wird die Canvas stark verkleinert, die Schrift wächst mit
+  function kk(){ var w = cv.clientWidth || 1000; return Math.max(1, Math.min(2.1, 700 / w)); }
+  function schrift(px, fett){ return (fett ? "600 " : "") + Math.round(px * kk()) + "px sans-serif"; }
+
+  function rahmen(oben, unten, yFn, vMin, vMax, vSchritt){
+    var t, v;
+    ctx.lineWidth = 1; ctx.strokeStyle = "#eef1f6";
+    var t0 = Math.ceil(p.lo / p.xSchritt - 1e-9) * p.xSchritt;
+    for(t = t0; t <= p.hi + 1e-9; t += p.xSchritt){
+      ctx.beginPath(); ctx.moveTo(xPx(t), oben); ctx.lineTo(xPx(t), unten); ctx.stroke();
+    }
+    for(v = Math.ceil(vMin / vSchritt) * vSchritt; v <= vMax + 1e-9; v += vSchritt){
+      ctx.beginPath(); ctx.moveTo(PX_LI, yFn(v)); ctx.lineTo(PX_RE, yFn(v)); ctx.stroke();
+    }
+    ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.3;
+    ctx.beginPath(); ctx.moveTo(PX_LI, oben); ctx.lineTo(PX_LI, unten); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PX_LI, yFn(0)); ctx.lineTo(PX_RE, yFn(0)); ctx.stroke();
+
+    ctx.fillStyle = "#64748b"; ctx.font = schrift(12);
+    ctx.textAlign = "right"; ctx.textBaseline = "middle";
+    for(v = Math.ceil(vMin / vSchritt) * vSchritt; v <= vMax + 1e-9; v += vSchritt){
+      ctx.fillText(fmt(v, 0), PX_LI - 8, yFn(v));
+    }
+    ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for(t = t0; t <= p.hi + 1e-9; t += p.xSchritt){
+      ctx.fillText(fmt(t, 0), xPx(t), unten + 5);
+    }
+    ctx.textAlign = "right";
+    ctx.fillText(p.xName, PX_RE + 24, unten + 5 + Math.round(15 * kk()));
+  }
+
+  function zeichneOben(a, b){
+    rahmen(O_OBEN, O_UNTEN, yO, p.oMin, p.oMax, p.oSchritt);
+    ctx.fillStyle = "#5b6b7f"; ctx.font = schrift(13, true);
+    ctx.textAlign = "left"; ctx.textBaseline = "bottom";
+    ctx.fillText(p.titel, PX_LI + 10, O_OBEN - 8);
+
+    // Fläche zwischen den Graphen in schmalen Spalten; Farbe nach dem Vorzeichen von f − g
+    var xa = xPx(a), xb = xPx(b), q, br = 2;
+    for(q = xa; q < xb; q += br){
+      var w = Math.min(br, xb - q) + 0.6, xm = pxX(q + w / 2 - 0.3);
+      var fv = p.f(xm), gv = p.g(xm), y1 = yO(fv), y2 = yO(gv);
+      ctx.fillStyle = fv >= gv ? "rgba(13,122,82,0.28)" : "rgba(220,38,38,0.25)";
+      ctx.fillRect(q, Math.min(y1, y2), w, Math.abs(y1 - y2));
+    }
+
+    // die beiden Graphen über den ganzen Bereich
+    var i, x;
+    ctx.lineWidth = 3; ctx.lineJoin = "round";
+    ctx.strokeStyle = "#334155"; ctx.beginPath();
+    for(i = 0; i <= 300; i++){ x = p.lo + i * (p.hi - p.lo) / 300; if(i === 0) ctx.moveTo(xPx(x), yO(p.g(x))); else ctx.lineTo(xPx(x), yO(p.g(x))); }
+    ctx.stroke();
+    ctx.strokeStyle = "#0d7a52"; ctx.beginPath();
+    for(i = 0; i <= 300; i++){ x = p.lo + i * (p.hi - p.lo) / 300; if(i === 0) ctx.moveTo(xPx(x), yO(p.f(x))); else ctx.lineTo(xPx(x), yO(p.f(x))); }
+    ctx.stroke();
+
+    ctx.font = schrift(15, true); ctx.textAlign = "left"; ctx.textBaseline = "middle";
+    ctx.fillStyle = "#0d7a52"; ctx.fillText("f", PX_RE + 6, yO(p.f(p.hi)));
+    ctx.fillStyle = "#334155"; ctx.fillText("g", PX_RE + 6, yO(p.g(p.hi)));
+
+    // Schnittstellen mit Vorzeichenwechsel; Berührstellen werden nie markiert
+    if(cSchn && cSchn.checked){
+      nullst.forEach(function(r){
+        ctx.fillStyle = "#fff"; ctx.strokeStyle = "#0d7a52"; ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.arc(xPx(r), yO(p.f(r)), 6, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      });
+    }
+  }
+
+  function zeichneUnten(a, b){
+    rahmen(U_OBEN, U_UNTEN, yU, p.uMin, p.uMax, p.uSchritt);
+    ctx.fillStyle = "#5b6b7f"; ctx.font = schrift(13, true);
+    ctx.textAlign = "left"; ctx.textBaseline = "bottom";
+    ctx.fillText("Bilanz und Flächeninhalt bis x (in " + p.einheit + ")", PX_LI + 10, U_OBEN - 8);
+
+    var j, y0B = bc[ja], y0A = ac[ja];
+    function bahn(werte, y0, von, bis){
+      ctx.beginPath();
+      for(j = von; j <= bis; j++){
+        var q = xPx(xJ(j)), y = yU(werte[j] - y0);
+        if(j === von) ctx.moveTo(q, y); else ctx.lineTo(q, y);
+      }
+      ctx.stroke();
+    }
+    // hinter b hellgrau gestrichelt
+    ctx.save(); ctx.setLineDash([6, 5]); ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 2.5; ctx.lineJoin = "round";
+    bahn(bc, y0B, jb, n); bahn(ac, y0A, jb, n);
+    ctx.restore();
+    // bis b durchgezogen
+    ctx.lineWidth = 3; ctx.lineJoin = "round";
+    ctx.strokeStyle = "#d97706"; bahn(ac, y0A, ja, jb);
+    ctx.strokeStyle = "#1d4ed8"; bahn(bc, y0B, ja, jb);
+
+    // Punkte auf der Linie x = b
+    ctx.fillStyle = "#d97706"; ctx.beginPath(); ctx.arc(xPx(b), yU(ac[jb] - y0A), 5.5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = "#1d4ed8"; ctx.beginPath(); ctx.arc(xPx(b), yU(bc[jb] - y0B), 5.5, 0, Math.PI * 2); ctx.fill();
+
+    // Legende, rechtsbündig aus der gemessenen Textbreite, damit sie den Titel nie berührt
+    ctx.font = schrift(13, true); ctx.textBaseline = "bottom"; ctx.textAlign = "left";
+    var t1 = ctx.measureText("Bilanz").width, t2 = ctx.measureText("Flächeninhalt").width;
+    var strich = 22, luecke = 6, abstand = 18;
+    var lx = PX_RE - (strich + luecke + t1 + abstand + strich + luecke + t2);
+    var ly = U_OBEN - 8;
+    ctx.strokeStyle = "#1d4ed8"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(lx, ly - 6); ctx.lineTo(lx + strich, ly - 6); ctx.stroke();
+    ctx.fillStyle = "#1d4ed8"; ctx.fillText("Bilanz", lx + strich + luecke, ly);
+    var lx2 = lx + strich + luecke + t1 + abstand;
+    ctx.strokeStyle = "#d97706";
+    ctx.beginPath(); ctx.moveTo(lx2, ly - 6); ctx.lineTo(lx2 + strich, ly - 6); ctx.stroke();
+    ctx.fillStyle = "#b45309"; ctx.fillText("Flächeninhalt", lx2 + strich + luecke, ly);
+  }
+
+  function grenzlinien(a, b){
+    ctx.save();
+    ctx.setLineDash([6, 5]); ctx.strokeStyle = "#5b6b7f"; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(xPx(a), O_OBEN); ctx.lineTo(xPx(a), U_UNTEN); ctx.stroke();
+    ctx.restore();
+    ctx.strokeStyle = "#0f2135"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(xPx(b), O_OBEN); ctx.lineTo(xPx(b), U_UNTEN); ctx.stroke();
+    ctx.font = schrift(14, true); ctx.textBaseline = "top";
+    marke("a", xPx(a), "#5b6b7f", 0);
+    marke("b", xPx(b), "#0f2135", 1);
+  }
+  // Marke links der Linie (a) bzw. rechts (b); nur am Rand wird gewechselt.
+  // b liegt eine Zeile tiefer als a, damit beide bei kleinem Abstand nicht überlappen.
+  function marke(text, px, farbe, zeile){
+    var bb = Math.round(14 * kk()), hh = Math.round(17 * kk());
+    var links = (text === "a") ? px > PX_LI + bb + 6 : px > 930;
+    var bx = links ? px - bb - 4 : px + 4, by = O_OBEN + 4 + zeile * (hh + 2);
+    ctx.fillStyle = "#fff"; ctx.fillRect(bx, by, bb, hh);
+    ctx.fillStyle = farbe; ctx.textAlign = "left";
+    ctx.fillText(text, bx + 3, by + 1);
+  }
+
+  function zeichnen(){
+    var a = xJ(ja), b = xJ(jb);
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, cv.width, cv.height);
+    zeichneOben(a, b);
+    zeichneUnten(a, b);
+    grenzlinien(a, b);
+  }
+
+  /* ---------- Anzeige ---------- */
+  function aktualisieren(){
+    var a = xJ(ja), b = xJ(jb);
+    var bil = bc[jb] - bc[ja], fl = ac[jb] - ac[ja];
+    var P = Math.max(0, (fl + bil) / 2), N = Math.max(0, (fl - bil) / 2);
+    var diff = fl - Math.abs(bil);
+    var wechsel = 0;
+    nullst.forEach(function(r){ if(r > a + 1e-9 && r < b - 1e-9) wechsel++; });
+    var e = " " + p.einheit;
+    wA.textContent = fmt(a, 2); wB.textContent = fmt(b, 2);
+    lA.textContent = fmt(a, 2) + p.xEinheit; lB.textContent = fmt(b, 2) + p.xEinheit;
+    lH.textContent = fmt(h(b), 2) + (p.hEinheit ? " " + p.hEinheit : "");
+    lP.textContent = fmt(P, 2) + e; lN.textContent = fmt(N, 2) + e;
+    lBil.textContent = fmt(bil, 2) + e; lFl.textContent = fmt(fl, 2) + e;
+    lDiff.textContent = fmt(Math.max(0, diff), 2) + e;
+    lNs.textContent = String(wechsel);
+    rA.value = String(ja); rB.value = String(jb);
+    zeichnen();
+  }
+
+  /* ---------- Bedienung ---------- */
+  function setzeA(j){
+    ja = Math.max(0, Math.min(n - MIN_ABSTAND, Math.round(j)));
+    if(jb < ja + MIN_ABSTAND) jb = ja + MIN_ABSTAND;
+  }
+  function setzeB(j){
+    jb = Math.max(MIN_ABSTAND, Math.min(n, Math.round(j)));
+    if(ja > jb - MIN_ABSTAND) ja = jb - MIN_ABSTAND;
+  }
+  function stoppe(){ laeuft = false; bPlay.textContent = "▶ Abspielen"; }
+
+  function paarSetzen(name){
+    schluessel = name; p = paare[name];
+    nullst = nullstellen(); tabellen();
+    ja = 0; jb = n;
+    rA.min = "0"; rA.max = String(n - MIN_ABSTAND);
+    rB.min = String(MIN_ABSTAND); rB.max = String(n);
+    document.querySelectorAll("[data-paar]").forEach(function(o){
+      o.classList.toggle("primaer", o.getAttribute("data-paar") === name);
+    });
+    stoppe();
+    aktualisieren();
+  }
+
+  rA.addEventListener("input", function(){ stoppe(); setzeA(parseInt(rA.value, 10)); aktualisieren(); });
+  rB.addEventListener("input", function(){ stoppe(); setzeB(parseInt(rB.value, 10)); aktualisieren(); });
+  if(cSchn) cSchn.addEventListener("change", zeichnen);
+
+  document.querySelectorAll("[data-paar]").forEach(function(btn){
+    btn.addEventListener("click", function(){ paarSetzen(btn.getAttribute("data-paar")); });
+  });
+
+  bPlay.addEventListener("click", function(){
+    if(laeuft){ stoppe(); return; }
+    if(jb >= n) setzeB(ja + MIN_ABSTAND);
+    bF = jb; laeuft = true;
+    bPlay.textContent = "❚❚ Pause";
+    aktualisieren();
+  });
+
+  bReset.addEventListener("click", function(){
+    if(cSchn) cSchn.checked = false;
+    paarSetzen("A");
+  });
+
+  // Ziehen mit Maus, Finger oder Stift: gegriffen wird die näher liegende Grenzlinie
+  function ausEvent(ev){
+    var r = cv.getBoundingClientRect();
+    return pxX((ev.clientX - r.left) * (cv.width / r.width));
+  }
+  function zieheAuf(x){
+    var j = Math.round((x - p.lo) * 100);
+    if(greift === "a") setzeA(j); else setzeB(j);
+    aktualisieren();
+  }
+  cv.addEventListener("pointerdown", function(ev){
+    var x = ausEvent(ev), a = xJ(ja), b = xJ(jb);
+    greift = (Math.abs(x - a) < Math.abs(x - b)) ? "a" : (Math.abs(x - a) > Math.abs(x - b) ? "b" : (x < a ? "a" : "b"));
+    stoppe();
+    try{ cv.setPointerCapture(ev.pointerId); }catch(e){}
+    zieheAuf(x); ev.preventDefault();
+  });
+  cv.addEventListener("pointermove", function(ev){
+    if(!greift) return;
+    zieheAuf(ausEvent(ev)); ev.preventDefault();
+  });
+  function loslassen(ev){
+    if(!greift) return;
+    greift = null;
+    try{ cv.releasePointerCapture(ev.pointerId); }catch(e){}
+  }
+  cv.addEventListener("pointerup", loslassen);
+  cv.addEventListener("pointercancel", loslassen);
+
+  function schritt(zeit){
+    if(letzteZeit === null) letzteZeit = zeit;
+    var dt = Math.min(0.05, (zeit - letzteZeit) / 1000);
+    letzteZeit = zeit;
+    if(laeuft){
+      // b läuft mit (hi − lo)/5 Einheiten je Sekunde, das sind n/5 Rasterzellen je Sekunde
+      bF += (n / 5) * dt;
+      if(bF >= n){ bF = n; stoppe(); }
+      setzeB(bF); aktualisieren();
+    }
+    requestAnimationFrame(schritt);
+  }
+
+  paarSetzen("A");
+  requestAnimationFrame(schritt);
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1 – Schnittstellen bestimmen", vw2:"Vorwissen 2 – Linearität des Integrals",
+    vw3:"Vorwissen 3 – Nullstellen durch Ausklammern",
+    sim1:"Simulation 1 – größte Bilanz bei wandernder unterer Grenze", sim2:"Simulation 2 – Nullstelle der Bilanzkurve",
+    a1:"Aufgabe 1 – Fläche zwischen Graph und Achse", a2:"Aufgabe 2 – Fläche zwischen zwei Parabeln",
+    a3:"Aufgabe 3 – Zuordnung Bilanz und Flächeninhalt", a4:"Aufgabe 4 – Zufluss gegen Abfluss",
+    a5:"Aufgabe 5 – Massenausgleich im Straßenbau"
+  };
+  var zeilen = ["Flächen zwischen Kurven – Vorzeichenwechsel und Schnittstellen – Mathematik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Aufgabe " + (i + 6) + " (offen):\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>

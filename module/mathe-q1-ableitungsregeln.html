@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Produkt-, Ketten- und Quotientenregel – Mathematik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#0d7a52;
+  --akzent-hell:#e7f6ef;
+  --akzent-rand:#b5e0cd;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#0b5c3e,#0d7a52);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#0b6845;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+@media (max-width:600px){
+  button{min-height:44px}
+  .regler input[type=range]{height:32px}
+  .check input,.opt input{width:24px;height:24px;min-width:24px}
+  .check label,.opt{min-height:44px}
+}
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Mathematik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Produkt-, Ketten- und Quotientenregel</h1>
+    <div class="meta">
+      <span class="chip">Inhaltsfeld: Funktionen und Analysis</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+      <span class="chip">ca. 90 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Ein Freibad hebt den Eintrittspreis jeden Tag um 10 Cent an – und jeden Tag kommen sechs Besucherinnen und Besucher weniger. Der Preis steigt also, die Nachfrage fällt. Was die Betreiberin interessiert, ist der Umsatz: Preis mal Besucherzahl. Steigt er, fällt er oder bleibt er gleich? Auf den ersten Blick ist das nicht zu sehen, denn die beiden Kurven zeigen in entgegengesetzte Richtungen.</p>
+
+  <p>Naheliegend wäre, einfach die beiden Änderungsraten miteinander zu verrechnen: +0,10 mal (−6) ergibt −0,6, der Umsatz fiele also. Das ist falsch, und zwar nicht knapp: In Wirklichkeit <strong>steigt</strong> der Umsatz zu Beginn mit 10 € pro Tag – das ist die Momentanrate U′(0). Der tatsächliche Zuwachs des ersten Tages liegt mit U(1) − U(0) = 9,40 € etwas darunter; warum, klärt Abschnitt 4. Zwischen dem naiven Ergebnis und der Wahrheit liegen ein Vorzeichen und ein Faktor von rund 17 (10,00 gegen 0,60, genauer 16,7). In dieser Einheit lernst du die drei Regeln kennen, mit denen man zusammengesetzte Funktionen ableitet: Produkte, Verkettungen und Quotienten. Potenzregel, Faktorregel und Summenregel aus der Einführungsphase setzt du dabei als bekannt voraus – ab jetzt reichen sie nicht mehr aus.</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Drei Fragen aus der Einführungsphase. Wenn du hier hängst, lohnt sich ein Blick zurück, bevor du weitermachst – die drei neuen Regeln bauen alle auf der Potenzregel und auf der Deutung der Ableitung als Änderungsrate auf.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Leite ab: <span class="m" data-tex="f(x) = 3x^4 - 5x^2 + 2x - 9" data-plain="f(x) = 3x⁴ − 5x² + 2x − 9"></span></div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span><span class="m" data-tex="f'(x) = 12x^3 - 10x^2 + 2" data-plain="f′(x) = 12x³ − 10x² + 2"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span><span class="m" data-tex="f'(x) = 12x^3 - 10x + 2" data-plain="f′(x) = 12x³ − 10x + 2"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span><span class="m" data-tex="f'(x) = 12x^3 - 10x + 2x - 9" data-plain="f′(x) = 12x³ − 10x + 2x − 9"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Leite ab: <span class="m" data-tex="f(x) = \dfrac{1}{x^{3}}" data-plain="f(x) = 1/x³"></span> für <span class="m" data-tex="x \neq 0" data-plain="x ≠ 0"></span>.</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span><span class="m" data-tex="f'(x) = -\dfrac{3}{x^{4}}" data-plain="f′(x) = −3/x⁴"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span><span class="m" data-tex="f'(x) = -\dfrac{3}{x^{2}}" data-plain="f′(x) = −3/x²"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span><span class="m" data-tex="f'(x) = \dfrac{3}{x^{4}}" data-plain="f′(x) = 3/x⁴"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage"><span class="m" data-tex="N(t)" data-plain="N(t)"></span> gibt die Besucherzahl eines Freibades am Tag <span class="m" data-tex="t" data-plain="t"></span> an, gemessen in Personen. Es ist <span class="m" data-tex="N'(5) = -6" data-plain="N′(5) = −6"></span>. Was bedeutet das?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span>Am fünften Tag waren 6 Besucher da.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span>Vom ersten bis zum fünften Tag sind insgesamt 6 Besucher weniger gekommen.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span>Um den fünften Tag herum nimmt die Besucherzahl mit etwa 6 Personen pro Tag ab.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 ERKLÄRTEIL =============== -->
+<section id="regeln">
+  <div class="stufe"><div class="nr">2</div><h2>Produktregel und Kettenregel</h2></div>
+
+  <h3>Warum die bekannten Regeln nicht reichen</h3>
+  <p>Summenregel und Faktorregel haben eine bequeme Eigenschaft: Man darf die Funktion zerlegen, die Teile einzeln ableiten und die Ergebnisse wieder zusammensetzen. Genau diese Eigenschaft verführt dazu, dasselbe beim Produkt zu erwarten. Das Gegenbeispiel ist so klein, dass es in eine Zeile passt.</p>
+
+  <div class="m block" data-tex="f(x) = x\cdot x = x^{2} \quad\Longrightarrow\quad f'(x) = 2x, \qquad \text{aber}\quad x'\cdot x' = 1\cdot 1 = 1" data-plain="f(x) = x · x = x² ⟹ f′(x) = 2x,  aber  x′ · x′ = 1 · 1 = 1"></div>
+
+  <p>An der Stelle x = 4 sagt die eine Rechnung 8, die andere 1. Das ist kein Rundungsproblem, sondern ein Strukturfehler: Ein Produkt ist keine Summe, und beim Ableiten darf man es nicht wie eine behandeln.</p>
+
+  <div class="hinweis">
+    <strong>Häufigster Fehler überhaupt.</strong> „Beim Produkt leite ich beide Faktoren ab und multipliziere die Ergebnisse." Das ist falsch, und du kannst es dir mit <span class="m" data-tex="x\cdot x" data-plain="x · x"></span> jederzeit in fünf Sekunden selbst widerlegen. Dieselbe Falle gibt es beim Quotienten: Auch <span class="m" data-tex="\left(\frac{u}{v}\right)' = \frac{u'}{v'}" data-plain="(u/v)′ = u′/v′"></span> ist falsch – siehe Abschnitt 3.
+  </div>
+
+  <h3>Die Produktregel</h3>
+  <p>Was beim Produkt tatsächlich passiert, siehst du am besten an einem Rechteck. Seine Seiten seien <span class="m" data-tex="u(x)" data-plain="u(x)"></span> und <span class="m" data-tex="v(x)" data-plain="v(x)"></span>, sein Flächeninhalt ist das Produkt <span class="m" data-tex="P(x) = u(x)\cdot v(x)" data-plain="P(x) = u(x) · v(x)"></span>. Wächst <span class="m" data-tex="x" data-plain="x"></span> um ein kleines Stück <span class="m" data-tex="h" data-plain="h"></span>, so kommen drei Flächenstücke hinzu: ein Streifen der Breite <span class="m" data-tex="\Delta u" data-plain="Δu"></span> entlang der Seite <span class="m" data-tex="v" data-plain="v"></span>, ein Streifen der Breite <span class="m" data-tex="\Delta v" data-plain="Δv"></span> entlang der Seite <span class="m" data-tex="u" data-plain="u"></span> – und in der Ecke ein kleines Rechteck <span class="m" data-tex="\Delta u\cdot\Delta v" data-plain="Δu · Δv"></span>.</p>
+
+  <div class="m block" data-tex="\Delta P = v\cdot\Delta u \;+\; u\cdot\Delta v \;+\; \Delta u\cdot\Delta v" data-plain="ΔP = v · Δu + u · Δv + Δu · Δv"></div>
+
+  <p>Teilt man durch <span class="m" data-tex="h" data-plain="h"></span>, so werden aus den beiden großen Streifen die Ausdrücke <span class="m" data-tex="v\cdot\frac{\Delta u}{h}" data-plain="v · Δu/h"></span> und <span class="m" data-tex="u\cdot\frac{\Delta v}{h}" data-plain="u · Δv/h"></span> – also genau die beiden Differenzenquotienten, jeweils bewertet mit der momentanen Länge der anderen Seite. Das Eckstück dagegen enthält <strong>zwei</strong> kleine Faktoren; geteilt durch <span class="m" data-tex="h" data-plain="h"></span> bleibt immer noch einer davon übrig und geht gegen null. Genau das ist der Grund, warum in der Produktregel ein Pluszeichen steht und kein Malzeichen.</p>
+
+  <div class="merksatz">
+    <b>Produktregel</b>
+    Für differenzierbare Funktionen <span class="m" data-tex="u" data-plain="u"></span> und <span class="m" data-tex="v" data-plain="v"></span> gilt <span class="m" data-tex="(u\cdot v)' = u'\cdot v + u\cdot v'" data-plain="(u · v)′ = u′ · v + u · v′"></span>. Inhaltlich: Ändern sich beide Faktoren, so setzt sich die Änderungsrate des Produkts <strong>additiv</strong> aus zwei Beiträgen zusammen. Jeder Faktor steuert seine eigene Änderung bei, und diese Änderung wird mit dem <strong>momentanen Wert</strong> des jeweils anderen Faktors bewertet. Wer nur die Raten miteinander multipliziert, lässt beide Werte unter den Tisch fallen.
+  </div>
+
+  <div class="m block" id="f-produktregel" data-tex="\big(u(x)\cdot v(x)\big)' \;=\; u'(x)\,v(x) \;+\; u(x)\,v'(x)" data-plain="(u(x) · v(x))′ = u′(x) · v(x) + u(x) · v′(x)"></div>
+
+  <details>
+    <summary>Herleitung der Produktregel aus dem Differenzenquotienten</summary>
+    <p>Sei <span class="m" data-tex="f = u\cdot v" data-plain="f = u · v"></span> mit differenzierbaren Funktionen <span class="m" data-tex="u" data-plain="u"></span> und <span class="m" data-tex="v" data-plain="v"></span>. Der Differenzenquotient lautet</p>
+    <div class="m block" data-tex="\frac{f(x+h)-f(x)}{h} = \frac{u(x+h)\,v(x+h) - u(x)\,v(x)}{h}" data-plain="[f(x+h) − f(x)]/h = [u(x+h)·v(x+h) − u(x)·v(x)]/h"></div>
+    <p>Im Zähler steht ein einziger Ausdruck, aus dem sich noch kein Differenzenquotient ablesen lässt. Der Trick besteht darin, eine passende Null zu addieren, nämlich <span class="m" data-tex="-\,u(x)\,v(x+h) + u(x)\,v(x+h)" data-plain="−u(x)·v(x+h) + u(x)·v(x+h)"></span>:</p>
+    <div class="m block" data-tex="\frac{u(x+h)v(x+h) - u(x)v(x+h) + u(x)v(x+h) - u(x)v(x)}{h}" data-plain="[u(x+h)v(x+h) − u(x)v(x+h) + u(x)v(x+h) − u(x)v(x)] / h"></div>
+    <p>Jetzt lassen sich die ersten beiden und die letzten beiden Summanden zusammenfassen:</p>
+    <div class="m block" data-tex="= \frac{u(x+h)-u(x)}{h}\cdot v(x+h) \;+\; u(x)\cdot\frac{v(x+h)-v(x)}{h}" data-plain="= [u(x+h) − u(x)]/h · v(x+h) + u(x) · [v(x+h) − v(x)]/h"></div>
+    <p>Nun der Grenzübergang <span class="m" data-tex="h\to 0" data-plain="h → 0"></span>. Der erste Differenzenquotient strebt gegen <span class="m" data-tex="u'(x)" data-plain="u′(x)"></span>, der zweite gegen <span class="m" data-tex="v'(x)" data-plain="v′(x)"></span>. Bleibt der Faktor <span class="m" data-tex="v(x+h)" data-plain="v(x+h)"></span>: Weil <span class="m" data-tex="v" data-plain="v"></span> differenzierbar ist, ist <span class="m" data-tex="v" data-plain="v"></span> auch stetig, und deshalb gilt <span class="m" data-tex="v(x+h)\to v(x)" data-plain="v(x+h) → v(x)"></span>. Insgesamt:</p>
+    <div class="m block" data-tex="f'(x) = u'(x)\,v(x) + u(x)\,v'(x)" data-plain="f′(x) = u′(x)·v(x) + u(x)·v′(x)"></div>
+    <p>Zwei Beobachtungen zum Mitnehmen. Erstens: Die Stetigkeit von <span class="m" data-tex="v" data-plain="v"></span> wird wirklich gebraucht – ohne sie bricht der Beweis an dieser einen Stelle zusammen. Zweitens: In der Rechteckdeutung ist der ergänzte Nullterm genau das Eckstück; es taucht auf und verschwindet wieder, weil es zwei kleine Faktoren enthält.</p>
+  </details>
+
+  <h3>Ein durchgerechnetes Beispiel mit Selbstkontrolle</h3>
+  <p><span class="m" data-tex="f(x) = (x^{3}-2x)(4x+5)" data-plain="f(x) = (x³ − 2x)(4x + 5)"></span> mit <span class="m" data-tex="u(x)=x^{3}-2x" data-plain="u(x) = x³ − 2x"></span> und <span class="m" data-tex="v(x)=4x+5" data-plain="v(x) = 4x + 5"></span>, also <span class="m" data-tex="u'(x)=3x^{2}-2" data-plain="u′(x) = 3x² − 2"></span> und <span class="m" data-tex="v'(x)=4" data-plain="v′(x) = 4"></span>.</p>
+  <div class="m block" data-tex="f'(x) = (3x^{2}-2)(4x+5) + (x^{3}-2x)\cdot 4 = 12x^{3}+15x^{2}-8x-10 + 4x^{3}-8x = 16x^{3}+15x^{2}-16x-10" data-plain="f′(x) = (3x² − 2)(4x + 5) + (x³ − 2x)·4 = 12x³ + 15x² − 8x − 10 + 4x³ − 8x = 16x³ + 15x² − 16x − 10"></div>
+  <p>Diese Aufgabe kannst du selbst kontrollieren, und das solltest du beim Üben auch tun: Ausmultiplizieren liefert <span class="m" data-tex="f(x)=4x^{4}+5x^{3}-8x^{2}-10x" data-plain="f(x) = 4x⁴ + 5x³ − 8x² − 10x"></span>, und die Potenzregel darauf ergibt dasselbe Ergebnis. Stichprobe: <span class="m" data-tex="f'(1)=5" data-plain="f′(1) = 5"></span> und <span class="m" data-tex="f'(2)=146" data-plain="f′(2) = 146"></span>.</p>
+
+  <div class="hinweis">
+    <strong>Wann lohnt sich die Produktregel überhaupt?</strong> Bei einem Produkt zweier Polynome kommst du auch durch Ausmultiplizieren ans Ziel – bei kleinen Termen ist das oft sogar schneller. Unverzichtbar wird die Regel, sobald ein Faktor <strong>nicht</strong> ausmultiplizierbar ist, etwa <span class="m" data-tex="x^{2}\sqrt{2x+1}" data-plain="x²·√(2x+1)"></span> (Abschnitt 3) oder später <span class="m" data-tex="x\cdot\mathrm{e}^{x}" data-plain="x · eˣ"></span>. Bis dahin ist das Ausmultiplizieren deine beste Selbstkontrolle.
+  </div>
+
+  <h3>Der Einstieg, jetzt gerechnet</h3>
+  <p>Zurück ins Freibad. Preis <span class="m" data-tex="p(t)=5{,}00 + 0{,}10\,t" data-plain="p(t) = 5,00 + 0,10 t"></span> in €, Besucherzahl <span class="m" data-tex="n(t)=400-6t" data-plain="n(t) = 400 − 6 t"></span>, Umsatz <span class="m" data-tex="U(t)=p(t)\cdot n(t)" data-plain="U(t) = p(t) · n(t)"></span>.</p>
+  <div class="m block" data-tex="U'(t) = p'(t)\,n(t) + p(t)\,n'(t) = 0{,}10\cdot n(t) + p(t)\cdot(-6)" data-plain="U′(t) = p′(t)·n(t) + p(t)·n′(t) = 0,10 · n(t) + p(t) · (−6)"></div>
+  <p>Am Tag <span class="m" data-tex="t=0" data-plain="t = 0"></span>: <span class="m" data-tex="U'(0) = 0{,}10\cdot 400 + 5{,}00\cdot(-6) = 40 - 30 = 10" data-plain="U′(0) = 0,10 · 400 + 5,00 · (−6) = 40 − 30 = 10"></span>, also <strong>+10 € pro Tag</strong>. Die beiden Beiträge haben handfeste Bedeutungen: 40 €/Tag kommen dadurch herein, dass die noch vorhandenen 400 Gäste 10 Cent mehr zahlen; 30 €/Tag gehen verloren, weil sechs Gäste zu je 5 € ausbleiben. Der Preisbeitrag überwiegt – vorerst.</p>
+
+  <div class="merksatz">
+    <b>Warum die naive Rechnung so gründlich danebenliegt</b>
+    <span class="m" data-tex="p'\cdot n' = 0{,}10\cdot(-6) = -0{,}60" data-plain="p′ · n′ = 0,10 · (−6) = −0,60"></span> hat nicht nur den falschen Betrag, sondern auch das falsche Vorzeichen. Der Grund ist immer derselbe: In der Produktregel stehen die <strong>Werte</strong> 400 und 5,00 – und die sind hier hundertmal größer als die Raten. Eine kleine relative Änderung eines großen Bestands ist ein großer absoluter Beitrag.
+  </div>
+
+  <h3>Die Kettenregel</h3>
+  <p>Der zweite Bauplan für zusammengesetzte Funktionen ist die Verkettung. Bei <span class="m" data-tex="f(x)=(2x-1)^{3}" data-plain="f(x) = (2x − 1)³"></span> passiert zweierlei nacheinander: Erst wird aus <span class="m" data-tex="x" data-plain="x"></span> der Wert <span class="m" data-tex="u=2x-1" data-plain="u = 2x − 1"></span> gebildet, dann wird dieser Wert hoch drei genommen. Man nennt <span class="m" data-tex="u(x)=2x-1" data-plain="u(x) = 2x − 1"></span> die <strong>innere</strong> und <span class="m" data-tex="v(u)=u^{3}" data-plain="v(u) = u³"></span> die <strong>äußere</strong> Funktion; zusammen ist <span class="m" data-tex="f(x)=v\big(u(x)\big)" data-plain="f(x) = v(u(x))"></span>.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Funktion</th><th>innere Funktion <span class="m" data-tex="u(x)" data-plain="u(x)"></span></th><th>äußere Funktion <span class="m" data-tex="v(u)" data-plain="v(u)"></span></th></tr>
+    <tr><td><span class="m" data-tex="(2x-1)^{3}" data-plain="(2x − 1)³"></span></td><td><span class="m" data-tex="2x-1" data-plain="2x − 1"></span></td><td><span class="m" data-tex="u^{3}" data-plain="u³"></span></td></tr>
+    <tr><td><span class="m" data-tex="\sqrt{x^{2}+1}" data-plain="√(x² + 1)"></span></td><td><span class="m" data-tex="x^{2}+1" data-plain="x² + 1"></span></td><td><span class="m" data-tex="\sqrt{u}" data-plain="√u"></span></td></tr>
+    <tr><td><span class="m" data-tex="\dfrac{1}{4x+7}" data-plain="1/(4x + 7)"></span></td><td><span class="m" data-tex="4x+7" data-plain="4x + 7"></span></td><td><span class="m" data-tex="u^{-1}" data-plain="u⁻¹"></span></td></tr>
+    <tr><td><span class="m" data-tex="\big(x^{2}-3x\big)^{5}" data-plain="(x² − 3x)⁵"></span></td><td><span class="m" data-tex="x^{2}-3x" data-plain="x² − 3x"></span></td><td><span class="m" data-tex="u^{5}" data-plain="u⁵"></span></td></tr>
+  </table>
+  </div>
+
+  <div class="m block" id="f-kettenregel" data-tex="\big(v(u(x))\big)' \;=\; v'\big(u(x)\big)\cdot u'(x) \qquad\text{oder}\qquad \frac{\mathrm{d}y}{\mathrm{d}x} = \frac{\mathrm{d}y}{\mathrm{d}u}\cdot\frac{\mathrm{d}u}{\mathrm{d}x}" data-plain="(v(u(x)))′ = v′(u(x)) · u′(x)   oder   dy/dx = dy/du · du/dx"></div>
+
+  <div class="merksatz">
+    <b>Kettenregel</b>
+    Für <span class="m" data-tex="u" data-plain="u"></span> differenzierbar an der Stelle <span class="m" data-tex="x" data-plain="x"></span> und <span class="m" data-tex="v" data-plain="v"></span> differenzierbar an der Stelle <span class="m" data-tex="u(x)" data-plain="u(x)"></span> gilt: Äußere Ableitung mal innere Ableitung – und die äußere Ableitung wird <strong>an der Stelle <span class="m" data-tex="u(x)" data-plain="u(x)"></span></strong> ausgewertet, nicht an der Stelle <span class="m" data-tex="x" data-plain="x"></span>. Inhaltlich ist die Kettenregel eine Aussage über Übersetzungsverhältnisse: Werden zwei Abhängigkeiten hintereinandergeschaltet, so <strong>multiplizieren</strong> sich ihre Änderungsraten, genau wie bei zwei Getriebestufen. Dreht sich die zweite Welle dreimal so schnell wie die erste und die erste doppelt so schnell wie die Kurbel, dann ist der Gesamtfaktor sechs – und nicht fünf.
+  </div>
+
+  <details>
+    <summary>Warum sich die Änderungsraten multiplizieren</summary>
+    <p>Der Ansatz ist eine Erweiterung des Differenzenquotienten. Sei <span class="m" data-tex="f(x)=v(u(x))" data-plain="f(x) = v(u(x))"></span> und <span class="m" data-tex="k = u(x+h)-u(x)" data-plain="k = u(x+h) − u(x)"></span> die Änderung der inneren Funktion. Solange <span class="m" data-tex="k\neq 0" data-plain="k ≠ 0"></span> ist, darf man erweitern:</p>
+    <div class="m block" data-tex="\frac{v(u(x+h))-v(u(x))}{h} = \underbrace{\frac{v(u(x)+k)-v(u(x))}{k}}_{\to\, v'(u(x))}\cdot\underbrace{\frac{u(x+h)-u(x)}{h}}_{\to\, u'(x)}" data-plain="[v(u(x+h)) − v(u(x))]/h = ([v(u(x)+k) − v(u(x))]/k) · ([u(x+h) − u(x)]/h) → v′(u(x)) · u′(x)"></div>
+    <p>Für <span class="m" data-tex="h\to 0" data-plain="h → 0"></span> geht auch <span class="m" data-tex="k\to 0" data-plain="k → 0"></span>, weil <span class="m" data-tex="u" data-plain="u"></span> als differenzierbare Funktion stetig ist. Der linke Faktor ist dann der Differenzenquotient von <span class="m" data-tex="v" data-plain="v"></span> an der Stelle <span class="m" data-tex="u(x)" data-plain="u(x)"></span> – und genau hier sieht man, warum <span class="m" data-tex="v'" data-plain="v′"></span> an der Stelle <span class="m" data-tex="u(x)" data-plain="u(x)"></span> und nicht an der Stelle <span class="m" data-tex="x" data-plain="x"></span> ausgewertet wird.</p>
+    <p><strong>Die Lücke.</strong> Das Argument setzt voraus, dass <span class="m" data-tex="k\neq 0" data-plain="k ≠ 0"></span> ist. Es gibt Funktionen, bei denen <span class="m" data-tex="u(x+h)=u(x)" data-plain="u(x+h) = u(x)"></span> für beliebig kleine <span class="m" data-tex="h" data-plain="h"></span> vorkommt; dann steht im Nenner eine Null. Ein vollständiger Beweis vermeidet das Dividieren, indem er die Differenzierbarkeit als lineare Näherung schreibt: <span class="m" data-tex="v(u_0+k) = v(u_0) + v'(u_0)\,k + r(k)\cdot k" data-plain="v(u₀ + k) = v(u₀) + v′(u₀)·k + r(k)·k"></span> mit <span class="m" data-tex="r(k)\to 0" data-plain="r(k) → 0"></span>. Dieser Weg wird im Leistungskurs nicht verlangt – dass die obige Rechnung eine Lücke hat, solltest du trotzdem wissen, statt sie für einen lückenlosen Beweis zu halten.</p>
+  </details>
+
+  <h3>Zwei durchgerechnete Beispiele</h3>
+  <p><strong>(a)</strong> <span class="m" data-tex="f(x)=(2x-1)^{3}" data-plain="f(x) = (2x − 1)³"></span>: äußere Ableitung <span class="m" data-tex="3u^{2}" data-plain="3u²"></span>, innere Ableitung 2, also <span class="m" data-tex="f'(x)=3(2x-1)^{2}\cdot 2 = 6(2x-1)^{2}" data-plain="f′(x) = 3(2x − 1)² · 2 = 6(2x − 1)²"></span>. Kontrolle durch Ausmultiplizieren: <span class="m" data-tex="f(x)=8x^{3}-12x^{2}+6x-1" data-plain="f(x) = 8x³ − 12x² + 6x − 1"></span>, abgeleitet <span class="m" data-tex="24x^{2}-24x+6 = 6(2x-1)^{2}" data-plain="24x² − 24x + 6 = 6(2x − 1)²"></span> ✓ Stichprobe: <span class="m" data-tex="f'(2)=6\cdot 3^{2}=54" data-plain="f′(2) = 6 · 3² = 54"></span>.</p>
+  <p><strong>(b)</strong> <span class="m" data-tex="f(x)=\sqrt{x^{2}+1}" data-plain="f(x) = √(x² + 1)"></span>: mit <span class="m" data-tex="v(u)=\sqrt{u}=u^{1/2}" data-plain="v(u) = √u = u^(1/2)"></span> ist <span class="m" data-tex="v'(u)=\frac{1}{2\sqrt{u}}" data-plain="v′(u) = 1/(2√u)"></span>, also</p>
+  <div class="m block" data-tex="f'(x) = \frac{1}{2\sqrt{x^{2}+1}}\cdot 2x = \frac{x}{\sqrt{x^{2}+1}}" data-plain="f′(x) = 1/(2·√(x²+1)) · 2x = x/√(x² + 1)"></div>
+  <p>Hier ist Ausmultiplizieren keine Option mehr – ohne Kettenregel kommst du nicht weiter. Stichprobe: <span class="m" data-tex="f'(2)=\tfrac{2}{\sqrt 5}\approx 0{,}8944" data-plain="f′(2) = 2/√5 ≈ 0,8944"></span>.</p>
+
+  <div class="hinweis">
+    <strong>Zwei Fallen bei der Kettenregel.</strong>
+    <strong>(1) Die innere Ableitung fehlt.</strong> Aus <span class="m" data-tex="(2x-3)^{4}" data-plain="(2x − 3)⁴"></span> wird gern <span class="m" data-tex="4(2x-3)^{3}" data-plain="4(2x − 3)³"></span> statt <span class="m" data-tex="8(2x-3)^{3}" data-plain="8(2x − 3)³"></span>. Probe: Der Graph von <span class="m" data-tex="(2x-3)^{4}" data-plain="(2x − 3)⁴"></span> ist gegenüber <span class="m" data-tex="x^{4}" data-plain="x⁴"></span> waagerecht gestaucht – er wird steiler, die Ableitung muss also größer ausfallen, nicht kleiner.
+    <strong>(2) Die äußere Ableitung wird an der falschen Stelle ausgewertet.</strong> In <span class="m" data-tex="v'(u(x))" data-plain="v′(u(x))"></span> steht die <strong>innere Funktion</strong> im Argument, nicht <span class="m" data-tex="x" data-plain="x"></span>. Bei <span class="m" data-tex="\sqrt{x^{2}+1}" data-plain="√(x² + 1)"></span> heißt das <span class="m" data-tex="\frac{1}{2\sqrt{x^{2}+1}}" data-plain="1/(2·√(x²+1))"></span> und eben nicht <span class="m" data-tex="\frac{1}{2\sqrt{x}}" data-plain="1/(2√x)"></span>.
+  </div>
+</section>
+
+<!-- =============== 3 VERTIEFUNG =============== -->
+<section id="kombination">
+  <div class="stufe"><div class="nr">3</div><h2>Die Quotientenregel – und wie die drei Regeln zusammenspielen</h2></div>
+
+  <h3>Der Quotient: dieselbe Falle, dasselbe Gegenbeispiel</h3>
+  <p>Auch beim Bruch liegt die naive Vermutung nahe: oben ableiten, unten ableiten, fertig. Und auch hier widerlegt ein Einzeiler die Vermutung.</p>
+  <div class="m block" data-tex="f(x) = \frac{x^{2}}{x} = x \;\Longrightarrow\; f'(x) = 1, \qquad \text{aber}\quad \frac{(x^{2})'}{(x)'} = \frac{2x}{1} = 2x" data-plain="f(x) = x²/x = x ⟹ f′(x) = 1,  aber  (x²)′/(x)′ = 2x/1 = 2x"></div>
+  <p>An der Stelle <span class="m" data-tex="x=3" data-plain="x = 3"></span> steht 1 gegen 6. Die Funktion <span class="m" data-tex="x^{2}/x" data-plain="x²/x"></span> ist für <span class="m" data-tex="x\neq 0" data-plain="x ≠ 0"></span> nichts anderes als die Gerade <span class="m" data-tex="y=x" data-plain="y = x"></span> mit der konstanten Steigung 1 – die naive Rechnung behauptet dagegen eine Steigung, die mit <span class="m" data-tex="x" data-plain="x"></span> wächst.</p>
+
+  <h3>Erst der Kehrwert: die Reziprokenregel</h3>
+  <p>Bevor wir den allgemeinen Bruch angehen, klären wir den Spezialfall <span class="m" data-tex="w = \frac{1}{v}" data-plain="w = 1/v"></span>. Dafür braucht es nicht einmal eine neue Idee, sondern nur die Produktregel und einen Blick auf die Gleichung <span class="m" data-tex="v(x)\cdot w(x) = 1" data-plain="v(x) · w(x) = 1"></span>.</p>
+
+  <details>
+    <summary>Warum <span class="m" data-tex="\left(\frac{1}{v}\right)' = -\frac{v'}{v^{2}}" data-plain="(1/v)′ = −v′/v²"></span> gilt</summary>
+    <p>Sei <span class="m" data-tex="v(x)\neq 0" data-plain="v(x) ≠ 0"></span> und <span class="m" data-tex="w(x)=\frac{1}{v(x)}" data-plain="w(x) = 1/v(x)"></span>. Dann ist <span class="m" data-tex="v(x)\cdot w(x) = 1" data-plain="v(x) · w(x) = 1"></span> für alle zulässigen <span class="m" data-tex="x" data-plain="x"></span>. Beide Seiten werden abgeleitet; rechts steht eine Konstante, ihre Ableitung ist null. Links greift die Produktregel:</p>
+    <div class="m block" data-tex="v'(x)\,w(x) + v(x)\,w'(x) = 0 \quad\Longrightarrow\quad w'(x) = -\frac{v'(x)\,w(x)}{v(x)} = -\frac{v'(x)}{v(x)^{2}}" data-plain="v′(x)·w(x) + v(x)·w′(x) = 0 ⟹ w′(x) = −v′(x)·w(x)/v(x) = −v′(x)/v(x)²"></div>
+    <p>Im letzten Schritt wurde <span class="m" data-tex="w(x)=1/v(x)" data-plain="w(x) = 1/v(x)"></span> eingesetzt. Probe an <span class="m" data-tex="v(x)=x" data-plain="v(x) = x"></span>: <span class="m" data-tex="(1/x)' = -1/x^{2}" data-plain="(1/x)′ = −1/x²"></span> ✓ – dasselbe Ergebnis liefert die Potenzregel über <span class="m" data-tex="x^{-1}" data-plain="x⁻¹"></span>. Zweite Probe: <span class="m" data-tex="v(x)=x^{2}+1" data-plain="v(x) = x² + 1"></span> ergibt <span class="m" data-tex="-\frac{2x}{(x^{2}+1)^{2}}" data-plain="−2x/(x² + 1)²"></span> ✓</p>
+    <p>Dieser Weg hat einen Vorzug gegenüber dem naheliegenden „schreibe <span class="m" data-tex="1/v" data-plain="1/v"></span> als <span class="m" data-tex="v^{-1}" data-plain="v⁻¹"></span> und wende die Kettenregel an": Er setzt die Potenzregel für negative Exponenten nicht voraus, sondern kommt allein mit der Produktregel aus. Vorausgesetzt ist dabei allerdings, dass <span class="m" data-tex="w=1/v" data-plain="w = 1/v"></span> an dieser Stelle differenzierbar ist; das zeigt man separat über den Differenzenquotienten von <span class="m" data-tex="1/v" data-plain="1/v"></span>, der sich auf einen Bruch mit dem Nenner <span class="m" data-tex="v(x+h)\,v(x)" data-plain="v(x+h) · v(x)"></span> bringen lässt. Der Weg über die Kettenregel liefert diese Existenzaussage mit, hat dafür aber die Potenzregel für negative Exponenten als Voraussetzung.</p>
+  </details>
+
+  <h3>Die Quotientenregel</h3>
+  <p>Jetzt der allgemeine Fall. Ein Bruch ist ein Produkt mit einem Kehrwert: <span class="m" data-tex="\frac{u}{v} = u\cdot\frac{1}{v}" data-plain="u/v = u · (1/v)"></span>. Produktregel und Reziprokenregel zusammen liefern die dritte Regel, ohne dass irgendetwas Neues angenommen werden muss.</p>
+
+  <details>
+    <summary>Die Quotientenregel aus Produkt- und Reziprokenregel</summary>
+    <div class="m block" data-tex="\left(\frac{u}{v}\right)' = \left(u\cdot\frac{1}{v}\right)' = u'\cdot\frac{1}{v} + u\cdot\left(-\frac{v'}{v^{2}}\right) = \frac{u'}{v} - \frac{u\,v'}{v^{2}}" data-plain="(u/v)′ = (u · 1/v)′ = u′ · (1/v) + u · (−v′/v²) = u′/v − u·v′/v²"></div>
+    <p>Beide Summanden werden auf den Hauptnenner <span class="m" data-tex="v^{2}" data-plain="v²"></span> gebracht:</p>
+    <div class="m block" data-tex="= \frac{u'\,v}{v^{2}} - \frac{u\,v'}{v^{2}} = \frac{u'\,v - u\,v'}{v^{2}}" data-plain="= u′v/v² − uv′/v² = (u′v − uv′)/v²"></div>
+    <p>Vorausgesetzt wird dabei: <span class="m" data-tex="u" data-plain="u"></span> und <span class="m" data-tex="v" data-plain="v"></span> sind differenzierbar und <span class="m" data-tex="v(x)\neq 0" data-plain="v(x) ≠ 0"></span> an der betrachteten Stelle. Die zweite Bedingung ist keine Formalie: An einer Nullstelle des Nenners ist die Funktion gar nicht definiert, dort kann man auch nicht ableiten.</p>
+  </details>
+
+  <div class="m block" id="f-quotientenregel" data-tex="\left(\frac{u(x)}{v(x)}\right)' = \frac{u'(x)\,v(x) - u(x)\,v'(x)}{\big(v(x)\big)^{2}}, \qquad v(x)\neq 0" data-plain="(u(x)/v(x))′ = [u′(x)·v(x) − u(x)·v′(x)] / (v(x))²,  v(x) ≠ 0"></div>
+
+  <div class="merksatz">
+    <b>Quotientenregel</b>
+    Sie ist keine vierte, eigenständige Regel, sondern Produkt- und Reziprokenregel in einer Zeile. Zwei Dinge unterscheiden sie von der Produktregel, und beide sind inhaltlich begründet. <strong>Erstens</strong> steht im Zähler ein Minus: Ein wachsender Nenner macht den Bruch kleiner, deshalb geht <span class="m" data-tex="v'" data-plain="v′"></span> mit negativem Vorzeichen ein. <strong>Zweitens</strong> darfst du die beiden Summanden im Zähler nicht vertauschen – bei der Produktregel ist die Reihenfolge gleichgültig, hier entscheidet sie über das Vorzeichen des Ergebnisses. Merkhilfe für die Reihenfolge: Der Zähler beginnt mit der Ableitung des Zählers.
+  </div>
+
+  <p><strong>Durchgerechnetes Beispiel.</strong> <span class="m" data-tex="f(x)=\dfrac{x^{2}+1}{x-2}" data-plain="f(x) = (x² + 1)/(x − 2)"></span> mit <span class="m" data-tex="D = \mathbb{R}\setminus\{2\}" data-plain="D = ℝ \ {2}"></span>. Es ist <span class="m" data-tex="u=x^{2}+1,\; u'=2x,\; v=x-2,\; v'=1" data-plain="u = x² + 1, u′ = 2x, v = x − 2, v′ = 1"></span>:</p>
+  <div class="m block" data-tex="f'(x) = \frac{2x(x-2) - (x^{2}+1)\cdot 1}{(x-2)^{2}} = \frac{2x^{2}-4x-x^{2}-1}{(x-2)^{2}} = \frac{x^{2}-4x-1}{(x-2)^{2}}" data-plain="f′(x) = [2x(x − 2) − (x² + 1)·1]/(x − 2)² = (2x² − 4x − x² − 1)/(x − 2)² = (x² − 4x − 1)/(x − 2)²"></div>
+  <p>Stichproben: <span class="m" data-tex="f'(3) = \frac{9-12-1}{1} = -4" data-plain="f′(3) = (9 − 12 − 1)/1 = −4"></span> und <span class="m" data-tex="f'(0) = \frac{-1}{4} = -0{,}25" data-plain="f′(0) = −1/4 = −0,25"></span>. Beachte: Der Nenner wird <strong>nicht</strong> ausmultipliziert. Faktorisiert stehen zu lassen spart Arbeit, und für die Suche nach Nullstellen von <span class="m" data-tex="f'" data-plain="f′"></span> zählt ohnehin nur der Zähler.</p>
+
+  <div class="hinweis">
+    <strong>Nullstellen der Ableitung bei Brüchen.</strong> Ein Bruch ist genau dann null, wenn sein Zähler null ist und der Nenner nicht. Weil der Nenner <span class="m" data-tex="v^{2}" data-plain="v²"></span> auf dem gesamten Definitionsbereich positiv ist, gilt die bequeme Regel: <strong>Waagerechte Tangenten findest du allein über <span class="m" data-tex="u'v - uv' = 0" data-plain="u′v − uv′ = 0"></span>.</strong> Wer den Nenner ausmultipliziert, macht sich unnötig Arbeit.
+  </div>
+
+  <h3>Welche Regel zuerst? Die Regeln kombinieren</h3>
+  <p>In der Praxis steckt selten nur eine Regel in einem Term. Die Entscheidung fällt immer gleich: <strong>Schau auf die äußerste Verknüpfung</strong> – auf diejenige Rechenoperation, die du als letzte ausführen würdest, wenn du für ein konkretes <span class="m" data-tex="x" data-plain="x"></span> den Funktionswert berechnest. Nicht auf die auffälligste, sondern auf die äußerste.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Term</th><th>letzte Rechenoperation</th><th>zuerst anzuwendende Regel</th></tr>
+    <tr><td><span class="m" data-tex="x^{2}\sqrt{2x+1}" data-plain="x² · √(2x + 1)"></span></td><td>Multiplikation</td><td>Produktregel, darin Kettenregel für die Wurzel</td></tr>
+    <tr><td><span class="m" data-tex="\big(x^{2}(2x+1)\big)^{3}" data-plain="(x²(2x + 1))³"></span></td><td>Potenzieren</td><td>Kettenregel, darin Produktregel für die innere Funktion</td></tr>
+    <tr><td><span class="m" data-tex="\dfrac{x^{3}}{2x+1}" data-plain="x³/(2x + 1)"></span></td><td>Division</td><td>Quotientenregel</td></tr>
+    <tr><td><span class="m" data-tex="\left(\dfrac{x}{x+1}\right)^{4}" data-plain="(x/(x + 1))⁴"></span></td><td>Potenzieren</td><td>Kettenregel, darin Quotientenregel</td></tr>
+  </table>
+  </div>
+
+  <p><strong>Durchgerechnetes Beispiel.</strong> <span class="m" data-tex="f(x)=x^{2}\sqrt{2x+1}" data-plain="f(x) = x² · √(2x + 1)"></span> mit <span class="m" data-tex="D = \left[-\tfrac12;\,\infty\right[" data-plain="D = [−0,5; ∞["></span>. Äußerste Operation ist die Multiplikation, also Produktregel mit <span class="m" data-tex="u=x^{2}" data-plain="u = x²"></span> und <span class="m" data-tex="v=\sqrt{2x+1}" data-plain="v = √(2x + 1)"></span>. Für <span class="m" data-tex="v'" data-plain="v′"></span> brauchst du die Kettenregel: <span class="m" data-tex="v'(x) = \frac{1}{2\sqrt{2x+1}}\cdot 2 = \frac{1}{\sqrt{2x+1}}" data-plain="v′(x) = 1/(2·√(2x+1)) · 2 = 1/√(2x + 1)"></span>.</p>
+  <div class="m block" data-tex="f'(x) = 2x\sqrt{2x+1} + x^{2}\cdot\frac{1}{\sqrt{2x+1}} = \frac{2x(2x+1) + x^{2}}{\sqrt{2x+1}} = \frac{5x^{2}+2x}{\sqrt{2x+1}} = \frac{x(5x+2)}{\sqrt{2x+1}}" data-plain="f′(x) = 2x·√(2x+1) + x²/√(2x+1) = [2x(2x+1) + x²]/√(2x+1) = (5x² + 2x)/√(2x+1) = x(5x+2)/√(2x+1)"></div>
+  <p>Stichprobe an der Stelle <span class="m" data-tex="x=4" data-plain="x = 4"></span>: <span class="m" data-tex="f(4)=16\cdot 3=48" data-plain="f(4) = 16 · 3 = 48"></span> und <span class="m" data-tex="f'(4)=\frac{4\cdot 22}{3}=\frac{88}{3}\approx 29{,}33" data-plain="f′(4) = 4 · 22/3 = 88/3 ≈ 29,33"></span>. Die Tangente dort lautet <span class="m" data-tex="y=\tfrac{88}{3}x-\tfrac{208}{3}" data-plain="y = (88/3)·x − 208/3"></span>.</p>
+
+  <h3>Mehrfache Verkettung und Ausblick</h3>
+  <p>Die Kettenregel lässt sich beliebig oft hintereinander anwenden – man arbeitet sich von außen nach innen durch und multipliziert alle Ableitungen auf. Beispiel <span class="m" data-tex="f(x)=\sqrt{(3x^{2}+1)^{3}} = (3x^{2}+1)^{3/2}" data-plain="f(x) = √((3x² + 1)³) = (3x² + 1)^(3/2)"></span>:</p>
+  <div class="m block" data-tex="f'(x) = \tfrac{3}{2}(3x^{2}+1)^{1/2}\cdot 6x = 9x\sqrt{3x^{2}+1}" data-plain="f′(x) = (3/2)·(3x² + 1)^(1/2) · 6x = 9x·√(3x² + 1)"></div>
+  <p>Stichproben: <span class="m" data-tex="f(1)=8" data-plain="f(1) = 8"></span>, <span class="m" data-tex="f'(1)=18" data-plain="f′(1) = 18"></span>, <span class="m" data-tex="f'(0)=0" data-plain="f′(0) = 0"></span>, <span class="m" data-tex="f'(2)=18\sqrt{13}\approx 64{,}90" data-plain="f′(2) = 18·√13 ≈ 64,90"></span>.</p>
+
+  <div class="merksatz">
+    <b>Die drei Regeln auf einen Blick</b>
+    Die drei Regeln sagen nicht dasselbe, aber sie hängen zusammen: Die Produktregel ist die grundlegende, die Kettenregel beschreibt Hintereinanderschaltung, und die Quotientenregel folgt aus beiden. Welche Regel du brauchst, entscheidest du <strong>nicht</strong> durch Hinsehen auf einzelne Symbole, sondern durch die Frage: Welche Rechenoperation führe ich zuletzt aus?
+  </div>
+
+  <div class="hinweis">
+    <strong>Was in den nächsten Einheiten dazukommt.</strong> Alle drei Regeln sind vollkommen unabhängig davon, <em>welche</em> Funktionen <span class="m" data-tex="u" data-plain="u"></span> und <span class="m" data-tex="v" data-plain="v"></span> sind – sie gelten für jede differenzierbare Funktion. Sobald du die Ableitungen von <span class="m" data-tex="\sin" data-plain="sin"></span>, <span class="m" data-tex="\cos" data-plain="cos"></span> und der natürlichen Exponentialfunktion kennst, kannst du ohne eine einzige neue Regel Terme wie <span class="m" data-tex="x\,\mathrm{e}^{-2x}" data-plain="x · e⁻²ˣ"></span> oder <span class="m" data-tex="\dfrac{\sin x}{x}" data-plain="sin x / x"></span> ableiten. Genau deshalb steht dieses Modul am Anfang der Q1-Analysis.
+  </div>
+</section>
+
+<!-- =============== 4 INTERAKTIVER KERN =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">4</div><h2>Zwei Bilder: das Umsatzrechteck und der Ölring</h2></div>
+
+  <h3>Simulation 1 – das Umsatzrechteck (Produktregel)</h3>
+
+  <p>Das Rechteck ist der Umsatz: Seine Breite ist die Besucherzahl, seine Höhe der Eintrittspreis, sein Flächeninhalt das Produkt aus beidem. Schiebst du die Zeit vorwärts, ändern sich beide Seiten gleichzeitig. Die drei eingefärbten Flächenstücke zeigen dir, woher die Änderung kommt.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Größe</th><th>Formel / Wert</th><th>Einheit</th></tr>
+    <tr><td>Preis</td><td><span class="m" data-tex="p(t) = p_0 + b\,t,\quad p_0 = 5{,}00" data-plain="p(t) = p₀ + b·t,  p₀ = 5,00"></span></td><td>€</td></tr>
+    <tr><td>Besucherzahl</td><td><span class="m" data-tex="n(t) = n_0 + d\,t,\quad n_0 = 400" data-plain="n(t) = n₀ + d·t,  n₀ = 400"></span></td><td>Personen</td></tr>
+    <tr><td>Umsatz</td><td><span class="m" data-tex="U(t) = p(t)\cdot n(t)" data-plain="U(t) = p(t) · n(t)"></span></td><td>€</td></tr>
+    <tr><td>Ableitung</td><td><span class="m" data-tex="U'(t) = b\,n(t) + p(t)\,d" data-plain="U′(t) = b·n(t) + p(t)·d"></span></td><td>€/Tag</td></tr>
+    <tr><td>Eckanteil</td><td><span class="m" data-tex="\frac{\Delta p\cdot\Delta n}{\Delta t} = b\,d\,\Delta t" data-plain="(Δp · Δn)/Δt = b · d · Δt"></span></td><td>€/Tag</td></tr>
+  </table>
+  </div>
+
+  <p>Dabei ist <span class="m" data-tex="\Delta p = b\,\Delta t" data-plain="Δp = b · Δt"></span> und <span class="m" data-tex="\Delta n = d\,\Delta t" data-plain="Δn = d · Δt"></span>. Die Identität, um die es geht, muss in jedem Zustand aufgehen:</p>
+
+  <div class="m block" data-tex="\frac{\Delta U}{\Delta t} \;=\; \underbrace{p'\,n}_{\text{Preisbeitrag}} \;+\; \underbrace{p\,n'}_{\text{Mengenbeitrag}} \;+\; \underbrace{\frac{\Delta p\,\Delta n}{\Delta t}}_{\text{Eckanteil}}" data-plain="ΔU/Δt = p′·n (Preisbeitrag) + p·n′ (Mengenbeitrag) + (Δp·Δn)/Δt (Eckanteil)"></div>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    Setze die Regler zurück (<span class="m" data-tex="b = 0{,}10" data-plain="b = 0,10"></span> €/Tag, <span class="m" data-tex="d = -6" data-plain="d = −6"></span>, <span class="m" data-tex="t = 0" data-plain="t = 0"></span>).
+    <b>(1)</b> Notiere für <span class="m" data-tex="\Delta t = 4{,}00" data-plain="Δt = 4,00"></span>; 2,00; 1,00 und 0,50 Tage jeweils die Sekantensteigung und den Eckanteil. Welche Zahl ändert sich dabei <b>nicht</b>, und wie verhält sich der Abstand der Sekantensteigung zu dieser Zahl?
+    <b>(2)</b> Sage vorher, welchen Eckanteil du für <span class="m" data-tex="\Delta t = 0{,}25" data-plain="Δt = 0,25"></span> Tage erwartest (der kleinste einstellbare Wert), und stelle ihn erst dann ein.
+    <b>(3)</b> Drücke „Zum Umsatzmaximum" und vergleiche dort Preisbeitrag und Mengenbeitrag.
+    Schreibe zum Schluss <b>einen</b> Satz auf, der erklärt, warum die Sekantensteigung immer genau um den Eckanteil von der Ableitung abweicht.
+  </div>
+
+  <div class="sim">
+    <canvas id="cvRecht" width="1000" height="440"></canvas>
+    <div class="trenner"></div>
+    <canvas id="cvU" width="1000" height="280"></canvas>
+
+    <div class="anzeige">
+      <div>Zeit t<span id="anzT">0,0 Tage</span></div>
+      <div>Preis p(t)<span id="anzP">5,00 €</span></div>
+      <div>Besucherzahl n(t)<span id="anzN">400,0</span></div>
+      <div>Umsatz U(t)<span id="anzU">2000,00 €</span></div>
+      <div>Preisbeitrag p′·n<span id="anzBp">40,00 €/Tag</span></div>
+      <div>Mengenbeitrag p·n′<span id="anzBn">−30,00 €/Tag</span></div>
+      <div>Ableitung U′(t)<span id="anzUs">10,00 €/Tag</span></div>
+      <div>Sekantensteigung<span id="anzSek">9,40 €/Tag</span></div>
+      <div>Eckanteil<span id="anzEck">−0,60 €/Tag</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label>Zeit t <b><span id="lT">0,0</span> Tage</b></label>
+          <input type="range" id="rT" min="0" max="210" step="1" value="0">
+        </div>
+        <div>
+          <label>Zeitschritt Δt <b><span id="lDt">1,00</span> Tage</b></label>
+          <input type="range" id="rDt" min="1" max="16" step="1" value="4">
+        </div>
+        <div>
+          <label>Preisänderung b <b><span id="lB">0,10</span> €/Tag</b></label>
+          <input type="range" id="rB" min="-15" max="30" step="1" value="10">
+        </div>
+        <div>
+          <label>Besucheränderung d <b><span id="lD">−6</span> Pers./Tag</b></label>
+          <input type="range" id="rD" min="-12" max="8" step="1" value="-6">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button class="primaer" id="bPlay">▶ Start</button>
+        <button id="bMax">Zum Umsatzmaximum</button>
+        <button id="bReset">Zurücksetzen</button>
+      </div>
+      <p id="maxMeldung" style="margin:12px 0 0;font-size:15px;color:var(--grau)">Tipp: Du kannst auch im unteren Diagramm ziehen, um die Zeit zu verstellen.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Stelle ein: <span class="m" data-tex="b = 0{,}20" data-plain="b = 0,20"></span> €/Tag, <span class="m" data-tex="d = -8" data-plain="d = −8"></span> Personen/Tag, <span class="m" data-tex="t = 6{,}0" data-plain="t = 6,0"></span> Tage und <span class="m" data-tex="\Delta t = 2{,}00" data-plain="Δt = 2,00"></span> Tage. Welche Sekantensteigung <span class="m" data-tex="\Delta U/\Delta t" data-plain="ΔU/Δt"></span> zeigt die Anzeige?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>20,80 €/Tag</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>17,60 €/Tag</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>24,00 €/Tag</span></label>
+      <label class="opt" data-i="3"><input type="radio" name="sim1"><span>70,40 €/Tag</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Setze die Regler zurück und stelle dann nur die Besucheränderung auf <span class="m" data-tex="d = -7" data-plain="d = −7"></span> Personen/Tag (<span class="m" data-tex="b = 0{,}10" data-plain="b = 0,10"></span> €/Tag bleibt). Drücke „Zum Umsatzmaximum". Welche Zeit und welchen Umsatz zeigt die Anzeige?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>t = 8,33 Tage, U = 1993,06 €</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span>t = 7,14 Tage, U = 2000,00 €</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>t = 3,57 Tage, U = 2008,93 €</span></label>
+      <label class="opt" data-i="3"><input type="radio" name="sim2"><span>t = 0,00 Tage, U = 2000,00 €</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <h3>Simulation 2 – der Ölring (Kettenregel)</h3>
+
+  <p>Aus einem Leck breitet sich ein kreisrunder Ölteppich aus. Der Radius wächst gleichmäßig, die Fläche nicht – und genau darum geht es. Die Fläche hängt vom Radius ab, der Radius von der Zeit. Das ist eine Kette aus zwei Abhängigkeiten, und ihre Raten multiplizieren sich.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Größe</th><th>Formel</th><th>Einheit</th></tr>
+    <tr><td>Radius</td><td><span class="m" data-tex="r(t) = r_0 + c\,t" data-plain="r(t) = r₀ + c·t"></span></td><td>m</td></tr>
+    <tr><td>Fläche</td><td><span class="m" data-tex="A(r) = \pi r^{2}" data-plain="A(r) = π·r²"></span></td><td>m²</td></tr>
+    <tr><td>Kettenregel</td><td><span class="m" data-tex="\frac{\mathrm{d}A}{\mathrm{d}t} = \frac{\mathrm{d}A}{\mathrm{d}r}\cdot\frac{\mathrm{d}r}{\mathrm{d}t} = 2\pi r\,c" data-plain="dA/dt = dA/dr · dr/dt = 2π·r·c"></span></td><td>m²/s</td></tr>
+    <tr><td>Ring exakt</td><td><span class="m" data-tex="\pi\big((r+\Delta r)^{2}-r^{2}\big),\ \Delta r = c\,\Delta t" data-plain="π·((r+Δr)² − r²),  Δr = c·Δt"></span></td><td>m²</td></tr>
+    <tr><td>Ring genähert</td><td><span class="m" data-tex="2\pi r\cdot\Delta r" data-plain="2π·r · Δr"></span></td><td>m²</td></tr>
+    <tr><td>Fehler</td><td><span class="m" data-tex="\pi\,\Delta r^{2}" data-plain="π·Δr²"></span></td><td>m²</td></tr>
+  </table>
+  </div>
+
+  <p>Der Zusammenhang, der hier sichtbar werden soll: <strong>Die äußere Ableitung <span class="m" data-tex="2\pi r" data-plain="2πr"></span> ist der Umfang des Kreises.</strong> Ein Ring der Breite <span class="m" data-tex="\Delta r" data-plain="Δr"></span> hat näherungsweise die Fläche „Umfang mal Breite" – und der Fehler dabei ist <span class="m" data-tex="\pi\Delta r^{2}" data-plain="π·Δr²"></span>, also wieder ein Term zweiter Ordnung, wie das Eckstück in Simulation 1.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    Startwerte lassen (<span class="m" data-tex="r_0=5" data-plain="r₀ = 5"></span> m, <span class="m" data-tex="c=0{,}5" data-plain="c = 0,5"></span> m/s, <span class="m" data-tex="t=20" data-plain="t = 20"></span> s). Vergleiche die exakte Ringfläche mit der Näherung „Umfang mal Ringbreite" für <span class="m" data-tex="\Delta t = 2{,}00" data-plain="Δt = 2,00"></span>; 1,00; 0,50 und 0,25 s. Notiere jedes Mal die absolute <b>und</b> die relative Differenz. Verdopple anschließend <span class="m" data-tex="t" data-plain="t"></span> auf 40 s und prüfe, ob sich die Fläche ebenfalls verdoppelt – und ob sich die Rate <span class="m" data-tex="\mathrm{d}A/\mathrm{d}t" data-plain="dA/dt"></span> verdoppelt. Formuliere zum Schluss einen Satz darüber, was der Umfang mit der Ableitung der Kreisfläche zu tun hat.
+  </div>
+
+  <div class="sim">
+    <canvas id="cvKette" width="1000" height="340"></canvas>
+
+    <div class="anzeige">
+      <div>Radius r(t)<span id="anzR">15,000 m</span></div>
+      <div>Fläche A<span id="anzA">706,858 m²</span></div>
+      <div>äußere Rate dA/dr = 2πr<span id="anzDAdr">94,2478 m</span></div>
+      <div>innere Rate dr/dt = c<span id="anzDrdt">0,50 m/s</span></div>
+      <div>Produkt dA/dt<span id="anzDAdt">47,1239 m²/s</span></div>
+      <div>Ring exakt<span id="anzRingEx">47,90929 m²</span></div>
+      <div>Ring genähert<span id="anzRingNa">47,12389 m²</span></div>
+      <div>Differenz<span id="anzFehler">0,78540 m² (1,639 %)</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label>Anfangsradius r₀ <b><span id="lR0">5</span> m</b></label>
+          <input type="range" id="rR0" min="2" max="20" step="1" value="5">
+        </div>
+        <div>
+          <label>Ausbreitungsgeschwindigkeit c <b><span id="lC">0,5</span> m/s</b></label>
+          <input type="range" id="rC" min="1" max="20" step="1" value="5">
+        </div>
+        <div>
+          <label>Zeit t <b><span id="lTk">20,0</span> s</b></label>
+          <input type="range" id="rTk" min="0" max="100" step="1" value="40">
+        </div>
+        <div>
+          <label>Zeitschritt Δt <b><span id="lDtk">1,00</span> s</b></label>
+          <input type="range" id="rDtk" min="1" max="8" step="1" value="4">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button id="bResetK">Zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Stelle die Regler in dieser Reihenfolge ein: <span class="m" data-tex="r_0 = 8" data-plain="r₀ = 8"></span> m, <span class="m" data-tex="c = 1{,}2" data-plain="c = 1,2"></span> m/s, <span class="m" data-tex="t = 15" data-plain="t = 15"></span> s, <span class="m" data-tex="\Delta t = 1{,}50" data-plain="Δt = 1,50"></span> s. Welchen Wert zeigt die Anzeige „Ring exakt“?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim3"><span>304,23 m²</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim3"><span>294,05 m²</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim3"><span>252,11 m²</span></label>
+      <label class="opt" data-i="3"><input type="radio" name="sim3"><span>100,66 m²</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="hinweis">
+    <strong>Was die Simulationen zeigen – und was nicht.</strong> Beide Bilder machen plausibel, warum in der Produktregel zwei Summanden und in der Kettenregel ein Produkt steht, und warum die jeweils übrigbleibenden Terme im Grenzwert verschwinden. Ein <strong>Beweis</strong> sind sie nicht: Dass ein Term bei fünf getesteten Werten von <span class="m" data-tex="\Delta t" data-plain="Δt"></span> kleiner wird, zeigt nicht, dass er gegen null geht. Den Nachweis liefern die Herleitungen in den Details-Blöcken der Abschnitte 2 und 3.
+  </div>
+</section>
+
+<!-- =============== 5 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">5</div><h2>Übungen</h2></div>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Aufgabe 1 · Anforderungsbereich I</span>
+    <div class="frage">Ein rechteckiges Solarfeld wird jedes Jahr erweitert. Seine Länge wächst nach <span class="m" data-tex="l(t) = 40 + 3t" data-plain="l(t) = 40 + 3 t"></span> (in Metern), seine Breite nach <span class="m" data-tex="b(t) = 25 + 2t" data-plain="b(t) = 25 + 2 t"></span> (in Metern); <span class="m" data-tex="t" data-plain="t"></span> zählt die Jahre seit der Inbetriebnahme. Berechne mit der Produktregel, wie schnell der Flächeninhalt zum Zeitpunkt <span class="m" data-tex="t = 0" data-plain="t = 0"></span> wächst.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="m²/Jahr">m²/Jahr</option>
+        <option value="m/Jahr">m/Jahr</option>
+        <option value="m²">m²</option>
+        <option value="m²·Jahr">m²·Jahr</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Zeichne das Rechteck und den Zuwachs nach einem Jahr ein. Du bekommst zwei lange, schmale Streifen und ein winziges Quadrat in der Ecke.</div>
+    <div class="hilfe-text" data-stufe="2">Produktregel: <span class="m" data-tex="A(t)=l(t)\cdot b(t)" data-plain="A(t) = l(t) · b(t)"></span>, also <span class="m" data-tex="A'(t)=l'(t)\,b(t)+l(t)\,b'(t)" data-plain="A′(t) = l′(t)·b(t) + l(t)·b′(t)"></span>. Die beiden Ableitungen <span class="m" data-tex="l'=3" data-plain="l′ = 3"></span> und <span class="m" data-tex="b'=2" data-plain="b′ = 2"></span> sind konstant; einzusetzen sind zusätzlich die <strong>Werte</strong> <span class="m" data-tex="l(0)" data-plain="l(0)"></span> und <span class="m" data-tex="b(0)" data-plain="b(0)"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="A'(0) = 3\cdot 25 + 40\cdot 2 = 75 + 80 = 155" data-plain="A′(0) = 3 · 25 + 40 · 2 = 75 + 80 = 155"></span> m²/Jahr. Kontrolle durch Ausmultiplizieren: <span class="m" data-tex="A(t) = 6t^{2}+155t+1000" data-plain="A(t) = 6t² + 155t + 1000"></span>, also <span class="m" data-tex="A'(t)=12t+155" data-plain="A′(t) = 12t + 155"></span> und <span class="m" data-tex="A'(0)=155" data-plain="A′(0) = 155"></span> ✓ Zweite Kontrolle über den echten Zuwachs eines Jahres: <span class="m" data-tex="A(1)-A(0)=161" data-plain="A(1) − A(0) = 161"></span> m² – das sind die 155 m² der beiden Streifen plus 6 m² Eckquadrat.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Aufgabe 2 · Anforderungsbereich I</span>
+    <div class="frage">Ein kugelförmiger Wetterballon wird aufgeblasen. Sein Radius wächst nach <span class="m" data-tex="r(t) = 2 + 0{,}5\,t" data-plain="r(t) = 2 + 0,5 t"></span> (in cm, <span class="m" data-tex="t" data-plain="t"></span> in Sekunden). Für das Volumen einer Kugel gilt <span class="m" data-tex="V = \tfrac{4}{3}\pi r^{3}" data-plain="V = (4/3)·π·r³"></span>. Berechne, wie schnell das Volumen nach 4 Sekunden zunimmt.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="cm³/s">cm³/s</option>
+        <option value="cm²/s">cm²/s</option>
+        <option value="cm³">cm³</option>
+        <option value="cm/s">cm/s</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Zwei Dinge hängen hier voneinander ab: Das Volumen hängt vom Radius ab, der Radius von der Zeit. Kläre zuerst, welche Größe die innere und welche die äußere ist.</div>
+    <div class="hilfe-text" data-stufe="2">Kettenregel in der Leibniz-Schreibweise: <span class="m" data-tex="\frac{\mathrm{d}V}{\mathrm{d}t} = \frac{\mathrm{d}V}{\mathrm{d}r}\cdot\frac{\mathrm{d}r}{\mathrm{d}t}" data-plain="dV/dt = dV/dr · dr/dt"></span>. Bestimme <span class="m" data-tex="\mathrm{d}V/\mathrm{d}r" data-plain="dV/dr"></span> aus der Kugelformel und lies <span class="m" data-tex="\mathrm{d}r/\mathrm{d}t" data-plain="dr/dt"></span> direkt aus <span class="m" data-tex="r(t)" data-plain="r(t)"></span> ab. Setze erst zum Schluss <span class="m" data-tex="r(4)" data-plain="r(4)"></span> ein.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\frac{\mathrm{d}V}{\mathrm{d}r} = \tfrac{4}{3}\pi\cdot 3r^{2} = 4\pi r^{2}" data-plain="dV/dr = (4/3)·π·3r² = 4π·r²"></span> und <span class="m" data-tex="\frac{\mathrm{d}r}{\mathrm{d}t}=0{,}5" data-plain="dr/dt = 0,5"></span> cm/s. Mit <span class="m" data-tex="r(4)=2+0{,}5\cdot 4 = 4{,}0" data-plain="r(4) = 2 + 0,5 · 4 = 4,0"></span> cm folgt <span class="m" data-tex="\frac{\mathrm{d}V}{\mathrm{d}t}\Big|_{t=4} = 4\pi\cdot 16\cdot 0{,}5 = 32\pi \approx 100{,}53" data-plain="dV/dt bei t = 4: 4π · 16 · 0,5 = 32π ≈ 100,53"></span> cm³/s. Zur Einordnung: Das Volumen beträgt dort <span class="m" data-tex="V(4)=\tfrac{256}{3}\pi\approx 268{,}08" data-plain="V(4) = (256/3)·π ≈ 268,08"></span> cm³ – pro Sekunde kommt also gut ein Drittel des aktuellen Volumens hinzu.</div>
+  </div>
+
+  <div class="aufgabe" data-mc="mc1">
+    <span class="ab">Aufgabe 3 · Anforderungsbereich II</span>
+    <div class="frage">Der Graph von <span class="m" data-tex="f(x) = (2x-3)^{4}" data-plain="f(x) = (2x − 3)⁴"></span> hat an der Stelle <span class="m" data-tex="x = 1{,}5" data-plain="x = 1,5"></span> eine waagerechte Tangente. Welche Begründung ist vollständig <strong>und</strong> richtig?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="mc1"><span>Weil <span class="m" data-tex="f(1{,}5)=0" data-plain="f(1,5) = 0"></span> ist und an einer Nullstelle die Ableitung immer null ist.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="mc1"><span>Weil <span class="m" data-tex="f'(x) = 8(2x-3)^{3}" data-plain="f′(x) = 8(2x − 3)³"></span> ist und der Faktor <span class="m" data-tex="(2x-3)^{3}" data-plain="(2x − 3)³"></span> bei <span class="m" data-tex="x=1{,}5" data-plain="x = 1,5"></span> verschwindet.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="mc1"><span>Weil <span class="m" data-tex="f'(x) = 4(2x-3)^{3}" data-plain="f′(x) = 4(2x − 3)³"></span> ist und die innere Ableitung dort null wird.</span></label>
+      <label class="opt" data-i="3"><input type="radio" name="mc1"><span>Weil die innere Funktion <span class="m" data-tex="2x-3" data-plain="2x − 3"></span> bei <span class="m" data-tex="x=1{,}5" data-plain="x = 1,5"></span> ihr Minimum hat.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Aufgabe 4 · Anforderungsbereich II</span>
+    <div class="frage">Nach der Einnahme eines Medikaments beschreibt <span class="m" data-tex="c(t) = \dfrac{20\,t}{t^{2}+4}" data-plain="c(t) = 20 t / (t² + 4)"></span> die Wirkstoffkonzentration im Blut in mg/L; <span class="m" data-tex="t" data-plain="t"></span> ist die Zeit in Stunden seit der Einnahme. Berechne, wie schnell die Konzentration eine Stunde nach der Einnahme zunimmt.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="mg/(L·h)">mg/(L·h)</option>
+        <option value="mg/L">mg/L</option>
+        <option value="mg·h/L">mg·h/L</option>
+        <option value="h">h</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Zähler und Nenner hängen beide von <span class="m" data-tex="t" data-plain="t"></span> ab. Kürzen lässt sich nichts, umschreiben als Produkt lohnt sich hier nicht – das ist der Standardfall für die Quotientenregel.</div>
+    <div class="hilfe-text" data-stufe="2"><span class="m" data-tex="u(t)=20t,\ v(t)=t^{2}+4" data-plain="u(t) = 20t, v(t) = t² + 4"></span>, also <span class="m" data-tex="u'=20" data-plain="u′ = 20"></span> und <span class="m" data-tex="v'=2t" data-plain="v′ = 2t"></span>. Einsetzen in <span class="m" data-tex="c'=\frac{u'v-uv'}{v^{2}}" data-plain="c′ = (u′v − uv′)/v²"></span> und <strong>erst danach</strong> <span class="m" data-tex="t=1" data-plain="t = 1"></span> einsetzen – der Nenner wird nicht ausmultipliziert.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m block" data-tex="c'(t) = \frac{20(t^{2}+4) - 20t\cdot 2t}{(t^{2}+4)^{2}} = \frac{20t^{2}+80-40t^{2}}{(t^{2}+4)^{2}} = \frac{80-20t^{2}}{(t^{2}+4)^{2}}" data-plain="c′(t) = [20(t² + 4) − 20t · 2t]/(t² + 4)² = (20t² + 80 − 40t²)/(t² + 4)² = (80 − 20t²)/(t² + 4)²"></span> Einsetzen: <span class="m" data-tex="c'(1) = \frac{80-20}{25} = \frac{60}{25} = 2{,}4" data-plain="c′(1) = (80 − 20)/25 = 60/25 = 2,4"></span> mg/(L·h). Probe auf Plausibilität: Der Zähler wird bei <span class="m" data-tex="t=2" data-plain="t = 2"></span> null, dort liegt das Konzentrationsmaximum mit <span class="m" data-tex="c(2)=5" data-plain="c(2) = 5"></span> mg/L. Vor diesem Zeitpunkt muss die Rate positiv sein – sie ist es.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Aufgabe 5 · Anforderungsbereich II</span>
+    <div class="frage">Ein zylindrisches Gefäß wird von außen aufgeweitet und gleichzeitig zusammengedrückt: Sein Innenradius wächst nach <span class="m" data-tex="r(t) = 3 + 0{,}2\,t" data-plain="r(t) = 3 + 0,2 t"></span>, seine Höhe sinkt nach <span class="m" data-tex="h(t) = 20 - 0{,}5\,t" data-plain="h(t) = 20 − 0,5 t"></span> (beides in cm, <span class="m" data-tex="t" data-plain="t"></span> in Sekunden). Für das Fassungsvermögen gilt <span class="m" data-tex="V = \pi r^{2} h" data-plain="V = π · r² · h"></span>. Berechne <span class="m" data-tex="V'(5)" data-plain="V′(5)"></span> und entscheide damit, ob das Gefäß nach fünf Sekunden gerade mehr oder weniger fasst.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="cm³/s">cm³/s</option>
+        <option value="cm²/s">cm²/s</option>
+        <option value="cm³">cm³</option>
+        <option value="cm/s">cm/s</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Hier steckt eine Regel in der anderen. Frage dich zuerst: Welche Rechenoperation führst du als <strong>letzte</strong> aus, wenn du <span class="m" data-tex="V" data-plain="V"></span> für ein konkretes <span class="m" data-tex="t" data-plain="t"></span> ausrechnest?</div>
+    <div class="hilfe-text" data-stufe="2">Äußerste Operation ist die Multiplikation von <span class="m" data-tex="r(t)^{2}" data-plain="r(t)²"></span> mit <span class="m" data-tex="h(t)" data-plain="h(t)"></span>, also Produktregel – der Faktor <span class="m" data-tex="\pi" data-plain="π"></span> bleibt nach der Faktorregel davor stehen. Für die Ableitung von <span class="m" data-tex="r(t)^{2}" data-plain="r(t)²"></span> brauchst du die Kettenregel: <span class="m" data-tex="\big(r(t)^{2}\big)' = 2\,r(t)\,r'(t)" data-plain="(r(t)²)′ = 2·r(t)·r′(t)"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m block" data-tex="V'(t) = \pi\Big(2\,r(t)\,r'(t)\,h(t) + r(t)^{2}\,h'(t)\Big)" data-plain="V′(t) = π · (2·r(t)·r′(t)·h(t) + r(t)²·h′(t))"></span> Mit <span class="m" data-tex="r(5)=4{,}0" data-plain="r(5) = 4,0"></span> cm, <span class="m" data-tex="h(5)=17{,}5" data-plain="h(5) = 17,5"></span> cm, <span class="m" data-tex="r'=0{,}2" data-plain="r′ = 0,2"></span> cm/s, <span class="m" data-tex="h'=-0{,}5" data-plain="h′ = −0,5"></span> cm/s: <span class="m block" data-tex="V'(5) = \pi\big(2\cdot 4\cdot 0{,}2\cdot 17{,}5 + 4^{2}\cdot(-0{,}5)\big) = \pi(28 - 8) = 20\pi \approx 62{,}83" data-plain="V′(5) = π · (2 · 4 · 0,2 · 17,5 + 4² · (−0,5)) = π(28 − 8) = 20π ≈ 62,83"></span> also <strong>+62,83 cm³/s</strong>: Das Gefäß fasst nach fünf Sekunden noch mehr, der Radiusgewinn überwiegt den Höhenverlust. Zum Vergleich: <span class="m" data-tex="V(5)=280\pi\approx 879{,}65" data-plain="V(5) = 280π ≈ 879,65"></span> cm³.</div>
+  </div>
+
+  <div class="aufgabe">
+    <span class="ab">Aufgabe 6 · Anforderungsbereich II</span>
+    <div class="frage">Vier Funktionen sind aus denselben beiden Bausteinen <span class="m" data-tex="x^{3}" data-plain="x³"></span> und <span class="m" data-tex="2x+1" data-plain="2x + 1"></span> aufgebaut – nur unterschiedlich verknüpft. Ordne jeder Funktion ihre Ableitung zu.</div>
+
+    <div class="diagramme">
+      <figure><div class="m block" data-tex="8x^{3}+3x^{2}" data-plain="8x³ + 3x²"></div><figcaption>A</figcaption></figure>
+      <figure><div class="m block" data-tex="-\dfrac{4x+3}{x^{4}}" data-plain="−(4x + 3)/x⁴"></div><figcaption>B</figcaption></figure>
+      <figure><div class="m block" data-tex="6(2x+1)^{2}" data-plain="6(2x + 1)²"></div><figcaption>C</figcaption></figure>
+      <figure><div class="m block" data-tex="\dfrac{4x^{3}+3x^{2}}{(2x+1)^{2}}" data-plain="(4x³ + 3x²)/(2x + 1)²"></div><figcaption>D</figcaption></figure>
+    </div>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="D"><span><span class="m" data-tex="f(x)=\dfrac{x^{3}}{2x+1}" data-plain="f(x) = x³/(2x + 1)"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="C"><span><span class="m" data-tex="f(x)=(2x+1)^{3}" data-plain="f(x) = (2x + 1)³"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="B"><span><span class="m" data-tex="f(x)=\dfrac{2x+1}{x^{3}}" data-plain="f(x) = (2x + 1)/x³"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="A"><span><span class="m" data-tex="f(x)=x^{3}(2x+1)" data-plain="f(x) = x³(2x + 1)"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Aufgabe 7 · Anforderungsbereich II</span>
+    <div class="frage">Ein Freibad führt ein neues Preismodell ein. Der Eintrittspreis steigt nach <span class="m" data-tex="p(t) = 4{,}00 + 0{,}20\,t" data-plain="p(t) = 4,00 + 0,20 t"></span> (in €), die Besucherzahl sinkt nach <span class="m" data-tex="n(t) = 300 - 5t" data-plain="n(t) = 300 − 5 t"></span>; <span class="m" data-tex="t" data-plain="t"></span> zählt die Tage. Bestimme den Tag, an dem der Tagesumsatz am größten ist.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="Tage">Tage</option>
+        <option value="Stunden">Stunden</option>
+        <option value="€">€</option>
+        <option value="€/Tag">€/Tag</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Der Umsatz ist das Produkt aus Preis und Besucherzahl. Ein Maximum erkennst du an der Stelle, an der die Änderungsrate des Umsatzes das Vorzeichen wechselt.</div>
+    <div class="hilfe-text" data-stufe="2">Stelle <span class="m" data-tex="U(t)=p(t)\cdot n(t)" data-plain="U(t) = p(t) · n(t)"></span> auf, leite mit der Produktregel ab und löse <span class="m" data-tex="U'(t)=0" data-plain="U′(t) = 0"></span>. Für den Nachweis, dass es ein Maximum und kein Minimum ist, genügt hier das Vorzeichen von <span class="m" data-tex="U''" data-plain="U″"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m block" data-tex="U'(t) = 0{,}20\,(300-5t) + (4{,}00+0{,}20t)\cdot(-5) = (60-t) + (-20-t) = 40-2t" data-plain="U′(t) = 0,20 · (300 − 5t) + (4,00 + 0,20t) · (−5) = (60 − t) + (−20 − t) = 40 − 2t"></span> <span class="m" data-tex="40-2t = 0 \Leftrightarrow t = 20" data-plain="40 − 2t = 0 ⟺ t = 20"></span>, also am <strong>20. Tag</strong>. Nachweis: <span class="m" data-tex="U''(t) = -2 < 0" data-plain="U″(t) = −2 < 0"></span> für alle <span class="m" data-tex="t" data-plain="t"></span>, also Maximum. Kontrolle durch Ausmultiplizieren: <span class="m" data-tex="U(t) = -t^{2}+40t+1200" data-plain="U(t) = −t² + 40t + 1200"></span>; Scheitel bei <span class="m" data-tex="t=20" data-plain="t = 20"></span> ✓ Zugehöriger Umsatz: <span class="m" data-tex="U(20) = 8{,}00\cdot 200 = 1600" data-plain="U(20) = 8,00 · 200 = 1600"></span> € (Preis 8,00 € mal 200 Stück) gegenüber 1200 € am Anfang.</div>
+  </div>
+
+  <div class="aufgabe">
+    <span class="ab">Aufgabe 8 · Anforderungsbereich III</span>
+    <div class="frage">In einem Heft stehen zwei selbstformulierte Merksätze: <strong>(1)</strong> „Wenn beide Faktoren wachsen, wächst auch ihr Produkt." <strong>(2)</strong> „Wenn ein Faktor wächst und der andere fällt, kann man über das Produkt nichts sagen." Nimm zu beiden Sätzen Stellung. Belege deine Bewertung jeweils mit einem konkreten Beispiel und gib bei Satz (1) an, unter welcher Zusatzvoraussetzung er richtig wird.</div>
+    <textarea placeholder="Deine Stellungnahme…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a6">Musterlösung anzeigen</button></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">„Wachsen" ist eine Aussage über die Ableitung. Was in der Produktregel zusätzlich vorkommt, sind die Funktions<strong>werte</strong> – und über deren Vorzeichen ist bisher nichts gesagt.</div>
+    <div class="hilfe-text" data-stufe="2">Schreibe <span class="m" data-tex="(uv)' = u'v + uv'" data-plain="(u·v)′ = u′v + uv′"></span> hin und prüfe für beide Sätze, welche der vier Größen <span class="m" data-tex="u,\ v,\ u',\ v'" data-plain="u, v, u′, v′"></span> durch die Voraussetzung festgelegt sind und welche frei bleiben.</div>
+    <div class="hilfe-text" data-stufe="3">Gliedere deine Antwort in drei Teile: erstens die allgemeine Entscheidungsgrundlage (die Produktregel), zweitens ein Gegenbeispiel zu Satz (1) mit einem negativen Funktionswert, drittens die Widerlegung von Satz (2) – dort ist der Fehler nicht ein falsches Ergebnis, sondern die Behauptung, es gebe keins.</div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> <strong>Zu (1):</strong> Der Satz ist in dieser Form <strong>falsch</strong>. Aus <span class="m" data-tex="u' > 0" data-plain="u′ > 0"></span> und <span class="m" data-tex="v' > 0" data-plain="v′ > 0"></span> folgt nach der Produktregel <span class="m" data-tex="(uv)' = u'v + uv'" data-plain="(uv)′ = u′v + uv′"></span> – über das Vorzeichen dieser Summe entscheiden aber auch die <strong>Werte</strong> <span class="m" data-tex="u" data-plain="u"></span> und <span class="m" data-tex="v" data-plain="v"></span>, und die dürfen negativ sein. Gegenbeispiel: <span class="m" data-tex="u(t)=t" data-plain="u(t) = t"></span>, <span class="m" data-tex="v(t)=t-10" data-plain="v(t) = t − 10"></span>, beide streng monoton wachsend mit <span class="m" data-tex="u'=v'=1" data-plain="u′ = v′ = 1"></span>. An der Stelle <span class="m" data-tex="t=1" data-plain="t = 1"></span> ist <span class="m" data-tex="(uv)'(1) = 1\cdot(-9) + 1\cdot 1 = -8 < 0" data-plain="(uv)′(1) = 1·(−9) + 1·1 = −8 < 0"></span>: Das Produkt <strong>fällt</strong>, obwohl beide Faktoren wachsen. (Anschaulich: <span class="m" data-tex="uv = t^{2}-10t" data-plain="uv = t² − 10t"></span> ist eine nach oben geöffnete Parabel mit Scheitel bei <span class="m" data-tex="t=5" data-plain="t = 5"></span>.) <strong>Richtig wird der Satz mit der Zusatzvoraussetzung <span class="m" data-tex="u>0" data-plain="u > 0"></span> und <span class="m" data-tex="v>0" data-plain="v > 0"></span></strong> an der betrachteten Stelle: Dann sind beide Summanden positiv, und die Summe ist es auch.</p>
+      <p><strong>Zu (2):</strong> Auch dieser Satz ist <strong>falsch</strong>, aber aus einem anderen Grund. Er verwechselt „das Ergebnis hängt von den Daten ab" mit „man kann nichts sagen". Tatsächlich ist die Frage vollständig entscheidbar: Man berechnet <span class="m" data-tex="u'v + uv'" data-plain="u′v + uv′"></span> und liest das Vorzeichen ab. Beispiel aus dem Einstieg: Preis <span class="m" data-tex="p(t)=5{,}00+0{,}10t" data-plain="p(t) = 5,00 + 0,10 t"></span> steigt, Besucherzahl <span class="m" data-tex="n(t)=400-6t" data-plain="n(t) = 400 − 6 t"></span> fällt – und trotzdem steht fest: <span class="m" data-tex="U'(0) = 0{,}10\cdot 400 + 5{,}00\cdot(-6) = +10" data-plain="U′(0) = 0,10 · 400 + 5,00 · (−6) = +10"></span> €/Tag, der Umsatz steigt. Richtig an Satz (2) ist nur, dass man das Vorzeichen <strong>nicht ohne Rechnung</strong> ablesen kann – und dass es von der Stelle abhängt: bei <span class="m" data-tex="t=12" data-plain="t = 12"></span> ist dieselbe Ableitung −4,40 €/Tag.</p>
+      <p><strong>Bewertungskriterien.</strong> Produktregel als Entscheidungsgrundlage genannt · Satz (1) korrekt als falsch bewertet · tragfähiges Gegenbeispiel mit Rechnung und negativem Funktionswert · Zusatzvoraussetzung <span class="m" data-tex="u,v>0" data-plain="u, v > 0"></span> formuliert · Satz (2) als Fehlschluss erkannt (entscheidbar, aber nicht ohne Rechnung) · konkretes Gegenbeispiel zu (2) · saubere sprachliche Trennung von Funktionswert und Änderungsrate.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe">
+    <span class="ab">Aufgabe 9 · Anforderungsbereich III</span>
+    <div class="frage">„Die Quotientenregel ist eigentlich überflüssig." Begründe, ob diese Behauptung zutrifft. Gehe dabei auf drei Punkte ein: wie man die Quotientenregel aus anderen Regeln gewinnt, welche Voraussetzung dabei gebraucht wird, und was das Minuszeichen im Zähler inhaltlich bedeutet. Schließe mit einer Bewertung: Würdest du die Regel trotzdem auswendig lernen?</div>
+    <textarea placeholder="Deine Begründung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a7">Musterlösung anzeigen</button></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Ein Bruch ist eine Schreibweise, keine eigene Rechenart. Frage dich, als was du <span class="m" data-tex="\frac{u}{v}" data-plain="u/v"></span> sonst noch schreiben kannst.</div>
+    <div class="hilfe-text" data-stufe="2"><span class="m" data-tex="\frac{u}{v} = u\cdot\frac{1}{v}" data-plain="u/v = u · (1/v)"></span>. Damit ist es ein Produkt, und für den zweiten Faktor brauchst du die Reziprokenregel aus Abschnitt 3. Für die inhaltliche Deutung des Minuszeichens hilft ein Blick auf <span class="m" data-tex="f(x)=1/x" data-plain="f(x) = 1/x"></span>.</div>
+    <div class="hilfe-text" data-stufe="3">Baue die Antwort in vier Schritten auf: (a) Umschreiben als Produkt, (b) Ableiten mit Produkt- und Reziprokenregel, (c) Zusammenfassen auf den Hauptnenner <span class="m" data-tex="v^{2}" data-plain="v²"></span>, (d) Voraussetzung und Deutung. Die Bewertung am Schluss darf begründet in beide Richtungen ausfallen.</div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Die Behauptung trifft im mathematischen Sinn <strong>zu</strong>: Die Quotientenregel ist keine unabhängige Regel, sondern eine Folgerung.</p>
+      <p><strong>(a) Herleitung.</strong> <span class="m" data-tex="\frac{u}{v} = u\cdot\frac{1}{v}" data-plain="u/v = u · (1/v)"></span>. Die Reziprokenregel <span class="m" data-tex="\left(\frac{1}{v}\right)' = -\frac{v'}{v^{2}}" data-plain="(1/v)′ = −v′/v²"></span> gewinnt man selbst wieder aus der Produktregel, indem man <span class="m" data-tex="v\cdot\frac1v = 1" data-plain="v · (1/v) = 1"></span> ableitet. Damit:</p>
+      <div class="m block" data-tex="\left(\frac{u}{v}\right)' = u'\cdot\frac{1}{v} + u\cdot\left(-\frac{v'}{v^{2}}\right) = \frac{u'v}{v^{2}} - \frac{uv'}{v^{2}} = \frac{u'v-uv'}{v^{2}}" data-plain="(u/v)′ = u′·(1/v) + u·(−v′/v²) = u′v/v² − uv′/v² = (u′v − uv′)/v²"></div>
+      <p><strong>(b) Voraussetzung.</strong> Gebraucht wird <span class="m" data-tex="v(x)\neq 0" data-plain="v(x) ≠ 0"></span> an der betrachteten Stelle – sonst ist die Funktion dort gar nicht definiert und die Frage nach der Ableitung sinnlos. Außerdem müssen <span class="m" data-tex="u" data-plain="u"></span> und <span class="m" data-tex="v" data-plain="v"></span> dort differenzierbar sein.</p>
+      <p><strong>(c) Deutung des Minuszeichens.</strong> Der Nenner wirkt umgekehrt auf den Funktionswert: Wächst <span class="m" data-tex="v" data-plain="v"></span>, so wird der Bruch kleiner. Deshalb geht <span class="m" data-tex="v'" data-plain="v′"></span> mit negativem Vorzeichen ein. Am Beispiel <span class="m" data-tex="f(x)=1/x" data-plain="f(x) = 1/x"></span> sieht man es unmittelbar: <span class="m" data-tex="f'(x) = -1/x^{2} < 0" data-plain="f′(x) = −1/x² < 0"></span> für alle <span class="m" data-tex="x\neq 0" data-plain="x ≠ 0"></span>. Daraus folgt auch die praktische Warnung: Anders als bei der Produktregel darf man die beiden Summanden im Zähler <strong>nicht</strong> vertauschen, weil sich dabei das Vorzeichen des gesamten Ergebnisses umdreht.</p>
+      <p><strong>(d) Bewertung.</strong> Beide Antworten sind vertretbar, wenn sie begründet werden. Für das Auswendiglernen spricht die Arbeitsersparnis in Klausuren und dass die fertige Form weniger Umformungsfehler zulässt; dagegen spricht, dass eine hergeleitete Regel bei einer Gedächtnislücke rekonstruierbar bleibt, eine auswendig gelernte nicht. Fachlich wichtig ist die Einsicht: Wer die Produkt- und die Kettenregel sicher beherrscht, kann <strong>jede</strong> Quotientenaufgabe auch ohne die dritte Regel lösen.</p>
+      <p><strong>Bewertungskriterien.</strong> Umschreiben des Bruchs als Produkt · Reziproken- oder Kettenregel korrekt auf <span class="m" data-tex="1/v" data-plain="1/v"></span> angewendet · fehlerfreies Zusammenfassen auf den Hauptnenner <span class="m" data-tex="v^{2}" data-plain="v²"></span> · Voraussetzung <span class="m" data-tex="v(x)\neq 0" data-plain="v(x) ≠ 0"></span> genannt · inhaltliche Deutung des Minuszeichens (wachsender Nenner verkleinert den Bruch) mit Beispiel · begründete Bewertung mit mindestens einem Argument pro Seite.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe">
+    <span class="ab">Aufgabe 10 · Anforderungsbereich III</span>
+    <div class="frage">Jemand behauptet: „Die Kettenregel brauche ich gar nicht. Jede Potenz einer Funktion kann ich auch mit der Produktregel ableiten – ich schreibe <span class="m" data-tex="g(x)^{2}" data-plain="g(x)²"></span> einfach als <span class="m" data-tex="g(x)\cdot g(x)" data-plain="g(x) · g(x)"></span>." <strong>(a)</strong> Zeige, dass beide Wege bei <span class="m" data-tex="f(x) = g(x)^{2}" data-plain="f(x) = g(x)²"></span> dasselbe Ergebnis liefern. <strong>(b)</strong> Nimm zu der Behauptung insgesamt Stellung und nenne mindestens zwei Fälle, in denen das Verfahren nicht mehr trägt.</div>
+    <textarea placeholder="Deine Stellungnahme…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a8">Musterlösung anzeigen</button></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Teil (a) ist schnell erledigt: Leite <span class="m" data-tex="g\cdot g" data-plain="g · g"></span> mit der Produktregel ab und vergleiche mit dem Ergebnis der Kettenregel.</div>
+    <div class="hilfe-text" data-stufe="2">Für Teil (b) frage dich, welche Verkettungen sich überhaupt als Produkt schreiben lassen. Was ist mit <span class="m" data-tex="\sqrt{2x+1}" data-plain="√(2x + 1)"></span>? Was mit <span class="m" data-tex="(3x-1)^{40}" data-plain="(3x − 1)⁴⁰"></span>?</div>
+    <div class="hilfe-text" data-stufe="3">Gliedere: (a) beide Rechnungen nebeneinander, (b) erst zugeben, worin die Behauptung recht hat (ganzzahlige Exponenten), dann die Grenzen aufzählen – nicht ganzzahlige Exponenten, nicht als Potenz schreibbare Verkettungen, praktische Undurchführbarkeit. Ein Schlusssatz zur Reichweite der Aussage gehört dazu.</div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>(a) Beide Wege.</strong> Produktregel: <span class="m" data-tex="(g\cdot g)' = g'\,g + g\,g' = 2\,g\,g'" data-plain="(g · g)′ = g′·g + g·g′ = 2·g·g′"></span>. Kettenregel mit äußerer Funktion <span class="m" data-tex="v(u)=u^{2}" data-plain="v(u) = u²"></span>: <span class="m" data-tex="\big(g(x)^{2}\big)' = 2\,g(x)\cdot g'(x)" data-plain="(g(x)²)′ = 2·g(x)·g′(x)"></span>. Dasselbe Ergebnis. Beispiel <span class="m" data-tex="g(x)=3x+1" data-plain="g(x) = 3x + 1"></span>, hier sogar für die dritte Potenz: Die Kettenregel liefert <span class="m" data-tex="3(3x+1)^{2}\cdot 3 = 9(3x+1)^{2}" data-plain="3(3x + 1)² · 3 = 9(3x + 1)²"></span>, die zweifach angewendete Produktregel auf <span class="m" data-tex="(3x+1)(3x+1)(3x+1)" data-plain="(3x + 1)(3x + 1)(3x + 1)"></span> ebenfalls <span class="m" data-tex="9(3x+1)^{2}" data-plain="9(3x + 1)²"></span>.</p>
+      <p><strong>(b) Stellungnahme.</strong> Die Behauptung ist in einem <strong>engen Spezialfall richtig</strong> und als allgemeine Aussage <strong>falsch</strong>. Richtig ist sie für Potenzen mit natürlichem Exponenten: Dort lässt sich die Potenz als wiederholtes Produkt schreiben, und die Produktregel führt (mit vollständiger Induktion sauber begründbar) auf <span class="m" data-tex="(g^{n})' = n\,g^{n-1}g'" data-plain="(gⁿ)′ = n·gⁿ⁻¹·g′"></span>. Sie trägt jedoch nicht, sobald eine der folgenden Situationen eintritt: <strong>(1) Nicht ganzzahlige Exponenten.</strong> <span class="m" data-tex="\sqrt{2x+1} = (2x+1)^{1/2}" data-plain="√(2x + 1) = (2x + 1)^(1/2)"></span> ist kein Produkt von Kopien – „ein halbes Mal mit sich selbst multipliziert" gibt es nicht. <strong>(2) Verkettungen, die keine Potenzen sind.</strong> Bei <span class="m" data-tex="\frac{1}{4x+7}" data-plain="1/(4x + 7)"></span>, später bei <span class="m" data-tex="\sin(3x)" data-plain="sin(3x)"></span> oder <span class="m" data-tex="\mathrm{e}^{-2x}" data-plain="e⁻²ˣ"></span> gibt es überhaupt keine Produktdarstellung, auf die man die Produktregel ansetzen könnte. <strong>(3) Praktische Grenze.</strong> Selbst dort, wo es geht, ist es unbrauchbar: <span class="m" data-tex="(3x-1)^{40}" data-plain="(3x − 1)⁴⁰"></span> als 40-faches Produkt abzuleiten ist ein Rechenweg, den niemand zu Ende geht. Hinzu kommt ein grundsätzlicher Einwand: Der Weg über die Produktregel <em>erklärt</em> nicht, warum der Faktor <span class="m" data-tex="g'" data-plain="g′"></span> auftaucht; die Kettenregel tut es, weil sie ihn als Übersetzungsfaktor zwischen zwei Änderungsraten deutet.</p>
+      <p><strong>Bewertungskriterien.</strong> Teil (a) mit beiden Rechnungen vollständig und korrekt · Übereinstimmung ausdrücklich festgestellt · Zugeständnis formuliert, in welchem Fall die Behauptung trägt (natürliche Exponenten) · mindestens zwei tragfähige Gegenfälle mit Beispiel · Unterscheidung zwischen „rechnerisch möglich" und „praktisch durchführbar" · abschließende, eindeutige Bewertung der Behauptung.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 6 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">6</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="merksatz">
+    <b>Kernaussage 1 – Beim Produkt werden Raten mit Werten bewertet, nicht mit Raten.</b>
+    <span class="m" data-tex="(u\cdot v)' = u'v + uv'" data-plain="(u · v)′ = u′v + uv′"></span>: Die Änderungsrate eines Produkts ist eine <strong>Summe aus zwei Beiträgen</strong>, und in jedem Beitrag steht neben einer Ableitung ein <strong>Funktionswert</strong>. Genau diese Werte lässt die naive Rechnung <span class="m" data-tex="u'v'" data-plain="u′v′"></span> unter den Tisch fallen – im Freibadbeispiel unterscheiden sich beide Ergebnisse um ein Vorzeichen und einen Faktor von rund 17 (genauer 16,7): +10,00 €/Tag gegenüber −0,60. Wer die Produktregel behalten will, merkt sich nicht die Buchstaben, sondern das Rechteck: zwei Streifen zählen, das Eckstück nicht mehr.
+  </div>
+
+  <div class="merksatz">
+    <b>Kernaussage 2 – Bei der Verkettung multiplizieren sich die Änderungsraten.</b>
+    <span class="m" data-tex="\big(v(u(x))\big)' = v'(u(x))\cdot u'(x)" data-plain="(v(u(x)))′ = v′(u(x)) · u′(x)"></span>, in Leibniz-Schreibweise <span class="m" data-tex="\frac{\mathrm{d}y}{\mathrm{d}x} = \frac{\mathrm{d}y}{\mathrm{d}u}\cdot\frac{\mathrm{d}u}{\mathrm{d}x}" data-plain="dy/dx = dy/du · du/dx"></span>. Zwei hintereinandergeschaltete Abhängigkeiten wirken wie zwei Getriebestufen: Ihre Übersetzungsverhältnisse werden multipliziert. Entscheidend ist die <strong>Auswertungsstelle</strong> – die äußere Ableitung wird bei <span class="m" data-tex="u(x)" data-plain="u(x)"></span> genommen, nicht bei <span class="m" data-tex="x" data-plain="x"></span>. Der Ölring zeigt dieselbe Aussage als Bild: <span class="m" data-tex="\mathrm{d}A/\mathrm{d}r = 2\pi r" data-plain="dA/dr = 2πr"></span> ist der Umfang, und die Fläche wächst genau dort, wo neuer Rand entsteht.
+  </div>
+
+  <div class="merksatz">
+    <b>Kernaussage 3 – Die Quotientenregel ist eine Folgerung, kein Zusatzgesetz.</b>
+    <span class="m" data-tex="\left(\frac{u}{v}\right)' = \frac{u'v - uv'}{v^{2}}" data-plain="(u/v)′ = (u′v − uv′)/v²"></span> für <span class="m" data-tex="v(x)\neq 0" data-plain="v(x) ≠ 0"></span>. Sie entsteht aus <span class="m" data-tex="\frac{u}{v} = u\cdot\frac{1}{v}" data-plain="u/v = u · (1/v)"></span> mit Produkt- und Reziprokenregel. Das Minuszeichen ist inhaltlich begründet: Ein wachsender Nenner macht den Bruch kleiner. Deshalb gilt hier – anders als beim Produkt – die Reihenfolge streng. Der Zähler beginnt mit der Ableitung des Zählers; wer die beiden Summanden vertauscht, dreht das Vorzeichen des gesamten Ergebnisses um.
+  </div>
+
+  <div class="merksatz">
+    <b>Kernaussage 4 – Welche Regel gilt, entscheidet die zuletzt ausgeführte Rechenoperation.</b>
+    Nicht das Aussehen des Terms entscheidet, sondern die Frage: <em>Was rechne ich zuletzt, wenn ich einen Zahlenwert einsetze?</em> Bei <span class="m" data-tex="\pi\,r(t)^{2}h(t)" data-plain="π · r(t)² · h(t)"></span> ist das die Multiplikation – also Produktregel, und die Kettenregel steckt darin für <span class="m" data-tex="r(t)^{2}" data-plain="r(t)²"></span>. Alle drei Regeln haben denselben Grund: Die weggelassenen Terme sind <strong>von zweiter Ordnung</strong>. Das Eckstück <span class="m" data-tex="\Delta p\,\Delta n" data-plain="Δp · Δn"></span> und der Ringfehler <span class="m" data-tex="\pi\,\Delta r^{2}" data-plain="π · Δr²"></span> werden beim Halbieren des Zeitschritts nicht halbiert, sondern geviertelt; geteilt durch <span class="m" data-tex="\Delta t" data-plain="Δt"></span> bleibt ein Rest, der gegen null geht. Deshalb stehen in den Regeln endlich viele Summanden und kein Korrekturterm.
+  </div>
+
+  <div class="hinweis">
+    <strong>Im Zentralabitur.</strong> Die drei Regeln sind kein eigenes Prüfungsthema – sie sind das Handwerkzeug, ohne das in der Analysis keine Teilaufgabe funktioniert. In diesen Gestalten begegnen sie dir:
+    <ul>
+      <li><strong>Funktionsuntersuchung einer zusammengesetzten Funktion.</strong> Der Standardtyp ist ein Produkt aus Polynom und Exponentialfunktion, etwa <span class="m" data-tex="f(x) = x\,\mathrm{e}^{-0{,}5x}" data-plain="f(x) = x · e^(−0,5x)"></span>. Dort brauchst du in derselben Aufgabe Produkt- <strong>und</strong> Kettenregel – und für <span class="m" data-tex="f''" data-plain="f″"></span> beide noch einmal auf dein eigenes Zwischenergebnis. Übe deshalb, die erste Ableitung sofort zu <strong>faktorisieren</strong> (hier <span class="m" data-tex="f'(x) = (1-0{,}5x)\,\mathrm{e}^{-0{,}5x}" data-plain="f′(x) = (1 − 0,5x) · e^(−0,5x)"></span>): Das macht die zweite Ableitung und die Nullstellensuche kurz.</li>
+      <li><strong>Gebrochenrationale Funktionen im Sachkontext.</strong> Konzentrations-, Wirkungs- und Kostenmodelle wie <span class="m" data-tex="c(t)=\frac{20t}{t^{2}+4}" data-plain="c(t) = 20t/(t² + 4)"></span> aus Aufgabe 4. Gefragt sind Maximum, Wendestelle und Grenzverhalten; der Nenner bleibt dabei als Quadrat stehen und wird nie ausmultipliziert.</li>
+      <li><strong>Extremwertaufgaben mit Nebenbedingung.</strong> Volumen, Umsatz, Materialverbrauch – die Zielgröße ist fast immer ein Produkt zweier veränderlicher Größen. Die inhaltliche Pointe ist dieselbe wie in Aufgabe 7: Im Optimum heben sich die beiden Beiträge der Produktregel gegenseitig auf.</li>
+      <li><strong>Funktionenscharen.</strong> Bei <span class="m" data-tex="f_k(x)" data-plain="f_k(x)"></span> wird nach <span class="m" data-tex="x" data-plain="x"></span> abgeleitet; <span class="m" data-tex="k" data-plain="k"></span> ist ein Faktor und <strong>keine</strong> Variable. Der häufigste Scharfehler ist eine erfundene Kettenregel für <span class="m" data-tex="k" data-plain="k"></span>.</li>
+      <li><strong>Nachweisaufgaben.</strong> „Zeige, dass <span class="m" data-tex="F" data-plain="F"></span> eine Stammfunktion von <span class="m" data-tex="f" data-plain="f"></span> ist." Das ist eine reine Ableitungsaufgabe mit Produkt- und Kettenregel. Sie geht selten durch Rechenfehler verloren, sondern durch unsauberes Zusammenfassen am Ende.</li>
+      <li><strong>Hilfsmittelfreier Teil.</strong> Ein Teil der Abiturklausur wird ohne Rechner bearbeitet, und genau dort werden Ableitungen wie <span class="m" data-tex="\big(\sqrt{2x+1}\big)'" data-plain="(√(2x + 1))′"></span> oder <span class="m" data-tex="\left(\frac{x}{x^{2}+1}\right)'" data-plain="(x/(x² + 1))′"></span> in einer Zeile verlangt. <em>Der genaue Zuschnitt dieses Teils wird jährlich in den Vorgaben des Landes festgelegt; er ist hier bewusst nicht zitiert.</em></li>
+      <li><strong>Begründungsaufgaben im LK.</strong> Warum liefert <span class="m" data-tex="u'v'" data-plain="u′v′"></span> nichts Sinnvolles? Warum ist die Quotientenregel entbehrlich? Warum trägt die Produktregel bei <span class="m" data-tex="\sqrt{g(x)}" data-plain="√(g(x))"></span> nicht mehr? Genau diese drei Fragen hast du in den Aufgaben 8, 9 und 10 bearbeitet.</li>
+    </ul>
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Selbstcheck – Ich kann …</h3>
+    <p style="color:var(--grau);font-size:15px">Hak ehrlich ab. Jeder Satz, bei dem du zögerst, kostet dich in der Klausur nicht eine Aufgabe, sondern alle – diese drei Regeln stecken in jeder Analysis-Aufgabe der Q1.</p>
+    <div class="check">
+      <label><input type="checkbox"><span>… Produkt-, Ketten- und Quotientenregel korrekt formulieren, einschließlich der Auswertungsstelle <span class="m" data-tex="u(x)" data-plain="u(x)"></span> bei der äußeren Ableitung und der Voraussetzung <span class="m" data-tex="v(x)\neq 0" data-plain="v(x) ≠ 0"></span> beim Quotienten.</span></label>
+      <label><input type="checkbox"><span>… bei einem zusammengesetzten Term entscheiden, welche Regel zuerst anzuwenden ist, indem ich frage, welche Rechenoperation zuletzt ausgeführt wird – und zwei Regeln in derselben Aufgabe verschachteln, etwa bei <span class="m" data-tex="x^{2}\sqrt{2x+1}" data-plain="x² · √(2x + 1)"></span>.</span></label>
+      <label><input type="checkbox"><span>… die Produktregel aus dem Differenzenquotienten herleiten und angeben, an welcher Stelle der Term zweiter Ordnung verschwindet und warum das zulässig ist.</span></label>
+      <label><input type="checkbox"><span>… die Fehlvorstellungen <span class="m" data-tex="(uv)'=u'v'" data-plain="(uv)′ = u′v′"></span> und <span class="m" data-tex="(u/v)'=u'/v'" data-plain="(u/v)′ = u′/v′"></span> mit einem selbst gewählten Gegenbeispiel in einer Zeile widerlegen.</span></label>
+      <label><input type="checkbox"><span>… in einem Sachzusammenhang eine Änderungsrate mit den Regeln bestimmen, ihr Vorzeichen und ihre Einheit deuten und daraus auf Wachstum, Abnahme oder ein Extremum schließen.</span></label>
+      <label><input type="checkbox"><span>… begründen, warum die Quotientenregel aus Produkt- und Reziprokenregel folgt, und eine Aussage über Ableitungsregeln bewerten, statt sie nur anzuwenden.</span></label>
+    </div>
+  </div>
+
+  <div class="hinweis">
+    <strong>Wie es weitergeht.</strong> Du kannst jetzt jedes Produkt, jede Verkettung und jeden Quotienten ableiten – bisher allerdings nur aus Potenzen, Wurzeln und Brüchen gebaut. Der nächste Schritt bringt keine vierte Regel, sondern neue <strong>Bausteine</strong>: die natürliche Exponentialfunktion mit <span class="m" data-tex="(\mathrm{e}^{x})' = \mathrm{e}^{x}" data-plain="(eˣ)′ = eˣ"></span> sowie Sinus und Kosinus. Ab dann leitest du Terme wie <span class="m" data-tex="x\,\mathrm{e}^{-0{,}5x}" data-plain="x · e^(−0,5x)"></span> oder <span class="m" data-tex="\frac{\sin x}{x}" data-plain="sin x / x"></span> ab, ohne etwas Neues über das <em>Ableiten</em> zu lernen – du setzt nur andere Funktionen in dieselben drei Regeln ein. Danach folgt die vollständige Funktionsuntersuchung, in der diese Ableitungen nicht mehr das Ziel sind, sondern der erste von mehreren Schritten.
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnisse kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+  <p style="font-size:14px;color:var(--grau)">Es wird nichts gespeichert. Deine Ergebnisse verlassen diese Seite nur über die Zwischenablage.</p>
+
+  <details class="lehrer">
+    <summary>Für die Lehrkraft</summary>
+
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Funktionen und Analysis" (Kernlehrplan Mathematik, gymnasiale Oberstufe NRW). Das Modul liefert das Werkzeug für die Fortführung der Analysis in Q1: die Ableitungsregeln für zusammengesetzte Funktionen. Prozessbezogene Schwerpunkte sind <em>Argumentieren</em> (beide Herleitungen, Aufgaben 8 bis 10), <em>Problemlösen</em> (Regelwahl und Verschachtelung in Aufgabe 5 und in der Zuordnung), <em>Modellieren</em> (Aufgaben 1, 2, 4 und 7) und <em>Werkzeuge nutzen</em> (die Simulationen als Messinstrument). Vorausgesetzt werden Potenz-, Faktor- und Summenregel, Ableitung als lokale Änderungsrate und Tangentensteigung, Differenzenquotient, Grenzwertbegriff sowie das Rechnen mit negativen und gebrochenen Exponenten; die Vorwissensfragen prüfen genau das. Bewusst nicht vorausgesetzt sind die Ableitungen von <span class="m" data-tex="\sin" data-plain="sin"></span>, <span class="m" data-tex="\cos" data-plain="cos"></span> und <span class="m" data-tex="\mathrm{e}^{x}" data-plain="eˣ"></span>. Stellung in der Reihe: vor der Funktionsuntersuchung und vor den Exponentialfunktionen.</p>
+    <p><em>Offen markiert (fachdidaktische Setzungen dieses Moduls, keine Vorgaben des Kernlehrplans):</em> die Reihenfolge Produkt-, Ketten-, Quotientenregel mit der Quotientenregel als Folgerung; der Verzicht auf einen lückenlosen Beweis der Kettenregel (die Lücke ist im Details-Block benannt); die Einordnung an den Anfang der Q1 – schulintern können die Regeln auch am Ende der Einführungsphase liegen.</p>
+
+    <p><strong>Zeitbedarf</strong> (ausgelegt auf eine Doppelstunde von 90 Minuten).</p>
+    <div class="tabelle">
+    <table>
+      <tr><th>Abschnitt</th><th>Zeit</th><th>Sozialform</th></tr>
+      <tr><td>1 Einstieg (Freibad, drei Vorwissensfragen)</td><td>8 min</td><td>Plenum, Fragen in Einzelarbeit</td></tr>
+      <tr><td>2 Produktregel, Rechteckbild, Herleitung, Kettenregel</td><td>25 min</td><td>lehrergelenkt, Details-Blöcke je nach Kurs</td></tr>
+      <tr><td>3 Quotient, Reziprokenregel, Quotientenregel, Regelwahl</td><td>18 min</td><td>Plenum mit zwei Sicherungsphasen</td></tr>
+      <tr><td>4 Zwei Simulationen, Beobachtungsaufträge, drei MC-Fragen</td><td>22 min</td><td>Partnerarbeit am Gerät</td></tr>
+      <tr><td>5 Übungen (Auswahl, siehe Differenzierung)</td><td>12 min</td><td>Einzel- oder Partnerarbeit</td></tr>
+      <tr><td>6 Abschluss, Selbstcheck, Export</td><td>5 min</td><td>Plenum</td></tr>
+    </table>
+    </div>
+    <p>Realistisch schaffbar sind die Abschnitte 1 bis 4 sowie die Aufgaben 1 und 2; alles Weitere ist Hausaufgabe oder Material für die Folgestunde. Wer beide Herleitungen im Plenum entwickelt, braucht dafür 20 bis 25 Minuten – dann entfällt der Übungsteil. Schnitt bei zwei Einzelstunden: nach Abschnitt 2, Simulation 1 ans Ende der ersten, Simulation 2 an den Anfang der zweiten Stunde. Kurzfassung für 45 Minuten: Einstieg, Abschnitt 2, Simulation 1 mit der ersten Verständnisfrage, Aufgaben 1 und 2; die Quotientenregel entfällt dann.</p>
+    <p><strong>Erwartete Notizen zu Simulation 1</strong> (bei <span class="m" data-tex="t=0" data-plain="t = 0"></span>, <span class="m" data-tex="U'(0)=10{,}00" data-plain="U′(0) = 10,00"></span> €/Tag bleibt unverändert):</p>
+    <div class="tabelle">
+    <table>
+      <tr><th>Δt in Tagen</th><th>Sekante</th><th>Eckanteil</th><th>Abstand zu U′ = 10,00</th></tr>
+      <tr><td>4,00</td><td>7,60</td><td>−2,40</td><td>2,40</td></tr>
+      <tr><td>2,00</td><td>8,80</td><td>−1,20</td><td>1,20</td></tr>
+      <tr><td>1,00</td><td>9,40</td><td>−0,60</td><td>0,60</td></tr>
+      <tr><td>0,50</td><td>9,70</td><td>−0,30</td><td>0,30</td></tr>
+      <tr><td>0,25</td><td>9,85</td><td>−0,15</td><td>0,15</td></tr>
+    </table>
+    </div>
+    <p>Am Maximum (<span class="m" data-tex="t^{*}=\tfrac{25}{3}\approx 8{,}33" data-plain="t* = 25/3 ≈ 8,33"></span> Tage) stehen +35,00 €/Tag gegen −35,00 €/Tag. Zu Simulation 2: Bei <span class="m" data-tex="t=40" data-plain="t = 40"></span> s ist <span class="m" data-tex="r=25" data-plain="r = 25"></span> m und <span class="m" data-tex="A=1963{,}50" data-plain="A = 1963,50"></span> m² (das 2,78-Fache, nicht das Doppelte), während <span class="m" data-tex="\mathrm{d}A/\mathrm{d}t=78{,}5398" data-plain="dA/dt = 78,5398"></span> m²/s genau das 25/15-Fache ist – die Rate wächst linear mit <span class="m" data-tex="r" data-plain="r"></span>, die Fläche quadratisch. Fehlerreihe für Δt = 2,00 · 1,00 · 0,50 · 0,25 s: 3,14159 · 0,78540 · 0,19635 · 0,04909 m², relativ 3,226 % · 1,639 % · 0,826 % · 0,415 %. Der Knopf „Zum Umsatzmaximum" setzt die Zeit exakt auf <span class="m" data-tex="t^{*}=8{,}333" data-plain="t* = 8,333"></span> Tage (angezeigt als 8,33), damit sich die Beiträge auf +35,00 und −35,00 €/Tag aufheben.</p>
+
+    <p><strong>Typische Schülerfehler – und wo anzuhalten ist.</strong></p>
+    <ul>
+      <li><span class="m" data-tex="(uv)'=u'v'" data-plain="(uv)′ = u′v′"></span>: der Leitfehler, Übertragung der Summenregel. Sofort in Abschnitt 2 anhalten, <em>bevor</em> die Produktregel steht: <span class="m" data-tex="x\cdot x" data-plain="x · x"></span> an die Tafel und beide Wege rechnen lassen (2x gegen 1). Aufgabe 8 prüft es später.</li>
+      <li>Innere Ableitung vergessen: in diesem Modul hat kein Beispiel die innere Ableitung 1. Nach dem ersten Kettenregel-Beispiel anhalten, durch Ausmultiplizieren gegenrechnen; Kursregel: die innere Ableitung zuerst hinschreiben.</li>
+      <li>Äußere Ableitung an der falschen Stelle ausgewertet: beim Merksatz die Leibniz-Schreibweise danebenstellen; bei <span class="m" data-tex="\mathrm{d}A/\mathrm{d}r=2\pi r" data-plain="dA/dr = 2πr"></span> ist klar, dass der aktuelle Radius einzusetzen ist.</li>
+      <li>Wert und Rate verwechselt (auch <span class="m" data-tex="r_0" data-plain="r₀"></span> statt <span class="m" data-tex="r(4)" data-plain="r(4)"></span> in Aufgabe 2): Tafelfrage „Welche der vier Zahlen in <span class="m" data-tex="u'v+uv'" data-plain="u′v + uv′"></span> hat welche Einheit?"</li>
+      <li>Vorzeichen und Reihenfolge in der Quotientenregel (Aufgabe 4 fängt −2,4 ab): Plausibilitätsprobe an <span class="m" data-tex="f(x)=1/x" data-plain="f(x) = 1/x"></span> einführen, dort muss die Ableitung negativ sein.</li>
+      <li>Nenner nicht quadriert oder vorher ausmultipliziert: Kursregel „Der Nenner bleibt als Quadrat stehen; im Zähler wird zusammengefasst."</li>
+      <li>Falsche Regelwahl bei verschachtelten Termen (Aufgabe 5): Frage schriftlich an die Tafel – welche Rechenoperation führe ich zuletzt aus? Die Zuordnung ist dafür gebaut.</li>
+      <li>„Die Simulation beweist es": am Hinweiskasten am Ende von Abschnitt 4 den Unterschied zwischen Plausibilisierung und Beweis klären.</li>
+      <li>Produkte mit drei Faktoren: konstante Faktoren gehören vor die Klammer; echte Dreifachprodukte siehe Differenzierung.</li>
+    </ul>
+
+    <p><strong>Differenzierung.</strong> Für schnellere Lernende: die Dreifaktorregel <span class="m" data-tex="(uvw)'=u'vw+uv'w+uvw'" data-plain="(uvw)′ = u′vw + uv′w + uvw′"></span> selbst herleiten (Quader statt Rechteck); <span class="m" data-tex="(g^{n})'=n\,g^{n-1}g'" data-plain="(gⁿ)′ = n·gⁿ⁻¹·g′"></span> per vollständiger Induktion beweisen; die Ableitung der Umkehrfunktion aus <span class="m" data-tex="f^{-1}(f(x))=x" data-plain="f⁻¹(f(x)) = x"></span> gewinnen; den Eckanteil über Δt auftragen (Ursprungsgerade mit Steigung <span class="m" data-tex="b\,d=-0{,}6" data-plain="b · d = −0,6"></span>); zu Aufgabe 7 fragen, für welche Preisänderungen b das Maximum im Zeitraum liegt (Formel für <span class="m" data-tex="t^{*}" data-plain="t*"></span> steht in Simulation 1). Für Lernende, die mehr Zeit brauchen: Pflichtteil sind die Aufgaben 1, 2 und die Zuordnung; von den Aufgaben im Anforderungsbereich III genügt Aufgabe 8. Die Details-Blöcke lassen sich in der Folgestunde nachholen. Eine Vorübung „nur die Regel nennen" hilft: <span class="m" data-tex="x^{2}(x+1)" data-plain="x²(x + 1)"></span>, <span class="m" data-tex="(x+1)^{5}" data-plain="(x + 1)⁵"></span>, <span class="m" data-tex="\frac{x}{x+1}" data-plain="x/(x + 1)"></span>, <span class="m" data-tex="\sqrt{3x}" data-plain="√(3x)"></span>, <span class="m" data-tex="3x^{2}+x" data-plain="3x² + x"></span> (der letzte braucht keine der neuen Regeln). Zwei der vier Funktionen der Zuordnung lassen sich ohne neue Regel durch Umformen kontrollieren; bei den Aufgaben 4 und 5 kann Hilfestufe 2 vorab freigegeben werden.</p>
+
+    <p><strong>Experimentbezug.</strong> Das Rechteck aus Papier: ein DIN-A4-Blatt, zwei Schnitte, ein Streifen oben, einer rechts, das Eck bleibt doppelt (bei 5 % Zuwachs in beide Richtungen 0,25 % der Fläche). Öltropfen oder Tinte auf Löschpapier: Radius per Handyvideo messen, daraus dr/dt und dA/dt bestimmen (dort ist r(t) nicht linear – ehrliches Experiment). Fahrrad-Übersetzung als Kettenregel im Wortsinn: Kettenblatt 50 Zähne, Ritzel 25, Rad 28 Zoll. Echte Preis-Absatz-Daten von Schulkiosk oder Mensa über mehrere Wochen. Anschluss Physik nach Einführung der e-Funktion: <span class="m" data-tex="U(t)=U_0\mathrm{e}^{-t/RC}" data-plain="U(t) = U₀·e^(−t/RC)"></span> mit dem Faktor <span class="m" data-tex="-1/RC" data-plain="−1/RC"></span> als innerer Ableitung. CAS oder GTR sinnvoll erst nach dieser Stunde und nur als Kontrollinstanz.</p>
+  </details>
+
+  <footer>
+    Mathematik LK Q1 · Produkt-, Ketten- und Quotientenregel · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/baustein-formelleiste.md
+var formelDaten = [
+  {abschnitt:"regeln", titel:"Produktregel und Kettenregel", formeln:[
+    {id:"produktregel", ziel:"f-produktregel", tex:"\\big(u(x)\\cdot v(x)\\big)' = u'(x)\\,v(x) + u(x)\\,v'(x)", plain:"(u(x) · v(x))′ = u′(x) · v(x) + u(x) · v′(x)",
+     zeichen:[
+       {tex:"u(x)", plain:"u(x)", text:"erster Faktor des Produkts"},
+       {tex:"v(x)", plain:"v(x)", text:"zweiter Faktor des Produkts"},
+       {tex:"u'(x)", plain:"u′(x)", text:"Ableitung des ersten Faktors"},
+       {tex:"v'(x)", plain:"v′(x)", text:"Ableitung des zweiten Faktors"}],
+     gilt:"u und v sind an der betrachteten Stelle differenzierbar. Die Regel gilt für jedes solche Produkt, auch wenn ein Faktor konstant ist.",
+     fehler:"Beide Faktoren getrennt ableiten und die Ergebnisse multiplizieren. Die Ableitung eines Produkts ist eine Summe aus zwei Produkten, in der jeweils ein Faktor abgeleitet wird und der andere stehen bleibt."},
+    {id:"kettenregel", ziel:"f-kettenregel", tex:"\\big(v(u(x))\\big)' = v'\\big(u(x)\\big)\\cdot u'(x)", plain:"(v(u(x)))′ = v′(u(x)) · u′(x)",
+     zeichen:[
+       {tex:"u(x)", plain:"u(x)", text:"innere Funktion"},
+       {tex:"v", plain:"v", text:"äußere Funktion"},
+       {tex:"v'\\big(u(x)\\big)", plain:"v′(u(x))", text:"äußere Ableitung, ausgewertet an der Stelle u(x)"},
+       {tex:"u'(x)", plain:"u′(x)", text:"innere Ableitung"}],
+     gilt:"u ist an der Stelle x differenzierbar und v an der Stelle u(x). Bei mehrfacher Verschachtelung wird die Regel von außen nach innen mehrfach angewendet.",
+     fehler:"Die innere Ableitung weglassen oder die äußere Ableitung an der Stelle x statt an der Stelle u(x) auswerten. Die äußere Funktion sieht die innere als ihr Argument."}
+  ]},
+  {abschnitt:"kombination", titel:"Die Quotientenregel", formeln:[
+    {id:"quotientenregel", ziel:"f-quotientenregel", tex:"\\left(\\dfrac{u(x)}{v(x)}\\right)' = \\dfrac{u'(x)\\,v(x) - u(x)\\,v'(x)}{\\big(v(x)\\big)^{2}}", plain:"(u(x)/v(x))′ = [u′(x) · v(x) − u(x) · v′(x)] / (v(x))²",
+     zeichen:[
+       {tex:"u(x)", plain:"u(x)", text:"Zählerfunktion"},
+       {tex:"v(x)", plain:"v(x)", text:"Nennerfunktion"},
+       {tex:"u'(x)", plain:"u′(x)", text:"Ableitung des Zählers"},
+       {tex:"v'(x)", plain:"v′(x)", text:"Ableitung des Nenners"}],
+     gilt:"u und v sind differenzierbar, und es gilt v(x) ≠ 0 an der betrachteten Stelle.",
+     fehler:"Zähler und Nenner getrennt ableiten, also u′/v′ rechnen, oder im Zähler die beiden Produkte vertauschen. Im Zähler steht zuerst die Ableitung des Zählers mal Nenner, davon wird abgezogen."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{r:1, fb:[
+    "Beim mittleren Summanden hast du zwar mit dem Exponenten multipliziert (−5 · 2 = −10), den Exponenten selbst aber stehen lassen. Die Potenzregel senkt ihn um eins: aus −5x² wird −10x¹, also −10x.",
+    "Richtig. Summanden einzeln ableiten, Vorfaktoren stehen lassen, Exponenten um eins senken: 3x⁴ → 12x³, −5x² → −10x, 2x → 2, −9 → 0.",
+    "Die letzten beiden Summanden sind unverändert stehen geblieben. 2x hat die konstante Steigung 2, nicht 2x; und eine additive Konstante wie −9 verschiebt den Graphen nur nach unten – auf die Steigung hat sie keinen Einfluss, ihre Ableitung ist 0."
+  ]},
+  vw2:{r:0, fb:[
+    "Richtig. Schreibe zuerst um: 1/x³ = x⁻³. Die Potenzregel senkt den Exponenten um eins, also −3 − 1 = −4, und liefert −3x⁻⁴ = −3/x⁴. Probe bei x = 2: −3/16.",
+    "Du hast den Exponenten −3 um eins erhöht statt gesenkt. Die Potenzregel senkt immer, auch bei negativen Exponenten: aus x⁻³ wird x⁻⁴, nicht x⁻².",
+    "Das Vorzeichen fehlt. Der Faktor, mit dem die Potenzregel multipliziert, ist der alte Exponent – und der ist hier −3, nicht +3. Inhaltlich passt das: 1/x³ fällt für x > 0, die Ableitung muss dort also negativ sein."
+  ]},
+  vw3:{r:2, fb:[
+    "Das wäre N(5), der Funktionswert. Die Ableitung misst nicht den Bestand, sondern seine Änderung. Im Modell N(t) = 400 − 6t ist N(5) = 370 – und N′(5) trotzdem −6.",
+    "Das wäre die Gesamtänderung N(5) − N(1), also eine Differenz über vier Tage. N′(5) ist dagegen eine Rate: eine Änderung pro Tag, an der Stelle t = 5.",
+    "Richtig. Die Ableitung ist die lokale Änderungsrate; ihre Einheit ist hier Personen pro Tag. Probe im Modell N(t) = 400 − 6t: N(5) = 370, N(6) = 364, Differenz −6. Genau diese Unterscheidung zwischen Wert und Rate brauchst du gleich bei jeder der drei neuen Regeln."
+  ]},
+  sim1:{r:1, fb:[
+    "20,80 €/Tag ist die Ableitung U′(t), die Steigung der Tangente – sie steht in der Anzeige „Ableitung U′(t)“. Die Sekante läuft von t = 6 bis t = 8 und liegt wegen des Eckanteils b·d·Δt = 0,20 · (−8) · 2 = −3,20 um genau diesen Betrag darunter.",
+    "Richtig. U(6) = 6,20 · 352 = 2182,40 €, U(8) = 6,60 · 336 = 2217,60 €, Differenz 35,20 € in 2 Tagen, also 17,60 €/Tag. Kontrolle über die Produktregel: U′ + Eckanteil = 20,80 + (−3,20) = 17,60.",
+    "Das Vorzeichen des Eckanteils ist vertauscht: Er beträgt b·d·Δt = 0,20 · (−8) · 2 = −3,20, weil d negativ ist. Zur Ableitung 20,80 kommt also −3,20 hinzu, nicht +3,20 (das wären die 24,00). Lies Ableitung und Eckanteil in der Anzeige ab und verknüpfe sie.",
+    "70,40 €/Tag ist nur der Preisbeitrag p′·n = 0,20 · 352. Der Mengenbeitrag p·n′ = 6,20 · (−8) = −49,60 €/Tag fehlt, dazu der Eckanteil. Beide Seiten des Rechtecks ändern sich gleichzeitig."
+  ]},
+  sim2:{r:2, fb:[
+    "8,33 Tage ist das Maximum für d = −6 aus dem Text, also der alte Wert. Die Lage von t* hängt aber von d ab: t* = −(b·400 + 5·d)/(2·b·d). Bei d = −7 liegt es früher; bei t = 8,33 ist der Umsatz mit 1993,06 € sogar kleiner als am Start.",
+    "Hier fehlt der Faktor 2 im Nenner: 7,14 ≈ 5/0,7 ist die Stelle, an der der Umsatz wieder auf den Startwert 2000,00 € zurückgefallen ist. Das Maximum liegt in der Mitte zwischen t = 0 und dieser Stelle, nämlich bei der Hälfte, t = 25/7 ≈ 3,57 Tage. Das folgt aus U′(t) = 5 − 1,4·t.",
+    "Richtig. U′(t) = 0,10 · (400 − 7t) + (5 + 0,10t) · (−7) = 5 − 1,4t, also t* = 25/7 ≈ 3,57 Tage. Dort ist p = 5,36 €, n = 375 und U = 2008,93 € – etwas mehr als die 2000,00 € am Start.",
+    "Das Maximum am Start gilt für d = −8: Dort ist U′(0) = 40 − 40 = 0. Bei d = −7 ist U′(0) = 0,10 · 400 + 5 · (−7) = +5 €/Tag, der Umsatz steigt also zunächst noch, das Maximum liegt später."
+  ]},
+  sim3:{r:0, fb:[
+    "Richtig. Radius r = 8 + 1,2 · 15 = 26 m, Ringbreite Δr = 1,2 · 1,5 = 1,8 m. Exakt: π · (27,8² − 26²) = π · 96,84 ≈ 304,23 m². Die Näherung 2π · 26 · 1,8 ≈ 294,05 m² liegt darunter; die Differenz π · Δr² ≈ 10,18 m² ist der Term zweiter Ordnung.",
+    "294,05 m² ist die Näherung „Umfang mal Ringbreite“ (2π · 26 · 1,8), nicht die exakte Ringfläche. Die exakte Fläche ist um den Fehlerterm π · Δr² = 10,18 m² größer, also 304,23 m². Beide Werte stehen in der Anzeige direkt untereinander.",
+    "Hier wurde Δr = Δt = 1,5 m gesetzt: π · (27,5² − 26²) ≈ 252,11 m². Die Ringbreite ist aber der Weg, den der Rand in der Zeit Δt zurücklegt, also Δr = c · Δt = 1,2 · 1,5 = 1,8 m. Die Geschwindigkeit c fehlt.",
+    "100,66 m² ergibt sich, wenn der Ring am Anfangsradius r₀ = 8 m statt am Radius zum Zeitpunkt t berechnet wird: π · (9,8² − 8²). Zum Zeitpunkt t = 15 s ist der Teppich aber schon auf r = 8 + 1,2 · 15 = 26 m angewachsen, und der Ring liegt weiter außen."
+  ]},
+  mc1:{r:1, fb:[
+    "Eine Nullstelle der Funktion hat mit der Ableitung nichts zu tun. Gegenbeispiel: f(x) = 2x − 3 hat bei x = 1,5 ebenfalls eine Nullstelle, aber überall die Steigung 2. Dass hier tatsächlich f′(1,5) = 0 gilt, liegt an der vierten Potenz, nicht an der Nullstelle.",
+    "Richtig. Kettenregel: äußere Ableitung 4(2x − 3)³, innere Ableitung 2, zusammen 8(2x − 3)³. Bei x = 1,5 ist der Klammerterm null, also f′(1,5) = 0. Der Graph berührt die x-Achse dort von oben – typisch für eine gerade Potenz.",
+    "Der Faktor 2 aus der inneren Ableitung fehlt; richtig ist 8(2x − 3)³. Vor allem aber ist die Begründung falsch: Die innere Ableitung ist konstant 2 und wird nirgends null. Null wird die innere Funktion – das ist etwas anderes.",
+    "2x − 3 ist eine Gerade; sie hat weder Minimum noch Maximum, sie steigt gleichmäßig. Ein Extremum hat hier nur die zusammengesetzte Funktion, und zwar deshalb, weil die vierte Potenz aus einem Vorzeichenwechsel ein Minimum macht."
+  ]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{wert:155, einheit:"m²/Jahr", tol:0.5,
+      ok:"Richtig. A′(t) = l′(t)·b(t) + l(t)·b′(t) = 3·(25+2t) + (40+3t)·2, also A′(0) = 3·25 + 40·2 = 75 + 80 = 155 m² pro Jahr.",
+      falschEinheit:"Der Zahlenwert stimmt. Gesucht ist aber eine Änderungsrate einer Fläche, also Quadratmeter pro Jahr – m² allein wäre ein Flächeninhalt, m/Jahr die Wachstumsrate einer einzelnen Seite.",
+      nah:"Du hast vermutlich nur einen der beiden Summanden gerechnet: 3·25 = 75 (die Verlängerung entlang der Breite) oder 40·2 = 80 (die Verbreiterung entlang der Länge). Beide Streifen entstehen gleichzeitig, beide zählen.",
+      weit:"Liegt dein Wert bei etwa der Hälfte von 155 (75 oder 80)? Dann fehlt ein Summand: 3·25 = 75 (Verlängerung) oder 40·2 = 80 (Verbreiterung) – beide Streifen entstehen gleichzeitig, beide zählen. Andernfalls: 6 m²/Jahr wäre das Produkt der beiden Ableitungen 3·2 – das ist nur das kleine Eckquadrat, das in einem Jahr hinzukommt, und damit der kleinste der drei Beiträge. Rechne die beiden großen Streifen zuerst: 3 m mehr Länge über 25 m Breite und 2 m mehr Breite über 40 m Länge."},
+  a2:{wert:100.53, einheit:"cm³/s", tol:0.15,
+      ok:"Richtig. r(4) = 4,0 cm; V′(t) = 4πr²·r′ = 4π·16·0,5 = 32π ≈ 100,53 cm³/s.",
+      falschEinheit:"Der Zahlenwert stimmt. Ein Volumen pro Zeit wird in cm³ pro Sekunde gemessen; cm²/s wäre eine Flächenänderung, cm³ ein Volumen ohne Zeitbezug.",
+      nah:"Prüfe zuerst den Radius: Gefragt ist der Zeitpunkt t = 4 s, dort ist r(4) = 2 + 0,5·4 = 4,0 cm – nicht 2 cm und nicht 3,5 cm. Eingesetzt wird r(4), abgeleitet wird nach t.",
+      weit:"201,06 cm³/s ist genau das Doppelte des richtigen Werts: Dir fehlt die innere Ableitung r′ = 0,5. Der Ausdruck 4πr² allein ist die Kugeloberfläche (64π ≈ 201,06) und hat die Einheit cm², keine Rate. 25,13 cm³/s bekommt man, wenn man r = 2 statt r(4) = 4 einsetzt."},
+  a3:{wert:2.4, einheit:"mg/(L·h)", tol:0.02,
+      ok:"Richtig. c′(t) = (80 − 20t²)/(t² + 4)², also c′(1) = 60/25 = 2,4 mg pro Liter und Stunde.",
+      falschEinheit:"Der Zahlenwert stimmt. Gefragt ist aber eine Änderungsrate: Konzentration pro Zeit, also mg/(L·h). mg/L wäre die Konzentration selbst – die beträgt bei t = 1 übrigens 4 mg/L.",
+      nah:"Das Vorzeichen passt nicht. −2,4 entsteht, wenn man die beiden Summanden im Zähler vertauscht: Die Quotientenregel beginnt mit der Ableitung des Zählers, also u′v − uv′ und nicht uv′ − u′v. Inhaltlich muss der Wert positiv sein – eine Stunde nach der Einnahme steigt die Konzentration noch, ihr Maximum liegt erst bei t = 2 h.",
+      weit:"10 mg/(L·h) bekommt man mit der falschen Regel u′/v′ = 20/(2t). Dass sie falsch ist, siehst du an x²/x: gekürzt ist das x mit der Steigung 1, die naive Rechnung liefert 2x. 12 mg/(L·h) entsteht, wenn der Nenner nicht quadriert wird – in der Quotientenregel steht v², hier also (t² + 4)² = 25."},
+  a4:{wert:62.83, einheit:"cm³/s", tol:0.1,
+      ok:"Richtig. V′(t) = π(2r·r′·h + r²·h′); bei t = 5 ist r = 4,0 cm und h = 17,5 cm, also V′(5) = π(2·4·0,2·17,5 + 16·(−0,5)) = π(28 − 8) = 20π ≈ 62,83 cm³/s. Positiv – das Gefäß fasst zu diesem Zeitpunkt noch mehr.",
+      falschEinheit:"Der Zahlenwert stimmt. Ein Fassungsvermögen ändert sich in Kubikzentimetern pro Sekunde; cm²/s wäre eine Flächenrate, cm³ ein Volumen.",
+      nah:"87,96 cm³/s ist 28π – das ist nur der erste Summand. Du hast den Beitrag der sinkenden Höhe unterschlagen: r²·h′ = 16·(−0,5) = −8 zieht π·8 ≈ 25,13 cm³/s wieder ab. Beim Produkt zählen immer beide Beiträge, auch wenn einer negativ ist.",
+      weit:"414,69 cm³/s entsteht, wenn r² wie ein einfaches r behandelt wird: Die Ableitung von r(t)² ist nach der Kettenregel 2·r(t)·r′(t) = 2·4·0,2 = 1,6 und nicht 2·r(t) = 8. −25,13 cm³/s ist umgekehrt nur der zweite Summand. Rechne beide Summanden getrennt auf und addiere sie erst am Schluss."},
+  a5:{wert:20, einheit:"Tage", tol:0.2, alt:{wert:480, einheit:"Stunden"},
+      ok:"Richtig. U′(t) = 0,20·(300 − 5t) + (4,00 + 0,20t)·(−5) = (60 − t) + (−20 − t) = 40 − 2t; Nullstelle bei t = 20 Tagen. Wegen U″ = −2 < 0 liegt dort das Maximum mit U(20) = 8,00 € · 200 = 1600 €.",
+      falschEinheit:"Der Zahlenwert stimmt, aber gefragt ist ein Zeitpunkt. 20 Tage (oder gleichwertig 480 Stunden) – nicht Euro und nicht Euro pro Tag. 1600 € wäre der zugehörige Umsatz, nicht der Tag.",
+      nah:"Prüfe die beiden Summanden einzeln: p′·n = 0,20·(300 − 5t) = 60 − t und p·n′ = (4,00 + 0,20t)·(−5) = −20 − t. Ihre Summe ist 40 − 2t. Wenn bei dir stattdessen 40 − t oder 60 − 2t herauskommt, ist beim Ausmultiplizieren einer der beiden Terme verloren gegangen.",
+      weit:"Kommt bei dir t = 40 heraus? Dann ist beim Ausmultiplizieren ein Term verloren gegangen (40 − t statt 40 − 2t): p′·n = 60 − t und p·n′ = −20 − t, beide zusammen 40 − 2t. Sonst: Setze nicht U(t), sondern U′(t) gleich null – gesucht ist die Stelle, an der der Umsatz aufhört zu steigen, nicht die, an der er verschwindet. t = 60 ist die Nullstelle von n(t), dort ist niemand mehr im Bad. Und wenn dein U′(t) gar kein t mehr enthält (etwa die Konstante 80), hast du das Minuszeichen von n′ zweimal gezählt."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.z1 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier stimmen. Beachte, wie nah die beiden Brüche beieinanderliegen und wie unterschiedlich ihre Ableitungen aussehen – beim Quotienten entscheidet die Reihenfolge von Zähler und Nenner alles.";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Zwei Strategien helfen: Erstens entscheidet die äußerste Rechenoperation über die Regel – Potenz, Produkt oder Division. Zweitens kannst du zwei der vier Ableitungen ohne jede Regel kontrollieren, indem du die Funktion vorher umformst (ausmultiplizieren bzw. gliedweise dividieren).";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation 1: Umsatzrechteck (Produktregel) ============ */
+(function(){
+  var cvR = document.getElementById("cvRecht"), ctxR = cvR.getContext("2d");
+  var cvU = document.getElementById("cvU"), ctxU = cvU.getContext("2d");
+
+  // Umrechnung Pixel <-> Sachgröße (Rechteck-Canvas)
+  var OX = 90, OY = 390;      // Ursprung in Pixeln
+  var SX = 1.4;               // Pixel pro Besucher  (600 Besucher = 840 px)
+  var SY = 24;                // Pixel pro Euro      (14 Euro = 336 px)
+  function px(n){ return OX + SX * n; }
+  function py(p){ return OY - SY * p; }
+  // Umsatzdiagramm: t = 0 ... 25 Tage waagerecht fest, senkrecht mitskalierend
+  var AX0 = 90, AX1 = 950, AY0 = 250, AY1 = 50, TMAX_D = 25;
+  var P0 = 5.00, N0 = 400;    // feste Grundwerte
+  var GRUEN = "#0d7a52", ROT = "#b91c1c", BRAUN = "#b45309";
+
+  var tw = 0, dt = 1.0, b = 0.10, d = -6;   // Zustand (tw = Wert der Zeit)
+  var tExakt = null;          // gesetzt, wenn "Zum Umsatzmaximum" die Zeit exakt auf t* legt
+  var laeuft = false, letzte = null, tFloat = 0;
+
+  var rT = document.getElementById("rT"), rDt = document.getElementById("rDt"),
+      rB = document.getElementById("rB"), rD = document.getElementById("rD");
+  var bPlay = document.getElementById("bPlay"), bMax = document.getElementById("bMax"),
+      bReset = document.getElementById("bReset"), meldung = document.getElementById("maxMeldung");
+  var TIPP = meldung.textContent;
+
+  function fmt(z, n){
+    var s = z.toFixed(n);
+    if(/^-0([.]0*)?$/.test(s)) s = s.slice(1);
+    return s.replace(".", ",").replace("-", "−");
+  }
+  function vz(z, n){ var s = fmt(z, n); return (z > 0 && s.charAt(0) !== "−" && parseFloat(s.replace(",", ".")) !== 0) ? "+" + s : s; }
+  function set(id, txt){ document.getElementById(id).textContent = txt; }
+
+  function pF(t){ return P0 + b * t; }
+  function nF(t){ return N0 + d * t; }
+  function uF(t){ return pF(t) * nF(t); }
+  function tStern(){ return (b * d !== 0) ? -(b * N0 + P0 * d) / (2 * b * d) : NaN; }
+
+  function werte(){
+    var t = tw, p = pF(t), n = nF(t), U = p * n;
+    var dp = b * dt, dn = d * dt;
+    var U1 = uF(t + dt);
+    return { t:t, p:p, n:n, U:U, dp:dp, dn:dn,
+             bp: b * n, bn: p * d, us: b * n + p * d,
+             sek: (U1 - U) / dt, eck: b * d * dt, U1:U1 };
+  }
+
+  function lesen(){
+    dt = rDt.value * 0.25; b = rB.value / 100; d = parseInt(rD.value, 10);
+    tw = (tExakt !== null) ? tExakt : rT.value / 10;
+  }
+
+  function anzeigen(){
+    var w = werte();
+    set("lT", tExakt !== null ? fmt(w.t, 2) : fmt(Math.round(w.t * 10) / 10, 1));
+    set("lDt", fmt(dt, 2)); set("lB", fmt(b, 2)); set("lD", fmt(d, 0));
+    set("anzT", (tExakt !== null ? fmt(w.t, 2) : fmt(Math.round(w.t * 10) / 10, 1)) + " Tage");
+    set("anzP", fmt(w.p, 2) + " €");
+    set("anzN", fmt(w.n, 1));
+    set("anzU", fmt(w.U, 2) + " €");
+    set("anzBp", fmt(w.bp, 2) + " €/Tag");
+    set("anzBn", fmt(w.bn, 2) + " €/Tag");
+    set("anzUs", fmt(w.us, 2) + " €/Tag");
+    set("anzSek", fmt(w.sek, 2) + " €/Tag");
+    set("anzEck", fmt(w.eck, 2) + " €/Tag");
+  }
+
+  // ---- Eingaben ----
+  [rDt, rB, rD].forEach(function(r){
+    r.addEventListener("input", function(){ tExakt = null; lesen(); zeichne(); });
+  });
+  rT.addEventListener("input", function(){
+    tExakt = null; tFloat = parseFloat(rT.value); lesen(); zeichne();
+  });
+  bPlay.addEventListener("click", function(){
+    if(!laeuft && tw >= 21 - 1e-9){ tExakt = null; rT.value = 0; tFloat = 0; lesen(); }
+    laeuft = !laeuft; letzte = null;
+    bPlay.textContent = laeuft ? "❚❚ Pause" : "▶ Start";
+    if(laeuft){ tExakt = null; tFloat = tw * 10; requestAnimationFrame(schritt); }
+    zeichne();
+  });
+  bMax.addEventListener("click", function(){
+    var ts = tStern();
+    if(isFinite(ts) && ts >= 0 && ts <= 21){
+      laeuft = false; bPlay.textContent = "▶ Start";
+      tExakt = ts; rT.value = Math.round(ts * 10);
+      meldung.textContent = TIPP;
+      lesen(); zeichne();
+    } else {
+      meldung.textContent = "Im einstellbaren Zeitraum bis 21 Tage gibt es kein Maximum — der Umsatz ist durchgehend monoton.";
+    }
+  });
+  bReset.addEventListener("click", function(){
+    laeuft = false; bPlay.textContent = "▶ Start"; tExakt = null; tFloat = 0;
+    rT.value = 0; rDt.value = 4; rB.value = 10; rD.value = -6;
+    meldung.textContent = TIPP; lesen(); zeichne();
+  });
+
+  // ---- Ziehen im Umsatzdiagramm (Zeigerereignisse) ----
+  var greift = false;
+  function tAusEvent(ev){
+    var r = cvU.getBoundingClientRect();
+    var xp = (ev.clientX - r.left) / r.width * cvU.width;
+    var t = (xp - AX0) / (AX1 - AX0) * TMAX_D;
+    return Math.max(0, Math.min(21, t));
+  }
+  cvU.addEventListener("pointerdown", function(ev){
+    greift = true; cvU.setPointerCapture(ev.pointerId);
+    laeuft = false; bPlay.textContent = "▶ Start";
+    tExakt = null; rT.value = Math.round(tAusEvent(ev) * 10); lesen(); zeichne();
+  });
+  cvU.addEventListener("pointermove", function(ev){
+    if(!greift) return;
+    tExakt = null; rT.value = Math.round(tAusEvent(ev) * 10); lesen(); zeichne();
+    ev.preventDefault();
+  });
+  function loslassen(){ greift = false; }
+  cvU.addEventListener("pointerup", loslassen);
+  cvU.addEventListener("pointercancel", loslassen);
+  cvU.style.touchAction = "pan-y";
+
+  // ---- Animation: 2,0 Tage pro Sekunde bis 21,0 ----
+  function schritt(jetzt){
+    if(!laeuft) return;
+    if(letzte === null) letzte = jetzt;
+    var dtFrame = Math.min(0.05, (jetzt - letzte) / 1000);
+    letzte = jetzt;
+    tFloat += 20 * dtFrame;                 // Reglereinheiten (1 Einheit = 0,1 Tag)
+    if(tFloat >= 210){
+      tFloat = 210; laeuft = false; bPlay.textContent = "▶ Start";
+    }
+    rT.value = Math.round(tFloat); lesen(); zeichne();
+    if(laeuft) requestAnimationFrame(schritt);
+  }
+
+  // ---- Zeichnen: Rechteck ----
+  function flaeche(x0, y0, x1, y1, farbe){
+    ctxR.fillStyle = farbe;
+    ctxR.fillRect(Math.min(x0, x1), Math.min(y0, y1), Math.abs(x1 - x0), Math.abs(y1 - y0));
+  }
+    function kk(){ var w = cvR.clientWidth || 1000; return Math.max(1, Math.min(1.7, 700 / w)); }
+function zeichneRecht(){
+    var w = werte(), c = ctxR, W = cvR.width, H = cvR.height;
+    c.clearRect(0, 0, W, H); c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+
+    // Achsen und Teilstriche
+    c.strokeStyle = "#94a3b8"; c.lineWidth = 1; c.fillStyle = "#5b6b7f"; c.font = "" + Math.round(12*kk()) + "px sans-serif";
+    c.beginPath(); c.moveTo(OX, OY); c.lineTo(px(600) + 10, OY); c.moveTo(OX, OY); c.lineTo(OX, py(14) - 10); c.stroke();
+    c.textAlign = "center"; c.textBaseline = "top";
+    for(var n = 0; n <= 600; n += 100){ c.fillText(String(n), px(n), OY + 5); c.beginPath(); c.moveTo(px(n), OY); c.lineTo(px(n), OY + 4); c.stroke(); }
+    c.textAlign = "right"; c.textBaseline = "middle";
+    for(var p = 0; p <= 14; p += 2){ c.fillText(String(p), OX - 8, py(p)); c.beginPath(); c.moveTo(OX - 4, py(p)); c.lineTo(OX, py(p)); c.stroke(); }
+    c.textAlign = "center"; c.textBaseline = "top"; c.fillText("Besucherzahl n", px(300), OY + 24*kk());
+    c.textAlign = "left"; c.textBaseline = "middle"; c.fillText("Preis p in €", 8, py(14) - 14);
+
+    // 2. Grundrechteck
+    c.fillStyle = "#e7f6ef"; c.fillRect(OX, py(w.p), px(w.n) - OX, OY - py(w.p));
+    c.strokeStyle = GRUEN; c.lineWidth = 2; c.strokeRect(OX, py(w.p), px(w.n) - OX, OY - py(w.p));
+    c.fillStyle = "#0b5c3e"; c.font = "bold " + Math.round(15*kk()) + "px sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
+    c.fillText("U = p · n = " + fmt(w.U, 2) + " €", (OX + px(w.n)) / 2, (OY + py(w.p)) / 2);
+
+    // 3. Mengenbeitrag p·Δn
+    flaeche(px(w.n), OY, px(w.n + w.dn), py(w.p), w.dn >= 0 ? "rgba(13,122,82,.35)" : "rgba(185,28,28,.35)");
+    // 4. Preisbeitrag n·Δp
+    flaeche(OX, py(w.p), px(w.n), py(w.p + w.dp), w.dp >= 0 ? "rgba(13,122,82,.35)" : "rgba(185,28,28,.35)");
+    // 5. Eckstück Δp·Δn, schraffiert, zuletzt
+    var ex0 = Math.min(px(w.n), px(w.n + w.dn)), ex1 = Math.max(px(w.n), px(w.n + w.dn));
+    var ey0 = Math.min(py(w.p), py(w.p + w.dp)), ey1 = Math.max(py(w.p), py(w.p + w.dp));
+    c.save(); c.beginPath(); c.rect(ex0, ey0, ex1 - ex0, ey1 - ey0); c.clip();
+    c.strokeStyle = BRAUN; c.lineWidth = 1.2;
+    for(var k = ex0 - (ey1 - ey0); k < ex1 + 6; k += 6){ c.beginPath(); c.moveTo(k, ey1); c.lineTo(k + (ey1 - ey0), ey0); c.stroke(); }
+    c.restore();
+    c.strokeStyle = BRAUN; c.lineWidth = 1.5; c.strokeRect(ex0, ey0, ex1 - ex0, ey1 - ey0);
+
+    // Legende rechts oben
+    var lx = 560, ly = 20, LZ = Math.round(22*kk());
+    var zeilen = [
+      ["rgba(13,122,82,.55)", "p·Δn (Mengenbeitrag)", w.p * w.dn],
+      ["rgba(13,122,82,.55)", "n·Δp (Preisbeitrag)", w.n * w.dp],
+      [BRAUN, "Δp·Δn (Eckstück)", w.dp * w.dn]
+    ];
+    if(w.dn < 0) zeilen[0][0] = "rgba(185,28,28,.55)";
+    if(w.dp < 0) zeilen[1][0] = "rgba(185,28,28,.55)";
+    c.font = "" + Math.round(13*kk()) + "px sans-serif"; c.textAlign = "left"; c.textBaseline = "middle";
+    zeilen.forEach(function(z, i){
+      var y = ly + i * LZ;
+      c.fillStyle = z[0]; c.fillRect(lx, y - 7*kk(), 14*kk(), 14*kk());
+      c.fillStyle = "#1f2a37"; c.fillText(z[1] + " = " + vz(z[2], 2) + " €", lx + 22*kk(), y);
+    });
+    c.fillStyle = "#1f2a37"; c.font = "bold " + Math.round(13*kk()) + "px sans-serif";
+    c.fillText("Summe = ΔU = " + vz(w.U1 - w.U, 2) + " €", lx, ly + 3 * LZ + 4);
+  }
+
+  // ---- Zeichnen: Umsatz über der Zeit ----
+  function zeichneU(){
+    var w = werte(), c = ctxU, W = cvU.width, H = cvU.height;
+    c.clearRect(0, 0, W, H); c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+    var ts = tStern(), tsIn = isFinite(ts) && ts >= 0 && ts <= TMAX_D;
+    var Umin = Math.min(uF(0), uF(TMAX_D)), Umax = Math.max(uF(0), uF(TMAX_D));
+    if(tsIn){ Umin = Math.min(Umin, uF(ts)); Umax = Math.max(Umax, uF(ts)); }
+    var spanne = Umax - Umin; if(spanne < 1) spanne = 1;
+    var Uu = Umin - 0.1 * spanne, Uo = Umax + 0.1 * spanne;
+    function pxT(t){ return AX0 + (AX1 - AX0) * t / TMAX_D; }
+    function pyU(U){ return AY0 - (AY0 - AY1) * (U - Uu) / (Uo - Uu); }
+
+    // Achsen
+    c.strokeStyle = "#94a3b8"; c.lineWidth = 1;
+    c.beginPath(); c.moveTo(AX0, AY1 - 10); c.lineTo(AX0, AY0); c.lineTo(AX1 + 10, AY0); c.stroke();
+    c.fillStyle = "#5b6b7f"; c.font = "" + Math.round(12*kk()) + "px sans-serif"; c.textAlign = "center"; c.textBaseline = "top";
+    for(var tt = 0; tt <= TMAX_D; tt += 5){ c.fillText(String(tt), pxT(tt), AY0 + 5); }
+    c.fillText("t in Tagen", pxT(12.5), AY0 + 22*kk());
+    c.textAlign = "right"; c.textBaseline = "middle";
+    c.fillText(fmt(Uu, 0), AX0 - 8, AY0); c.fillText(fmt((Uu + Uo) / 2, 0), AX0 - 8, (AY0 + AY1) / 2); c.fillText(fmt(Uo, 0), AX0 - 8, AY1);
+    c.textAlign = "left"; c.fillText("U in €", 8, AY1 - 24);
+
+    // Maximum-Hilfslinie
+    if(tsIn){
+      c.strokeStyle = "#94a3b8"; c.setLineDash([4, 4]);
+      c.beginPath(); c.moveTo(pxT(ts), AY0); c.lineTo(pxT(ts), AY1); c.stroke(); c.setLineDash([]);
+      c.fillStyle = "#5b6b7f"; c.textAlign = "left"; c.textBaseline = "bottom"; c.fillText("Maximum", pxT(ts) + 5, AY0 - 6);
+    }
+
+    // 1. vollständige Kurve blass, 2. durchlaufener Teil kräftig
+    function kurve(t0, t1){
+      c.beginPath();
+      for(var i = 0; i <= 100; i++){ var t = t0 + (t1 - t0) * i / 100; var x = pxT(t), y = pyU(uF(t)); if(i === 0) c.moveTo(x, y); else c.lineTo(x, y); }
+      c.stroke();
+    }
+    c.strokeStyle = "rgba(13,122,82,.25)"; c.lineWidth = 2; kurve(0, TMAX_D);
+    c.strokeStyle = GRUEN; c.lineWidth = 2.5; if(w.t > 0) kurve(0, w.t);
+
+    // Sekante und Tangente (geklippt auf den Zeichenbereich)
+    c.save(); c.beginPath(); c.rect(AX0, AY1 - 12, AX1 - AX0 + 10, AY0 - AY1 + 12); c.clip();
+    function gerade(steig, farbe, dash){
+      c.strokeStyle = farbe; c.lineWidth = 2; c.setLineDash(dash);
+      c.beginPath(); c.moveTo(pxT(w.t - 3), pyU(w.U - 3 * steig)); c.lineTo(pxT(w.t + 3), pyU(w.U + 3 * steig)); c.stroke(); c.setLineDash([]);
+    }
+    gerade(w.sek, BRAUN, [7, 5]);
+    gerade(w.us, GRUEN, []);
+    c.restore();
+
+    // Punkte
+    c.fillStyle = GRUEN; c.beginPath(); c.arc(pxT(w.t), pyU(w.U), 5, 0, 6.2832); c.fill();
+    c.fillStyle = BRAUN; c.beginPath(); c.arc(pxT(w.t + dt), pyU(w.U1), 4, 0, 6.2832); c.fill();
+    // Legende
+    c.font = "" + Math.round(12*kk()) + "px sans-serif"; c.textAlign = "left"; c.textBaseline = "middle";
+    c.fillStyle = GRUEN; c.fillText("── Tangente (U′)", AX0 + 20, 22*kk());
+    c.fillStyle = BRAUN; c.fillText("- - Sekante (ΔU/Δt)", AX0 + 170*kk(), 22*kk());
+  }
+
+  function zeichne(){ anzeigen(); zeichneRecht(); zeichneU(); }
+  lesen(); zeichne();
+})();
+
+/* ============ Simulation 2: Ölring (Kettenregel) ============ */
+(function(){
+  var cv = document.getElementById("cvKette"), c = cv.getContext("2d");
+  // Umrechnung: 1 m = 1 px (größter Radius 120 m); Mittelpunkt links, Balken rechts
+  var MX = 240, MY = 170;
+  var BX = 480, BW = 460;     // linke Kante der Balken, volle Balkenlänge
+
+  var rR0 = document.getElementById("rR0"), rC = document.getElementById("rC"),
+      rTk = document.getElementById("rTk"), rDtk = document.getElementById("rDtk");
+
+  function kk(){ var w = cv.clientWidth || 1000; return Math.max(1, Math.min(1.7, 700 / w)); }
+  function fmt(z, n){ return z.toFixed(n).replace(".", ","); }
+  function set(id, txt){ document.getElementById(id).textContent = txt; }
+
+  function zeichne(){
+    var r0 = parseInt(rR0.value, 10), cc = rC.value / 10, t = rTk.value / 2, dt = rDtk.value * 0.25;
+    var r = r0 + cc * t, A = Math.PI * r * r, dAdr = 2 * Math.PI * r, dAdt = dAdr * cc;
+    var dr = cc * dt;
+    var ex = Math.PI * ((r + dr) * (r + dr) - r * r), na = 2 * Math.PI * r * dr, fe = Math.PI * dr * dr;
+    var rel = fe / ex * 100;
+
+    set("lR0", fmt(r0, 0)); set("lC", fmt(cc, 1)); set("lTk", fmt(t, 1)); set("lDtk", fmt(dt, 2));
+    set("anzR", fmt(r, 3) + " m"); set("anzA", fmt(A, 3) + " m²");
+    set("anzDAdr", fmt(dAdr, 4) + " m"); set("anzDrdt", fmt(cc, 2) + " m/s");
+    set("anzDAdt", fmt(dAdt, 4) + " m²/s");
+    set("anzRingEx", fmt(ex, 5) + " m²"); set("anzRingNa", fmt(na, 5) + " m²");
+    set("anzFehler", fmt(fe, 5) + " m² (" + fmt(rel, 3) + " %)");
+
+    var W = cv.width, H = cv.height, kb = Math.min(kk(), 1.25);
+    c.clearRect(0, 0, W, H); c.fillStyle = "#fff"; c.fillRect(0, 0, W, H);
+
+    // Teppich
+    c.fillStyle = "#e7f6ef"; c.beginPath(); c.arc(MX, MY, r, 0, 6.2832); c.fill();
+    c.strokeStyle = "#0d7a52"; c.lineWidth = 2; c.beginPath(); c.arc(MX, MY, r, 0, 6.2832); c.stroke();
+    // Ring (Mindeststrichstärke 2 px)
+    c.strokeStyle = "rgba(180,83,9,.45)"; c.lineWidth = Math.max(2, dr);
+    c.beginPath(); c.arc(MX, MY, r + dr / 2, 0, 6.2832); c.stroke();
+    // Maßpfeil
+    c.strokeStyle = "#1f2a37"; c.lineWidth = 1.5;
+    c.beginPath(); c.moveTo(MX, MY); c.lineTo(MX + r, MY); c.stroke();
+    c.beginPath(); c.moveTo(MX + r - 7, MY - 4); c.lineTo(MX + r, MY); c.lineTo(MX + r - 7, MY + 4); c.stroke();
+    c.fillStyle = "#1f2a37"; c.font = "" + Math.round(13*kk()) + "px sans-serif"; c.textAlign = "center"; c.textBaseline = "bottom";
+    c.fillText("r = " + fmt(r, 1) + " m", MX + r / 2, MY - 4);
+    c.font = "bold " + Math.round(14*kk()) + "px sans-serif"; c.textBaseline = "top";
+    c.fillText("A = π r² = " + fmt(A, 1) + " m²", MX, 296);
+    c.font = "" + Math.round(11*kk()) + "px sans-serif"; c.fillStyle = "#5b6b7f";
+    c.fillText("Ringbreite zur Sichtbarkeit mindestens 2 px dargestellt", MX, 322);
+
+    // Balken mit gemeinsamer Skala
+    var skala = BW / Math.max(ex, na);
+    var bal = [
+      ["Ringfläche exakt: π((r+Δr)² − r²)", ex, "#b45309"],
+      ["Näherung: Umfang · Ringbreite = 2πr·Δr", na, "#0d7a52"],
+      ["Differenz π·Δr²", fe, "#64748b"]
+    ];
+    bal.forEach(function(z, i){
+      var yb = 70 + i * 60;
+      c.fillStyle = "#1f2a37"; c.font = Math.round(13*kb) + "px sans-serif"; c.textAlign = "left"; c.textBaseline = "bottom";
+      c.fillText(z[0], BX, yb - 6);
+      c.fillStyle = z[2]; c.fillRect(BX, yb, z[1] * skala, 34);
+      var vt = fmt(z[1], 5) + " m²", bl = z[1] * skala;
+      c.textBaseline = "middle";
+      if(bl > 200){ c.fillStyle = "#fff"; c.textAlign = "right"; c.fillText(vt, BX + bl - 8, yb + 17); }
+      else { c.fillStyle = "#1f2a37"; c.textAlign = "left"; c.fillText(vt, BX + bl + 8, yb + 17); }
+    });
+  }
+
+  [rR0, rC, rTk, rDtk].forEach(function(r){ r.addEventListener("input", zeichne); });
+  document.getElementById("bResetK").addEventListener("click", function(){
+    rR0.value = 5; rC.value = 5; rTk.value = 40; rDtk.value = 4; zeichne();
+  });
+  zeichne();
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1 – Potenz- und Summenregel",
+    vw2:"Vorwissen 2 – negative Exponenten",
+    vw3:"Vorwissen 3 – Ableitung als Änderungsrate",
+    sim1:"Simulation 1 – Sekantensteigung ablesen",
+    sim2:"Simulation 1 – Umsatzmaximum bei d = −7",
+    sim3:"Simulation 2 – exakte Ringfläche ablesen",
+    a1:"Aufgabe 1 – Solarfeld, Produktregel",
+    a2:"Aufgabe 2 – Wetterballon, Kettenregel",
+    mc1:"Aufgabe 3 – waagerechte Tangente bei (2x − 3)⁴",
+    a3:"Aufgabe 4 – Wirkstoffkonzentration, Quotientenregel",
+    a4:"Aufgabe 5 – Zylinder, Produkt- und Kettenregel",
+    z1:"Aufgabe 6 – Zuordnung der vier Ableitungen",
+    a5:"Aufgabe 7 – Umsatzmaximum"
+  };
+  var zeilen = ["Produkt-, Ketten- und Quotientenregel – Mathematik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Aufgabe " + (i + 8) + ":\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>

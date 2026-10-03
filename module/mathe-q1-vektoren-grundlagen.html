@@ -1,0 +1,1603 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vektoren: Grundlagen – Mathematik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#0d7a52;
+  --akzent-hell:#e7f6ef;
+  --akzent-rand:#b5e0cd;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#0b5c3e,#0d7a52);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#0b6845;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+@media (max-width:600px){
+  button{min-height:44px}
+  .regler input[type=range]{height:32px}
+  .zeile select,.eingabe select,.eingabe input[type=number]{min-height:44px}
+  #cSchn{width:24px !important;height:24px !important}
+}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Mathematik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Vektoren: Grundlagen – Rechnen im Raum und lineare Unabhängigkeit</h1>
+    <div class="meta">
+      <span class="chip">Inhaltsfeld: Analytische Geometrie und Lineare Algebra</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+      <span class="chip">ca. 120 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Eine Drohne soll ein Gebäude inspizieren. Sie startet im Punkt <span class="m" data-tex="O(0\,|\,0\,|\,0)" data-plain="O(0|0|0)"></span>, alle Angaben sind in Metern. Der Flugplan besteht aus zwei Verschiebungen: Zuerst fliegt sie 20 m in <span class="m" data-tex="x_1" data-plain="x₁"></span>-Richtung und steigt dabei um 5 m, dann fliegt sie 30 m in <span class="m" data-tex="x_2" data-plain="x₂"></span>-Richtung und steigt wieder um 5 m. Jede Verschiebung hat eine Richtung und eine Länge und lässt sich deshalb durch drei Zahlen beschreiben, nämlich die Änderung der drei Koordinaten: <span class="m" data-tex="\begin{pmatrix}20\\0\\5\end{pmatrix}" data-plain="(20|0|5)"></span> und <span class="m" data-tex="\begin{pmatrix}0\\30\\5\end{pmatrix}" data-plain="(0|30|5)"></span>. So eine Zahlenspalte heißt <strong>Vektor</strong>.</p>
+
+  <p>Nach beiden Teilflügen befindet sich die Drohne im Punkt <span class="m" data-tex="(20\,|\,30\,|\,10)" data-plain="(20|30|10)"></span> und damit gut 37 m Luftlinie vom Start entfernt. Um auf direktem Weg zurückzufliegen, braucht sie die Verschiebung <span class="m" data-tex="\begin{pmatrix}-20\\-30\\-10\end{pmatrix}" data-plain="(−20|−30|−10)"></span>, also das Entgegengesetzte des gesamten Hinflugs.</p>
+
+  <details>
+    <summary>Woher kommen 37 m?</summary>
+    <p>Die Luftlinie zwischen Start und Ziel ist die Länge der Gesamtverschiebung. Der Satz des Pythagoras wird zweimal angewendet, erst für die Strecke am Boden, dann für die Höhe dazu. Es ergibt sich <span class="m" data-tex="\sqrt{20^{2} + 30^{2} + 10^{2}} = \sqrt{1400} \approx 37{,}4\,\mathrm{m}" data-plain="√(20² + 30² + 10²) = √1400 ≈ 37,4 m"></span>. Warum das so ist, klärst du in Abschnitt 2.</p>
+  </details>
+
+  <p>In diesem Modul lernst du, wie man mit solchen Verschiebungen rechnet: Wie setzt man mehrere zusammen? Was bedeutet es, eine Verschiebung zu verdoppeln oder umzukehren? Wie berechnet man Längen und Mittelpunkte im Raum? Am Ende steht eine Frage, die für alles Folgende wichtig ist: Wann ist eine von mehreren Verschiebungen überflüssig, weil sie sich aus den anderen zusammensetzen lässt? Das ist die <strong>lineare Abhängigkeit</strong>. In der Simulation in Abschnitt 4 prüfst du sie an Beispielen selbst nach.</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Drei Fragen aus der Sekundarstufe I und der Einführungsphase. Wenn du hier hängst, lohnt sich ein Blick zurück, bevor du weitermachst.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Der Punkt <span class="m" data-tex="P(2\,|\,{-}1)" data-plain="P(2|−1)"></span> wird im Koordinatensystem um 3 Einheiten nach links und um 4 Einheiten nach oben verschoben. Welche Koordinaten hat der Bildpunkt?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span><span class="m" data-tex="(5\,|\,{-}5)" data-plain="(5|−5)"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span><span class="m" data-tex="({-}1\,|\,3)" data-plain="(−1|3)"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span><span class="m" data-tex="({-}1\,|\,{-}5)" data-plain="(−1|−5)"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Ein Rechteck ist 6 cm breit und 8 cm hoch. Wie lang ist seine Diagonale?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span>14 cm, weil man die beiden Seiten addiert.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span>10 cm, weil nach dem Satz des Pythagoras die Wurzel aus der Summe der Quadrate gilt.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span>48 cm, weil man die beiden Seiten multipliziert.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Welches Zahlenpaar löst beide Gleichungen <span class="m" data-tex="x + 2y = 7" data-plain="x + 2y = 7"></span> und <span class="m" data-tex="2x - y = 4" data-plain="2x − y = 4"></span> zugleich?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span><span class="m" data-tex="x = 1,\ y = 3" data-plain="x = 1, y = 3"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span><span class="m" data-tex="x = 3,\ y = 2" data-plain="x = 3, y = 2"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span><span class="m" data-tex="x = 2,\ y = 0" data-plain="x = 2, y = 0"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 ERKLÄRTEIL =============== -->
+<section id="grundlagen">
+  <div class="stufe"><div class="nr">2</div><h2>Vektoren im Raum und Rechnen mit ihnen</h2></div>
+
+  <h3>Das Koordinatensystem im Raum</h3>
+  <p>Im Raum stehen drei Koordinatenachsen paarweise senkrecht aufeinander. Sie heißen <span class="m" data-tex="x_1" data-plain="x₁"></span>, <span class="m" data-tex="x_2" data-plain="x₂"></span> und <span class="m" data-tex="x_3" data-plain="x₃"></span>, und ein Punkt wird durch drei Koordinaten festgelegt, <span class="m" data-tex="P(p_1\,|\,p_2\,|\,p_3)" data-plain="P(p₁|p₂|p₃)"></span>. Auf Papier zeichnet man ein <strong>Schrägbild</strong>: Die <span class="m" data-tex="x_2" data-plain="x₂"></span>-Achse läuft nach rechts, die <span class="m" data-tex="x_3" data-plain="x₃"></span>-Achse nach oben und die <span class="m" data-tex="x_1" data-plain="x₁"></span>-Achse schräg nach links unten, dabei verkürzt, denn eine Einheit ist nur die halbe Diagonale eines Kästchens lang. Um einen Punkt zu zeichnen, gehst du <span class="m" data-tex="p_2" data-plain="p₂"></span> Einheiten nach rechts, <span class="m" data-tex="p_3" data-plain="p₃"></span> nach oben und <span class="m" data-tex="p_1" data-plain="p₁"></span> mal die halbe Kästchendiagonale nach links unten.</p>
+
+  <p>Ein Schrägbild ist nicht eindeutig, denn viele verschiedene Punkte im Raum haben im Bild denselben Platz: Alle Punkte auf einer Geraden in Blickrichtung fallen zusammen. Darum lässt du dich beim Rechnen nie vom Bild leiten, sondern nur von den Koordinaten. Das Bild dient dazu, die Lage zu verstehen.</p>
+
+  <h3>Vektoren: Verschiebungen als Zahlenspalten</h3>
+  <p>Eine Verschiebung im Raum ist dadurch festgelegt, wie sich jede der drei Koordinaten ändert. Das schreibst du als Spalte mit drei Komponenten, und gezeichnet ist es ein <strong>Pfeil</strong>. Alle Pfeile mit gleicher Länge und gleicher Richtung beschreiben dieselbe Verschiebung und gehören deshalb zum selben <strong>Vektor</strong>: Ein Vektor kann an jedem Punkt angesetzt werden. Zwei Vektoren sind genau dann gleich, wenn alle Komponenten übereinstimmen.</p>
+
+  <p>Zur Anschauung eine Verschiebung in der Ebene: Der Punkt <span class="m" data-tex="A(1\,|\,3)" data-plain="A(1|3)"></span> wird um 3 nach rechts und 2 nach oben zum Punkt <span class="m" data-tex="B(4\,|\,5)" data-plain="B(4|5)"></span> geschoben. Der Vektor von A nach B ist <span class="m" data-tex="\overrightarrow{AB} = \begin{pmatrix}3\\2\end{pmatrix}" data-plain="AB→ = (3|2)"></span>. Der graue Pfeil vom Ursprung O zu einem Punkt heißt <strong>Ortsvektor</strong> dieses Punktes; er hat dieselben Komponenten wie die Koordinaten des Punktes.</p>
+
+  <div class="diagramme" style="max-width:380px">
+      <figure><svg viewBox="0 0 240 204" role="img" aria-label="Ebene mit den Punkten A und B, den Ortsvektoren von A und B und dem Vektor von A nach B"><line x1="28.0" y1="184.0" x2="28.0" y2="34.0" stroke="#e2e8f0" stroke-width="1"/><line x1="58.0" y1="184.0" x2="58.0" y2="34.0" stroke="#e2e8f0" stroke-width="1"/><text x="58.0" y="196.0" font-size="8" fill="#94a3b8" text-anchor="middle">1</text><line x1="88.0" y1="184.0" x2="88.0" y2="34.0" stroke="#e2e8f0" stroke-width="1"/><text x="88.0" y="196.0" font-size="8" fill="#94a3b8" text-anchor="middle">2</text><line x1="118.0" y1="184.0" x2="118.0" y2="34.0" stroke="#e2e8f0" stroke-width="1"/><text x="118.0" y="196.0" font-size="8" fill="#94a3b8" text-anchor="middle">3</text><line x1="148.0" y1="184.0" x2="148.0" y2="34.0" stroke="#e2e8f0" stroke-width="1"/><text x="148.0" y="196.0" font-size="8" fill="#94a3b8" text-anchor="middle">4</text><line x1="178.0" y1="184.0" x2="178.0" y2="34.0" stroke="#e2e8f0" stroke-width="1"/><text x="178.0" y="196.0" font-size="8" fill="#94a3b8" text-anchor="middle">5</text><line x1="28.0" y1="184.0" x2="178.0" y2="184.0" stroke="#e2e8f0" stroke-width="1"/><line x1="28.0" y1="154.0" x2="178.0" y2="154.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="157.0" font-size="8" fill="#94a3b8" text-anchor="end">1</text><line x1="28.0" y1="124.0" x2="178.0" y2="124.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="127.0" font-size="8" fill="#94a3b8" text-anchor="end">2</text><line x1="28.0" y1="94.0" x2="178.0" y2="94.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="97.0" font-size="8" fill="#94a3b8" text-anchor="end">3</text><line x1="28.0" y1="64.0" x2="178.0" y2="64.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="67.0" font-size="8" fill="#94a3b8" text-anchor="end">4</text><line x1="28.0" y1="34.0" x2="178.0" y2="34.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="37.0" font-size="8" fill="#94a3b8" text-anchor="end">5</text><line x1="24.0" y1="184.0" x2="182.0" y2="184.0" stroke="#94a3b8" stroke-width="1.3"/><polygon points="188.0,184.0 182.0,181.5 182.0,186.5" fill="#94a3b8"/><line x1="28.0" y1="188.0" x2="28.0" y2="30.0" stroke="#94a3b8" stroke-width="1.3"/><polygon points="28.0,24.0 25.5,30.0 30.5,30.0" fill="#94a3b8"/><text x="184.0" y="196.0" font-size="9" fill="#94a3b8" text-anchor="start">x</text><text x="34.0" y="26.0" font-size="9" fill="#94a3b8" text-anchor="start">y</text><line x1="28.0" y1="184.0" x2="55.8" y2="100.6" stroke="#64748b" stroke-width="1.8" stroke-dasharray="4 3"/><polygon points="58.0,94.0 53.0,99.7 58.6,101.6" fill="#64748b"/><line x1="28.0" y1="184.0" x2="143.6" y2="39.5" stroke="#64748b" stroke-width="1.8" stroke-dasharray="4 3"/><polygon points="148.0,34.0 141.3,37.6 145.9,41.3" fill="#64748b"/><line x1="58.0" y1="94.0" x2="148.0" y2="94.0" stroke="#c2410c" stroke-width="1.3" stroke-dasharray="3 3"/><line x1="148.0" y1="94.0" x2="148.0" y2="34.0" stroke="#c2410c" stroke-width="1.3" stroke-dasharray="3 3"/><line x1="58.0" y1="94.0" x2="140.5" y2="39.0" stroke="#0d7a52" stroke-width="3"/><polygon points="148.0,34.0 138.4,35.8 142.6,42.1" fill="#0d7a52"/><circle cx="58.0" cy="94.0" r="2.8" fill="#0f2135"/><circle cx="148.0" cy="34.0" r="2.8" fill="#0f2135"/><text x="52.0" y="86.0" font-size="9" fill="#0f2135" text-anchor="end" font-weight="700">A(1|3)</text><text x="153.0" y="28.0" font-size="9" fill="#0f2135" text-anchor="start" font-weight="700">B(4|5)</text><text x="103.0" y="106.0" font-size="9" fill="#c2410c" text-anchor="middle" font-weight="700">3</text><text x="156.0" y="67.0" font-size="9" fill="#c2410c" text-anchor="start" font-weight="700">2</text><text x="49.0" y="151.0" font-size="9" fill="#64748b" text-anchor="start" font-weight="700">a→</text><text x="100.0" y="121.0" font-size="9" fill="#64748b" text-anchor="start" font-weight="700">b→</text><text x="81.0" y="56.0" font-size="9" fill="#0d7a52" text-anchor="start" font-weight="700">AB→</text></svg><figcaption>Ortsvektoren a→ und b→ (grau) und der Vektor AB→ = (3|2) (grün)</figcaption></figure>
+  </div>
+
+  <p>Die Zeichnung zeigt auch, wie du den Vektor aus den Ortsvektoren <span class="m" data-tex="\vec{a}" data-plain="a→"></span> und <span class="m" data-tex="\vec{b}" data-plain="b→"></span> der beiden Punkte berechnest: Von O nach B kommst du, indem du erst von O nach A und dann von A nach B gehst. Also ist <span class="m" data-tex="\vec{b} = \vec{a} + \overrightarrow{AB}" data-plain="b→ = a→ + AB→"></span>, und umgestellt gilt für beliebige Punkte im Raum:</p>
+
+  <div class="m block" id="f-vab" data-tex="\overrightarrow{AB} = \vec{b} - \vec{a}" data-plain="AB→ = b→ − a→"></div>
+
+  <p>Merke dir „Spitze minus Fuß“: Du subtrahierst komponentenweise die Koordinaten des Anfangspunkts von denen des Endpunkts. Ein Beispiel im Raum: Für <span class="m" data-tex="A(1\,|\,2\,|\,3)" data-plain="A(1|2|3)"></span> und <span class="m" data-tex="B(3\,|\,5\,|\,9)" data-plain="B(3|5|9)"></span> ist <span class="m" data-tex="\overrightarrow{AB} = \begin{pmatrix}3-1\\5-2\\9-3\end{pmatrix} = \begin{pmatrix}2\\3\\6\end{pmatrix}" data-plain="AB→ = (3−1|5−2|9−3) = (2|3|6)"></span>. Der Vektor von B nach A ist das Entgegengesetzte, <span class="m" data-tex="\overrightarrow{BA} = \begin{pmatrix}-2\\-3\\-6\end{pmatrix}" data-plain="BA→ = (−2|−3|−6)"></span>.</p>
+
+  <h3>Rechnen mit Vektoren</h3>
+  <p><strong>Addieren.</strong> Zwei Verschiebungen hintereinander ausgeführt sind wieder eine Verschiebung. Zeichnerisch setzt du den zweiten Pfeil an die Spitze des ersten. Rechnerisch addierst du die Komponenten. Die Summe <span class="m" data-tex="\vec{a} + \vec{b}" data-plain="a→ + b→"></span> ist die Diagonale des Parallelogramms, das von beiden Pfeilen aufgespannt wird, deshalb kommt es nicht auf die Reihenfolge an.</p>
+
+  <div class="diagramme" style="max-width:380px">
+      <figure><svg viewBox="0 0 240 172" role="img" aria-label="Summe zweier Vektoren als Pfeilkette und als Diagonale eines Parallelogramms"><line x1="28.0" y1="150.0" x2="28.0" y2="36.0" stroke="#e2e8f0" stroke-width="1"/><line x1="66.0" y1="150.0" x2="66.0" y2="36.0" stroke="#e2e8f0" stroke-width="1"/><text x="66.0" y="162.0" font-size="8" fill="#94a3b8" text-anchor="middle">1</text><line x1="104.0" y1="150.0" x2="104.0" y2="36.0" stroke="#e2e8f0" stroke-width="1"/><text x="104.0" y="162.0" font-size="8" fill="#94a3b8" text-anchor="middle">2</text><line x1="142.0" y1="150.0" x2="142.0" y2="36.0" stroke="#e2e8f0" stroke-width="1"/><text x="142.0" y="162.0" font-size="8" fill="#94a3b8" text-anchor="middle">3</text><line x1="180.0" y1="150.0" x2="180.0" y2="36.0" stroke="#e2e8f0" stroke-width="1"/><text x="180.0" y="162.0" font-size="8" fill="#94a3b8" text-anchor="middle">4</text><line x1="218.0" y1="150.0" x2="218.0" y2="36.0" stroke="#e2e8f0" stroke-width="1"/><text x="218.0" y="162.0" font-size="8" fill="#94a3b8" text-anchor="middle">5</text><line x1="28.0" y1="150.0" x2="218.0" y2="150.0" stroke="#e2e8f0" stroke-width="1"/><line x1="28.0" y1="112.0" x2="218.0" y2="112.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="115.0" font-size="8" fill="#94a3b8" text-anchor="end">1</text><line x1="28.0" y1="74.0" x2="218.0" y2="74.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="77.0" font-size="8" fill="#94a3b8" text-anchor="end">2</text><line x1="28.0" y1="36.0" x2="218.0" y2="36.0" stroke="#e2e8f0" stroke-width="1"/><text x="22.0" y="39.0" font-size="8" fill="#94a3b8" text-anchor="end">3</text><line x1="24.0" y1="150.0" x2="222.0" y2="150.0" stroke="#94a3b8" stroke-width="1.3"/><polygon points="228.0,150.0 222.0,147.5 222.0,152.5" fill="#94a3b8"/><line x1="28.0" y1="154.0" x2="28.0" y2="32.0" stroke="#94a3b8" stroke-width="1.3"/><polygon points="28.0,26.0 25.5,32.0 30.5,32.0" fill="#94a3b8"/><text x="224.0" y="162.0" font-size="9" fill="#94a3b8" text-anchor="start">x</text><text x="34.0" y="28.0" font-size="9" fill="#94a3b8" text-anchor="start">y</text><line x1="66.0" y1="74.0" x2="173.4" y2="38.2" stroke="#64748b" stroke-width="1.6" stroke-dasharray="4 3"/><polygon points="180.0,36.0 172.4,35.4 174.3,41.0" fill="#64748b"/><line x1="142.0" y1="112.0" x2="176.9" y2="42.3" stroke="#64748b" stroke-width="1.6" stroke-dasharray="4 3"/><polygon points="180.0,36.0 174.2,40.9 179.5,43.6" fill="#64748b"/><line x1="28.0" y1="150.0" x2="133.5" y2="114.8" stroke="#0d7a52" stroke-width="2.6"/><polygon points="142.0,112.0 132.3,111.3 134.7,118.4" fill="#0d7a52"/><line x1="142.0" y1="112.0" x2="176.0" y2="44.0" stroke="#c2410c" stroke-width="2.6"/><polygon points="180.0,36.0 172.6,42.4 179.4,45.7" fill="#c2410c"/><line x1="28.0" y1="150.0" x2="172.0" y2="42.0" stroke="#0f2135" stroke-width="3"/><polygon points="180.0,36.0 169.5,38.6 174.5,45.4" fill="#0f2135"/><line x1="28.0" y1="150.0" x2="62.9" y2="80.3" stroke="#64748b" stroke-width="1.6" stroke-dasharray="4 3"/><polygon points="66.0,74.0 60.2,78.9 65.5,81.6" fill="#64748b"/><text x="83.0" y="145.0" font-size="10" fill="#0d7a52" text-anchor="middle" font-weight="700">a→</text><text x="156.0" y="79.0" font-size="10" fill="#c2410c" text-anchor="start" font-weight="700">b→</text><text x="90.0" y="83.0" font-size="10" fill="#0f2135" text-anchor="end" font-weight="700">a→ + b→</text></svg><figcaption>Summe a→ + b→ als Pfeilkette und als Diagonale des Parallelogramms</figcaption></figure>
+  </div>
+
+  <p><strong>Gegenvektor und Differenz.</strong> Der Gegenvektor <span class="m" data-tex="-\vec{a}" data-plain="−a→"></span> hat dieselbe Länge wie <span class="m" data-tex="\vec{a}" data-plain="a→"></span>, zeigt aber in die entgegengesetzte Richtung. Der <strong>Nullvektor</strong> <span class="m" data-tex="\vec{0}" data-plain="0→"></span> hat lauter Komponenten null: die Verschiebung, die nichts bewegt. Die Differenz ist die Summe mit dem Gegenvektor, <span class="m" data-tex="\vec{a} - \vec{b} = \vec{a} + ({-}\vec{b})" data-plain="a→ − b→ = a→ + (−b→)"></span>.</p>
+
+  <p><strong>Vervielfachen.</strong> Die Verschiebung <span class="m" data-tex="r\cdot\vec{a}" data-plain="r·a→"></span> entsteht, indem alle Komponenten mit der reellen Zahl <span class="m" data-tex="r" data-plain="r"></span> multipliziert werden. Für <span class="m" data-tex="r &gt; 1" data-plain="r &gt; 1"></span> wird der Pfeil gestreckt, für <span class="m" data-tex="0 &lt; r &lt; 1" data-plain="0 &lt; r &lt; 1"></span> gestaucht und für <span class="m" data-tex="r &lt; 0" data-plain="r &lt; 0"></span> zusätzlich umgedreht.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Operation</th><th>Komponentenweise</th><th>Bedeutung am Pfeil</th></tr>
+    <tr><td><span class="m" data-tex="\vec{a} + \vec{b}" data-plain="a→ + b→"></span></td><td><span class="m" data-tex="\begin{pmatrix}a_1+b_1\\a_2+b_2\\a_3+b_3\end{pmatrix}" data-plain="(a₁+b₁|a₂+b₂|a₃+b₃)"></span></td><td>Pfeile hintereinander, Diagonale des Parallelogramms</td></tr>
+    <tr><td><span class="m" data-tex="-\vec{a}" data-plain="−a→"></span></td><td><span class="m" data-tex="\begin{pmatrix}-a_1\\-a_2\\-a_3\end{pmatrix}" data-plain="(−a₁|−a₂|−a₃)"></span></td><td>derselbe Pfeil in Gegenrichtung</td></tr>
+    <tr><td><span class="m" data-tex="\vec{a} - \vec{b}" data-plain="a→ − b→"></span></td><td><span class="m" data-tex="\begin{pmatrix}a_1-b_1\\a_2-b_2\\a_3-b_3\end{pmatrix}" data-plain="(a₁−b₁|a₂−b₂|a₃−b₃)"></span></td><td>Summe mit dem Gegenvektor von b, bei gleichem Anfang der Pfeil von der Spitze von b zur Spitze von a</td></tr>
+    <tr><td><span class="m" data-tex="r\cdot\vec{a}" data-plain="r·a→"></span></td><td><span class="m" data-tex="\begin{pmatrix}ra_1\\ra_2\\ra_3\end{pmatrix}" data-plain="(r·a₁|r·a₂|r·a₃)"></span></td><td>Pfeil um den Faktor |r| gestreckt, bei negativem r umgedreht</td></tr>
+  </table>
+  </div>
+
+  <p>Ein Zahlenbeispiel mit <span class="m" data-tex="\vec{a} = \begin{pmatrix}2\\-1\\3\end{pmatrix}" data-plain="a→ = (2|−1|3)"></span> und <span class="m" data-tex="\vec{b} = \begin{pmatrix}1\\4\\-2\end{pmatrix}" data-plain="b→ = (1|4|−2)"></span>: Es ist <span class="m" data-tex="\vec{a} + \vec{b} = \begin{pmatrix}3\\3\\1\end{pmatrix}" data-plain="a→ + b→ = (3|3|1)"></span>, <span class="m" data-tex="\vec{a} - \vec{b} = \begin{pmatrix}1\\-5\\5\end{pmatrix}" data-plain="a→ − b→ = (1|−5|5)"></span> und <span class="m" data-tex="3\vec{a} = \begin{pmatrix}6\\-3\\9\end{pmatrix}" data-plain="3a→ = (6|−3|9)"></span>. Kombinierst du, ist <span class="m" data-tex="2\vec{a} - 3\vec{b} = \begin{pmatrix}4\\-2\\6\end{pmatrix} - \begin{pmatrix}3\\12\\-6\end{pmatrix} = \begin{pmatrix}1\\-14\\12\end{pmatrix}" data-plain="2a→ − 3b→ = (4|−2|6) − (3|12|−6) = (1|−14|12)"></span>.</p>
+
+  <div class="merksatz">
+    <b>Rechengesetze für Vektoren</b>
+    Für alle Vektoren <span class="m" data-tex="\vec{a},\,\vec{b}" data-plain="a→, b→"></span> und alle reellen Zahlen <span class="m" data-tex="r,\,s" data-plain="r, s"></span> gelten: <span class="m" data-tex="\vec{a} + \vec{b} = \vec{b} + \vec{a}" data-plain="a→ + b→ = b→ + a→"></span> (Reihenfolge egal), <span class="m" data-tex="r\cdot(\vec{a} + \vec{b}) = r\vec{a} + r\vec{b}" data-plain="r·(a→ + b→) = r·a→ + r·b→"></span> und <span class="m" data-tex="(r + s)\cdot\vec{a} = r\vec{a} + s\vec{a}" data-plain="(r + s)·a→ = r·a→ + s·a→"></span> (Ausmultiplizieren wie bei Zahlen) sowie <span class="m" data-tex="\vec{a} + ({-}\vec{a}) = \vec{0}" data-plain="a→ + (−a→) = 0→"></span>. Du rechnest also mit Vektoren wie mit Termen, nur dass du nicht durch einen Vektor teilen kannst.
+  </div>
+
+  <h3>Die Länge eines Vektors</h3>
+  <p>Die Länge des Pfeils heißt <strong>Betrag</strong> des Vektors. Die Zeichnung zeigt den Vektor <span class="m" data-tex="\vec{v} = \begin{pmatrix}2\\3\\6\end{pmatrix}" data-plain="v→ = (2|3|6)"></span> als Raumdiagonale eines Quaders mit den Kantenlängen 2, 3 und 6. Zuerst ist die Diagonale der Grundfläche nach Pythagoras <span class="m" data-tex="\sqrt{2^{2} + 3^{2}} = \sqrt{13}" data-plain="√(2² + 3²) = √13"></span> lang. Sie steht senkrecht auf der Höhe 6, also ist die Raumdiagonale <span class="m" data-tex="\sqrt{13 + 6^{2}} = \sqrt{49} = 7" data-plain="√(13 + 6²) = √49 = 7"></span>.</p>
+
+  <div class="diagramme" style="max-width:340px">
+      <figure><svg viewBox="0 0 200 250" role="img" aria-label="Quader im Schrägbild mit der Raumdiagonale vom Ursprung zum Punkt P(2|3|6)"><line x1="70.0" y1="190.0" x2="70.0" y2="46.0" stroke="#cbd5e1" stroke-width="1"/><line x1="70.0" y1="190.0" x2="142.0" y2="190.0" stroke="#cbd5e1" stroke-width="1"/><line x1="70.0" y1="190.0" x2="46.0" y2="214.0" stroke="#cbd5e1" stroke-width="1"/><line x1="70.0" y1="46.0" x2="142.0" y2="46.0" stroke="#cbd5e1" stroke-width="1"/><line x1="70.0" y1="46.0" x2="46.0" y2="70.0" stroke="#cbd5e1" stroke-width="1"/><line x1="142.0" y1="190.0" x2="142.0" y2="46.0" stroke="#cbd5e1" stroke-width="1"/><line x1="142.0" y1="190.0" x2="118.0" y2="214.0" stroke="#cbd5e1" stroke-width="1"/><line x1="142.0" y1="46.0" x2="118.0" y2="70.0" stroke="#cbd5e1" stroke-width="1"/><line x1="46.0" y1="214.0" x2="46.0" y2="70.0" stroke="#cbd5e1" stroke-width="1"/><line x1="46.0" y1="214.0" x2="118.0" y2="214.0" stroke="#cbd5e1" stroke-width="1"/><line x1="46.0" y1="70.0" x2="118.0" y2="70.0" stroke="#cbd5e1" stroke-width="1"/><line x1="118.0" y1="214.0" x2="118.0" y2="70.0" stroke="#cbd5e1" stroke-width="1"/><line x1="70.0" y1="190.0" x2="70.0" y2="23.2" stroke="#94a3b8" stroke-width="1.3"/><polygon points="70.0,17.2 67.5,23.2 72.5,23.2" fill="#94a3b8"/><line x1="70.0" y1="190.0" x2="160.0" y2="190.0" stroke="#94a3b8" stroke-width="1.3"/><polygon points="166.0,190.0 160.0,187.5 160.0,192.5" fill="#94a3b8"/><line x1="70.0" y1="190.0" x2="34.6" y2="225.4" stroke="#94a3b8" stroke-width="1.3"/><polygon points="30.4,229.6 36.4,227.1 32.9,223.6" fill="#94a3b8"/><text x="74.0" y="21.2" font-size="9" fill="#94a3b8" text-anchor="start">x₃</text><text x="164.0" y="202.0" font-size="9" fill="#94a3b8" text-anchor="start">x₂</text><text x="26.4" y="240.6" font-size="9" fill="#94a3b8" text-anchor="start">x₁</text><line x1="70.0" y1="190.0" x2="118.0" y2="214.0" stroke="#c2410c" stroke-width="1.6" stroke-dasharray="3 3"/><line x1="118.0" y1="214.0" x2="118.0" y2="70.0" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="3 3"/><line x1="70.0" y1="190.0" x2="114.3" y2="79.3" stroke="#0d7a52" stroke-width="3"/><polygon points="118.0,70.0 110.4,77.7 118.2,80.8" fill="#0d7a52"/><circle cx="70.0" cy="190.0" r="2.8" fill="#0f2135"/><circle cx="118.0" cy="70.0" r="2.8" fill="#0f2135"/><text x="124.0" y="72.0" font-size="9" fill="#0f2135" text-anchor="start" font-weight="700">P(2|3|6)</text><text x="50.0" y="206.0" font-size="9" fill="#94a3b8" text-anchor="end" font-weight="700">2</text><text x="82.0" y="226.0" font-size="9" fill="#94a3b8" text-anchor="middle" font-weight="700">3</text><text x="124.0" y="142.0" font-size="9" fill="#94a3b8" text-anchor="start" font-weight="700">6</text><text x="96.0" y="216.0" font-size="9" fill="#c2410c" text-anchor="start" font-weight="700">√13</text><text x="90.0" y="128.0" font-size="10" fill="#0d7a52" text-anchor="end" font-weight="700">7</text><text x="63.0" y="185.0" font-size="9" fill="#0f2135" text-anchor="end" font-weight="700">O</text></svg><figcaption>Raumdiagonale v→ = (2|3|6) mit der Länge 7; die Grundflächendiagonale ist √13 lang</figcaption></figure>
+  </div>
+
+  <p>Dasselbe Vorgehen funktioniert für jeden Vektor, und es gilt:</p>
+
+  <div class="m block" id="f-betrag" data-tex="\left|\vec{a}\right| = \sqrt{a_{1}^{2} + a_{2}^{2} + a_{3}^{2}}" data-plain="|a→| = √(a₁² + a₂² + a₃²)"></div>
+
+  <p>In der Ebene entfällt die dritte Komponente. Der <strong>Abstand</strong> zweier Punkte <span class="m" data-tex="A" data-plain="A"></span> und <span class="m" data-tex="B" data-plain="B"></span> ist der Betrag des Vektors zwischen ihnen, <span class="m" data-tex="d(A,B) = \left|\overrightarrow{AB}\right|" data-plain="d(A, B) = |AB→|"></span>. Die Drohne aus dem Einstieg ist im Punkt <span class="m" data-tex="(20\,|\,30\,|\,10)" data-plain="(20|30|10)"></span> und damit <span class="m" data-tex="\sqrt{400 + 900 + 100} = \sqrt{1400} \approx 37{,}4" data-plain="√(400 + 900 + 100) = √1400 ≈ 37,4"></span> Meter vom Start entfernt.</p>
+
+  <details>
+    <summary>Herleitung: Warum die Längenformel im Raum aus dem Satz des Pythagoras folgt</summary>
+    <p><strong>Schritt 1 – Grundfläche.</strong> Der Vektor <span class="m" data-tex="\vec{a}" data-plain="a→"></span> hat die Komponenten <span class="m" data-tex="a_1,\,a_2,\,a_3" data-plain="a₁, a₂, a₃"></span>. Seine Projektion auf die <span class="m" data-tex="x_1x_2" data-plain="x₁x₂"></span>-Ebene ist der Vektor mit den Komponenten <span class="m" data-tex="a_1,\,a_2,\,0" data-plain="a₁, a₂, 0"></span>. Sie ist die Hypotenuse eines rechtwinkligen Dreiecks mit den Katheten <span class="m" data-tex="|a_1|" data-plain="|a₁|"></span> und <span class="m" data-tex="|a_2|" data-plain="|a₂|"></span>, hat also die Länge <span class="m" data-tex="d = \sqrt{a_1^{2} + a_2^{2}}" data-plain="d = √(a₁² + a₂²)"></span>.</p>
+    <p><strong>Schritt 2 – Höhe dazu.</strong> Der Pfeil <span class="m" data-tex="\vec{a}" data-plain="a→"></span> ist die Hypotenuse eines zweiten rechtwinkligen Dreiecks, dessen eine Kathete diese Projektion ist und dessen andere Kathete die Höhe <span class="m" data-tex="|a_3|" data-plain="|a₃|"></span> ist. Die beiden Katheten stehen senkrecht aufeinander, weil die <span class="m" data-tex="x_3" data-plain="x₃"></span>-Achse auf der <span class="m" data-tex="x_1x_2" data-plain="x₁x₂"></span>-Ebene senkrecht steht.</p>
+    <p><strong>Schritt 3 – Zusammensetzen.</strong> Der Satz des Pythagoras liefert <span class="m" data-tex="\left|\vec{a}\right|^{2} = d^{2} + a_3^{2} = a_1^{2} + a_2^{2} + a_3^{2}" data-plain="|a→|² = d² + a₃² = a₁² + a₂² + a₃²"></span>. Weil Längen nicht negativ sind, folgt durch Wurzelziehen die Formel.</p>
+  </details>
+
+  <p>Aus der Komponentenrechnung folgt sofort: Vervielfacht man einen Vektor mit <span class="m" data-tex="r" data-plain="r"></span>, ändert sich die Länge um den Betrag von <span class="m" data-tex="r" data-plain="r"></span>. Mit <span class="m" data-tex="r = 3" data-plain="r = 3"></span> und <span class="m" data-tex="\vec{a} = \begin{pmatrix}2\\-1\\3\end{pmatrix}" data-plain="a→ = (2|−1|3)"></span> ist zum Beispiel <span class="m" data-tex="|\vec{a}| = \sqrt{14}" data-plain="|a→| = √14"></span> und <span class="m" data-tex="|3\vec{a}| = \sqrt{126} = 3\sqrt{14}" data-plain="|3a→| = √126 = 3√14"></span>.</p>
+
+  <div class="m block" id="f-betragv" data-tex="\left|r\cdot\vec{a}\right| = |r|\cdot\left|\vec{a}\right|" data-plain="|r·a→| = |r|·|a→|"></div>
+
+  <p>Dividierst du einen Vektor <span class="m" data-tex="\vec{a} \neq \vec{0}" data-plain="a→ ≠ 0→"></span> durch seine Länge, erhältst du einen Vektor mit Länge 1, der in dieselbe Richtung zeigt, einen <strong>Einheitsvektor</strong>. Für <span class="m" data-tex="\vec{v} = \begin{pmatrix}2\\3\\6\end{pmatrix}" data-plain="v→ = (2|3|6)"></span> mit dem Betrag 7 ist das <span class="m" data-tex="\tfrac{1}{7}\begin{pmatrix}2\\3\\6\end{pmatrix} = \begin{pmatrix}\tfrac{2}{7}\\\tfrac{3}{7}\\\tfrac{6}{7}\end{pmatrix}" data-plain="(1/7)·(2|3|6) = (2/7|3/7|6/7)"></span>, und wegen <span class="m" data-tex="\tfrac{4}{49} + \tfrac{9}{49} + \tfrac{36}{49} = 1" data-plain="4/49 + 9/49 + 36/49 = 1"></span> hat er tatsächlich die Länge 1.</p>
+
+  <div class="m block" id="f-einheit" data-tex="\dfrac{1}{\left|\vec{a}\right|}\cdot\vec{a}" data-plain="(1/|a→|)·a→"></div>
+
+  <p>Der <strong>Mittelpunkt</strong> einer Strecke liegt in der Mitte zwischen den beiden Endpunkten. Seine Koordinaten sind die Mittelwerte der Koordinaten der Endpunkte:</p>
+
+  <div class="m block" id="f-mittel" data-tex="\vec{m} = \dfrac{1}{2}\left(\vec{a} + \vec{b}\right)" data-plain="m→ = ½(a→ + b→)"></div>
+
+  <p>Für <span class="m" data-tex="A(2\,|\,0\,|\,6)" data-plain="A(2|0|6)"></span> und <span class="m" data-tex="B(4\,|\,8\,|\,{-}2)" data-plain="B(4|8|−2)"></span> ist <span class="m" data-tex="\vec{m} = \tfrac{1}{2}\begin{pmatrix}6\\8\\4\end{pmatrix} = \begin{pmatrix}3\\4\\2\end{pmatrix}" data-plain="m→ = ½·(6|8|4) = (3|4|2)"></span>, der Mittelpunkt ist also <span class="m" data-tex="M(3\,|\,4\,|\,2)" data-plain="M(3|4|2)"></span>.</p>
+
+  <h3>Parallele Vektoren</h3>
+  <p>Zwei Vektoren sind <strong>parallel</strong> (man sagt auch kollinear), wenn ihre Pfeile dieselbe oder die entgegengesetzte Richtung haben. Dann ist der eine ein Vielfaches des anderen:</p>
+
+  <div class="m block" id="f-parallel" data-tex="\vec{b} = r\cdot\vec{a}" data-plain="b→ = r·a→"></div>
+
+  <p>Die Zahl <span class="m" data-tex="r" data-plain="r"></span> muss für <em>alle</em> Komponenten dieselbe sein. Zwei Beispiele mit <span class="m" data-tex="\vec{v} = \begin{pmatrix}2\\-3\\1\end{pmatrix}" data-plain="v→ = (2|−3|1)"></span>: Der Vektor <span class="m" data-tex="\begin{pmatrix}6\\-9\\3\end{pmatrix}" data-plain="(6|−9|3)"></span> ist parallel zu <span class="m" data-tex="\vec{v}" data-plain="v→"></span>, denn es ist <span class="m" data-tex="\begin{pmatrix}6\\-9\\3\end{pmatrix} = 3\cdot\vec{v}" data-plain="(6|−9|3) = 3·v→"></span>, und <span class="m" data-tex="\begin{pmatrix}-4\\6\\-2\end{pmatrix} = {-}2\cdot\vec{v}" data-plain="(−4|6|−2) = −2·v→"></span> zeigt in die entgegengesetzte Richtung. Dagegen ist <span class="m" data-tex="\begin{pmatrix}6\\-9\\4\end{pmatrix}" data-plain="(6|−9|4)"></span> nicht parallel zu <span class="m" data-tex="\vec{v}" data-plain="v→"></span>: Die ersten beiden Komponenten verlangen <span class="m" data-tex="r = 3" data-plain="r = 3"></span>, die dritte verlangt <span class="m" data-tex="r = 4" data-plain="r = 4"></span>.</p>
+
+  <div class="hinweis">
+    <strong>Der Nullvektor.</strong> Der Nullvektor ist ein Vielfaches jedes Vektors, nämlich <span class="m" data-tex="\vec{0} = 0\cdot\vec{a}" data-plain="0→ = 0·a→"></span>. Er hat keine Richtung und wird deshalb als parallel zu jedem Vektor betrachtet. Das spielt in Abschnitt 3 eine Rolle.
+  </div>
+</section>
+
+<!-- =============== 3 VERTIEFUNG =============== -->
+<section id="vertiefung">
+  <div class="stufe"><div class="nr">3</div><h2>Linearkombination und lineare Unabhängigkeit</h2></div>
+
+  <h3>Vektoren zusammensetzen: die Linearkombination</h3>
+  <p>Mit den beiden Rechenoperationen aus Abschnitt 2, Vervielfachen und Addieren, lassen sich aus gegebenen Vektoren neue bilden. Ein Vektor der Form</p>
+
+  <div class="m block" id="f-lk" data-tex="\vec{p} = r\,\vec{a} + s\,\vec{b} + t\,\vec{c}" data-plain="p→ = r·a→ + s·b→ + t·c→"></div>
+
+  <p>mit reellen Zahlen <span class="m" data-tex="r,\,s,\,t" data-plain="r, s, t"></span> heißt <strong>Linearkombination</strong> der Vektoren <span class="m" data-tex="\vec{a},\,\vec{b},\,\vec{c}" data-plain="a→, b→, c→"></span>. Bei der Drohne aus dem Einstieg war die Gesamtverschiebung die Summe der beiden Teilflüge, also eine Linearkombination mit den Koeffizienten 1 und 1.</p>
+
+  <p>Nicht jeder Vektor lässt sich aus zwei gegebenen Vektoren zusammensetzen. Gegeben sind <span class="m" data-tex="\vec{a} = \begin{pmatrix}1\\0\\2\end{pmatrix}" data-plain="a→ = (1|0|2)"></span> und <span class="m" data-tex="\vec{b} = \begin{pmatrix}0\\1\\1\end{pmatrix}" data-plain="b→ = (0|1|1)"></span>. Für <span class="m" data-tex="\vec{p} = \begin{pmatrix}4\\1\\9\end{pmatrix}" data-plain="p→ = (4|1|9)"></span> lautet der Ansatz <span class="m" data-tex="r\,\vec{a} + s\,\vec{b} = \vec{p}" data-plain="r·a→ + s·b→ = p→"></span>, komponentenweise <span class="m" data-tex="r = 4" data-plain="r = 4"></span> (erste Komponente), <span class="m" data-tex="s = 1" data-plain="s = 1"></span> (zweite) und <span class="m" data-tex="2r + s = 9" data-plain="2r + s = 9"></span> (dritte).</p>
+
+  <p>Die ersten beiden Gleichungen legen <span class="m" data-tex="r = 4" data-plain="r = 4"></span> und <span class="m" data-tex="s = 1" data-plain="s = 1"></span> fest, und die dritte ist mit <span class="m" data-tex="2\cdot 4 + 1 = 9" data-plain="2·4 + 1 = 9"></span> erfüllt. Also ist <span class="m" data-tex="\vec{p} = 4\vec{a} + \vec{b}" data-plain="p→ = 4·a→ + b→"></span>. Für <span class="m" data-tex="\vec{q} = \begin{pmatrix}4\\1\\5\end{pmatrix}" data-plain="q→ = (4|1|5)"></span> liefern die ersten beiden Gleichungen wieder <span class="m" data-tex="r = 4" data-plain="r = 4"></span> und <span class="m" data-tex="s = 1" data-plain="s = 1"></span>, aber die dritte verlangt <span class="m" data-tex="2\cdot 4 + 1 = 5" data-plain="2·4 + 1 = 5"></span>, was falsch ist. Dieser Vektor lässt sich also nicht aus <span class="m" data-tex="\vec{a}" data-plain="a→"></span> und <span class="m" data-tex="\vec{b}" data-plain="b→"></span> zusammensetzen. Zeichnerisch: Alle Linearkombinationen von <span class="m" data-tex="\vec{a}" data-plain="a→"></span> und <span class="m" data-tex="\vec{b}" data-plain="b→"></span> liegen in der Ebene durch O, in der beide Pfeile liegen, und <span class="m" data-tex="\vec{q}" data-plain="q→"></span> zeigt aus dieser Ebene heraus.</p>
+
+  <h3>Wann ist ein Vektor überflüssig? Lineare Unabhängigkeit</h3>
+  <p>Drei Vektoren <span class="m" data-tex="\vec{a},\,\vec{b},\,\vec{c}" data-plain="a→, b→, c→"></span> sind <strong>linear abhängig</strong>, wenn sich mindestens einer von ihnen als Linearkombination der beiden anderen schreiben lässt. Dieser Vektor ist dann überflüssig, denn die beiden anderen reichen aus, um alles zu erzeugen, was auch mit ihm möglich ist. Ist keiner der drei so darstellbar, heißen sie <strong>linear unabhängig</strong>. Zum Überprüfen benutzt du eine gleichwertige Fassung: Man schaut, auf wie viele Arten sich der Nullvektor kombinieren lässt.</p>
+
+  <div class="m block" id="f-unabh" data-tex="r\,\vec{a} + s\,\vec{b} + t\,\vec{c} = \vec{0}" data-plain="r·a→ + s·b→ + t·c→ = 0→"></div>
+
+  <p>Eine Lösung gibt es immer, nämlich <span class="m" data-tex="r = s = t = 0" data-plain="r = s = t = 0"></span>, die <strong>triviale Lösung</strong>. Hat die Gleichung nur diese Lösung, sind die Vektoren linear unabhängig. Gibt es eine weitere Lösung, sind sie linear abhängig. Denn dann ist mindestens ein Koeffizient ungleich null, und die Gleichung lässt sich nach dem zugehörigen Vektor auflösen.</p>
+
+  <p><strong>Beispiel 1.</strong> Geprüft werden <span class="m" data-tex="\vec{a} = \begin{pmatrix}1\\1\\0\end{pmatrix}" data-plain="a→ = (1|1|0)"></span>, <span class="m" data-tex="\vec{b} = \begin{pmatrix}0\\1\\1\end{pmatrix}" data-plain="b→ = (0|1|1)"></span> und <span class="m" data-tex="\vec{c} = \begin{pmatrix}1\\0\\1\end{pmatrix}" data-plain="c→ = (1|0|1)"></span>. Komponentenweise entsteht das Gleichungssystem <span class="m" data-tex="r + t = 0" data-plain="r + t = 0"></span>, <span class="m" data-tex="r + s = 0" data-plain="r + s = 0"></span> und <span class="m" data-tex="s + t = 0" data-plain="s + t = 0"></span>. Aus der ersten Gleichung folgt <span class="m" data-tex="r = {-}t" data-plain="r = −t"></span>, aus der zweiten <span class="m" data-tex="s = {-}r = t" data-plain="s = −r = t"></span>. Setzt du das in die dritte ein, bleibt <span class="m" data-tex="2t = 0" data-plain="2t = 0"></span>, also <span class="m" data-tex="t = 0" data-plain="t = 0"></span> und damit <span class="m" data-tex="r = s = 0" data-plain="r = s = 0"></span>. Es gibt nur die triviale Lösung: Die drei Vektoren sind linear unabhängig.</p>
+
+  <p><strong>Beispiel 2.</strong> Geprüft werden <span class="m" data-tex="\vec{a} = \begin{pmatrix}1\\0\\2\end{pmatrix}" data-plain="a→ = (1|0|2)"></span>, <span class="m" data-tex="\vec{b} = \begin{pmatrix}0\\1\\1\end{pmatrix}" data-plain="b→ = (0|1|1)"></span> und <span class="m" data-tex="\vec{c} = \begin{pmatrix}1\\1\\3\end{pmatrix}" data-plain="c→ = (1|1|3)"></span>. Das System lautet <span class="m" data-tex="r + t = 0" data-plain="r + t = 0"></span>, <span class="m" data-tex="s + t = 0" data-plain="s + t = 0"></span> und <span class="m" data-tex="2r + s + 3t = 0" data-plain="2r + s + 3t = 0"></span>. Aus den ersten beiden folgt <span class="m" data-tex="r = {-}t" data-plain="r = −t"></span> und <span class="m" data-tex="s = {-}t" data-plain="s = −t"></span>. Die dritte wird zu <span class="m" data-tex="-2t - t + 3t = 0" data-plain="−2t − t + 3t = 0"></span>, also <span class="m" data-tex="0 = 0" data-plain="0 = 0"></span>: Sie ist für jedes <span class="m" data-tex="t" data-plain="t"></span> erfüllt. Mit <span class="m" data-tex="t = 1" data-plain="t = 1"></span> entsteht die nichttriviale Lösung <span class="m" data-tex="r = s = {-}1" data-plain="r = s = −1"></span>, also <span class="m" data-tex="-\vec{a} - \vec{b} + \vec{c} = \vec{0}" data-plain="−a→ − b→ + c→ = 0→"></span> und damit <span class="m" data-tex="\vec{c} = \vec{a} + \vec{b}" data-plain="c→ = a→ + b→"></span>. Die drei Vektoren sind linear abhängig.</p>
+
+  <div class="merksatz">
+    <b>Was du dir merken solltest</b>
+    Zwei Vektoren sind genau dann linear abhängig, wenn sie parallel sind. Drei Vektoren sind genau dann linear abhängig, wenn ihre Pfeile, von einem gemeinsamen Anfangspunkt aus gezeichnet, in einer Ebene liegen (man sagt: komplanar). Kommt der Nullvektor vor, sind die Vektoren immer linear abhängig. Vier Vektoren im Raum sind immer linear abhängig. Sind drei Vektoren linear unabhängig, lässt sich jeder Vektor des Raumes auf genau eine Weise als Linearkombination der drei schreiben; man nennt sie dann eine <strong>Basis</strong>.
+  </div>
+
+  <details>
+    <summary>Begründung: Warum zwei Vektoren genau dann linear abhängig sind, wenn sie parallel sind</summary>
+    <p><strong>Schritt 1 – Aus „abhängig“ folgt „parallel“.</strong> Sind <span class="m" data-tex="\vec{a}" data-plain="a→"></span> und <span class="m" data-tex="\vec{b}" data-plain="b→"></span> linear abhängig, gibt es <span class="m" data-tex="r,\,s" data-plain="r, s"></span>, nicht beide null, mit <span class="m" data-tex="r\vec{a} + s\vec{b} = \vec{0}" data-plain="r·a→ + s·b→ = 0→"></span>. Ist <span class="m" data-tex="s \neq 0" data-plain="s ≠ 0"></span>, folgt <span class="m" data-tex="\vec{b} = {-}\tfrac{r}{s}\,\vec{a}" data-plain="b→ = −(r/s)·a→"></span>, also sind die Vektoren parallel. Ist <span class="m" data-tex="s = 0" data-plain="s = 0"></span>, muss <span class="m" data-tex="r \neq 0" data-plain="r ≠ 0"></span> sein und es bleibt <span class="m" data-tex="r\vec{a} = \vec{0}" data-plain="r·a→ = 0→"></span>, also <span class="m" data-tex="\vec{a} = \vec{0}" data-plain="a→ = 0→"></span>, und der Nullvektor ist zu jedem Vektor parallel.</p>
+    <p><strong>Schritt 2 – Aus „parallel“ folgt „abhängig“.</strong> Ist <span class="m" data-tex="\vec{b} = r\vec{a}" data-plain="b→ = r·a→"></span>, dann ist <span class="m" data-tex="r\vec{a} + ({-}1)\vec{b} = \vec{0}" data-plain="r·a→ + (−1)·b→ = 0→"></span> eine nichttriviale Lösung, weil der Koeffizient von <span class="m" data-tex="\vec{b}" data-plain="b→"></span> den Wert −1 hat.</p>
+  </details>
+
+  <details>
+    <summary>Begründung: Warum die Darstellung bei linear unabhängigen Vektoren eindeutig ist</summary>
+    <p>Angenommen, der Vektor <span class="m" data-tex="\vec{p}" data-plain="p→"></span> ließe sich auf zwei Arten darstellen, <span class="m" data-tex="\vec{p} = r\vec{a} + s\vec{b} + t\vec{c}" data-plain="p→ = r·a→ + s·b→ + t·c→"></span> und <span class="m" data-tex="\vec{p} = r'\vec{a} + s'\vec{b} + t'\vec{c}" data-plain="p→ = r′·a→ + s′·b→ + t′·c→"></span>. Subtrahiert man beide Gleichungen, bleibt <span class="m" data-tex="(r - r')\vec{a} + (s - s')\vec{b} + (t - t')\vec{c} = \vec{0}" data-plain="(r − r′)·a→ + (s − s′)·b→ + (t − t′)·c→ = 0→"></span>. Sind <span class="m" data-tex="\vec{a},\,\vec{b},\,\vec{c}" data-plain="a→, b→, c→"></span> linear unabhängig, hat diese Gleichung nur die triviale Lösung, also <span class="m" data-tex="r = r'" data-plain="r = r′"></span>, <span class="m" data-tex="s = s'" data-plain="s = s′"></span> und <span class="m" data-tex="t = t'" data-plain="t = t′"></span>. Die beiden Darstellungen stimmen überein.</p>
+  </details>
+
+  <h3>Anwendungen in Figuren</h3>
+  <p><strong>Parallelogramm.</strong> Ein Viereck <span class="m" data-tex="ABCD" data-plain="ABCD"></span>, dessen Ecken der Reihe nach umlaufen werden, ist ein Parallelogramm, wenn gegenüberliegende Seiten parallel und gleich lang sind, also wenn <span class="m" data-tex="\overrightarrow{AB}" data-plain="AB→"></span> und <span class="m" data-tex="\overrightarrow{DC}" data-plain="DC→"></span> derselbe Vektor sind:</p>
+
+  <div class="m block" id="f-parallelogramm" data-tex="\overrightarrow{AB} = \overrightarrow{DC}" data-plain="AB→ = DC→"></div>
+
+  <p>Dann gilt auch <span class="m" data-tex="\overrightarrow{BC} = \overrightarrow{AD}" data-plain="BC→ = AD→"></span>. Ein Beispiel: Für <span class="m" data-tex="A(1\,|\,1\,|\,0)" data-plain="A(1|1|0)"></span>, <span class="m" data-tex="B(5\,|\,2\,|\,1)" data-plain="B(5|2|1)"></span>, <span class="m" data-tex="C(6\,|\,5\,|\,3)" data-plain="C(6|5|3)"></span> und <span class="m" data-tex="D(2\,|\,4\,|\,2)" data-plain="D(2|4|2)"></span> ist <span class="m" data-tex="\overrightarrow{AB} = \begin{pmatrix}4\\1\\1\end{pmatrix}" data-plain="AB→ = (4|1|1)"></span> und <span class="m" data-tex="\overrightarrow{DC} = \begin{pmatrix}4\\1\\1\end{pmatrix}" data-plain="DC→ = (4|1|1)"></span>. Das Viereck ist ein Parallelogramm. Fehlt eine Ecke, rechnest du sie mit Hilfe der Gleichung aus.</p>
+
+  <p><strong>Schwerpunkt.</strong> Der Schwerpunkt eines Dreiecks ist der Schnittpunkt seiner Seitenhalbierenden. Sein Ortsvektor ist der Mittelwert der drei Ortsvektoren der Ecken:</p>
+
+  <div class="m block" id="f-schwer" data-tex="\vec{s} = \dfrac{1}{3}\left(\vec{a} + \vec{b} + \vec{c}\right)" data-plain="s→ = ⅓(a→ + b→ + c→)"></div>
+
+  <p>Für <span class="m" data-tex="A(1\,|\,2\,|\,3)" data-plain="A(1|2|3)"></span>, <span class="m" data-tex="B(4\,|\,{-}2\,|\,0)" data-plain="B(4|−2|0)"></span> und <span class="m" data-tex="C({-}2\,|\,3\,|\,6)" data-plain="C(−2|3|6)"></span> ist <span class="m" data-tex="\vec{s} = \tfrac{1}{3}\begin{pmatrix}3\\3\\9\end{pmatrix} = \begin{pmatrix}1\\1\\3\end{pmatrix}" data-plain="s→ = ⅓·(3|3|9) = (1|1|3)"></span>, der Schwerpunkt ist also <span class="m" data-tex="S(1\,|\,1\,|\,3)" data-plain="S(1|1|3)"></span>.</p>
+
+  <div class="hinweis">
+    <strong>Ausblick.</strong> Eine Gerade im Raum wird durch einen Punkt und eine Richtung festgelegt, eine Ebene durch einen Punkt und zwei Richtungen, die nicht parallel sein dürfen. In beiden Fällen sind Linearkombinationen das Werkzeug: Alle Punkte der Geraden oder Ebene entstehen, indem man die Richtungsvektoren mit variablen Koeffizienten vervielfacht und zum Anfangspunkt addiert. Die lineare Unabhängigkeit der Richtungsvektoren sorgt dafür, dass eine Ebene wirklich eine Ebene ist und keine Gerade.
+  </div>
+</section>
+
+<!-- =============== 4 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">4</div><h2>Vektoren zusammensetzen: Wann reichen sie aus?</h2></div>
+
+  <p>In der Simulation gehen drei Vektoren <span class="m" data-tex="\vec{a}" data-plain="a→"></span>, <span class="m" data-tex="\vec{b}" data-plain="b→"></span> und <span class="m" data-tex="\vec{c}" data-plain="c→"></span> vom Ursprung O aus (dünne Pfeile). Mit den Reglern <span class="m" data-tex="r" data-plain="r"></span>, <span class="m" data-tex="s" data-plain="s"></span> und <span class="m" data-tex="t" data-plain="t"></span> stellst du eine Linearkombination <span class="m" data-tex="r\,\vec{a} + s\,\vec{b} + t\,\vec{c}" data-plain="r·a→ + s·b→ + t·c→"></span> ein. Sie wird als Pfeilkette gezeichnet: erst <span class="m" data-tex="r\,\vec{a}" data-plain="r·a→"></span> in Grün, dann <span class="m" data-tex="s\,\vec{b}" data-plain="s·b→"></span> in Orange, dann <span class="m" data-tex="t\,\vec{c}" data-plain="t·c→"></span> in Blau. Der Endpunkt <span class="m" data-tex="E" data-plain="E"></span> der Kette hat den Ortsvektor der Linearkombination. Deine Aufgabe ist, <span class="m" data-tex="E" data-plain="E"></span> auf den goldenen <strong>Zielpunkt</strong> zu legen. Die Anzeige „Abstand“ rechnet im Raum und sagt dir, wie nah du bist. Gepunktete Linien gehen von <span class="m" data-tex="E" data-plain="E"></span> und vom Ziel senkrecht zur <span class="m" data-tex="x_1x_2" data-plain="x₁x₂"></span>-Ebene und helfen, die Höhe im Schrägbild zu lesen. Das Bild ist ein Schrägbild wie in Abschnitt 2, deshalb verlässt du dich auf die angezeigten Koordinaten.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    1. Wähle „Datensatz 1“ mit dem Zielpunkt P. Stelle <span class="m" data-tex="r" data-plain="r"></span>, <span class="m" data-tex="s" data-plain="s"></span> und <span class="m" data-tex="t" data-plain="t"></span> so ein, dass der Abstand 0,00 LE beträgt, und notiere die drei Werte. Wechsle dann zum Zielpunkt Q und mache dasselbe. Suche bei P nach einer zweiten Einstellung mit Abstand 0,00 LE.<br>
+    2. Wähle „Datensatz 2“ mit dem Zielpunkt P. Finde mindestens drei verschiedene Einstellungen, die P treffen, und schreibe sie auf. Welche Beziehung besteht zwischen den Werten <span class="m" data-tex="r" data-plain="r"></span>, <span class="m" data-tex="s" data-plain="s"></span> und <span class="m" data-tex="t" data-plain="t"></span>? Wechsle dann zum Zielpunkt Q: Was geschieht mit dem kleinsten Abstand, den du erreichst?<br>
+    3. Wähle „Datensatz 3“. Vergleiche die Vektoren <span class="m" data-tex="\vec{a}" data-plain="a→"></span> und <span class="m" data-tex="\vec{b}" data-plain="b→"></span> in der Anzeige. Probiere beide Zielpunkte aus und klicke erst danach auf „Abhängigkeit prüfen“ und „Lösung zeigen“. Formuliere einen Satz: Woran erkennst du schon an den Vektoren, dass nicht jeder Punkt erreichbar ist?
+  </div>
+
+  <div class="sim">
+    <canvas id="cvV" width="760" height="520" role="img" aria-label="Schrägbild mit drei Vektoren, einer Pfeilkette und einem Zielpunkt"></canvas>
+
+    <div style="padding:10px 16px 12px;font-size:14px;line-height:1.75;color:var(--grau)">
+      <strong style="color:var(--text)">Dünn:</strong> die gegebenen Vektoren
+      <b style="color:#0d7a52">a→</b>, <b style="color:#c2410c">b→</b>, <b style="color:#1d4ed8">c→</b>.
+      <strong style="color:var(--text)">Dick:</strong> die Pfeilkette
+      <b style="color:#0d7a52">r·a→</b>, <b style="color:#c2410c">s·b→</b>, <b style="color:#1d4ed8">t·c→</b>.
+      Schwarzer Punkt: Endpunkt E. Goldene Raute: Zielpunkt. <b style="color:#b91c1c">Rot gestrichelt:</b> Abstand von E zum Ziel.
+    </div>
+
+    <div class="anzeige">
+      <div>Vektor a→<span id="aVa">–</span></div>
+      <div>Vektor b→<span id="aVb">–</span></div>
+      <div>Vektor c→<span id="aVc">–</span></div>
+      <div>Einstellung (r | s | t)<span id="aEin">–</span></div>
+      <div>Endpunkt E<span id="aE">–</span></div>
+      <div><em id="aZName" style="font-style:normal">Zielpunkt P</em><span id="aZ">–</span></div>
+      <div>Abstand E–Ziel<span id="aAbst">–</span></div>
+      <div>Die Vektoren sind<span id="aAbh">–</span></div>
+      <div>Lösungen für das Ziel<span id="aLoes">–</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label for="sDaten">Datensatz</label>
+          <select id="sDaten" style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px;background:#fff">
+            <option value="0">Datensatz 1</option>
+            <option value="1">Datensatz 2</option>
+            <option value="2">Datensatz 3</option>
+          </select>
+        </div>
+        <div>
+          <label for="rR">Koeffizient r <b id="lR">0</b></label>
+          <input type="range" id="rR" min="-3" max="3" step="0.5" value="0">
+        </div>
+        <div>
+          <label for="rS">Koeffizient s <b id="lS">0</b></label>
+          <input type="range" id="rS" min="-3" max="3" step="0.5" value="0">
+        </div>
+        <div>
+          <label for="rT">Koeffizient t <b id="lT">0</b></label>
+          <input type="range" id="rT" min="-3" max="3" step="0.5" value="0">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button id="bZiel">Zielpunkt wechseln</button>
+        <button class="primaer" id="bAbh">Abhängigkeit prüfen</button>
+        <button id="bLoes">Lösung zeigen</button>
+        <button id="bReset">Zurücksetzen</button>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px;margin-left:6px">
+          <input type="checkbox" id="cLot" checked style="accent-color:var(--akzent);width:16px;height:16px">
+          Senkrechte Hilfslinien zeigen
+        </label>
+      </div>
+      <p id="simHinweis" aria-live="polite" style="margin:10px 0 0;font-size:14px;color:var(--grau)"></p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Du wählst „Datensatz 2“ mit dem Zielpunkt P und stellst fest, dass sowohl <span class="m" data-tex="(r\,|\,s\,|\,t) = (1\,|\,1\,|\,0)" data-plain="(r|s|t) = (1|1|0)"></span> als auch <span class="m" data-tex="(r\,|\,s\,|\,t) = (0\,|\,2\,|\,1)" data-plain="(r|s|t) = (0|2|1)"></span> den Endpunkt auf P legen. Was schließt du daraus?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>Nichts Besonderes: Mit drei Reglern gibt es immer mehrere Einstellungen für denselben Punkt.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span><span class="m" data-tex="\vec{a},\,\vec{b},\,\vec{c}" data-plain="a→, b→, c→"></span> sind linear abhängig, und es gibt dann unendlich viele Einstellungen für P.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span><span class="m" data-tex="\vec{a},\,\vec{b},\,\vec{c}" data-plain="a→, b→, c→"></span> sind linear unabhängig, denn beide Einstellungen führen zum selben Punkt.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Du wählst „Datensatz 3“ und den Zielpunkt Q. Wie lange du auch probierst, der Abstand bleibt deutlich über null. Woran liegt das?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>Die Regler reichen nur von −3 bis 3. Mit größeren Werten würde E auf Q landen.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span><span class="m" data-tex="\vec{b}" data-plain="b→"></span> ist ein Vielfaches von <span class="m" data-tex="\vec{a}" data-plain="a→"></span>, die drei Vektoren spannen nur eine Ebene durch O auf, und Q liegt nicht in dieser Ebene.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>Q liegt im Schrägbild zu weit vom Ursprung entfernt, sodass die Kette nicht bis dorthin reicht.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+</section>
+
+<!-- =============== 5 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">5</div><h2>Übungen</h2></div>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Die Punkte <span class="m" data-tex="A(2\,|\,{-}1\,|\,4)" data-plain="A(2|−1|4)"></span> und <span class="m" data-tex="B(5\,|\,3\,|\,16)" data-plain="B(5|3|16)"></span> sind die Endpunkte einer Strecke, die Koordinaten sind in Längeneinheiten angegeben. Berechne die Länge der Strecke.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="LE³">LE³</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die Länge der Strecke ist der Betrag eines Vektors. Überlege, welcher Vektor die beiden Punkte verbindet.</div>
+    <div class="hilfe-text" data-stufe="2">Bilde zuerst den Vektor von <span class="m" data-tex="A" data-plain="A"></span> nach <span class="m" data-tex="B" data-plain="B"></span> („Spitze minus Fuß“) und berechne dann seinen Betrag mit der Wurzel aus der Summe der Komponentenquadrate.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\overrightarrow{AB} = \begin{pmatrix}5-2\\3-({-}1)\\16-4\end{pmatrix} = \begin{pmatrix}3\\4\\12\end{pmatrix}" data-plain="AB→ = (5−2|3−(−1)|16−4) = (3|4|12)"></span>. Damit ist <span class="m" data-tex="\left|\overrightarrow{AB}\right| = \sqrt{3^{2} + 4^{2} + 12^{2}} = \sqrt{9 + 16 + 144} = \sqrt{169} = 13\,\mathrm{LE}" data-plain="|AB→| = √(3² + 4² + 12²) = √(9 + 16 + 144) = √169 = 13 LE"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Gegeben sind <span class="m" data-tex="A({-}2\,|\,5\,|\,7)" data-plain="A(−2|5|7)"></span> und <span class="m" data-tex="B(10\,|\,1\,|\,{-}3)" data-plain="B(10|1|−3)"></span>. Berechne die <span class="m" data-tex="x_3" data-plain="x₃"></span>-Koordinate des Mittelpunkts <span class="m" data-tex="M" data-plain="M"></span> der Strecke <span class="m" data-tex="AB" data-plain="AB"></span>.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Jede Koordinate des Mittelpunkts ist der Mittelwert der entsprechenden Koordinaten der beiden Endpunkte. Für die Frage brauchst du nur die dritten Koordinaten.</div>
+    <div class="hilfe-text" data-stufe="2">Der Ortsvektor des Mittelpunkts ist <span class="m" data-tex="\vec{m} = \tfrac{1}{2}\left(\vec{a} + \vec{b}\right)" data-plain="m→ = ½(a→ + b→)"></span>. Betrachte davon nur die dritte Komponente.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="m_3 = \dfrac{7 + ({-}3)}{2} = \dfrac{4}{2} = 2" data-plain="m₃ = (7 + (−3)) / 2 = 4 / 2 = 2"></span>. Der ganze Mittelpunkt ist <span class="m" data-tex="M(4\,|\,3\,|\,2)" data-plain="M(4|3|2)"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Jedes der vier Vektortripel unten ist entweder linear unabhängig oder linear abhängig. Ordne jedem Tripel die Aussage zu, die es am genauesten beschreibt.</div>
+
+    <ul style="margin:0 0 14px;padding-left:20px">
+      <li><strong>A</strong> – Die drei Vektoren sind linear unabhängig.</li>
+      <li><strong>B</strong> – Genau zwei der Vektoren sind parallel, keiner ist der Nullvektor.</li>
+      <li><strong>C</strong> – Kein Vektor ist der Nullvektor und keine zwei sind parallel, aber die drei Vektoren sind linear abhängig.</li>
+      <li><strong>D</strong> – Einer der Vektoren ist der Nullvektor.</li>
+    </ul>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="C"><span><span class="m" data-tex="\left\{\begin{pmatrix}1\\2\\0\end{pmatrix},\ \begin{pmatrix}0\\1\\1\end{pmatrix},\ \begin{pmatrix}2\\5\\1\end{pmatrix}\right\}" data-plain="{(1|2|0), (0|1|1), (2|5|1)}"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="D"><span><span class="m" data-tex="\left\{\begin{pmatrix}2\\1\\3\end{pmatrix},\ \begin{pmatrix}0\\0\\0\end{pmatrix},\ \begin{pmatrix}1\\4\\-2\end{pmatrix}\right\}" data-plain="{(2|1|3), (0|0|0), (1|4|−2)}"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="A"><span><span class="m" data-tex="\left\{\begin{pmatrix}1\\0\\1\end{pmatrix},\ \begin{pmatrix}1\\1\\0\end{pmatrix},\ \begin{pmatrix}0\\1\\2\end{pmatrix}\right\}" data-plain="{(1|0|1), (1|1|0), (0|1|2)}"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="B"><span><span class="m" data-tex="\left\{\begin{pmatrix}1\\2\\-1\end{pmatrix},\ \begin{pmatrix}-2\\-4\\2\end{pmatrix},\ \begin{pmatrix}0\\1\\3\end{pmatrix}\right\}" data-plain="{(1|2|−1), (−2|−4|2), (0|1|3)}"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Prüfe jedes Tripel der Reihe nach: Kommt der Nullvektor vor? Sind zwei der Vektoren Vielfache voneinander?</div>
+    <div class="hilfe-text" data-stufe="2">Trifft beides nicht zu, suche, ob sich ein Vektor aus den beiden anderen zusammensetzen lässt (Summe, Differenz oder ein Vielfaches probieren). Gelingt das nicht, stelle das Gleichungssystem für <span class="m" data-tex="r\,\vec{a} + s\,\vec{b} + t\,\vec{c} = \vec{0}" data-plain="r·a→ + s·b→ + t·c→ = 0→"></span> auf und prüfe, ob es nur die triviale Lösung hat.</div>
+    <div class="hilfe-text" data-stufe="3">Erstes Tripel: Kein Nullvektor, keine zwei Vektoren parallel, und es ist <span class="m" data-tex="2\begin{pmatrix}1\\2\\0\end{pmatrix} + \begin{pmatrix}0\\1\\1\end{pmatrix} = \begin{pmatrix}2\\5\\1\end{pmatrix}" data-plain="2·(1|2|0) + (0|1|1) = (2|5|1)"></span>. Der dritte Vektor ist also zusammengesetzt, die drei sind linear abhängig: C. Zweites Tripel: Der zweite Vektor ist der Nullvektor: D. Drittes Tripel: Das System <span class="m" data-tex="r + s = 0" data-plain="r + s = 0"></span>, <span class="m" data-tex="s + t = 0" data-plain="s + t = 0"></span>, <span class="m" data-tex="r + 2t = 0" data-plain="r + 2t = 0"></span> gibt <span class="m" data-tex="r = {-}s" data-plain="r = −s"></span>, <span class="m" data-tex="t = {-}s" data-plain="t = −s"></span> und damit <span class="m" data-tex="-3s = 0" data-plain="−3s = 0"></span>, also <span class="m" data-tex="r = s = t = 0" data-plain="r = s = t = 0"></span>. Die drei Vektoren sind linear unabhängig: A. Viertes Tripel: Der zweite Vektor ist <span class="m" data-tex="-2" data-plain="−2"></span> mal der erste, der dritte ist zu keinem von beiden parallel: B.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Für welchen Wert von <span class="m" data-tex="t" data-plain="t"></span> sind die Vektoren <span class="m" data-tex="\vec{a} = \begin{pmatrix}2\\t\\6\end{pmatrix}" data-plain="a→ = (2|t|6)"></span> und <span class="m" data-tex="\vec{b} = \begin{pmatrix}-1\\3\\-3\end{pmatrix}" data-plain="b→ = (−1|3|−3)"></span> parallel?</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Parallel heißt: Der eine Vektor entsteht aus dem anderen durch Vervielfachen, mit demselben Faktor in jeder Komponente. Zwei der drei Komponenten von <span class="m" data-tex="ec{a}" data-plain="a→"></span> und <span class="m" data-tex="ec{b}" data-plain="b→"></span> sind bereits bekannt und reichen, um diesen Faktor zu bestimmen.</div>
+    <div class="hilfe-text" data-stufe="2">Setze <span class="m" data-tex="\vec{a} = r\cdot\vec{b}" data-plain="a→ = r·b→"></span> an. Bestimme <span class="m" data-tex="r" data-plain="r"></span> aus der ersten Komponente, prüfe es an der dritten und berechne dann <span class="m" data-tex="t" data-plain="t"></span> aus der zweiten.</div>
+    <div class="hilfe-text" data-stufe="3">Erste Komponente: <span class="m" data-tex="2 = r\cdot({-}1)" data-plain="2 = r·(−1)"></span>, also <span class="m" data-tex="r = {-}2" data-plain="r = −2"></span>. Dritte Komponente zur Probe: <span class="m" data-tex="6 = ({-}2)\cdot({-}3)" data-plain="6 = (−2)·(−3)"></span> stimmt. Zweite Komponente: <span class="m" data-tex="t = ({-}2)\cdot 3 = {-}6" data-plain="t = (−2)·3 = −6"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Das Viereck <span class="m" data-tex="ABCD" data-plain="ABCD"></span> mit den Ecken <span class="m" data-tex="A(1\,|\,0\,|\,2)" data-plain="A(1|0|2)"></span>, <span class="m" data-tex="B(4\,|\,2\,|\,3)" data-plain="B(4|2|3)"></span> und <span class="m" data-tex="C(5\,|\,6\,|\,1)" data-plain="C(5|6|1)"></span> soll ein Parallelogramm sein, dessen Ecken der Reihe nach umlaufen werden. Bestimme die <span class="m" data-tex="x_2" data-plain="x₂"></span>-Koordinate der vierten Ecke <span class="m" data-tex="D" data-plain="D"></span>.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Achte darauf, welche Ecken sich gegenüberliegen. In einem Parallelogramm gibt es zwei Paare gleicher Seitenvektoren, mit denen du die fehlende Ecke von einer bekannten aus erreichst.</div>
+    <div class="hilfe-text" data-stufe="2">Es gilt <span class="m" data-tex="\overrightarrow{BC} = \overrightarrow{AD}" data-plain="BC→ = AD→"></span>, also <span class="m" data-tex="\vec{d} = \vec{a} + \overrightarrow{BC}" data-plain="d→ = a→ + BC→"></span>. Berechne zuerst <span class="m" data-tex="\overrightarrow{BC}" data-plain="BC→"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\overrightarrow{BC} = \begin{pmatrix}5-4\\6-2\\1-3\end{pmatrix} = \begin{pmatrix}1\\4\\-2\end{pmatrix}" data-plain="BC→ = (5−4|6−2|1−3) = (1|4|−2)"></span>. Damit ist <span class="m" data-tex="\vec{d} = \begin{pmatrix}1\\0\\2\end{pmatrix} + \begin{pmatrix}1\\4\\-2\end{pmatrix} = \begin{pmatrix}2\\4\\0\end{pmatrix}" data-plain="d→ = (1|0|2) + (1|4|−2) = (2|4|0)"></span>, also <span class="m" data-tex="D(2\,|\,4\,|\,0)" data-plain="D(2|4|0)"></span> und die gesuchte Koordinate ist 4. Probe: <span class="m" data-tex="\overrightarrow{AB} = \begin{pmatrix}3\\2\\1\end{pmatrix}" data-plain="AB→ = (3|2|1)"></span> und <span class="m" data-tex="\overrightarrow{DC} = \begin{pmatrix}3\\2\\1\end{pmatrix}" data-plain="DC→ = (3|2|1)"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a6">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Eine Mitschülerin behauptet: „Wenn von drei Vektoren im Raum keine zwei parallel sind, dann sind die drei Vektoren immer linear unabhängig.“ Beurteile diese Aussage und begründe deine Entscheidung.</div>
+    <textarea placeholder="Deine Beurteilung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a6">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Die Aussage ist falsch. Ein Gegenbeispiel sind <span class="m" data-tex="\vec{a} = \begin{pmatrix}1\\0\\0\end{pmatrix}" data-plain="a→ = (1|0|0)"></span>, <span class="m" data-tex="\vec{b} = \begin{pmatrix}0\\1\\0\end{pmatrix}" data-plain="b→ = (0|1|0)"></span> und <span class="m" data-tex="\vec{c} = \begin{pmatrix}1\\1\\0\end{pmatrix}" data-plain="c→ = (1|1|0)"></span>. Keine zwei dieser Vektoren sind parallel: <span class="m" data-tex="\vec{a}" data-plain="a→"></span> hat in der zweiten Komponente eine Null, <span class="m" data-tex="\vec{b}" data-plain="b→"></span> und <span class="m" data-tex="\vec{c}" data-plain="c→"></span> dort nicht, also ist keines von ihnen ein Vielfaches von <span class="m" data-tex="\vec{a}" data-plain="a→"></span>; ebenso hat <span class="m" data-tex="\vec{b}" data-plain="b→"></span> in der ersten Komponente eine Null, <span class="m" data-tex="\vec{c}" data-plain="c→"></span> nicht. Trotzdem ist <span class="m" data-tex="\vec{c} = \vec{a} + \vec{b}" data-plain="c→ = a→ + b→"></span>, das heißt <span class="m" data-tex="1\cdot\vec{a} + 1\cdot\vec{b} + ({-}1)\cdot\vec{c} = \vec{0}" data-plain="1·a→ + 1·b→ + (−1)·c→ = 0→"></span> ist eine nichttriviale Lösung, und die drei Vektoren sind linear abhängig. Alle drei liegen in der <span class="m" data-tex="x_1x_2" data-plain="x₁x₂"></span>-Ebene.</p>
+      <p>Der Fehler der Aussage liegt darin, dass die Bedingung „keine zwei sind parallel“ nur Paare ausschließt. Bei drei Vektoren gibt es einen zweiten Fall der Abhängigkeit, nämlich dass alle drei in einer Ebene liegen (komplanar sind). Richtig ist die Umkehrung: Sind drei Vektoren linear unabhängig, dann sind keine zwei von ihnen parallel, denn sonst wäre schon ein Paar abhängig und damit auch das Tripel.</p>
+      <p><strong>Bewertungskriterien.</strong> Aussage als falsch erkannt · Gegenbeispiel mit drei Vektoren angegeben · Nachweis, dass keine zwei Vektoren parallel sind · Nachweis der linearen Abhängigkeit durch eine nichttriviale Linearkombination oder durch die Darstellung eines Vektors mit den anderen · Hinweis auf den zweiten Fall (komplanar) oder auf die richtige Umkehrung.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-num="a7">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Beweise mit Vektoren: In jedem Parallelogramm <span class="m" data-tex="ABCD" data-plain="ABCD"></span> halbieren sich die beiden Diagonalen <span class="m" data-tex="AC" data-plain="AC"></span> und <span class="m" data-tex="BD" data-plain="BD"></span> gegenseitig. Begründe, warum dein Beweis nicht nur für ein Zahlenbeispiel, sondern für jedes Parallelogramm im Raum gilt.</div>
+    <textarea placeholder="Dein Beweis…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a7">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Seien <span class="m" data-tex="\vec{a},\,\vec{b},\,\vec{c},\,\vec{d}\;" data-plain="a→, b→, c→, d→"></span> die Ortsvektoren der Ecken. Der Mittelpunkt der Diagonale <span class="m" data-tex="AC" data-plain="AC"></span> hat den Ortsvektor <span class="m" data-tex="\vec{m} = \tfrac{1}{2}(\vec{a} + \vec{c})" data-plain="m→ = ½(a→ + c→)"></span>, der Mittelpunkt der Diagonale <span class="m" data-tex="BD" data-plain="BD"></span> den Ortsvektor <span class="m" data-tex="\vec{n} = \tfrac{1}{2}(\vec{b} + \vec{d})" data-plain="n→ = ½(b→ + d→)"></span>.</p>
+      <p>Weil <span class="m" data-tex="ABCD" data-plain="ABCD"></span> ein Parallelogramm ist, gilt <span class="m" data-tex="\overrightarrow{AB} = \overrightarrow{DC}" data-plain="AB→ = DC→"></span>, also <span class="m" data-tex="\vec{b} - \vec{a} = \vec{c} - \vec{d}\;" data-plain="b→ − a→ = c→ − d→"></span>. Addiert man auf beiden Seiten <span class="m" data-tex="\vec{a} + \vec{d}\;" data-plain="a→ + d→"></span>, folgt <span class="m" data-tex="\vec{b} + \vec{d} = \vec{a} + \vec{c}" data-plain="b→ + d→ = a→ + c→"></span>. Damit ist <span class="m" data-tex="\vec{n} = \vec{m}" data-plain="n→ = m→"></span>: Die beiden Diagonalen haben denselben Mittelpunkt, sie halbieren sich also gegenseitig.</p>
+      <p>Der Beweis arbeitet mit den Ortsvektoren <span class="m" data-tex="\vec{a},\,\vec{b},\,\vec{c},\,\vec{d}\;" data-plain="a→, b→, c→, d→"></span> als Platzhaltern und benutzt nur die Bedingung <span class="m" data-tex="\overrightarrow{AB} = \overrightarrow{DC}" data-plain="AB→ = DC→"></span> und die Rechengesetze für Vektoren. Er gilt deshalb für jedes Parallelogramm, in der Ebene wie im Raum, und nicht nur für eine Zahlenwahl.</p>
+      <p><strong>Bewertungskriterien.</strong> Mittelpunkte beider Diagonalen mit Ortsvektoren angegeben · Parallelogrammbedingung als Vektorgleichung <span class="m" data-tex="\overrightarrow{AB} = \overrightarrow{DC}" data-plain="AB→ = DC→"></span> formuliert · Umformung zu <span class="m" data-tex="\vec{a} + \vec{c} = \vec{b} + \vec{d}\;" data-plain="a→ + c→ = b→ + d→"></span> · Schluss auf gleiche Mittelpunkte · Begründung der Allgemeingültigkeit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 6 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">6</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Das Wichtigste in sechs Sätzen</h3>
+    <ul>
+      <li>Ein Vektor beschreibt eine Verschiebung und wird als Zahlenspalte geschrieben. Den Vektor von <span class="m" data-tex="A" data-plain="A"></span> nach <span class="m" data-tex="B" data-plain="B"></span> erhältst du als „Spitze minus Fuß“, <span class="m" data-tex="\overrightarrow{AB} = \vec{b} - \vec{a}" data-plain="AB→ = b→ − a→"></span>.</li>
+      <li>Vektoren werden komponentenweise addiert, subtrahiert und mit reellen Zahlen vervielfacht. Die Summe ist die Pfeilkette, und für die Rechengesetze gelten dieselben Regeln wie für Terme.</li>
+      <li>Die Länge eines Vektors ist <span class="m" data-tex="\left|\vec{a}\right| = \sqrt{a_1^{2} + a_2^{2} + a_3^{2}}" data-plain="|a→| = √(a₁² + a₂² + a₃²)"></span>, sie ist auch der Abstand der Endpunkte. Vervielfacht man mit <span class="m" data-tex="r" data-plain="r"></span>, ändert sich die Länge um <span class="m" data-tex="|r|" data-plain="|r|"></span>. Der Mittelpunkt einer Strecke hat den Ortsvektor <span class="m" data-tex="\tfrac{1}{2}(\vec{a} + \vec{b})" data-plain="½(a→ + b→)"></span>.</li>
+      <li>Zwei Vektoren sind parallel, wenn der eine ein Vielfaches des anderen ist, <span class="m" data-tex="\vec{b} = r\cdot\vec{a}" data-plain="b→ = r·a→"></span>, mit demselben <span class="m" data-tex="r" data-plain="r"></span> in allen Komponenten.</li>
+      <li>Eine Linearkombination <span class="m" data-tex="r\,\vec{a} + s\,\vec{b} + t\,\vec{c}" data-plain="r·a→ + s·b→ + t·c→"></span> setzt Vektoren zusammen. Die Vektoren sind linear unabhängig, wenn <span class="m" data-tex="r\,\vec{a} + s\,\vec{b} + t\,\vec{c} = \vec{0}" data-plain="r·a→ + s·b→ + t·c→ = 0→"></span> nur die triviale Lösung <span class="m" data-tex="r = s = t = 0" data-plain="r = s = t = 0"></span> hat, sonst linear abhängig.</li>
+      <li>Zwei Vektoren sind genau dann linear abhängig, wenn sie parallel sind. Drei Vektoren sind es genau dann, wenn sie in einer Ebene liegen. Bei linearer Unabhängigkeit ist jede Darstellung als Linearkombination eindeutig, bei Abhängigkeit gibt es entweder keine oder unendlich viele.</li>
+    </ul>
+  </div>
+
+  <div class="hinweis">
+    <strong>Blick aufs Zentralabitur.</strong> Die Vektorrechnung ist selten eine eigene Aufgabe, sie ist das Werkzeug für die Aufgaben zur analytischen Geometrie. Diese Gestalten begegnen dir typischerweise:
+    <ul style="margin:8px 0 0">
+      <li>ein Körper oder eine Figur in einem Sachzusammenhang (Dach, Pyramide, Zelt, Flugbahn), von dem Ecken gegeben sind: Seitenvektoren, Längen, Mittelpunkte und fehlende Ecken bestimmen;</li>
+      <li>der Nachweis, dass ein Viereck ein Parallelogramm ist, mit der Gleichung <span class="m" data-tex="\overrightarrow{AB} = \overrightarrow{DC}" data-plain="AB→ = DC→"></span>, und die Berechnung der vierten Ecke;</li>
+      <li>die Frage, ob drei Vektoren linear unabhängig sind oder ob ein Vektor sich als Linearkombination darstellen lässt, mit einem linearen Gleichungssystem;</li>
+      <li>die Begründung allgemeiner Aussagen mit Vektoren, bei denen mit Platzhaltern statt mit Zahlen gerechnet wird.</li>
+    </ul>
+    <p style="margin:8px 0 0">Ob du für das Gleichungssystem oder die Rechnung ein digitales Hilfsmittel nutzen darfst, hängt vom Aufgabenteil ab; die Ansätze musst du in jedem Fall selbst aufstellen.</p>
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Ich kann …</h3>
+    <div class="check">
+      <label><input type="checkbox"><span>… Punkte im Schrägbild eines Koordinatensystems zeichnen und aus ihren Koordinaten den Vektor zwischen zwei Punkten bestimmen.</span></label>
+      <label><input type="checkbox"><span>… Vektoren addieren, subtrahieren und vervielfachen und diese Rechnungen am Pfeil deuten.</span></label>
+      <label><input type="checkbox"><span>… Länge, Abstand und Mittelpunkt mit Vektoren berechnen und mit dem Satz des Pythagoras begründen.</span></label>
+      <label><input type="checkbox"><span>… prüfen, ob zwei Vektoren parallel sind, und einen unbekannten Parameter so bestimmen, dass sie es sind.</span></label>
+      <label><input type="checkbox"><span>… einen Vektor als Linearkombination darstellen oder begründen, dass das nicht möglich ist.</span></label>
+      <label><input type="checkbox"><span>… die lineare Unabhängigkeit von Vektoren mit einem Gleichungssystem prüfen und die Folgen für die Darstellbarkeit beschreiben.</span></label>
+    </div>
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnis als Text kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+
+  <details class="lehrer">
+    <summary>Didaktische Hinweise (Lehrkraft)</summary>
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Analytische Geometrie und Lineare Algebra“ (Kernlehrplan Mathematik, gymnasiale Oberstufe NRW). Q1 umfasst laut Verteilung dieses Projekts nach der Analysis die analytische Geometrie; dieses Modul ist ihr Einstieg. Es deckt ab: Koordinatensystem im Raum und Schrägbild, Vektor als Verschiebung, Ortsvektor und Verbindungsvektor, Addieren, Subtrahieren und Vervielfachen, Betrag und Abstand, Mittelpunkt, Parallelität, Linearkombination und lineare (Un-)Abhängigkeit mit Ausblick auf Basis und Komplanarität. Anwendungen sind Parallelogramm und Dreiecksschwerpunkt. Prozessbezogene Schwerpunkte sind <em>Argumentieren</em> (die drei Begründungen, Aufgaben a6 und a7), <em>Modellieren</em> (Einstieg mit der Drohne), <em>Werkzeuge nutzen</em> (die Simulation als Experimentierfeld) und <em>Kommunizieren</em> (Spaltenschreibweise, Pfeil und Schrägbild als Darstellungen). Vorausgesetzt werden der Satz des Pythagoras, das Lösen einfacher linearer Gleichungssysteme und der Umgang mit Koordinaten der Ebene. Das Skalarprodukt, Geraden und Ebenen folgen in eigenen Modulen; das Gauß-Verfahren wird hier nicht eingeführt, die Gleichungssysteme haben drei Unbekannte und lassen sich durch Einsetzen lösen.</p>
+    <p><strong>Offene Punkte.</strong> Nicht geklärt ist, in welcher Tiefe der Kernlehrplan für den Leistungskurs lineare Unabhängigkeit, Basis und Komplanarität schon im ersten Halbjahr der analytischen Geometrie verlangt; das Modul behandelt sie als Grundlage für Geraden und Ebenen und lässt die Determinante und das Spatprodukt aus. Offen ist auch die Notation: Das Modul schreibt Vektoren mit Pfeil und als Spalte, Punkte als <span class="m" data-tex="P(p_1\,|\,p_2\,|\,p_3)" data-plain="P(p₁|p₂|p₃)"></span> und Ortsvektoren mit dem kleinen Buchstaben des Punktes. Eure Schule kann eine andere Schreibweise vereinbart haben. Die Schrägbild-Konvention (halbe Kästchendiagonale für die <span class="m" data-tex="x_1" data-plain="x₁"></span>-Achse) ist die im Unterricht übliche, der Kernlehrplan legt sie nicht fest. Es wurden keine Kernlehrplan-Zitate eingetragen, die sich nicht belegen ließen.</p>
+    <p><strong>Zeitbedarf.</strong> Abschnitte 1 und 2 etwa 40 Minuten, Abschnitt 3 etwa 30 Minuten, Simulation mit Beobachtungsauftrag 25 Minuten, Übungen 25 Minuten. Die beiden Aufgaben im Anforderungsbereich III eignen sich für eine Hausaufgabe oder eine Partnerarbeit mit anschließendem Vergleich der Musterlösung.</p>
+    <p><strong>Typische Hürden.</strong> Erstens „Spitze minus Fuß“ vertauschen: Wer Anfangspunkt minus Endpunkt rechnet, erhält den Gegenvektor. Zweitens den Betrag als Summe der Komponenten statt als Wurzel aus der Summe der Quadrate (Aufgabe a1). Drittens beim Mittelpunkt das Halbieren vergessen (Aufgabe a2). Viertens die Parallelität an nur einer Komponente prüfen oder das Vorzeichen des Faktors übersehen (Aufgabe a4). Fünftens bei der Parallelogrammergänzung die Reihenfolge der Ecken ignorieren (Aufgabe a5). Sechstens die triviale Lösung als Beweis der Unabhängigkeit ansehen. Siebtens „keine zwei parallel“ mit „linear unabhängig“ gleichsetzen (Aufgabe a6). Achtens Längen im Schrägbild mit Längen im Raum verwechseln. Neuntens Punkt und Ortsvektor nicht unterscheiden: Ein Punkt hat eine Lage, ein Vektor eine Verschiebung.</p>
+    <p><strong>Modellgrenzen.</strong> Das Schrägbild der Simulation ist mehrdeutig; deshalb werden Endpunkt, Ziel und Abstand als Zahlen angezeigt. Die Koeffizienten laufen nur von −3 bis 3 in Schritten von 0,5. Die Datensätze sind konstruiert: Datensatz 1 ist linear unabhängig, in Datensatz 2 ist der dritte Vektor die Differenz der ersten beiden, in Datensatz 3 ist der zweite Vektor das −2-fache des ersten. Die Lösungsmengen bei Abhängigkeit sind einparametrig; die Simulation zeigt nur ein Beispiel. Sie zeigt nicht, wie man ein Gleichungssystem von Hand löst.</p>
+    <p><strong>Formelleiste.</strong> Nicht aufgenommen sind die komponentenweisen Rechenregeln und die Rechengesetze, weil sie als Tabelle beziehungsweise Merksatz stehen, sowie Formeln, die nur in Aufgaben und Musterlösungen auftreten. Die Vorwissensfragen nach der Verschiebung eines Punktes, der Diagonale im Rechteck und dem Gleichungssystem fragen nach nichts, was die Leiste erklärt.</p>
+    <p><strong>Experimentbezug.</strong> Sinnvoll sind Modelle aus Schaschlikspießen und Knete, an denen das Schrägbild mit dem Raum verglichen wird (Wo liegt der Punkt wirklich?), das Kräfteparallelogramm mit Federwaagen aus der Physik und eine 3D-Darstellung in einer Geometriesoftware, in der Vektoren gezogen werden. Die Software ist keine Voraussetzung.</p>
+    <p><strong>Differenzierung.</strong> Das dreistufige Hilfesystem trägt die Binnendifferenzierung. Schnelle Gruppen können beweisen, dass der Schwerpunkt jede Seitenhalbierende im Verhältnis 2 : 1 teilt, oder begründen, dass vier Vektoren im Raum immer linear abhängig sind. Unsichere Gruppen bearbeiten zuerst die Aufgaben a1, a2 und a4 und spielen die Simulation zunächst nur mit Datensatz 1.</p>
+  </details>
+
+  <footer>
+    Mathematik LK Q1 · Vektoren: Grundlagen · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/baustein-formelleiste.md
+var formelDaten = [
+  {abschnitt:"grundlagen", titel:"Vektoren im Raum und Rechnen mit ihnen", formeln:[
+    {id:"vab", ziel:"f-vab", tex:"\\overrightarrow{AB} = \\vec{b} - \\vec{a}", plain:"AB→ = b→ − a→",
+     zeichen:[
+       {tex:"\\overrightarrow{AB}", plain:"AB→", text:"Vektor von A nach B, die Verschiebung, die A auf B abbildet"},
+       {tex:"\\vec{a}", plain:"a→", text:"Ortsvektor von A, der Pfeil vom Ursprung O zu A"},
+       {tex:"\\vec{b}", plain:"b→", text:"Ortsvektor von B, der Pfeil vom Ursprung O zu B"}],
+     gilt:"Gilt für zwei beliebige Punkte A und B im Raum. Komponentenweise heißt das: Endpunkt minus Anfangspunkt.",
+     fehler:"Anfangspunkt minus Endpunkt rechnen. Dann erhältst du den Vektor von B nach A, der zu AB→ entgegengesetzt zeigt."},
+    {id:"betrag", ziel:"f-betrag", tex:"\\left|\\vec{a}\\right| = \\sqrt{a_{1}^{2} + a_{2}^{2} + a_{3}^{2}}", plain:"|a→| = √(a₁² + a₂² + a₃²)",
+     zeichen:[
+       {tex:"\\left|\\vec{a}\\right|", plain:"|a→|", text:"Betrag des Vektors, die Länge seines Pfeils"},
+       {tex:"a_{1},\\,a_{2},\\,a_{3}", plain:"a₁, a₂, a₃", text:"die drei Komponenten des Vektors"}],
+     gilt:"Gilt im Koordinatensystem mit gleich skalierten, aufeinander senkrechten Achsen. In der Ebene entfällt a₃. Der Abstand zweier Punkte A und B ist der Betrag von AB→.",
+     fehler:"Die Komponenten addieren statt ihrer Quadrate. Der Vektor (1|2|2) hat den Betrag 3 und nicht 5, und die Wurzel gehört über die ganze Summe."},
+    {id:"betragv", ziel:"f-betragv", tex:"\\left|r\\cdot\\vec{a}\\right| = |r|\\cdot\\left|\\vec{a}\\right|", plain:"|r·a→| = |r|·|a→|",
+     zeichen:[
+       {tex:"r", plain:"r", text:"reelle Zahl, der Streckfaktor"},
+       {tex:"\\vec{a}", plain:"a→", text:"beliebiger Vektor"}],
+     gilt:"Gilt für jede reelle Zahl r und jeden Vektor. Bei negativem r kehrt sich die Richtung um, die Länge ändert sich nur um den Faktor |r|.",
+     fehler:"Den Betrag von r weglassen und bei r = −2 eine negative Länge erhalten. Längen sind nie negativ."},
+    {id:"einheit", ziel:"f-einheit", tex:"\\dfrac{1}{\\left|\\vec{a}\\right|}\\cdot\\vec{a}", plain:"(1/|a→|)·a→",
+     zeichen:[
+       {tex:"\\vec{a}", plain:"a→", text:"Vektor, der nicht der Nullvektor ist"},
+       {tex:"\\dfrac{1}{\\left|\\vec{a}\\right|}", plain:"1/|a→|", text:"Kehrwert der Länge, der Streckfaktor"}],
+     gilt:"Gilt für jeden Vektor außer dem Nullvektor. Das Ergebnis zeigt in dieselbe Richtung wie a→ und hat die Länge 1 (Einheitsvektor).",
+     fehler:"Jede Komponente durch eine eigene Zahl teilen statt alle durch den Betrag. Dann ändert sich die Richtung des Vektors."},
+    {id:"mittel", ziel:"f-mittel", tex:"\\vec{m} = \\dfrac{1}{2}\\left(\\vec{a} + \\vec{b}\\right)", plain:"m→ = ½(a→ + b→)",
+     zeichen:[
+       {tex:"\\vec{m}", plain:"m→", text:"Ortsvektor des Mittelpunkts M der Strecke AB"},
+       {tex:"\\vec{a}", plain:"a→", text:"Ortsvektor des Endpunkts A"},
+       {tex:"\\vec{b}", plain:"b→", text:"Ortsvektor des Endpunkts B"}],
+     gilt:"Gilt für jede Strecke AB. Komponentenweise ist jede Koordinate von M der Mittelwert der entsprechenden Koordinaten von A und B.",
+     fehler:"Das Halbieren vergessen. Die Summe a→ + b→ führt zum Punkt 2M, der doppelt so weit vom Ursprung entfernt liegt wie M."},
+    {id:"parallel", ziel:"f-parallel", tex:"\\vec{b} = r\\cdot\\vec{a}", plain:"b→ = r·a→",
+     zeichen:[
+       {tex:"\\vec{a},\\ \\vec{b}", plain:"a→, b→", text:"die beiden Vektoren"},
+       {tex:"r", plain:"r", text:"reelle Zahl, der Streckfaktor"}],
+     gilt:"Zwei Vektoren sind parallel (kollinear), wenn es bei a→ ≠ 0→ eine solche Zahl r gibt. Bei r > 0 zeigen sie in dieselbe, bei r < 0 in entgegengesetzte Richtung.",
+     fehler:"Nur eine Komponente vergleichen. Die Zahl r muss für alle Komponenten dieselbe sein, erst dann sind die Vektoren parallel."}
+  ]},
+  {abschnitt:"vertiefung", titel:"Linearkombination und lineare Unabhängigkeit", formeln:[
+    {id:"lk", ziel:"f-lk", tex:"\\vec{p} = r\\,\\vec{a} + s\\,\\vec{b} + t\\,\\vec{c}", plain:"p→ = r·a→ + s·b→ + t·c→",
+     zeichen:[
+       {tex:"\\vec{p}", plain:"p→", text:"die Linearkombination der Vektoren a→, b→ und c→"},
+       {tex:"r,\\,s,\\,t", plain:"r, s, t", text:"reelle Zahlen, die Koeffizienten"},
+       {tex:"\\vec{a},\\,\\vec{b},\\,\\vec{c}", plain:"a→, b→, c→", text:"gegebene Vektoren"}],
+     gilt:"Gilt für beliebige Vektoren und beliebige reelle Koeffizienten, auch mit nur zwei Summanden. Ob sich ein gegebener Vektor so darstellen lässt, entscheidet ein lineares Gleichungssystem für r, s und t.",
+     fehler:"Die Koeffizienten aus nur einer Komponentengleichung bestimmen. Alle Komponentengleichungen müssen gleichzeitig erfüllt sein."},
+    {id:"unabh", ziel:"f-unabh", tex:"r\\,\\vec{a} + s\\,\\vec{b} + t\\,\\vec{c} = \\vec{0}", plain:"r·a→ + s·b→ + t·c→ = 0→",
+     zeichen:[
+       {tex:"\\vec{0}", plain:"0→", text:"Nullvektor, alle Komponenten sind null"},
+       {tex:"r,\\,s,\\,t", plain:"r, s, t", text:"gesuchte reelle Zahlen"},
+       {tex:"\\vec{a},\\,\\vec{b},\\,\\vec{c}", plain:"a→, b→, c→", text:"die zu prüfenden Vektoren"}],
+     gilt:"Die Vektoren sind linear unabhängig, wenn diese Gleichung nur die Lösung r = s = t = 0 hat. Gibt es eine weitere Lösung, sind sie linear abhängig.",
+     fehler:"Die Lösung r = s = t = 0 als Beweis der Unabhängigkeit nehmen. Sie löst die Gleichung immer, entscheidend ist, ob es noch eine andere gibt."},
+    {id:"schwer", ziel:"f-schwer", tex:"\\vec{s} = \\dfrac{1}{3}\\left(\\vec{a} + \\vec{b} + \\vec{c}\\right)", plain:"s→ = ⅓(a→ + b→ + c→)",
+     zeichen:[
+       {tex:"\\vec{s}", plain:"s→", text:"Ortsvektor des Schwerpunkts S des Dreiecks ABC"},
+       {tex:"\\vec{a},\\,\\vec{b},\\,\\vec{c}", plain:"a→, b→, c→", text:"Ortsvektoren der drei Ecken"}],
+     gilt:"Gilt für jedes Dreieck ABC, auch im Raum. Der Schwerpunkt ist der Schnittpunkt der Seitenhalbierenden.",
+     fehler:"Durch 2 teilen, weil es bei der Strecke so war. Bei drei Ecken wird durch 3 geteilt."},
+    {id:"parallelogramm", ziel:"f-parallelogramm", tex:"\\overrightarrow{AB} = \\overrightarrow{DC}", plain:"AB→ = DC→",
+     zeichen:[
+       {tex:"\\overrightarrow{AB}", plain:"AB→", text:"Vektor von A nach B"},
+       {tex:"\\overrightarrow{DC}", plain:"DC→", text:"Vektor von D nach C"}],
+     gilt:"Das Viereck ABCD, dessen Ecken in dieser Reihenfolge umlaufen werden, ist genau dann ein Parallelogramm, wenn die Gleichung gilt. Dann gilt auch BC→ = AD→.",
+     fehler:"Die Ecken in der falschen Reihenfolge einsetzen. Aus AB→ = CD→ folgt, dass ABDC ein Parallelogramm ist, nicht ABCD."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{"r": 1, "fb": ["Hier wurde in x-Richtung nach rechts statt nach links und in y-Richtung nach unten statt nach oben verschoben: Aus 2 + 3 = 5 und −1 − 4 = −5 entsteht (5|−5). Nach links bedeutet aber, dass die x-Koordinate kleiner wird, nach oben, dass die y-Koordinate größer wird.", "Richtig. Nach links heißt x − 3: 2 − 3 = −1. Nach oben heißt y + 4: −1 + 4 = 3. Der Bildpunkt ist (−1|3). Genau so arbeiten Vektoren später: Eine Verschiebung wird Komponente für Komponente auf die Koordinaten addiert.", "Hier stimmt die x-Koordinate, aber nach oben bedeutet, dass die y-Koordinate wächst: −1 + 4 = 3. Bei −1 − 4 = −5 wurde nach unten verschoben."]},
+  vw2:{"r": 1, "fb": ["14 cm sind der halbe Umfang, also 6 + 8. Die Diagonale ist aber die Hypotenuse eines rechtwinkligen Dreiecks mit den Katheten 6 cm und 8 cm, und sie ist kürzer als die beiden Katheten zusammen.", "Richtig. Nach dem Satz des Pythagoras ist d² = 6² + 8² = 36 + 64 = 100 und damit d = 10 cm. Dasselbe Verfahren, mit einer dritten Komponente, liefert später die Länge eines Vektors im Raum.", "48 ist das Produkt der Seiten und hätte die Einheit cm², also den Flächeninhalt des Rechtecks. Die Länge der Diagonalen folgt aus dem Satz des Pythagoras: d² = 6² + 8²."]},
+  vw3:{"r": 1, "fb": ["Probe in der zweiten Gleichung: 2·1 − 3 = −1 und nicht 4. Das Paar erfüllt nur die erste Gleichung (1 + 2·3 = 7). Eine Lösung muss aber beide Gleichungen zugleich erfüllen.", "Richtig. Probe: 3 + 2·2 = 7 und 2·3 − 2 = 4, beide Gleichungen stimmen. Solche Gleichungssysteme löst du gleich, um Koeffizienten von Vektoren zu bestimmen.", "Probe in der ersten Gleichung: 2 + 2·0 = 2 und nicht 7. Das Paar erfüllt nur die zweite Gleichung (2·2 − 0 = 4). Eine Lösung muss beide erfüllen."]},
+  sim1:{"r": 1, "fb": ["Mehr als eine Einstellung gibt es nicht immer. Wähle zum Vergleich Datensatz 1: Dort gibt es für jeden Zielpunkt genau eine Einstellung. Dass es in Datensatz 2 mehrere gibt, liegt an den Vektoren und nicht an der Zahl der Regler.", "Richtig. Die beiden Einstellungen (1|1|0) und (0|2|1) unterscheiden sich um (−1|1|1). Stellst du (−1|1|1) als Koeffizienten ein, kommt der Nullvektor heraus, und zwar ohne dass alle drei Koeffizienten null sind. Genau das heißt linear abhängig. Dann lässt sich jede Einstellung um ein Vielfaches davon verschieben, es gibt unendlich viele.", "Es ist umgekehrt. Bei linear unabhängigen Vektoren gibt es zu jedem erreichbaren Punkt genau eine Einstellung (Datensatz 1). Zwei verschiedene Einstellungen für denselben Punkt sind ein Zeichen für lineare Abhängigkeit."]},
+  sim2:{"r": 1, "fb": ["Mit größeren Reglern käme Q nicht näher. Alle erreichbaren Punkte liegen in einer festen Ebene, und Q hat von dieser Ebene einen Abstand von etwa 1,3 LE, egal wie groß die Koeffizienten sind.", "Richtig. In Datensatz 3 ist b das −2-fache von a, also fehlt eine Richtung. Die Punkte r·a + s·b + t·c liegen alle in der Ebene durch O, die von a und c aufgespannt wird. Q liegt nicht in dieser Ebene, der Abstand bleibt bei mindestens 1,3 LE. Das ist der Preis der linearen Abhängigkeit: Nicht jeder Punkt ist erreichbar.", "Der Ausschnitt spielt keine Rolle: Die Anzeige für den Abstand rechnet im Raum und nicht im Bild. Dass Q nicht erreichbar ist, liegt an den Vektoren."]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{"wert": 13, "einheit": "LE", "tol": 0.05, "ok": "Richtig. AB = B − A = (3|4|12), und |AB| = √(3² + 4² + 12²) = √(9 + 16 + 144) = √169 = 13 LE.", "falschEinheit": "Der Zahlenwert passt. Gefragt ist der Abstand zweier Punkte, also eine Länge in Längeneinheiten (LE). LE² wäre ein Flächeninhalt, LE³ ein Volumen und ° ein Winkel.", "nah": "19 bekommst du, wenn du die Komponenten addierst: 3 + 4 + 12. Der Betrag ist die Wurzel aus der Summe der Quadrate, nicht die Summe der Komponenten. Auch 12, die größte Komponente, ist nur ein Teil der Länge.", "weit": "169 ist die Summe der Quadrate 9 + 16 + 144, die Wurzel fehlt noch. Sehr kleine Werte entstehen, wenn du nur mit einem Teil der Komponenten rechnest oder Koordinaten statt Differenzen verwendest. Die Hilfen führen dich: erst AB, dann der Betrag."},
+  a2:{"wert": 2, "einheit": "ohne Einheit", "tol": 0.01, "ok": "Richtig. Für die Koordinate x₃ ist der Mittelwert (7 + (−3)) / 2 = 4 / 2 = 2. Der Mittelpunkt ist M(4|3|2).", "falschEinheit": "Der Zahlenwert passt. Eine Koordinate eines Punktes ist eine Zahl ohne Einheit. LE wäre eine Länge, LE² ein Flächeninhalt und ° ein Winkel.", "nah": "Das ist nicht x₃. Der Wert 3 wäre zum Beispiel die x₂-Koordinate des Mittelpunkts. Bilde den Mittelwert der x₃-Koordinaten beider Endpunkte und nicht einer anderen Achse.", "weit": "Bei 4 wurde die Summe der x₃-Koordinaten nicht halbiert (oder die x₁-Koordinate des Mittelpunkts abgelesen). Bei 10 oder −5 wurde die Differenz statt der Summe gebildet. Die Hilfen führen dich: Mittelpunkt heißt halbe Summe der Ortsvektoren."},
+  a4:{"wert": -6, "einheit": "ohne Einheit", "tol": 0.01, "ok": "Richtig. Aus 2 = r·(−1) folgt r = −2. Damit muss t = (−2)·3 = −6 sein, und die dritte Komponente passt: (−2)·(−3) = 6.", "falschEinheit": "Der Zahlenwert passt. Der Parameter t ist eine Komponente eines Vektors und hier eine reine Zahl. LE wäre eine Länge, LE² ein Flächeninhalt und ° ein Winkel.", "nah": "Der Betrag kommt dir nahe, aber prüfe den Faktor: Aus 2 = r·(−1) folgt r = −2 und nicht r = 2. Dieses Vorzeichen gilt für alle Komponenten.", "weit": "Werte wie −1,5 entstehen, wenn du 3 durch −2 teilst statt mit −2 zu multiplizieren, und 3 ist nur die zweite Komponente von b→ ohne den Faktor. Der Faktor r verbindet b→ mit a→: a→ = r·b→, und er wird aus einer Komponente bestimmt, in der beide Zahlen bekannt sind. Die Hilfen führen dich."},
+  a5:{"wert": 4, "einheit": "ohne Einheit", "tol": 0.01, "ok": "Richtig. Für ein Parallelogramm ABCD gilt AB = DC, also D = A + BC = A + (C − B). Die x₂-Koordinate ist 0 + (6 − 2) = 4, und D(2|4|0).", "falschEinheit": "Der Zahlenwert passt. Eine Koordinate ist eine Zahl ohne Einheit. LE wäre eine Länge, LE² ein Flächeninhalt und ° ein Winkel.", "nah": "−4 entsteht, wenn du D = A + B − C rechnest. Dann stünden A und B gegenüber statt A und C. Bei ABCD liegen A und C gegenüber, also ist D der Endpunkt von A + BC.", "weit": "8 bekommst du aus D = B + C − A. Dann stünden B und C gegenüber statt B und D. Die Reihenfolge A, B, C, D legt fest, welche Ecken gegenüberliegen. Die Hilfen führen dich: erst BC, dann D = A + BC."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.a3 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier richtig. Vier Fragen sortieren jedes Tripel: Ist ein Vektor der Nullvektor? Sind zwei Vektoren Vielfache voneinander? Liegt ein Vektor in der Ebene der beiden anderen (ein Vektor ist Summe von Vielfachen der anderen)? Oder hat die Gleichung r·a→ + s·b→ + t·c→ = 0→ nur die triviale Lösung?";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Prüfe jedes Tripel der Reihe nach: Kommt der Nullvektor vor? Sind zwei Vektoren Vielfache voneinander? Lässt sich sonst ein Vektor aus den beiden anderen zusammensetzen, zum Beispiel als Summe? Wenn nichts davon zutrifft, sind die drei Vektoren linear unabhängig.";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: Linearkombination und lineare Abhängigkeit ============ */
+(function(){
+  var cv = document.getElementById("cvV"), ctx = cv.getContext("2d");
+  var $ = function(id){ return document.getElementById(id); };
+  var W = cv.width, H = cv.height;
+
+  // Schrägbild wie im Unterricht: x2 nach rechts, x3 nach oben, x1 nach links unten, je Einheit eine halbe Kästchendiagonale
+  var U = 46, OX = 330, OY = 350;
+  var farbA = "#0d7a52", farbB = "#c2410c", farbC = "#1d4ed8", farbZ = "#8a6100", farbE = "#0f2135", farbD = "#b91c1c";
+  var farbT = "#5b6b7f", farbGitter = "#e2e8f0", farbLot = "#94a3b8";
+
+  // Beispieldaten: drei Vektoren, zwei Zielpunkte je Datensatz, ein Beispiel bei unendlich vielen Lösungen
+  var DATEN = [{"id": "d1", "titel": "Datensatz 1", "a": [2, 0, 1], "b": [0, 2, 1], "c": [1, 1, -1], "ziele": [[1, 3, 4], [0, 4, -2]], "bsp": [null, null]}, {"id": "d2", "titel": "Datensatz 2", "a": [2, 0, 1], "b": [0, 2, 1], "c": [2, -2, 0], "ziele": [[2, 2, 2], [2, 2, 0]], "bsp": [[1, 1, 0], null]}, {"id": "d3", "titel": "Datensatz 3", "a": [2, 0, 1], "b": [-4, 0, -2], "c": [1, 2, 0], "ziele": [[3, 2, 1], [2, 2, 2]], "bsp": [[1, 0, 1], null]}];
+  var NAME = ["P", "Q"];
+
+  var ds = 0, zi = 0, kr = 0, ks = 0, kt = 0, lot = true, zeigeAbh = false, zeigeLoes = false;
+
+  function q(){ return DATEN[ds]; }
+  function ziel(){ return q().ziele[zi]; }
+  function fmt(z, n){ return z.toFixed(n).replace(".", ","); }
+  function minus(s){ return s.replace("-", "−"); }
+  // ganze Zahlen ohne Nachkommastelle, sonst eine Stelle
+  function kurz(v){ return Math.abs(v - Math.round(v)) < 1e-9 ? minus(String(Math.round(v))) : minus(fmt(v, 1)); }
+  function vek(v){ return "(" + v.map(kurz).join(" | ") + ")"; }
+  function koeff(z){ return kurz(z); }
+
+  /* ---------- Rechnung ---------- */
+  function ende(){
+    var d = q();
+    return [0, 1, 2].map(function(i){ return kr * d.a[i] + ks * d.b[i] + kt * d.c[i]; });
+  }
+  function abstand(){
+    var e = ende(), z = ziel();
+    return Math.sqrt(Math.pow(e[0] - z[0], 2) + Math.pow(e[1] - z[1], 2) + Math.pow(e[2] - z[2], 2));
+  }
+  // Rang einer Matrix (Zeilen) mit Gauß-Verfahren
+  function rang(m){
+    var a = m.map(function(z){ return z.slice(); }), r = 0, n = a[0].length, eps = 1e-9;
+    for(var c = 0; c < n && r < a.length; c++){
+      var p = -1, best = eps;
+      for(var i = r; i < a.length; i++) if(Math.abs(a[i][c]) > best){ best = Math.abs(a[i][c]); p = i; }
+      if(p < 0) continue;
+      var tmp = a[r]; a[r] = a[p]; a[p] = tmp;
+      for(var k = 0; k < a.length; k++){
+        if(k === r) continue;
+        var f = a[k][c] / a[r][c];
+        for(var j = c; j < n; j++) a[k][j] -= f * a[r][j];
+      }
+      r++;
+    }
+    return r;
+  }
+  function spalten(z){
+    var d = q(), m = [[], [], []];
+    for(var i = 0; i < 3; i++){ m[i] = [d.a[i], d.b[i], d.c[i]]; if(z) m[i].push(z[i]); }
+    return m;
+  }
+  function det3(a, b, c){
+    return a[0] * (b[1] * c[2] - b[2] * c[1]) - a[1] * (b[0] * c[2] - b[2] * c[0]) + a[2] * (b[0] * c[1] - b[1] * c[0]);
+  }
+  function rangA(){ return rang(spalten(null)); }
+  function loesbar(){ return rang(spalten(ziel())) === rangA(); }
+  // eindeutige Lösung (nur bei Rang 3): Cramersche Regel
+  function loesung(){
+    var d = q(), z = ziel(), D = det3(d.a, d.b, d.c);
+    return [det3(z, d.b, d.c) / D, det3(d.a, z, d.c) / D, det3(d.a, d.b, z) / D];
+  }
+
+  /* ---------- Zeichnen ---------- */
+  function P(x1, x2, x3){ return [OX + U * (x2 - 0.5 * x1), OY - U * (x3 - 0.5 * x1)]; }
+  function strecke(p, r, farbe, breite, strich){
+    ctx.strokeStyle = farbe; ctx.lineWidth = breite; ctx.setLineDash(strich || []);
+    ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(r[0], r[1]); ctx.stroke(); ctx.setLineDash([]);
+  }
+  function pfeil(p, r, farbe, breite, kopf){
+    var dx = r[0] - p[0], dy = r[1] - p[1], l = Math.sqrt(dx * dx + dy * dy);
+    if(l < 2) return;
+    var ux = dx / l, uy = dy / l, k = Math.min(kopf, l * 0.6);
+    ctx.strokeStyle = farbe; ctx.lineWidth = breite; ctx.beginPath();
+    ctx.moveTo(p[0], p[1]); ctx.lineTo(r[0] - ux * k * 0.6, r[1] - uy * k * 0.6); ctx.stroke();
+    ctx.fillStyle = farbe; ctx.beginPath(); ctx.moveTo(r[0], r[1]);
+    ctx.lineTo(r[0] - ux * k + uy * k * 0.45, r[1] - uy * k - ux * k * 0.45);
+    ctx.lineTo(r[0] - ux * k - uy * k * 0.45, r[1] - uy * k + ux * k * 0.45);
+    ctx.closePath(); ctx.fill();
+  }
+  function punkt(p, rad, fuell, rand){
+    ctx.fillStyle = fuell; ctx.strokeStyle = rand; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(p[0], p[1], rad, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+  }
+  function raute(p, rad, fuell, rand){
+    ctx.fillStyle = fuell; ctx.strokeStyle = rand; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(p[0], p[1] - rad); ctx.lineTo(p[0] + rad, p[1]); ctx.lineTo(p[0], p[1] + rad); ctx.lineTo(p[0] - rad, p[1]);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+  }
+  function text(s, x, y, ausr, farbe, font){
+    ctx.fillStyle = farbe || farbT; ctx.font = font || "14px sans-serif";
+    ctx.textAlign = ausr || "left"; ctx.textBaseline = "alphabetic"; ctx.fillText(s, x, y);
+  }
+  function fuss(v, farbe){
+    // senkrechte Hilfslinie zur x1x2-Ebene mit kleinem Kreis am Fußpunkt
+    var o = P(v[0], v[1], v[2]), u = P(v[0], v[1], 0);
+    strecke(o, u, farbe, 1.5, [3, 4]);
+    ctx.strokeStyle = farbe; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(u[0], u[1], 4, 0, 2 * Math.PI); ctx.stroke();
+  }
+
+  function zeichne(){
+    var d = q(), i, j;
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+
+    // Boden (x1x2-Ebene) als Gitter
+    for(i = -4; i <= 4; i++) strecke(P(i, -4, 0), P(i, 6, 0), farbGitter, 1);
+    for(j = -4; j <= 6; j++) strecke(P(-4, j, 0), P(4, j, 0), farbGitter, 1);
+
+    // Achsen mit Skala
+    strecke(P(-4, 0, 0), P(4.4, 0, 0), farbT, 2); strecke(P(0, -4, 0), P(0, 6.4, 0), farbT, 2); strecke(P(0, 0, -3), P(0, 0, 6.4), farbT, 2);
+    pfeil(P(3.9, 0, 0), P(4.6, 0, 0), farbT, 2, 11); pfeil(P(0, 6, 0), P(0, 6.7, 0), farbT, 2, 11); pfeil(P(0, 0, 6), P(0, 0, 6.7), farbT, 2, 11);
+    var a;
+    text("x₁", P(4.7, 0, 0)[0] - 6, P(4.7, 0, 0)[1] + 18, "center", farbT, "600 16px sans-serif");
+    text("x₂", P(0, 6.8, 0)[0] + 4, P(0, 6.8, 0)[1] + 6, "left", farbT, "600 16px sans-serif");
+    text("x₃", P(0, 0, 6.8)[0] + 10, P(0, 0, 6.8)[1] + 4, "left", farbT, "600 16px sans-serif");
+    for(i = -4; i <= 4; i++){ if(i === 0) continue; a = P(i, 0, 0); text(minus(String(i)), a[0] - 12, a[1] + 14, "center", farbT, "12px sans-serif"); }
+    for(j = -4; j <= 6; j++){ if(j === 0) continue; a = P(0, j, 0); text(minus(String(j)), a[0], a[1] + 17, "center", farbT, "12px sans-serif"); }
+    for(i = -3; i <= 6; i++){ if(i === 0) continue; a = P(0, 0, i); text(minus(String(i)), a[0] - 9, a[1] + 4, "right", farbT, "12px sans-serif"); }
+    text("0", P(0, 0, 0)[0] + 9, P(0, 0, 0)[1] + 16, "left", farbT, "12px sans-serif");
+
+    var O = P(0, 0, 0), cols = [farbA, farbB, farbC], vs = [d.a, d.b, d.c], namen = ["a", "b", "c"];
+
+    // die drei gegebenen Vektoren, dünn und blass
+    ctx.globalAlpha = 0.5;
+    for(i = 0; i < 3; i++) pfeil(O, P(vs[i][0], vs[i][1], vs[i][2]), cols[i], 2, 10);
+    ctx.globalAlpha = 1;
+    for(i = 0; i < 3; i++){
+      var sp = P(vs[i][0], vs[i][1], vs[i][2]);
+      text(namen[i], sp[0] + 8, sp[1] - 6, "left", cols[i], "600 16px sans-serif");
+    }
+
+    // Hilfslinien
+    var z = ziel(), e = ende();
+    if(lot){ fuss(z, farbZ); fuss(e, farbE); }
+
+    // Pfeilkette
+    var koef = [kr, ks, kt], pos = [0, 0, 0], von, nach;
+    for(i = 0; i < 3; i++){
+      von = P(pos[0], pos[1], pos[2]);
+      pos = [pos[0] + koef[i] * vs[i][0], pos[1] + koef[i] * vs[i][1], pos[2] + koef[i] * vs[i][2]];
+      nach = P(pos[0], pos[1], pos[2]);
+      if(koef[i] !== 0) pfeil(von, nach, cols[i], 5, 16);
+    }
+
+    // Abstandslinie, Ziel und Endpunkt
+    var pe = P(e[0], e[1], e[2]), pz = P(z[0], z[1], z[2]);
+    if(abstand() > 0.005) strecke(pe, pz, farbD, 2, [7, 5]);
+    raute(pz, 10, farbZ, "#fff"); text(NAME[zi], pz[0] + 14, pz[1] - 10, "left", farbZ, "700 17px sans-serif");
+    punkt(pe, 7, farbE, "#fff"); text("E", pe[0] + 12, pe[1] + 18, "left", farbE, "700 17px sans-serif");
+  }
+
+  /* ---------- Anzeigen ---------- */
+  function anzeigen(){
+    var d = q(), e = ende(), abst = abstand(), rg = rangA();
+    $("aVa").textContent = vek(d.a); $("aVb").textContent = vek(d.b); $("aVc").textContent = vek(d.c);
+    $("aEin").textContent = "(" + koeff(kr) + " | " + koeff(ks) + " | " + koeff(kt) + ")";
+    $("aE").textContent = vek(e);
+    $("aZName").textContent = "Zielpunkt " + NAME[zi];
+    $("aZ").textContent = vek(ziel());
+    $("aAbst").textContent = minus(fmt(abst < 0.005 ? 0 : abst, 2)) + " LE";
+    $("aAbh").textContent = zeigeAbh ? (rg === 3 ? "linear unabhängig" : "linear abhängig") : "–";
+    if(zeigeLoes){
+      if(!loesbar()) $("aLoes").textContent = "keine";
+      else if(rg === 3){ var l = loesung(); $("aLoes").textContent = "genau eine: (" + kurz(l[0]) + " | " + kurz(l[1]) + " | " + kurz(l[2]) + ")"; }
+      else { var b = d.bsp[zi]; $("aLoes").textContent = "unendlich viele, etwa (" + (b ? b.map(kurz).join(" | ") : "–") + ")"; }
+    } else $("aLoes").textContent = "–";
+
+    var h = "";
+    if(abst < 0.005) h = "Treffer: E liegt auf dem Zielpunkt " + NAME[zi] + ".";
+    else if(zeigeLoes && !loesbar()) h = "Der Zielpunkt " + NAME[zi] + " liegt nicht in dem Teil des Raumes, den die drei Vektoren erreichen: Kein Regler hilft.";
+    $("simHinweis").textContent = h;
+  }
+
+  function beschriftung(){
+    $("lR").textContent = koeff(kr); $("lS").textContent = koeff(ks); $("lT").textContent = koeff(kt);
+    $("bAbh").textContent = zeigeAbh ? "Abhängigkeit verbergen" : "Abhängigkeit prüfen";
+    $("bLoes").textContent = zeigeLoes ? "Lösung verbergen" : "Lösung zeigen";
+  }
+  function alles(){ beschriftung(); zeichne(); anzeigen(); }
+
+  function setze(i){
+    ds = i; zi = 0; kr = 0; ks = 0; kt = 0; zeigeAbh = false; zeigeLoes = false;
+    $("rR").value = 0; $("rS").value = 0; $("rT").value = 0;
+    alles();
+  }
+
+  $("sDaten").addEventListener("change", function(){ setze(parseInt(this.value, 10)); });
+  [["rR", function(v){ kr = v; }], ["rS", function(v){ ks = v; }], ["rT", function(v){ kt = v; }]].forEach(function(p){
+    $(p[0]).addEventListener("input", function(){ p[1](parseFloat(this.value)); alles(); });
+  });
+  $("bZiel").addEventListener("click", function(){ zi = 1 - zi; zeigeLoes = false; alles(); });
+  $("bAbh").addEventListener("click", function(){ zeigeAbh = !zeigeAbh; alles(); });
+  $("bLoes").addEventListener("click", function(){ zeigeLoes = !zeigeLoes; alles(); });
+  $("bReset").addEventListener("click", function(){ setze(ds); });
+  $("cLot").addEventListener("change", function(){ lot = this.checked; alles(); });
+
+  setze(0);
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1 – Verschiebung im Koordinatensystem",
+    vw2:"Vorwissen 2 – Satz des Pythagoras",
+    vw3:"Vorwissen 3 – Gleichungssystem",
+    sim1:"Simulation 1 – mehrere Einstellungen für denselben Punkt",
+    sim2:"Simulation 2 – nicht erreichbarer Zielpunkt",
+    a1:"Aufgabe 1 – Länge einer Strecke",
+    a2:"Aufgabe 2 – Mittelpunkt",
+    a3:"Aufgabe 3 – Zuordnung Vektortripel und Aussage",
+    a4:"Aufgabe 4 – parallele Vektoren",
+    a5:"Aufgabe 5 – Parallelogramm",
+    a6:"Aufgabe 6 – Aussage zur Unabhängigkeit prüfen",
+    a7:"Aufgabe 7 – Diagonalen im Parallelogramm"
+  };
+  var zeilen = ["Vektoren: Grundlagen – Mathematik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Aufgabe " + (i + 6) + " (offen):\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>

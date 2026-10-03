@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Funktionsuntersuchung: Extrem- und Wendestellen, Funktionsscharen – Mathematik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+
+<style>
+:root{
+  --akzent:#0d7a52;
+  --akzent-hell:#e7f6ef;
+  --akzent-rand:#b5e0cd;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#0a5c3e,#0d7a52);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#0b6845;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+/* ---------- Touch (schmale Geräte) ---------- */
+@media (max-width:600px){
+  button{min-height:44px}
+  .regler input[type=range]{height:32px}
+  .regler select,.eingabe select,.eingabe input[type=number],.zeile select{min-height:44px}
+  .zeile select{min-width:72px}
+  .knopfleiste input[type=checkbox]{width:24px !important;height:24px !important}
+  .check input{flex:0 0 auto;width:24px;height:24px}
+}
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Mathematik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Funktionsuntersuchung: Extrem- und Wendestellen, Funktionsscharen</h1>
+    <div class="meta">
+      <span class="chip">Inhaltsfeld: Funktionen und Analysis</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+      <span class="chip">ca. 130 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Die Passstraße steigt nicht gleichmäßig: erst eine Kuppe, dann eine Senke, dann wieder hinauf. Die Planerinnen zeichnen das als Höhenprofil, und sie müssen drei Dinge genau wissen. Wo liegt die Kuppe, wo die Senke? Wo fällt die Straße am steilsten ab? Und gibt es irgendwo ein waagerechtes Stück, auf dem ein beladener Lkw anfahren muss? Alle drei Fragen lassen sich am Graphen nur grob beantworten, mit der Ableitung aber auf den Zentimeter genau.</p>
+
+  <p>Der eigentliche Haken: Das Profil steht noch nicht fest. Ein einziger Steuerwert <em>a</em>, etwa die Anfangssteigung am Fuß des Hangs, verändert die ganze Kurve. Für einen Teil der <em>a</em>-Werte gibt es Kuppe und Senke, für den anderen keine von beiden. Und genau zwischen beiden Bereichen liegt ein Sonderfall, bei dem die Tangente waagerecht ist, obwohl es weder Kuppe noch Senke gibt. „Ableitung null heißt Gipfel“ ist also zu einfach gedacht. In dieser Einheit lernst du, Extrem- und Wendestellen sicher zu unterscheiden, eine Funktion vollständig zu untersuchen und das Ganze für eine ganze Funktionenschar auf einmal zu tun.</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Drei Fragen aus der Einführungsphase und der Sekundarstufe I. Wenn du hier hängst, lohnt sich ein Blick zurück: Für die Funktionsuntersuchung brauchst du zweite Ableitungen, quadratische Gleichungen und ein sicheres Gefühl dafür, was f′ über den Graphen sagt.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Bestimme die zweite Ableitung von <span class="m" data-tex="f(x) = x^4 - 2x^3 + 5x" data-plain="f(x) = x⁴ − 2x³ + 5x"></span>.</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span><span class="m" data-tex="f&#x27;&#x27;(x) = 4x^3 - 6x^2 + 5" data-plain="f″(x) = 4x³ − 6x² + 5"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span><span class="m" data-tex="f&#x27;&#x27;(x) = 12x^2 - 12x" data-plain="f″(x) = 12x² − 12x"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span><span class="m" data-tex="f&#x27;&#x27;(x) = 12x^2 - 12x + 5" data-plain="f″(x) = 12x² − 12x + 5"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Löse <span class="m" data-tex="3x^2 - 12x + 9 = 0" data-plain="3x² − 12x + 9 = 0"></span>.</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span><span class="m" data-tex="x = 2" data-plain="x = 2"></span> (eine doppelte Lösung)</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span><span class="m" data-tex="x = -1" data-plain="x = −1"></span> oder <span class="m" data-tex="x = -3" data-plain="x = −3"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span><span class="m" data-tex="x = 1" data-plain="x = 1"></span> oder <span class="m" data-tex="x = 3" data-plain="x = 3"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Für <span class="m" data-tex="f(x) = x^2 - 4x" data-plain="f(x) = x² − 4x"></span> gilt <span class="m" data-tex="f&#x27;(3) = 2" data-plain="f′(3) = 2"></span>. Welche Aussage über den Graphen bei <span class="m" data-tex="x = 3" data-plain="x = 3"></span> ist richtig?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span>Der Graph steigt dort, obwohl er unterhalb der x-Achse verläuft.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span>Der Graph hat dort einen Tiefpunkt.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span>Der Graph liegt dort oberhalb der x-Achse, weil f′(3) positiv ist.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 ERKLÄRTEIL =============== -->
+<section id="erklaerung">
+  <div class="stufe"><div class="nr">2</div><h2>Extrempunkte, Wendepunkte, Kurvendiskussion</h2></div>
+
+  <h3>2.1 Was f′ und f″ über den Graphen verraten</h3>
+  <p>Die erste Ableitung <span class="m" data-tex="f&#x27;(x)" data-plain="f′(x)"></span> ist die Steigung der Tangente. Ist sie an einer Stelle positiv, steigt der Graph dort, ist sie negativ, fällt er. Die zweite Ableitung <span class="m" data-tex="f&#x27;&#x27;(x)" data-plain="f″(x)"></span> ist die Ableitung der Steigungsfunktion, sie sagt also, <strong>wie sich die Steigung ändert</strong>: Ist <span class="m" data-tex="f&#x27;&#x27;(x) &gt; 0" data-plain="f″(x) &gt; 0"></span>, wird die Steigung größer, der Graph biegt sich nach links, man spricht von einer <strong>Linkskurve</strong>. Ist <span class="m" data-tex="f&#x27;&#x27;(x) &lt; 0" data-plain="f″(x) &lt; 0"></span>, wird die Steigung kleiner, und der Graph biegt sich nach rechts: eine <strong>Rechtskurve</strong>.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Vorzeichen</th><th>Aussage über den Graphen</th><th>Beispiel</th></tr>
+    <tr><td><span class="m" data-tex="f&#x27;&gt;0" data-plain="f′ &gt; 0"></span></td><td>Graph steigt</td><td>Parabel <span class="m" data-tex="x^2" data-plain="x²"></span> für <span class="m" data-tex="x&gt;0" data-plain="x &gt; 0"></span></td></tr>
+    <tr><td><span class="m" data-tex="f&#x27;&lt;0" data-plain="f′ &lt; 0"></span></td><td>Graph fällt</td><td>Parabel <span class="m" data-tex="x^2" data-plain="x²"></span> für <span class="m" data-tex="x&lt;0" data-plain="x &lt; 0"></span></td></tr>
+    <tr><td><span class="m" data-tex="f&#x27;&#x27;&gt;0" data-plain="f″ &gt; 0"></span></td><td>Linkskurve (Steigung wächst)</td><td>Parabel <span class="m" data-tex="x^2" data-plain="x²"></span> überall</td></tr>
+    <tr><td><span class="m" data-tex="f&#x27;&#x27;&lt;0" data-plain="f″ &lt; 0"></span></td><td>Rechtskurve (Steigung fällt)</td><td>Parabel <span class="m" data-tex="-x^2" data-plain="−x²"></span> überall</td></tr>
+  </table>
+  </div>
+
+  <div class="hinweis">
+    <strong>Vier Wörter, die du nicht durcheinanderbringen darfst.</strong> Die <strong>Extremstelle</strong> <span class="m" data-tex="x_E" data-plain="x_E"></span> ist ein x-Wert. Der <strong>Extremwert</strong> <span class="m" data-tex="f(x_E)" data-plain="f(x_E)"></span> ist ein y-Wert. Der <strong>Extrempunkt</strong> <span class="m" data-tex="(x_E\,|\,f(x_E))" data-plain="(x_E | f(x_E))"></span> ist beides zusammen. „Lokal“ heißt: Der Funktionswert ist nur in einer Umgebung von <span class="m" data-tex="x_E" data-plain="x_E"></span> der größte oder kleinste. Wer nach der Extremstelle fragt und den y-Wert antwortet, hat die Frage nicht beantwortet.
+  </div>
+
+  <h3>2.2 Extremstellen</h3>
+  <p>Auf dem Gipfel ist die Tangente waagerecht: Vor dem Gipfel steigt der Graph, dahinter fällt er, und genau dazwischen muss die Steigung null sein. Das ist die <strong>notwendige Bedingung</strong>. Sie sagt aber nur, wo man suchen muss, nicht, was man findet. Dass eine waagerechte Tangente noch kein Extremum bedeutet, zeigt gleich Abschnitt 2.4.</p>
+
+  <div class="merksatz">
+    <b>Extremstellen</b>
+    <strong>Notwendig:</strong> Hat <span class="m" data-tex="f" data-plain="f"></span> bei <span class="m" data-tex="x_0" data-plain="x₀"></span> eine lokale Extremstelle, so ist <span class="m" id="f-extrem-notwendig" data-tex="f&#x27;(x_0)=0" data-plain="f′(x₀) = 0"></span>. Die Umkehrung gilt nicht.<br>
+    <strong>Hinreichend, Kriterium 1 (Vorzeichenwechsel):</strong> Wechselt <span class="m" data-tex="f&#x27;" data-plain="f′"></span> bei <span class="m" data-tex="x_0" data-plain="x₀"></span> das Vorzeichen, so liegt bei Wechsel von + nach − ein <strong>Hochpunkt</strong>, bei Wechsel von − nach + ein <strong>Tiefpunkt</strong> vor.<br>
+    <strong>Hinreichend, Kriterium 2 (zweite Ableitung):</strong> Aus <span class="m" data-tex="f&#x27;(x_0)=0" data-plain="f′(x₀) = 0"></span> und <span class="m" id="f-extrem-hoch" data-tex="f&#x27;&#x27;(x_0)&lt;0" data-plain="f″(x₀) &lt; 0"></span> folgt ein Hochpunkt, aus <span class="m" id="f-extrem-tief" data-tex="f&#x27;&#x27;(x_0)&gt;0" data-plain="f″(x₀) &gt; 0"></span> ein Tiefpunkt. Ist <span class="m" data-tex="f&#x27;&#x27;(x_0)=0" data-plain="f″(x₀) = 0"></span>, <strong>entscheidet dieses Kriterium nichts</strong>; dann bleibt nur der Vorzeichenwechsel von <span class="m" data-tex="f&#x27;" data-plain="f′"></span>.
+  </div>
+
+  <details>
+    <summary>Herleitung des f″-Kriteriums aus dem Differenzenquotienten</summary>
+    <p>Sei <span class="m" data-tex="f&#x27;(x_0)=0" data-plain="f′(x₀) = 0"></span> und <span class="m" data-tex="f&#x27;&#x27;(x_0)&gt;0" data-plain="f″(x₀) &gt; 0"></span>. Die zweite Ableitung ist die Ableitung von <span class="m" data-tex="f&#x27;" data-plain="f′"></span>, also der Grenzwert</p>
+    <div class="m block" data-tex="f&#x27;&#x27;(x_0) = \lim_{h\to 0}\frac{f&#x27;(x_0+h)-f&#x27;(x_0)}{h} = \lim_{h\to 0}\frac{f&#x27;(x_0+h)}{h}" data-plain="f″(x₀) = lim(h→0) [f′(x₀+h) − f′(x₀)]/h = lim(h→0) f′(x₀+h)/h"></div>
+    <p>Im letzten Schritt wurde <span class="m" data-tex="f&#x27;(x_0)=0" data-plain="f′(x₀) = 0"></span> benutzt. Der Grenzwert ist positiv. Also ist für alle hinreichend kleinen <span class="m" data-tex="h\neq 0" data-plain="h ≠ 0"></span> auch der Quotient <span class="m" data-tex="f&#x27;(x_0+h)/h" data-plain="f′(x₀+h)/h"></span> positiv. Zwei Fälle: Für <span class="m" data-tex="h&gt;0" data-plain="h &gt; 0"></span> muss dann <span class="m" data-tex="f&#x27;(x_0+h)&gt;0" data-plain="f′(x₀+h) &gt; 0"></span> sein, und für <span class="m" data-tex="h&lt;0" data-plain="h &lt; 0"></span> muss <span class="m" data-tex="f&#x27;(x_0+h)&lt;0" data-plain="f′(x₀+h) &lt; 0"></span> sein, denn ein positiver Quotient mit negativem Nenner hat einen negativen Zähler. Das ist genau der Vorzeichenwechsel von − nach +: Kriterium 2 ist also ein Spezialfall von Kriterium 1, und <span class="m" data-tex="x_0" data-plain="x₀"></span> ist ein Tiefpunkt. Für <span class="m" data-tex="f&#x27;&#x27;(x_0)&lt;0" data-plain="f″(x₀) &lt; 0"></span> läuft die Rechnung mit umgekehrten Vorzeichen.</p>
+    <p><strong>Zahlenprobe</strong> (Beispiel aus 2.5, <span class="m" data-tex="x_0=0" data-plain="x₀ = 0"></span>, <span class="m" data-tex="f&#x27;&#x27;(0)=8" data-plain="f″(0) = 8"></span>): <span class="m" data-tex="f&#x27;(0{,}1)=0{,}684" data-plain="f′(0,1) = 0,684"></span> und <span class="m" data-tex="f&#x27;(-0{,}1)=-0{,}924" data-plain="f′(−0,1) = −0,924"></span>; die Quotienten <span class="m" data-tex="0{,}684/0{,}1 = 6{,}84" data-plain="0,684/0,1 = 6,84"></span> und <span class="m" data-tex="(-0{,}924)/(-0{,}1)=9{,}24" data-plain="(−0,924)/(−0,1) = 9,24"></span> liegen beide in der Nähe von 8, dem Wert von <span class="m" data-tex="f&#x27;&#x27;(0)" data-plain="f″(0)"></span>, und beide sind positiv.</p>
+    <p><strong>Was die Herleitung zeigt und was nicht.</strong> Sie zeigt, dass im Fall <span class="m" data-tex="f&#x27;&#x27;(x_0)\neq 0" data-plain="f″(x₀) ≠ 0"></span> der Vorzeichenwechsel garantiert ist. Für <span class="m" data-tex="f&#x27;&#x27;(x_0)=0" data-plain="f″(x₀) = 0"></span> ist der Grenzwert null, und über das Vorzeichen des Quotienten sagt sie nichts. Genau dort liegt die Lücke des Kriteriums.</p>
+  </details>
+
+  <h3>2.3 Wendestellen</h3>
+  <p>Ein Wendepunkt ist der Ort, an dem der Graph von einer Linkskurve in eine Rechtskurve übergeht oder umgekehrt. An dieser Stelle ist die Steigung so groß oder so klein wie nirgends in der Nähe, also hat die Funktion <span class="m" data-tex="f&#x27;" data-plain="f′"></span> dort eine Extremstelle. Wer die Extremstellen von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> sucht, wendet die Regeln aus 2.2 auf <span class="m" data-tex="f&#x27;" data-plain="f′"></span> an, und das ist schon der ganze Trick. Mit dem Beispiel Passstraße heißt das: Dort, wo die Straße am steilsten fällt, liegt ein Wendepunkt.</p>
+
+  <div class="merksatz">
+    <b>Wendestellen</b>
+    <strong>Notwendig:</strong> Ist <span class="m" data-tex="x_0" data-plain="x₀"></span> eine Wendestelle, so gilt <span class="m" id="f-wende-notwendig" data-tex="f&#x27;&#x27;(x_0)=0" data-plain="f″(x₀) = 0"></span>.<br>
+    <strong>Hinreichend:</strong> Wechselt <span class="m" data-tex="f&#x27;&#x27;" data-plain="f″"></span> bei <span class="m" data-tex="x_0" data-plain="x₀"></span> das Vorzeichen, oder gilt <span class="m" data-tex="f&#x27;&#x27;(x_0)=0" data-plain="f″(x₀) = 0"></span> und <span class="m" id="f-wende-hinreichend" data-tex="f&#x27;&#x27;&#x27;(x_0)\neq 0" data-plain="f‴(x₀) ≠ 0"></span>, so liegt ein Wendepunkt vor. Die <strong>Wendetangente</strong> ist die Tangente im Wendepunkt; sie hat die größte oder kleinste Steigung der Umgebung. Ist die Wendetangente waagerecht, spricht man von einem <strong>Sattelpunkt</strong> (auch Terrassenpunkt).
+  </div>
+
+  <details>
+    <summary>Wendestellen sind Extremstellen von f′</summary>
+    <p>Setze <span class="m" data-tex="g = f&#x27;" data-plain="g = f′"></span>. Dann ist <span class="m" data-tex="g&#x27; = f&#x27;&#x27;" data-plain="g′ = f″"></span> und <span class="m" data-tex="g&#x27;&#x27;=f&#x27;&#x27;&#x27;" data-plain="g″ = f‴"></span>. Eine Wendestelle von <span class="m" data-tex="f" data-plain="f"></span> ist per Definition eine Stelle, an der sich das Krümmungsverhalten ändert, also an der <span class="m" data-tex="g&#x27;=f&#x27;&#x27;" data-plain="g′ = f″"></span> das Vorzeichen wechselt, und das ist exakt der Vorzeichenwechsel-Test für eine Extremstelle von <span class="m" data-tex="g" data-plain="g"></span>. Damit folgt sofort:</p>
+    <div class="m block" data-tex="f&#x27;&#x27;(x_0)=0 \;\wedge\; f&#x27;&#x27;&#x27;(x_0)\neq 0 \;\Longrightarrow\; g&#x27;(x_0)=0 \;\wedge\; g&#x27;&#x27;(x_0)\neq 0 \;\Longrightarrow\; g \text{ hat bei } x_0 \text{ eine Extremstelle}" data-plain="f″(x₀) = 0 und f‴(x₀) ≠ 0 ⟹ g′(x₀) = 0 und g″(x₀) ≠ 0 ⟹ g = f′ hat bei x₀ eine Extremstelle"></div>
+    <p>Die Extremstelle von <span class="m" data-tex="g=f&#x27;" data-plain="g = f′"></span> ist ein Vorzeichenwechsel von <span class="m" data-tex="g&#x27;=f&#x27;&#x27;" data-plain="g′ = f″"></span>, und das ist die Wendestelle. Nebenbei erklärt die Rechnung den Namen der Wendetangente: Ihre Steigung ist der Extremwert <span class="m" data-tex="g(x_0)=f&#x27;(x_0)" data-plain="g(x₀) = f′(x₀)"></span>.</p>
+    <p><strong>Zahlenprobe</strong> (Beispiel 2.5): <span class="m" data-tex="f&#x27;&#x27;&#x27;(x)=24(x-1)" data-plain="f‴(x) = 24(x − 1)"></span> hat an den Wendestellen <span class="m" data-tex="x=1\mp\tfrac{\sqrt3}{3}" data-plain="x = 1 ∓ √3/3"></span> die Werte <span class="m" data-tex="\mp 8\sqrt 3\approx\mp 13{,}86" data-plain="∓8√3 ≈ ∓13,86"></span>, beide ungleich null. Die Steigungen der Wendetangenten <span class="m" data-tex="\pm\tfrac{8\sqrt3}{9}\approx\pm 1{,}54" data-plain="±8√3/9 ≈ ±1,54"></span> sind die Extremwerte von <span class="m" data-tex="f&#x27;" data-plain="f′"></span>: Das lokale Maximum der Steigung <span class="m" data-tex="+1{,}54" data-plain="+1,54"></span> liegt links von <span class="m" data-tex="x=1" data-plain="x = 1"></span>, das lokale Minimum <span class="m" data-tex="-1{,}54" data-plain="−1,54"></span> rechts davon.</p>
+    <p><strong>Die Umkehrung gilt nicht.</strong> Bei <span class="m" data-tex="f(x)=x^5" data-plain="f(x) = x⁵"></span> ist <span class="m" data-tex="f&#x27;&#x27;&#x27;(0)=0" data-plain="f‴(0) = 0"></span>, und trotzdem hat <span class="m" data-tex="f&#x27;&#x27;=20x^3" data-plain="f″ = 20x³"></span> bei 0 von − nach + gewechselt. Das Kriterium mit <span class="m" data-tex="f&#x27;&#x27;&#x27;" data-plain="f‴"></span> ist bequem, aber nicht das einzige.</p>
+  </details>
+
+  <h3>2.4 Die Fehlvorstellung: „Null in der Ableitung entscheidet“</h3>
+  <div class="hinweis">
+    <strong>Häufigster Fehler überhaupt.</strong> „Bei <span class="m" data-tex="f&#x27;(x_0)=0" data-plain="f′(x₀) = 0"></span> ist ein Extremum“ und „bei <span class="m" data-tex="f&#x27;&#x27;(x_0)=0" data-plain="f″(x₀) = 0"></span> ist ein Wendepunkt“. Beides ist falsch, und du kannst es an zwei Funktionen in einer Minute selbst widerlegen: <span class="m" data-tex="x^3" data-plain="x³"></span> hat bei 0 eine waagerechte Tangente und <strong>kein</strong> Extremum, und <span class="m" data-tex="x^4" data-plain="x⁴"></span> hat bei 0 ein Extremum und <strong>keinen</strong> Wendepunkt, obwohl in beiden Fällen <span class="m" data-tex="f&#x27;(0)=f&#x27;&#x27;(0)=0" data-plain="f′(0) = f″(0) = 0"></span> gilt.
+  </div>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Funktion</th><th>f′ um x = 0</th><th>f″ um x = 0</th><th>Befund bei x = 0</th></tr>
+    <tr><td><span class="m" data-tex="x^4" data-plain="x⁴"></span></td><td><span class="m" data-tex="4x^3" data-plain="4x³"></span>: − → +</td><td><span class="m" data-tex="12x^2" data-plain="12x²"></span>: ≥ 0, kein Wechsel</td><td>Tiefpunkt, kein Wendepunkt</td></tr>
+    <tr><td><span class="m" data-tex="-x^4" data-plain="−x⁴"></span></td><td><span class="m" data-tex="-4x^3" data-plain="−4x³"></span>: + → −</td><td><span class="m" data-tex="-12x^2" data-plain="−12x²"></span>: ≤ 0, kein Wechsel</td><td>Hochpunkt, kein Wendepunkt</td></tr>
+    <tr><td><span class="m" data-tex="x^3" data-plain="x³"></span></td><td><span class="m" data-tex="3x^2" data-plain="3x²"></span>: ≥ 0, kein Wechsel</td><td><span class="m" data-tex="6x" data-plain="6x"></span>: − → +</td><td>Sattelpunkt</td></tr>
+  </table>
+  </div>
+
+  <div class="merksatz">
+    <b>Ein Merksatz, der eine Aussage macht</b>
+    Eine Nullstelle von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> ist nur dann eine Extremstelle, wenn <span class="m" data-tex="f&#x27;" data-plain="f′"></span> dort <strong>das Vorzeichen wechselt</strong>, und eine Nullstelle von <span class="m" data-tex="f&#x27;&#x27;" data-plain="f″"></span> ist nur dann eine Wendestelle, wenn <span class="m" data-tex="f&#x27;&#x27;" data-plain="f″"></span> dort <strong>das Vorzeichen wechselt</strong>. Es kommt auf den Wechsel an, nicht auf die Null. Der Wert <span class="m" data-tex="f&#x27;&#x27;(x_0)" data-plain="f″(x₀)"></span> ist nur eine Abkürzung für den Vorzeichenwechsel, und die Abkürzung gilt nur, solange er nicht null ist.
+  </div>
+
+  <h3>2.5 Kurvendiskussion als Ablauf: ein Beispiel vollständig</h3>
+  <p>Eine vollständige Untersuchung geht immer in derselben Reihenfolge, damit nichts vergessen wird und die Ergebnisse aufeinander aufbauen. Die Schritte: <strong>(1)</strong> Definitionsbereich und Symmetrie, <strong>(2)</strong> Verhalten für <span class="m" data-tex="x\to\pm\infty" data-plain="x → ±∞"></span>, <strong>(3)</strong> Nullstellen und y-Achsenabschnitt, <strong>(4)</strong> Ableitungen, <strong>(5)</strong> Extrempunkte, <strong>(6)</strong> Wendepunkte, <strong>(7)</strong> Skizze aus den Ergebnissen. Ein Beispiel, an dem alles vorkommt:</p>
+  <div class="m block" data-tex="f(x) = x^4-4x^3+4x^2 = x^2(x-2)^2" data-plain="f(x) = x⁴ − 4x³ + 4x² = x²(x − 2)²"></div>
+
+  <p><strong>(1)–(3)</strong> Definitionsbereich ℝ. Der faktorisierte Term zeigt: Nullstellen bei <span class="m" data-tex="x=0" data-plain="x = 0"></span> und <span class="m" data-tex="x=2" data-plain="x = 2"></span>, beide <strong>doppelt</strong>, also berührt der Graph dort die x-Achse, ohne sie zu schneiden; dazu ist <span class="m" data-tex="f\ge 0" data-plain="f ≥ 0"></span> überall (ein Quadrat). Der Höchstgrad-Term <span class="m" data-tex="x^4" data-plain="x⁴"></span> mit positivem Koeffizienten liefert <span class="m" data-tex="f(x)\to+\infty" data-plain="f(x) → +∞"></span> für <span class="m" data-tex="x\to\pm\infty" data-plain="x → ±∞"></span>. Symmetrie: Zur y-Achse besteht keine (Exponenten 4, 3, 2 gemischt), wohl aber zur Geraden <span class="m" data-tex="x=1" data-plain="x = 1"></span>, denn <span class="m" data-tex="f(x)=\big((x-1)^2-1\big)^2" data-plain="f(x) = ((x − 1)² − 1)²"></span> hängt nur von <span class="m" data-tex="(x-1)^2" data-plain="(x − 1)²"></span> ab. Kontrolle: <span class="m" data-tex="f(-1)=f(3)=9" data-plain="f(−1) = f(3) = 9"></span>.</p>
+
+  <p><strong>(4)</strong> <span class="m" data-tex="f&#x27;(x)=4x^3-12x^2+8x=4x(x-1)(x-2)" data-plain="f′(x) = 4x³ − 12x² + 8x = 4x(x − 1)(x − 2)"></span>, <span class="m" data-tex="f&#x27;&#x27;(x)=12x^2-24x+8" data-plain="f″(x) = 12x² − 24x + 8"></span>, <span class="m" data-tex="f&#x27;&#x27;&#x27;(x)=24x-24=24(x-1)" data-plain="f‴(x) = 24x − 24 = 24(x − 1)"></span>.</p>
+
+  <p><strong>(5)</strong> Notwendig: <span class="m" data-tex="f&#x27;(x)=0" data-plain="f′(x) = 0"></span> bei <span class="m" data-tex="x=0,\,1,\,2" data-plain="x = 0, 1, 2"></span>. Hinreichend mit <span class="m" data-tex="f&#x27;&#x27;" data-plain="f″"></span>: <span class="m" data-tex="f&#x27;&#x27;(0)=8&gt;0" data-plain="f″(0) = 8 &gt; 0"></span> Tiefpunkt, <span class="m" data-tex="f&#x27;&#x27;(1)=-4&lt;0" data-plain="f″(1) = −4 &lt; 0"></span> Hochpunkt, <span class="m" data-tex="f&#x27;&#x27;(2)=8&gt;0" data-plain="f″(2) = 8 &gt; 0"></span> Tiefpunkt. Die y-Werte gehören dazu: <span class="m" data-tex="T_1(0\,|\,0)" data-plain="T₁(0 | 0)"></span>, <span class="m" data-tex="H(1\,|\,1)" data-plain="H(1 | 1)"></span>, <span class="m" data-tex="T_2(2\,|\,0)" data-plain="T₂(2 | 0)"></span>. Beide Tiefpunkte sind zugleich globale Minima, weil <span class="m" data-tex="f\ge0" data-plain="f ≥ 0"></span> ist.</p>
+
+  <p><strong>(6)</strong> Notwendig: <span class="m" data-tex="12x^2-24x+8=0" data-plain="12x² − 24x + 8 = 0"></span>, also <span class="m" data-tex="x^2-2x+\tfrac23=0" data-plain="x² − 2x + 2/3 = 0"></span> und <span class="m" data-tex="x=1\pm\sqrt{1-\tfrac23}=1\pm\tfrac{\sqrt3}{3}\approx 0{,}423\text{ bzw. }1{,}577" data-plain="x = 1 ± √(1 − 2/3) = 1 ± √3/3 ≈ 0,423 bzw. 1,577"></span>. Hinreichend: <span class="m" data-tex="f&#x27;&#x27;&#x27;(x)=\mp 8\sqrt3\neq 0" data-plain="f‴(x) = ∓8√3 ≠ 0"></span>. Beide y-Werte sind <span class="m" data-tex="\tfrac49\approx 0{,}444" data-plain="4/9 ≈ 0,444"></span> (Symmetrie!), die Steigungen der Wendetangenten <span class="m" data-tex="\pm\tfrac{8\sqrt3}{9}\approx\pm1{,}54" data-plain="±8√3/9 ≈ ±1,54"></span>.</p>
+
+  <p><strong>(7)</strong> Der Graph hat die Form eines „W“: zwei Tiefpunkte auf der x-Achse, dazwischen der Hochpunkt <span class="m" data-tex="(1\,|\,1)" data-plain="(1 | 1)"></span>, die Wendepunkte zwischen Tief- und Hochpunkt. Das passt zur Steigungsrichtung: Von <span class="m" data-tex="T_1" data-plain="T₁"></span> zu <span class="m" data-tex="H" data-plain="H"></span> steigt der Graph, dazwischen muss die Steigung ein Maximum haben, und das liegt genau bei der ersten Wendestelle.</p>
+
+  <div class="hinweis">
+    <strong>Selbstkontrolle beim Üben.</strong> Zwei Proben fangen fast alle Rechenfehler: die Symmetrie (bei diesem Beispiel <span class="m" data-tex="f(2-x)=f(x)" data-plain="f(2 − x) = f(x)"></span>) und ein Blick auf die Form. Steht in der Rechnung ein Tiefpunkt neben einem Tiefpunkt, muss dazwischen ein Hochpunkt liegen: <strong>Extrempunkte wechseln sich ab</strong>, und zwischen einem Hoch- und einem Tiefpunkt liegt mindestens ein Wendepunkt.
+  </div>
+
+  <h3>2.6 Lokal ist nicht global: Randextrema</h3>
+  <p>Ist die Funktion nur auf einem Intervall <span class="m" data-tex="[a;b]" data-plain="[a; b]"></span> betrachtet, etwa ein Pegelstand über fünf Tage, dann kann der größte Wert am <strong>Rand</strong> liegen, wo die Tangente gar nicht waagerecht sein muss. Man bestimmt deshalb zuerst alle lokalen Extremwerte im Inneren und vergleicht sie dann mit den Funktionswerten an den Rändern. Der größte dieser Werte ist das <strong>globale Maximum</strong>, der kleinste das globale Minimum.</p>
+
+  <div class="merksatz">
+    <b>Globale Extrema auf einem Intervall</b>
+    Kandidaten sind die Nullstellen von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> im Inneren und die beiden Randwerte. Wer nur <span class="m" data-tex="f&#x27;=0" data-plain="f′ = 0"></span> löst, übersieht den Rand, und wer nur den Rand betrachtet, übersieht den Gipfel im Inneren.
+  </div>
+</section>
+
+<!-- =============== 3 VERTIEFUNG =============== -->
+<section id="scharen">
+  <div class="stufe"><div class="nr">3</div><h2>Funktionsscharen: Ein Parameter, viele Graphen</h2></div>
+
+  <h3>3.1 Was eine Schar ist und was sie verlangt</h3>
+  <p>Steht in einem Funktionsterm neben <span class="m" data-tex="x" data-plain="x"></span> noch ein Buchstabe, zum Beispiel <span class="m" data-tex="f_t(x)=x^3-3t\,x^2" data-plain="f_t(x) = x³ − 3t·x²"></span>, dann steht der Term für <strong>unendlich viele Funktionen auf einmal</strong>: für jedes <span class="m" data-tex="t" data-plain="t"></span> eine. Man nennt das eine <strong>Funktionenschar</strong> und <span class="m" data-tex="t" data-plain="t"></span> den <strong>Parameter</strong>. Die Aufgabe ist, die Untersuchung einmal für alle durchzuführen. Dafür gilt eine einzige Grundregel: <strong>Beim Ableiten nach <span class="m" data-tex="x" data-plain="x"></span> ist der Parameter eine Konstante.</strong> Aus <span class="m" data-tex="-3t\,x^2" data-plain="−3t·x²"></span> wird also <span class="m" data-tex="-6t\,x" data-plain="−6t·x"></span> — der Faktor <span class="m" data-tex="-3t" data-plain="−3t"></span> bleibt stehen wie die 5 in <span class="m" data-tex="5x^2" data-plain="5x²"></span>.</p>
+
+  <div class="hinweis">
+    <strong>Zwei Fehler, die immer wieder passieren.</strong> (1) Nach dem Parameter abzuleiten: <span class="m" data-tex="(-3t\,x^2)&#x27;=-3x^2" data-plain="(−3t·x²)′ = −3x²"></span> wäre die Ableitung nach <span class="m" data-tex="t" data-plain="t"></span> und beantwortet eine andere Frage. (2) Zu früh durch den Parameter zu teilen: Wer bei <span class="m" data-tex="3x(x-2t)=0" data-plain="3x(x − 2t) = 0"></span> durch <span class="m" data-tex="t" data-plain="t"></span> kürzt, verliert den Fall <span class="m" data-tex="t=0" data-plain="t = 0"></span>. Die Kontrollfrage lautet immer: <strong>Für welche Parameterwerte ist die Rechnung überhaupt erlaubt, und was passiert an den Rändern?</strong>
+  </div>
+
+  <h3>3.2 Beispiel mit Fallunterscheidung: <span class="m" data-tex="f_t(x)=x^3-3t\,x^2" data-plain="f_t(x) = x³ − 3t·x²"></span></h3>
+  <p>Ableitungen: <span class="m" data-tex="f_t&#x27;(x)=3x^2-6t\,x=3x(x-2t)" data-plain="f_t′(x) = 3x² − 6t·x = 3x(x − 2t)"></span>, <span class="m" data-tex="f_t&#x27;&#x27;(x)=6x-6t=6(x-t)" data-plain="f_t″(x) = 6x − 6t = 6(x − t)"></span>, <span class="m" data-tex="f_t&#x27;&#x27;&#x27;(x)=6" data-plain="f_t‴(x) = 6"></span>.</p>
+
+  <p><strong>Extremstellen.</strong> Notwendig: <span class="m" data-tex="3x(x-2t)=0" data-plain="3x(x − 2t) = 0"></span>, also <span class="m" data-tex="x=0" data-plain="x = 0"></span> oder <span class="m" data-tex="x=2t" data-plain="x = 2t"></span>. Für <span class="m" data-tex="t\neq 0" data-plain="t ≠ 0"></span> sind das zwei verschiedene Stellen. Hinreichend: <span class="m" data-tex="f_t&#x27;&#x27;(0)=-6t" data-plain="f_t″(0) = −6t"></span> und <span class="m" data-tex="f_t&#x27;&#x27;(2t)=6t" data-plain="f_t″(2t) = 6t"></span>. Jetzt hängt das Vorzeichen vom Parameter ab, und deshalb braucht man eine <strong>Fallunterscheidung</strong>:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Fall</th><th>Bei x = 0</th><th>Bei x = 2t</th></tr>
+    <tr><td>t &gt; 0</td><td>f″ = −6t &lt; 0: Hochpunkt (0 | 0)</td><td>f″ = 6t &gt; 0: Tiefpunkt (2t | −4t³)</td></tr>
+    <tr><td>t &lt; 0</td><td>f″ = −6t &gt; 0: Tiefpunkt (0 | 0)</td><td>f″ = 6t &lt; 0: Hochpunkt (2t | −4t³)</td></tr>
+    <tr><td>t = 0</td><td colspan="2">beide Stellen fallen zusammen: f₀(x) = x³, Sattelpunkt (0 | 0)</td></tr>
+  </table>
+  </div>
+
+  <p><strong>Wendestelle.</strong> <span class="m" data-tex="f_t&#x27;&#x27;(x)=0" data-plain="f_t″(x) = 0"></span> ergibt <span class="m" data-tex="x=t" data-plain="x = t"></span>, und <span class="m" data-tex="f_t&#x27;&#x27;&#x27;=6\neq 0" data-plain="f_t‴ = 6 ≠ 0"></span> gilt für jeden Parameter: Der Wendepunkt <span class="m" data-tex="W_t(t\,|\,-2t^3)" data-plain="W_t(t | −2t³)"></span> existiert immer. Die Steigung der Wendetangente ist <span class="m" data-tex="f_t&#x27;(t)=-3t^2" data-plain="f_t′(t) = −3t²"></span>: <strong>nie positiv</strong>, und nur für <span class="m" data-tex="t=0" data-plain="t = 0"></span> waagerecht, also genau im Sattelfall.</p>
+
+  <p><strong>Zahlenproben.</strong> <span class="m" data-tex="t=2" data-plain="t = 2"></span>: <span class="m" data-tex="f_2(x)=x^3-6x^2" data-plain="f₂(x) = x³ − 6x²"></span> mit <span class="m" data-tex="H(0\,|\,0)" data-plain="H(0 | 0)"></span>, <span class="m" data-tex="T(4\,|\,-32)" data-plain="T(4 | −32)"></span>, <span class="m" data-tex="W(2\,|\,-16)" data-plain="W(2 | −16)"></span>. <span class="m" data-tex="t=-1" data-plain="t = −1"></span>: <span class="m" data-tex="f_{-1}(x)=x^3+3x^2" data-plain="f₋₁(x) = x³ + 3x²"></span> mit <span class="m" data-tex="T(0\,|\,0)" data-plain="T(0 | 0)"></span>, <span class="m" data-tex="H(-2\,|\,4)" data-plain="H(−2 | 4)"></span>, <span class="m" data-tex="W(-1\,|\,2)" data-plain="W(−1 | 2)"></span>.</p>
+
+  <div class="merksatz">
+    <b>Der Parameter entscheidet über die Sorte des Punktes</b>
+    Bei Scharen ist die Aussage „das ist ein Hochpunkt“ fast nie für alle Parameterwerte richtig. Ein vollständiges Ergebnis besteht aus den <strong>Fällen</strong> und den <strong>Übergangswerten</strong>: Hier wechselt bei <span class="m" data-tex="t=0" data-plain="t = 0"></span> ein Hochpunkt in einen Tiefpunkt, und genau dort verschmelzen die beiden Extremstellen zum Sattelpunkt.
+  </div>
+
+  <h3>3.3 Die Ortskurve</h3>
+  <p>Verändert man den Parameter, wandern die Extrem- und Wendepunkte. Die <strong>Ortskurve</strong> (Ortslinie) ist die Kurve, auf der alle diese Punkte liegen. Die Methode besteht aus zwei Schritten: <strong>Erstens</strong> die Koordinaten des Punktes in Abhängigkeit vom Parameter aufschreiben, <strong>zweitens</strong> den Parameter eliminieren, also aus der x-Koordinate nach <span class="m" data-tex="t" data-plain="t"></span> auflösen und in die y-Koordinate einsetzen.</p>
+
+  <div class="merksatz">
+    <b>Ortskurve bestimmen</b>
+    (1) Punkt in Abhängigkeit von <span class="m" data-tex="t" data-plain="t"></span> bestimmen: <span class="m" data-tex="(x(t)\,|\,y(t))" data-plain="(x(t) | y(t))"></span>. (2) x-Gleichung nach <span class="m" data-tex="t" data-plain="t"></span> auflösen. (3) In <span class="m" data-tex="y(t)" data-plain="y(t)"></span> einsetzen. Ergebnis: eine Gleichung <span class="m" data-tex="y=g(x)" data-plain="y = g(x)"></span> ohne Parameter. Sie gilt nur für die Parameterwerte, für die der Punkt überhaupt existiert.
+  </div>
+
+  <p><strong>Wendepunkte:</strong> <span class="m" data-tex="x=t" data-plain="x = t"></span>, <span class="m" data-tex="y=-2t^3" data-plain="y = −2t³"></span>. Auflösen ist trivial (<span class="m" data-tex="t=x" data-plain="t = x"></span>), also</p>
+  <div class="m block" data-tex="y=-2x^3" data-plain="y = −2x³"></div>
+  <p><strong>Extrempunkte:</strong> Der bewegliche Extrempunkt hat <span class="m" data-tex="x=2t" data-plain="x = 2t"></span>, also <span class="m" data-tex="t=x/2" data-plain="t = x/2"></span>, und <span class="m" data-tex="y=-4t^3=-4\cdot\tfrac{x^3}{8}" data-plain="y = −4t³ = −4·x³/8"></span>, also</p>
+  <div class="m block" data-tex="y=-\tfrac12 x^3" data-plain="y = −x³/2"></div>
+  <p>Probe: <span class="m" data-tex="t=2" data-plain="t = 2"></span> liefert <span class="m" data-tex="T(4\,|\,-32)" data-plain="T(4 | −32)"></span>, und <span class="m" data-tex="-\tfrac12\cdot 4^3=-32" data-plain="−(1/2)·4³ = −32"></span> ✓. Der feste Punkt <span class="m" data-tex="(0\,|\,0)" data-plain="(0 | 0)"></span> liegt auf beiden Kurven.</p>
+
+  <details>
+    <summary>Ortskurve ohne die Koordinaten des Punktes vorher auszurechnen</summary>
+    <p>Manchmal sind die Koordinaten des Extrempunkts unhandlich (Wurzeln!). Dann geht es kürzer: Ein Extrempunkt <span class="m" data-tex="(x\,|\,y)" data-plain="(x | y)"></span> erfüllt immer zwei Gleichungen gleichzeitig, nämlich <span class="m" data-tex="f_t&#x27;(x)=0" data-plain="f_t′(x) = 0"></span> und <span class="m" data-tex="y=f_t(x)" data-plain="y = f_t(x)"></span>. Löst man die erste nach <span class="m" data-tex="t" data-plain="t"></span> auf und setzt das in die zweite ein, so ist der Parameter verschwunden, ohne dass man die Extremstelle je explizit ausgerechnet hat. Am Beispiel: <span class="m" data-tex="3x^2-6t\,x=0" data-plain="3x² − 6t·x = 0"></span> ergibt für <span class="m" data-tex="x\neq0" data-plain="x ≠ 0"></span> die Beziehung <span class="m" data-tex="t=x/2" data-plain="t = x/2"></span>; eingesetzt in <span class="m" data-tex="y=x^3-3t\,x^2" data-plain="y = x³ − 3t·x²"></span> folgt <span class="m" data-tex="y=x^3-\tfrac32 x^3=-\tfrac12x^3" data-plain="y = x³ − (3/2)·x³ = −x³/2"></span>, dasselbe Ergebnis wie oben.</p>
+    <p><strong>Warum das funktioniert:</strong> Die Gleichung <span class="m" data-tex="f_t&#x27;(x)=0" data-plain="f_t′(x) = 0"></span> beschreibt alle Paare <span class="m" data-tex="(x,t)" data-plain="(x, t)"></span>, bei denen die Tangente waagerecht ist. Wer sie nach <span class="m" data-tex="t" data-plain="t"></span> auflöst, erhält zu jedem <span class="m" data-tex="x" data-plain="x"></span> den Parameter, für den dort eine waagerechte Tangente liegt, und der zugehörige y-Wert ist genau <span class="m" data-tex="f_t(x)" data-plain="f_t(x)"></span> mit diesem <span class="m" data-tex="t" data-plain="t"></span>.</p>
+    <p><strong>Die Vorsicht dabei.</strong> Das Verfahren liefert alle Punkte mit waagerechter Tangente, also auch Sattelpunkte. Ob ein Extrempunkt vorliegt, muss danach noch für jeden Bereich geprüft werden (hier: Existenz für alle <span class="m" data-tex="t\neq 0" data-plain="t ≠ 0"></span>).</p>
+  </details>
+
+  <h3>3.4 Einen Parameter bestimmen</h3>
+  <p><strong>Aufgabe:</strong> Für welchen Wert von <span class="m" data-tex="t&gt;0" data-plain="t &gt; 0"></span> liegt der Tiefpunkt von <span class="m" data-tex="f_t" data-plain="f_t"></span> auf der Geraden <span class="m" data-tex="y=-32" data-plain="y = −32"></span>?<br>
+  <strong>Lösung:</strong> Der Tiefpunkt ist <span class="m" data-tex="(2t\,|\,-4t^3)" data-plain="(2t | −4t³)"></span>. Gefordert: <span class="m" data-tex="-4t^3=-32" data-plain="−4t³ = −32"></span>, also <span class="m" data-tex="t^3=8" data-plain="t³ = 8"></span> und <span class="m" data-tex="t=2" data-plain="t = 2"></span> (die einzige reelle Lösung, und sie ist größer als null). Probe: <span class="m" data-tex="T(4\,|\,-32)" data-plain="T(4 | −32)"></span> ✓. Das Vorgehen lautet immer: Koordinate des Punktes in Abhängigkeit vom Parameter, Bedingung als Gleichung für den Parameter, lösen, Bedingung an den Parameter (hier <span class="m" data-tex="t&gt;0" data-plain="t &gt; 0"></span>) prüfen.</p>
+</section>
+
+
+<!-- =============== 4 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">4</div><h2>Scharen im Experiment: Punkte wandern, Punkte verschmelzen</h2></div>
+
+  <p>Oben siehst du den Graphen einer Funktion, die von einem Parameter <em>a</em> abhängt. Verstellst du <em>a</em>, wandern Hochpunkte, Tiefpunkte und Wendepunkte, und manchmal verschwinden sie. Darunter stehen die Ableitungen und zwei Vorzeichenbänder: Wo das obere Band <strong>grün</strong> ist, steigt der Graph, wo es <strong>rot</strong> ist, fällt er. Das untere Band ist <strong>blau</strong> in Linkskurven und <strong>orange</strong> in Rechtskurven. Bei zwei der drei Scharen ist die Formel verdeckt: Du untersuchst sie wie ein Messobjekt, nur mit dem, was die Anzeige hergibt.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    Bei Schar 2 und Schar 3 kennst du die Formel nicht. Du untersuchst beide wie eine Messreihe: mit dem Graphen, den Messwerten an der Prüfstelle und den Vorzeichenbändern.<br>
+    <strong>Teil 1 (Schar 2).</strong> Erhöhe <em>a</em> von −1,00 in kleinen Schritten bis 2,00 und beobachte den Wendepunkt, die Extrempunkte und die Steigung der Wendetangente. Notiere für vier Werte von <em>a</em> die x-Werte von Hoch- und Tiefpunkt und die Steigung der Wendetangente. Finde den Wert von <em>a</em>, bei dem die Steigung der Wendetangente 0,00 ist, und beschreibe, was im selben Moment mit den beiden Extrempunkten geschieht. Formuliere: „Bei <em>a</em> = ___ fallen Hoch- und Tiefpunkt zusammen, weil ___.“<br>
+    <strong>Teil 2 (Schar 3).</strong> Stelle die Prüfstelle auf x₀ = 0,00. Lies f′(0) und f″(0) für <em>a</em> = −1,00; 1,00; 2,00 und dann für <em>a</em> = 0,00 ab. Schau in beiden Bändern, ob f′ bei x = 0 das Vorzeichen wechselt. Formuliere: „Bei x = 0 liegt für <em>a</em> ≠ 0 ein ___, für <em>a</em> = 0 ein ___.“<br>
+    <strong>Zusatz (Schar 1).</strong> Schalte „Ortskurve“ ein, lies für <em>a</em> = 1,00 und <em>a</em> = 4,00 die Tiefpunkte ab und finde eine Gleichung, die zu <strong>beiden</strong> Punkten passt (Hilfe: Abschnitt 3.3).
+  </div>
+
+  <div class="sim">
+    <canvas id="cvF" width="1000" height="400" style="touch-action:pan-y"></canvas>
+    <div style="padding:6px 14px 8px;font-size:12.5px;color:var(--grau)">Achsen unterschiedlich skaliert: Beurteile Steigungen an den Messwerten, nicht am Winkel im Bild. Markierungen: H Hochpunkt · T Tiefpunkt · W Wendepunkt · S Sattelpunkt (Wendepunkt mit waagerechter Tangente).</div>
+    <div class="trenner"></div>
+    <canvas id="cvAbl" width="1000" height="330"></canvas>
+
+    <div class="anzeige">
+      <div>Parameter<span id="anzA">a = 1,00</span></div>
+      <div>Prüfstelle<span id="anzX0">x₀ = 2,00</span></div>
+      <div>Funktionswert f(x₀)<span id="anzF">0,67</span></div>
+      <div>Ableitung f′(x₀)<span id="anzF1">3,00</span></div>
+      <div>Ableitung f″(x₀)<span id="anzF2">4,00</span></div>
+      <div style="grid-column:1/-1">Verlauf an der Prüfstelle<span id="anzArt" style="font-size:16px">steigt · Linkskurve</span></div>
+      <div style="grid-column:1/-1">Extrempunkte<span id="anzExt" style="font-size:16px">–</span></div>
+      <div style="grid-column:1/-1">Wendepunkt(e)<span id="anzWen" style="font-size:16px">–</span></div>
+      <div style="grid-column:1/-1">Befund<span id="anzBefund" style="font-size:16px">—</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label for="sSchar">Schar</label>
+          <select id="sSchar" style="font:inherit;padding:7px 9px;border:1px solid var(--linie);border-radius:8px;width:100%">
+            <option value="1">Schar 1: fₐ(x) = x³/3 − a·x</option>
+            <option value="2">Schar 2 (Formel verdeckt)</option>
+            <option value="3">Schar 3 (Formel verdeckt)</option>
+          </select>
+        </div>
+        <div>
+          <label for="rA">Parameter a <b id="lA">1,00</b></label>
+          <input type="range" id="rA" min="-20" max="80" step="1" value="20">
+        </div>
+        <div>
+          <label for="rX">Prüfstelle x₀ <b id="lX">2,00</b></label>
+          <input type="range" id="rX" min="-60" max="60" step="1" value="40">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button class="primaer" id="bPlay">▶ Prüfstelle wandern lassen</button>
+        <button id="bReset">Zurücksetzen</button>
+      </div>
+      <div class="knopfleiste" style="margin-top:10px;gap:16px">
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px"><input type="checkbox" id="cTan" checked style="accent-color:var(--akzent);width:16px;height:16px"> Tangente an der Prüfstelle</label>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px"><input type="checkbox" id="cSpur" style="accent-color:var(--akzent);width:16px;height:16px"> Ortskurve der Extrem- und Wendepunkte</label>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px"><input type="checkbox" id="cAufbau" style="accent-color:var(--akzent);width:16px;height:16px"> f′ und f″ nur bis zur Prüfstelle</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Du hast in Schar 2 den Parameter a von −1,00 bis 2,00 verändert. Welche Beschreibung trifft zu?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>Alle drei markierten Punkte wandern gemeinsam nach rechts, ihr Abstand zueinander bleibt gleich.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>Der Wendepunkt bleibt bei x = 1,00 stehen und wandert nur senkrecht. Hoch- und Tiefpunkt rücken zusammen und fallen bei a = 0,00 in einem Punkt zusammen; für a &gt; 0 gibt es keine Extrempunkte mehr.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>Der Wendepunkt bleibt bei x = 1,00 stehen und wandert nur senkrecht. Hoch- und Tiefpunkt rücken zusammen und fallen bei a = 1,00, wo die Wendetangente waagerecht ist, im Wendepunkt zusammen; für a &gt; 1 gibt es keine Extrempunkte mehr.</span></label>
+      <label class="opt" data-i="3"><input type="radio" name="sim1"><span>Der Wendepunkt bleibt bei x = 1,00 stehen. Hoch- und Tiefpunkt haben bis a = 0,95 einen deutlichen Abstand und verschwinden dann plötzlich, ohne sich vorher angenähert zu haben.</span></label>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Achte auf die angezeigte Steigung der Wendetangente: Sie ändert sich mit a und geht dabei durch einen besonderen Wert.</div>
+    <div class="hilfe-text" data-stufe="2">Stelle a nacheinander auf 0,00; 0,50; 0,95; 1,00 und 1,05 und notiere jedes Mal die x-Werte von Hoch- und Tiefpunkt, die Lage des Wendepunkts und die Steigung der Wendetangente. Vergleiche die Zeilen.</div>
+    <div class="hilfe-text" data-stufe="3">a = 0,00: H(0,00 | 0,00), T(2,00 | −1,33), Steigung −1,00. a = 0,50: H(0,29 | 0,07), T(1,71 | −0,40), Steigung −0,50. a = 0,95: H(0,78 | 0,29), T(1,22 | 0,28), Steigung −0,05. a = 1,00: nur S(1,00 | 0,33), Steigung 0,00. a = 1,05: keine Extrempunkte, Steigung +0,05. Der Wendepunkt bleibt bei x = 1,00, die Extrempunkte rücken aufeinander zu und fallen bei a = 1,00 mit ihm zusammen, dort ist seine Tangente waagerecht.</div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">In Schar 3 hast du die Prüfstelle auf x₀ = 0,00 gestellt und a = −1,00; 1,00; 2,00 und danach 0,00 eingestellt. Welche Aussage über die Stelle x = 0 stimmt?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>Für a ≠ 0 liegt dort ein Tiefpunkt (f′ und f″ sind null, f′ wechselt von − nach +), für a = 0 ein Sattelpunkt.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span>Für a ≠ 0 liegt dort ein Sattelpunkt (f′ und f″ sind null, f′ wechselt nicht das Vorzeichen). Für a = 0 wird daraus ein Tiefpunkt, obwohl f″(0) weiterhin null ist.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>Für jedes a liegt dort ein Sattelpunkt (f′ und f″ sind null, f′ wechselt nie das Vorzeichen); der Tiefpunkt bei x = a kommt für a ≠ 0 dazu, für a = 0 verschwindet er.</span></label>
+      <label class="opt" data-i="3"><input type="radio" name="sim2"><span>Dort liegt für kein a etwas Besonderes vor: Weil f″(0) = 0 ist, kann bei x = 0 weder ein Extrempunkt noch ein Sattelpunkt sein.</span></label>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die Zahlen f′(0) und f″(0) allein reichen nicht. Schau auf das obere Band rund um x = 0: Ändert sich dort die Farbe?</div>
+    <div class="hilfe-text" data-stufe="2">Setze x₀ = 0,00, notiere f′(0) und f″(0) für a = −1,00; 1,00; 2,00 und 0,00 und prüfe jedes Mal, ob links und rechts von x = 0 dieselbe Farbe im f′-Band steht.</div>
+    <div class="hilfe-text" data-stufe="3">In allen vier Fällen ist f′(0) = 0,00 und f″(0) = 0,00. Für a = −1,00 steht links und rechts von 0 grün, für a = 1,00 und 2,00 beide Male rot: kein Vorzeichenwechsel von f′, also ein Sattelpunkt S(0,00 | 0,00). Für a = 0,00 wechselt das Band von rot nach grün: Tiefpunkt T(0,00 | 0,00), obwohl f″(0) = 0,00 ist.</div>
+  </div>
+
+  <div class="hinweis">
+    <strong>Was du mitnehmen solltest.</strong> Eine waagerechte Tangente allein sagt nicht, was für ein Punkt vorliegt. Der Sattelpunkt ist der Übergang, an dem ein Hochpunkt und ein Tiefpunkt verschmelzen und verschwinden, und die zweite Ableitung kann dort versagen. Was zählt, ist der Vorzeichenwechsel, und den zeigt das Band.
+  </div>
+</section>
+
+
+<!-- =============== 5 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">5</div><h2>Übungen</h2></div>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Gegeben ist <span class="m" data-tex="f(x) = x^3 - 6x^2 + 9x - 4" data-plain="f(x) = x³ − 6x² + 9x − 4"></span>. Bestimme die <strong>y-Koordinate des Tiefpunkts</strong> des Graphen.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="LE">LE</option>
+        <option value="FE">FE</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Es gibt zwei Stellen mit waagerechter Tangente, aber nur eine gehört zum Tiefpunkt. Und gefragt ist der y-Wert, nicht die Stelle.</div>
+    <div class="hilfe-text" data-stufe="2">Löse <span class="m" data-tex="f&#x27;(x)=0" data-plain="f′(x) = 0"></span> (quadratische Gleichung), prüfe an beiden Lösungen das Vorzeichen von <span class="m" data-tex="f&#x27;&#x27;" data-plain="f″"></span> und setze die Stelle mit <span class="m" data-tex="f&#x27;&#x27;&gt;0" data-plain="f″ &gt; 0"></span> in <span class="m" data-tex="f" data-plain="f"></span> ein.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="f&#x27;(x)=3x^2-12x+9=3(x-1)(x-3)=0" data-plain="f′(x) = 3x² − 12x + 9 = 3(x − 1)(x − 3) = 0"></span>, also <span class="m" data-tex="x=1" data-plain="x = 1"></span> oder <span class="m" data-tex="x=3" data-plain="x = 3"></span>. Mit <span class="m" data-tex="f&#x27;&#x27;(x)=6x-12" data-plain="f″(x) = 6x − 12"></span>: <span class="m" data-tex="f&#x27;&#x27;(1)=-6&lt;0" data-plain="f″(1) = −6 &lt; 0"></span> Hochpunkt, <span class="m" data-tex="f&#x27;&#x27;(3)=6&gt;0" data-plain="f″(3) = 6 &gt; 0"></span> Tiefpunkt. <span class="m" data-tex="f(3)=27-54+27-4=-4" data-plain="f(3) = 27 − 54 + 27 − 4 = −4"></span>, also <span class="m" data-tex="T(3\,|\,-4)" data-plain="T(3 | −4)"></span>. Kontrolle: <span class="m" data-tex="f(x)=(x-4)(x-1)^2" data-plain="f(x) = (x − 4)(x − 1)²"></span> hat bei <span class="m" data-tex="x=1" data-plain="x = 1"></span> die doppelte Nullstelle, dort liegt der Hochpunkt <span class="m" data-tex="H(1\,|\,0)" data-plain="H(1 | 0)"></span> ✓.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Gegeben ist <span class="m" data-tex="f(x) = x^3 - 6x^2 + 5x" data-plain="f(x) = x³ − 6x² + 5x"></span>. Bestimme die <strong>Steigung der Wendetangente</strong>.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="1">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="°">°</option>
+        <option value="FE">FE</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die Wendestelle bestimmst du mit der zweiten Ableitung; die Steigung der Tangente aber mit der ersten.</div>
+    <div class="hilfe-text" data-stufe="2">Löse <span class="m" data-tex="f&#x27;&#x27;(x)=0" data-plain="f″(x) = 0"></span> und setze das Ergebnis in <span class="m" data-tex="f&#x27;" data-plain="f′"></span> ein, nicht in <span class="m" data-tex="f" data-plain="f"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="f&#x27;(x)=3x^2-12x+5" data-plain="f′(x) = 3x² − 12x + 5"></span>, <span class="m" data-tex="f&#x27;&#x27;(x)=6x-12=0" data-plain="f″(x) = 6x − 12 = 0"></span> also <span class="m" data-tex="x_W=2" data-plain="x_W = 2"></span>, und <span class="m" data-tex="f&#x27;&#x27;&#x27;(x)=6\neq0" data-plain="f‴(x) = 6 ≠ 0"></span> bestätigt die Wendestelle. <span class="m" data-tex="f&#x27;(2)=3\cdot4-12\cdot2+5=12-24+5=-7" data-plain="f′(2) = 3·4 − 12·2 + 5 = 12 − 24 + 5 = −7"></span>. Zur Einordnung: <span class="m" data-tex="f(2)=8-24+10=-6" data-plain="f(2) = 8 − 24 + 10 = −6"></span>, der Wendepunkt ist <span class="m" data-tex="W(2\,|\,-6)" data-plain="W(2 | −6)"></span>. Die Steigung <span class="m" data-tex="-7" data-plain="−7"></span> ist der kleinste Wert von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> überhaupt: <span class="m" data-tex="f&#x27;(x)=3(x-2)^2-7" data-plain="f′(x) = 3(x − 2)² − 7"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-mc="mc1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Für <span class="m" data-tex="f(x) = \tfrac12x^4 - 4x^3 + 9x^2 - 5" data-plain="f(x) = ½x⁴ − 4x³ + 9x² − 5"></span> ist <span class="m" data-tex="f&#x27;(x)=2x(x-3)^2" data-plain="f′(x) = 2x(x − 3)²"></span> und <span class="m" data-tex="f&#x27;&#x27;(x)=6(x-1)(x-3)" data-plain="f″(x) = 6(x − 1)(x − 3)"></span>. Untersuche die Stelle <span class="m" data-tex="x=3" data-plain="x = 3"></span>. Welche Aussage ist <strong>vollständig und richtig begründet</strong>?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="mc1"><span>Tiefpunkt, denn f′(3) = 0.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="mc1"><span>Weder Extrem- noch Wendepunkt, denn f″(3) = 0 liefert keine Entscheidung.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="mc1"><span>Wendepunkt, denn f″(3) = 0. Dass die Tangente dort waagerecht ist, ist Zufall.</span></label>
+      <label class="opt" data-i="3"><input type="radio" name="mc1"><span>Sattelpunkt: f′ wechselt bei x = 3 das Vorzeichen nicht (f′ = 2x(x − 3)² ist für x &gt; 0 nie negativ), f″ wechselt es dagegen (von − nach +). Also ein Wendepunkt mit waagerechter Tangente.</span></label>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Du hast zwei Kriterien zur Verfügung, und eines davon wird an dieser Stelle nichts liefern. Welches, und was bleibt dann?</div>
+    <div class="hilfe-text" data-stufe="2">Prüfe mit den gegebenen Termen das Vorzeichen von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> links und rechts von 3, danach das von <span class="m" data-tex="f&#x27;&#x27;" data-plain="f″"></span>. Ein Quadrat wie <span class="m" data-tex="(x-3)^2" data-plain="(x − 3)²"></span> ist nie negativ.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="f&#x27;(2{,}9)=2\cdot2{,}9\cdot0{,}01=0{,}058" data-plain="f′(2,9) = 2·2,9·0,01 = 0,058"></span> und <span class="m" data-tex="f&#x27;(3{,}1)=2\cdot3{,}1\cdot0{,}01=0{,}062" data-plain="f′(3,1) = 2·3,1·0,01 = 0,062"></span>: kein Vorzeichenwechsel, kein Extremum. <span class="m" data-tex="f&#x27;&#x27;(2{,}9)=6\cdot1{,}9\cdot(-0{,}1)=-1{,}14" data-plain="f″(2,9) = 6·1,9·(−0,1) = −1,14"></span> und <span class="m" data-tex="f&#x27;&#x27;(3{,}1)=6\cdot2{,}1\cdot0{,}1=1{,}26" data-plain="f″(3,1) = 6·2,1·0,1 = 1,26"></span>: Vorzeichenwechsel, Wendestelle. Kontrolle mit <span class="m" data-tex="f&#x27;&#x27;&#x27;(x)=12x-24" data-plain="f‴(x) = 12x − 24"></span>: <span class="m" data-tex="f&#x27;&#x27;&#x27;(3)=12\neq0" data-plain="f‴(3) = 12 ≠ 0"></span> ✓. Wegen <span class="m" data-tex="f&#x27;(3)=0" data-plain="f′(3) = 0"></span> ist es ein Sattelpunkt <span class="m" data-tex="S(3\,|\,8{,}5)" data-plain="S(3 | 8,5)"></span> mit <span class="m" data-tex="f(3)=40{,}5-108+81-5=8{,}5" data-plain="f(3) = 40,5 − 108 + 81 − 5 = 8,5"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Der Wasserstand eines Flusses wird für die ersten fünf Tage einer Beobachtung modelliert durch <span class="m" data-tex="h(t) = 0{,}1\,(t^3 - 6t^2 + 9t)" data-plain="h(t) = 0,1·(t³ − 6t² + 9t)"></span> (<span class="m" data-tex="h" data-plain="h"></span> in m, <span class="m" data-tex="t" data-plain="t"></span> in Tagen, <span class="m" data-tex="0\le t\le5" data-plain="0 ≤ t ≤ 5"></span>). Bestimme den <strong>größten Wasserstand</strong> in diesem Zeitraum.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="m">m</option>
+        <option value="m/Tag">m/Tag</option>
+        <option value="Tage">Tage</option>
+        <option value="cm">cm</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Was bedeutet die Angabe <span class="m" data-tex="0\le t\le5" data-plain="0 ≤ t ≤ 5"></span> für deine Kandidatenliste?</div>
+    <div class="hilfe-text" data-stufe="2">Kandidaten: die Nullstellen von <span class="m" data-tex="h&#x27;" data-plain="h′"></span> im Inneren und die Randwerte <span class="m" data-tex="h(0)" data-plain="h(0)"></span> und <span class="m" data-tex="h(5)" data-plain="h(5)"></span>. Berechne alle Funktionswerte und wähle den größten.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="h&#x27;(t)=0{,}1(3t^2-12t+9)=0{,}3(t-1)(t-3)" data-plain="h′(t) = 0,1·(3t² − 12t + 9) = 0,3·(t − 1)(t − 3)"></span>. Kandidaten im Inneren: <span class="m" data-tex="t=1" data-plain="t = 1"></span> und <span class="m" data-tex="t=3" data-plain="t = 3"></span>. Werte: <span class="m" data-tex="h(0)=0" data-plain="h(0) = 0"></span>, <span class="m" data-tex="h(1)=0{,}1\cdot4=0{,}4" data-plain="h(1) = 0,1·4 = 0,4"></span>, <span class="m" data-tex="h(3)=0{,}1\cdot(27-54+27)=0" data-plain="h(3) = 0,1·(27 − 54 + 27) = 0"></span>, <span class="m" data-tex="h(5)=0{,}1\cdot(125-150+45)=2{,}0" data-plain="h(5) = 0,1·(125 − 150 + 45) = 2,0"></span>. Der größte Wert ist <span class="m" data-tex="2{,}0\,\mathrm{m}" data-plain="2,0 m"></span> am <strong>Rand</strong> <span class="m" data-tex="t=5" data-plain="t = 5"></span>. Das lokale Maximum <span class="m" data-tex="0{,}4\,\mathrm{m}" data-plain="0,4 m"></span> bei <span class="m" data-tex="t=1" data-plain="t = 1"></span> ist nur ein lokales. Der Pegel steigt danach weiter, und die Modellgrenze bei <span class="m" data-tex="t=5" data-plain="t = 5"></span> schneidet den Anstieg ab.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die Höhe eines Bambussprosses wird beschrieben durch <span class="m" data-tex="B(t) = -0{,}02\,t^3 + 0{,}6\,t^2" data-plain="B(t) = −0,02·t³ + 0,6·t²"></span> (<span class="m" data-tex="B" data-plain="B"></span> in cm, <span class="m" data-tex="t" data-plain="t"></span> in Tagen, <span class="m" data-tex="0\le t\le20" data-plain="0 ≤ t ≤ 20"></span>). Bestimme die <strong>größte Wachstumsgeschwindigkeit</strong> in diesem Zeitraum.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="cm/Tag">cm/Tag</option>
+        <option value="cm">cm</option>
+        <option value="Tage">Tage</option>
+        <option value="cm²">cm²</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die Geschwindigkeit ist selbst eine Funktion der Zeit. Gesucht ist deren größter Wert.</div>
+    <div class="hilfe-text" data-stufe="2">Die Wachstumsgeschwindigkeit ist <span class="m" data-tex="B&#x27;(t)" data-plain="B′(t)"></span>. Bestimme die Extremstelle von <span class="m" data-tex="B&#x27;" data-plain="B′"></span> mit <span class="m" data-tex="B&#x27;&#x27;(t)=0" data-plain="B″(t) = 0"></span> und prüfe mit <span class="m" data-tex="B&#x27;&#x27;&#x27;" data-plain="B‴"></span>, dass es ein Maximum ist. Vergleiche mit den Randwerten von <span class="m" data-tex="B&#x27;" data-plain="B′"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="B&#x27;(t)=-0{,}06t^2+1{,}2t=0{,}06\,t\,(20-t)" data-plain="B′(t) = −0,06t² + 1,2t = 0,06·t·(20 − t)"></span>. <span class="m" data-tex="B&#x27;&#x27;(t)=-0{,}12t+1{,}2=0" data-plain="B″(t) = −0,12t + 1,2 = 0"></span> ergibt <span class="m" data-tex="t=10" data-plain="t = 10"></span>, und <span class="m" data-tex="B&#x27;&#x27;&#x27;=-0{,}12&lt;0" data-plain="B‴ = −0,12 &lt; 0"></span> zeigt: Maximum von <span class="m" data-tex="B&#x27;" data-plain="B′"></span>. <span class="m" data-tex="B&#x27;(10)=-0{,}06\cdot100+12=-6+12=6" data-plain="B′(10) = −0,06·100 + 12 = −6 + 12 = 6"></span> cm/Tag. Ränder: <span class="m" data-tex="B&#x27;(0)=0" data-plain="B′(0) = 0"></span>, <span class="m" data-tex="B&#x27;(20)=-24+24=0" data-plain="B′(20) = −24 + 24 = 0"></span>. Also <span class="m" data-tex="6\,\mathrm{cm/Tag}" data-plain="6 cm/Tag"></span>. Merke: <strong>Die größte Änderungsrate liegt an einer Wendestelle des Bestands.</strong></div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Für jedes <span class="m" data-tex="a" data-plain="a"></span> ist <span class="m" data-tex="f_a(x) = x^3 - 6x^2 + a\,x" data-plain="f_a(x) = x³ − 6x² + a·x"></span> eine Funktion. Bestimme den Wert von <span class="m" data-tex="a" data-plain="a"></span>, für den der Graph von <span class="m" data-tex="f_a" data-plain="f_a"></span> <strong>genau eine</strong> Stelle mit waagerechter Tangente hat.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="1">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="°">°</option>
+        <option value="FE">FE</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Waagerechte Tangenten sind Nullstellen von <span class="m" data-tex="f_a&#x27;" data-plain="f_a′"></span>. Wie viele Nullstellen kann eine quadratische Funktion haben, und wann ist es genau eine?</div>
+    <div class="hilfe-text" data-stufe="2">Berechne <span class="m" data-tex="f_a&#x27;(x)=3x^2-12x+a" data-plain="f_a′(x) = 3x² − 12x + a"></span> und setze die Diskriminante <span class="m" data-tex="b^2-4ac" data-plain="b² − 4ac"></span> dieser quadratischen Funktion gleich null.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="D=(-12)^2-4\cdot3\cdot a=144-12a=0" data-plain="D = (−12)² − 4·3·a = 144 − 12a = 0"></span>, also <span class="m" data-tex="a=12" data-plain="a = 12"></span>. Dann ist <span class="m" data-tex="f_{12}&#x27;(x)=3x^2-12x+12=3(x-2)^2" data-plain="f₁₂′(x) = 3x² − 12x + 12 = 3(x − 2)²"></span> mit der doppelten Nullstelle <span class="m" data-tex="x=2" data-plain="x = 2"></span>. Probe: <span class="m" data-tex="f_{12}&#x27;&#x27;(2)=6\cdot2-12=0" data-plain="f₁₂″(2) = 6·2 − 12 = 0"></span>, <span class="m" data-tex="f_{12}&#x27;" data-plain="f₁₂′"></span> wechselt nicht das Vorzeichen (ein Quadrat), also ein Sattelpunkt <span class="m" data-tex="S(2\,|\,8)" data-plain="S(2 | 8)"></span>. Gegenprobe: <span class="m" data-tex="a=11" data-plain="a = 11"></span> ergibt <span class="m" data-tex="D=12&gt;0" data-plain="D = 12 &gt; 0"></span> (zwei Stellen), <span class="m" data-tex="a=13" data-plain="a = 13"></span> ergibt <span class="m" data-tex="D=-12&lt;0" data-plain="D = −12 &lt; 0"></span> (keine).</div>
+  </div>
+
+  <div class="aufgabe">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Für jedes <span class="m" data-tex="t" data-plain="t"></span> ist <span class="m" data-tex="f_t(x) = x^3 - 3t^2\,x" data-plain="f_t(x) = x³ − 3t²·x"></span> eine Funktion.<br>
+      <strong>(a)</strong> Bestimme die Extrempunkte von <span class="m" data-tex="f_t" data-plain="f_t"></span> in Abhängigkeit von <span class="m" data-tex="t" data-plain="t"></span> mit vollständiger Fallunterscheidung.<br>
+      <strong>(b)</strong> Bestimme die Gleichung der Ortskurve, auf der alle Extrempunkte liegen.</div>
+    <textarea data-offen="Offene Aufgabe: Schar mit Fallunterscheidung und Ortskurve" placeholder="Deine Lösung mit Fallunterscheidung und Ortskurve…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a8">Musterlösung anzeigen</button></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsgerüst</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Beim Ableiten nach <span class="m" data-tex="x" data-plain="x"></span> ist <span class="m" data-tex="t" data-plain="t"></span> eine Konstante. Achte darauf, dass an den beiden Extremstellen das Vorzeichen von <span class="m" data-tex="f_t&#x27;&#x27;" data-plain="f_t″"></span> vom Vorzeichen von <span class="m" data-tex="t" data-plain="t"></span> abhängt: Unterscheide die Fälle <span class="m" data-tex="t&gt;0" data-plain="t &gt; 0"></span>, <span class="m" data-tex="t&lt;0" data-plain="t &lt; 0"></span> und <span class="m" data-tex="t=0" data-plain="t = 0"></span>.</div>
+    <div class="hilfe-text" data-stufe="2">Bestimme <span class="m" data-tex="f_t&#x27;(x)=3x^2-3t^2" data-plain="f_t′(x) = 3x² − 3t²"></span>, zerlege in Faktoren und lies die beiden Extremstellen ab. Prüfe mit <span class="m" data-tex="f_t&#x27;&#x27;(x)=6x" data-plain="f_t″(x) = 6x"></span> das Vorzeichen an beiden Stellen für <span class="m" data-tex="t&gt;0" data-plain="t &gt; 0"></span> und <span class="m" data-tex="t&lt;0" data-plain="t &lt; 0"></span>. Für die Ortskurve schreibst du beide Punkte als <span class="m" data-tex="(x\,|\,y)" data-plain="(x | y)"></span> in Abhängigkeit von <span class="m" data-tex="t" data-plain="t"></span> und eliminierst <span class="m" data-tex="t" data-plain="t"></span>.</div>
+    <div class="hilfe-text" data-stufe="3">Schlüsselzahlen: <span class="m" data-tex="f_t&#x27;(x)=3(x-t)(x+t)" data-plain="f_t′(x) = 3(x − t)(x + t)"></span>, <span class="m" data-tex="f_t&#x27;&#x27;(x)=6x" data-plain="f_t″(x) = 6x"></span>, <span class="m" data-tex="f_t(t)=-2t^3" data-plain="f_t(t) = −2t³"></span>, <span class="m" data-tex="f_t(-t)=2t^3" data-plain="f_t(−t) = 2t³"></span>. Gliederung: drei Fälle (<span class="m" data-tex="t&gt;0" data-plain="t &gt; 0"></span>, <span class="m" data-tex="t&lt;0" data-plain="t &lt; 0"></span>, <span class="m" data-tex="t=0" data-plain="t = 0"></span>) · beide Punkte getrennt in Abhängigkeit von <span class="m" data-tex="t" data-plain="t"></span> parametrisieren und jeweils <span class="m" data-tex="t" data-plain="t"></span> eliminieren · Probe mit <span class="m" data-tex="t=2" data-plain="t = 2"></span>. Die volle Lösung steht in der Musterlösung.</div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong><br>
+      <strong>(a)</strong> <span class="m" data-tex="f_t&#x27;(x)=3x^2-3t^2=3(x-t)(x+t)" data-plain="f_t′(x) = 3x² − 3t² = 3(x − t)(x + t)"></span>, notwendig also <span class="m" data-tex="x=t" data-plain="x = t"></span> oder <span class="m" data-tex="x=-t" data-plain="x = −t"></span>; <span class="m" data-tex="f_t&#x27;&#x27;(x)=6x" data-plain="f_t″(x) = 6x"></span>. Mit <span class="m" data-tex="f_t(t)=t^3-3t^3=-2t^3" data-plain="f_t(t) = t³ − 3t³ = −2t³"></span> und <span class="m" data-tex="f_t(-t)=2t^3" data-plain="f_t(−t) = 2t³"></span> gilt:<br>
+      <strong>Fall <span class="m" data-tex="t&gt;0" data-plain="t &gt; 0"></span>:</strong> <span class="m" data-tex="f_t&#x27;&#x27;(t)=6t&gt;0" data-plain="f_t″(t) = 6t &gt; 0"></span>, Tiefpunkt <span class="m" data-tex="T(t\,|\,-2t^3)" data-plain="T(t | −2t³)"></span>; <span class="m" data-tex="f_t&#x27;&#x27;(-t)=-6t&lt;0" data-plain="f_t″(−t) = −6t &lt; 0"></span>, Hochpunkt <span class="m" data-tex="H(-t\,|\,2t^3)" data-plain="H(−t | 2t³)"></span>.<br>
+      <strong>Fall <span class="m" data-tex="t&lt;0" data-plain="t &lt; 0"></span>:</strong> <span class="m" data-tex="f_t&#x27;&#x27;(t)=6t&lt;0" data-plain="f_t″(t) = 6t &lt; 0"></span>, Hochpunkt <span class="m" data-tex="H(t\,|\,-2t^3)" data-plain="H(t | −2t³)"></span>; <span class="m" data-tex="f_t&#x27;&#x27;(-t)=-6t&gt;0" data-plain="f_t″(−t) = −6t &gt; 0"></span>, Tiefpunkt <span class="m" data-tex="T(-t\,|\,2t^3)" data-plain="T(−t | 2t³)"></span>.<br>
+      <strong>Fall <span class="m" data-tex="t=0" data-plain="t = 0"></span>:</strong> <span class="m" data-tex="f_0(x)=x^3" data-plain="f₀(x) = x³"></span> mit <span class="m" data-tex="f_0&#x27;(x)=3x^2\ge0" data-plain="f₀′(x) = 3x² ≥ 0"></span>, kein Vorzeichenwechsel: keine Extrempunkte, sondern der Sattelpunkt <span class="m" data-tex="S(0\,|\,0)" data-plain="S(0 | 0)"></span>. Übergangswert ist <span class="m" data-tex="t=0" data-plain="t = 0"></span>, dort verschmelzen Hoch- und Tiefpunkt.<br>
+      Zahlenprobe <span class="m" data-tex="t=2" data-plain="t = 2"></span>: <span class="m" data-tex="f_2(x)=x^3-12x" data-plain="f₂(x) = x³ − 12x"></span> mit <span class="m" data-tex="T(2\,|\,-16)" data-plain="T(2 | −16)"></span>, <span class="m" data-tex="H(-2\,|\,16)" data-plain="H(−2 | 16)"></span>; <span class="m" data-tex="t=-1" data-plain="t = −1"></span>: <span class="m" data-tex="f_{-1}(x)=x^3-3x" data-plain="f₋₁(x) = x³ − 3x"></span> mit <span class="m" data-tex="H(-1\,|\,2)" data-plain="H(−1 | 2)"></span>, <span class="m" data-tex="T(1\,|\,-2)" data-plain="T(1 | −2)"></span>.<br>
+      <strong>(b)</strong> Erster Punkt: <span class="m" data-tex="x=t" data-plain="x = t"></span>, <span class="m" data-tex="y=-2t^3" data-plain="y = −2t³"></span>, also <span class="m" data-tex="t=x" data-plain="t = x"></span> und <span class="m" data-tex="y=-2x^3" data-plain="y = −2x³"></span>. Zweiter Punkt: <span class="m" data-tex="x=-t" data-plain="x = −t"></span>, <span class="m" data-tex="y=2t^3" data-plain="y = 2t³"></span>, also <span class="m" data-tex="t=-x" data-plain="t = −x"></span> und <span class="m" data-tex="y=2(-x)^3=-2x^3" data-plain="y = 2·(−x)³ = −2x³"></span>. Beide Punkte liegen auf derselben Ortskurve <span class="m" data-tex="y=-2x^3" data-plain="y = −2x³"></span> (der Sattelpunkt <span class="m" data-tex="(0\,|\,0)" data-plain="(0 | 0)"></span> auch). Probe: <span class="m" data-tex="T(2\,|\,-16)" data-plain="T(2 | −16)"></span>: <span class="m" data-tex="-2\cdot8=-16" data-plain="−2·8 = −16"></span> ✓. Dass dieselbe Gleichung <span class="m" data-tex="y=-2x^3" data-plain="y = −2x³"></span> wie bei den Wendepunkten in 3.2 herauskommt, ist kein Zufall: Beide Punktfamilien haben die Form <span class="m" data-tex="(t\,|\,-2t^3)" data-plain="(t | −2t³)"></span>. Prüfe das selbst nach.</p>
+      <p><strong>Bewertungskriterien.</strong> Ableitung nach <span class="m" data-tex="x" data-plain="x"></span> mit <span class="m" data-tex="t" data-plain="t"></span> als Konstante · beide Extremstellen <span class="m" data-tex="x=\pm t" data-plain="x = ±t"></span> mit y-Werten · Vorzeichen von <span class="m" data-tex="f_t&#x27;&#x27;" data-plain="f_t″"></span> je Fall ausgewertet und Hoch-/Tiefpunkt richtig zugeordnet · Fall <span class="m" data-tex="t=0" data-plain="t = 0"></span> nicht durch Kürzen verloren und als Sattelpunkt gedeutet · Parameter für beide Punkte eliminiert · Ortskurve <span class="m" data-tex="y=-2x^3" data-plain="y = −2x³"></span> angegeben und an einem Zahlenbeispiel geprüft.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die vier Diagramme zeigen jeweils den Graphen der <strong>Ableitung</strong> <span class="m" data-tex="f&#x27;" data-plain="f′"></span> einer ganzrationalen Funktion <span class="m" data-tex="f" data-plain="f"></span> (nicht den Graphen von <span class="m" data-tex="f" data-plain="f"></span> selbst!). Ordne jeder Beschreibung von <span class="m" data-tex="f" data-plain="f"></span> das passende Diagramm zu.</div>
+
+    <div class="diagramme">
+      <figure>
+        <svg viewBox="0 0 220 160" role="img" aria-label="Diagramm A"><line x1="10" y1="80" x2="210" y2="80" stroke="#94a3b8"/><line x1="110" y1="10" x2="110" y2="150" stroke="#94a3b8"/><line x1="50" y1="76" x2="50" y2="84" stroke="#94a3b8"/><line x1="170" y1="76" x2="170" y2="84" stroke="#94a3b8"/><text x="116" y="20" font-size="12" fill="#5b6b7f">f′</text><polyline points="14,35 26,41 38,46 50,52 62,58 74,63 86,69 98,74 110,80 122,86 134,91 146,97 158,102 170,108 182,114 194,119 206,125" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>A</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 220 160" role="img" aria-label="Diagramm B"><line x1="10" y1="80" x2="210" y2="80" stroke="#94a3b8"/><line x1="110" y1="10" x2="110" y2="150" stroke="#94a3b8"/><line x1="50" y1="76" x2="50" y2="84" stroke="#94a3b8"/><line x1="170" y1="76" x2="170" y2="84" stroke="#94a3b8"/><text x="116" y="20" font-size="12" fill="#5b6b7f">f′</text><polyline points="14,150 26,118 38,95 50,80 62,72 74,69 86,71 98,75 110,80 122,85 134,89 146,91 158,88 170,80 182,65 194,42 206,10" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>B</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 220 160" role="img" aria-label="Diagramm C"><line x1="10" y1="80" x2="210" y2="80" stroke="#94a3b8"/><line x1="110" y1="10" x2="110" y2="150" stroke="#94a3b8"/><line x1="50" y1="76" x2="50" y2="84" stroke="#94a3b8"/><line x1="170" y1="76" x2="170" y2="84" stroke="#94a3b8"/><text x="116" y="20" font-size="12" fill="#5b6b7f">f′</text><polyline points="14,36 26,53 38,68 50,80 62,90 74,98 86,104 98,107 110,108 122,107 134,104 146,98 158,90 170,80 182,68 194,53 206,36" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>C</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 220 160" role="img" aria-label="Diagramm D"><line x1="10" y1="80" x2="210" y2="80" stroke="#94a3b8"/><line x1="110" y1="10" x2="110" y2="150" stroke="#94a3b8"/><line x1="50" y1="76" x2="50" y2="84" stroke="#94a3b8"/><line x1="170" y1="76" x2="170" y2="84" stroke="#94a3b8"/><text x="116" y="20" font-size="12" fill="#5b6b7f">f′</text><polyline points="14,8 26,25 38,40 50,52 62,62 74,70 86,76 98,79 110,80 122,79 134,76 146,70 158,62 170,52 182,40 194,25 206,8" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>D</figcaption>
+      </figure>
+    </div>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="C"><span>f hat genau zwei Extrempunkte und genau einen Wendepunkt.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="B"><span>f hat drei Extrempunkte und zwei Wendepunkte.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="D"><span>f hat genau eine Stelle mit waagerechter Tangente, aber keinen Extrempunkt.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="A"><span>f hat genau einen Extrempunkt, und der ist ein Hochpunkt; einen Wendepunkt gibt es nicht.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Lies die Diagramme als Bild der Steigung von f: Wo ist die Steigung null, und wo ändert sie sich am schnellsten?</div>
+    <div class="hilfe-text" data-stufe="2">Extremstellen von <span class="m" data-tex="f" data-plain="f"></span> = Nullstellen von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> <strong>mit</strong> Vorzeichenwechsel (Schnittpunkte mit der x-Achse). Wendestellen von <span class="m" data-tex="f" data-plain="f"></span> = Extremstellen von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> (Gipfel und Täler im Diagramm).</div>
+    <div class="hilfe-text" data-stufe="3">A: <span class="m" data-tex="f&#x27;=-x" data-plain="f′ = −x"></span>, eine Nullstelle mit Wechsel von + nach −, kein Gipfel oder Tal: ein Hochpunkt, kein Wendepunkt. B: <span class="m" data-tex="f&#x27;=x^3-x" data-plain="f′ = x³ − x"></span>, drei Nullstellen mit Wechsel, zwei Extrema von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> (bei <span class="m" data-tex="x=\pm0{,}58" data-plain="x = ±0,58"></span>): drei Extrem- und zwei Wendepunkte. C: <span class="m" data-tex="f&#x27;=x^2-1" data-plain="f′ = x² − 1"></span>, zwei Nullstellen mit Wechsel, ein Tal bei <span class="m" data-tex="x=0" data-plain="x = 0"></span>: zwei Extrem- und ein Wendepunkt. D: <span class="m" data-tex="f&#x27;=x^2" data-plain="f′ = x²"></span>, eine Nullstelle <strong>ohne</strong> Wechsel (Berührung), ein Tal bei 0: waagerechte Tangente ohne Extremum, also ein Sattelpunkt. Zugehörige Funktionen: <span class="m" data-tex="-\tfrac{x^2}{2}" data-plain="−x²/2"></span>, <span class="m" data-tex="\tfrac{x^4}{4}-\tfrac{x^2}{2}" data-plain="x⁴/4 − x²/2"></span>, <span class="m" data-tex="\tfrac{x^3}{3}-x" data-plain="x³/3 − x"></span>, <span class="m" data-tex="\tfrac{x^3}{3}" data-plain="x³/3"></span>.</div>
+  </div>
+
+  <div class="aufgabe">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Eine Schülerin untersucht <span class="m" data-tex="f(x)=x^4-4x^3" data-plain="f(x) = x⁴ − 4x³"></span> und schreibt:<br>
+      <strong>(1)</strong> <span class="m" data-tex="f&#x27;(x)=4x^3-12x^2=4x^2(x-3)" data-plain="f′(x) = 4x³ − 12x² = 4x²(x − 3)"></span>, also <span class="m" data-tex="f&#x27;(x)=0" data-plain="f′(x) = 0"></span> für <span class="m" data-tex="x=0" data-plain="x = 0"></span> und <span class="m" data-tex="x=3" data-plain="x = 3"></span>.<br>
+      <strong>(2)</strong> <span class="m" data-tex="f&#x27;&#x27;(x)=12x^2-24x" data-plain="f″(x) = 12x² − 24x"></span>; wegen <span class="m" data-tex="f&#x27;&#x27;(3)=36&gt;0" data-plain="f″(3) = 36 &gt; 0"></span> Tiefpunkt <span class="m" data-tex="T(3\,|\,-27)" data-plain="T(3 | −27)"></span>.<br>
+      <strong>(3)</strong> „Es ist <span class="m" data-tex="f&#x27;&#x27;(0)=0" data-plain="f″(0) = 0"></span>, also liegt bei <span class="m" data-tex="x=0" data-plain="x = 0"></span> kein Extremum vor.“<br>
+      <strong>(4)</strong> <span class="m" data-tex="f&#x27;&#x27;(x)=12x(x-2)=0" data-plain="f″(x) = 12x(x − 2) = 0"></span> für <span class="m" data-tex="x=0" data-plain="x = 0"></span> und <span class="m" data-tex="x=2" data-plain="x = 2"></span>; „das sind die Wendestellen“.<br>
+      <strong>(5)</strong> Wendepunkte <span class="m" data-tex="W_1(0\,|\,0)" data-plain="W₁(0 | 0)"></span> und <span class="m" data-tex="W_2(2\,|\,-8)" data-plain="W₂(2 | −8)"></span>.<br>
+      <strong>Beurteile die Lösung Schritt für Schritt:</strong> Welche Ergebnisse stimmen, welche Begründungen tragen nicht, was fehlt, und wo steckt ein Rechenfehler? Gib die korrekte Angabe für Schritt (5) an.</div>
+    <textarea data-offen="Offene Aufgabe: Schülerlösung beurteilen" placeholder="Deine Beurteilung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a6">Musterlösung anzeigen</button></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsgerüst</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Prüfe jeden Schritt zweifach: Stimmt das Ergebnis? Und würde dieselbe Begründung auch bei <span class="m" data-tex="x^4" data-plain="x⁴"></span> zu einem richtigen Ergebnis führen?</div>
+    <div class="hilfe-text" data-stufe="2">Lege eine Tabelle mit den Spalten „Ergebnis richtig?“ und „Begründung ausreichend?“ an. Für (3) brauchst du das Vorzeichen von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> links und rechts von 0, für (4) den Wert von <span class="m" data-tex="f&#x27;&#x27;&#x27;" data-plain="f‴"></span> an den beiden Stellen, für (5) den Funktionswert <span class="m" data-tex="f(2)" data-plain="f(2)"></span>.</div>
+    <div class="hilfe-text" data-stufe="3">(1) und (2) stimmen. Zu (3): <span class="m" data-tex="f&#x27;(-0{,}1)=-0{,}124" data-plain="f′(−0,1) = −0,124"></span> und <span class="m" data-tex="f&#x27;(0{,}1)=-0{,}116" data-plain="f′(0,1) = −0,116"></span>. Zu (4): <span class="m" data-tex="f&#x27;&#x27;&#x27;(x)=24x-24" data-plain="f‴(x) = 24x − 24"></span>, also <span class="m" data-tex="f&#x27;&#x27;&#x27;(0)=-24" data-plain="f‴(0) = −24"></span> und <span class="m" data-tex="f&#x27;&#x27;&#x27;(2)=24" data-plain="f‴(2) = 24"></span>. Zu (5): <span class="m" data-tex="f(2)=16-32" data-plain="f(2) = 16 − 32"></span>. Gliedere deine Antwort: was stimmt · Lücke in (3) · Lücke in (4) · Rechenfehler in (5) · Fazit.</div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong><br>
+      <strong>(1)</strong> richtig: <span class="m" data-tex="f&#x27;(x)=4x^2(x-3)" data-plain="f′(x) = 4x²(x − 3)"></span>, Nullstellen 0 und 3.<br>
+      <strong>(2)</strong> richtig: <span class="m" data-tex="f&#x27;&#x27;(3)=12\cdot9-24\cdot3=36&gt;0" data-plain="f″(3) = 12·9 − 24·3 = 36 &gt; 0"></span> und <span class="m" data-tex="f(3)=81-108=-27" data-plain="f(3) = 81 − 108 = −27"></span>.<br>
+      <strong>(3)</strong> Das <strong>Ergebnis</strong> stimmt (bei 0 liegt kein Extremum), die <strong>Begründung</strong> nicht. Aus <span class="m" data-tex="f&#x27;&#x27;(0)=0" data-plain="f″(0) = 0"></span> folgt weder „Extremum“ noch „kein Extremum“: Bei <span class="m" data-tex="x^4" data-plain="x⁴"></span> ist <span class="m" data-tex="f&#x27;&#x27;(0)=0" data-plain="f″(0) = 0"></span> und es gibt dort einen Tiefpunkt. Die Schülerin hätte auf den Vorzeichenwechsel von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> zurückgreifen müssen: <span class="m" data-tex="f&#x27;(-0{,}1)=-0{,}124&lt;0" data-plain="f′(−0,1) = −0,124 &lt; 0"></span> und <span class="m" data-tex="f&#x27;(0{,}1)=-0{,}116&lt;0" data-plain="f′(0,1) = −0,116 &lt; 0"></span>: kein Wechsel (das Quadrat <span class="m" data-tex="x^2" data-plain="x²"></span> in <span class="m" data-tex="f&#x27;" data-plain="f′"></span> ist nie negativ, <span class="m" data-tex="x-3" data-plain="x − 3"></span> bleibt in der Nähe von 0 negativ), also kein Extremum, sondern eine waagerechte Tangente ohne Extremum.<br>
+      <strong>(4)</strong> Notwendig, aber nicht hinreichend. Ergänzen: <span class="m" data-tex="f&#x27;&#x27;&#x27;(x)=24x-24" data-plain="f‴(x) = 24x − 24"></span>, <span class="m" data-tex="f&#x27;&#x27;&#x27;(0)=-24\neq0" data-plain="f‴(0) = −24 ≠ 0"></span> und <span class="m" data-tex="f&#x27;&#x27;&#x27;(2)=24\neq0" data-plain="f‴(2) = 24 ≠ 0"></span>, oder Vorzeichenwechsel von <span class="m" data-tex="f&#x27;&#x27;" data-plain="f″"></span> (bei −0,1 / 0,1: +2,52 / −2,28; bei 1,9 / 2,1: −2,28 / +2,52). Damit sind beide Stellen tatsächlich Wendestellen.<br>
+      <strong>(5)</strong> <span class="m" data-tex="W_1(0\,|\,0)" data-plain="W₁(0 | 0)"></span> stimmt, und wegen <span class="m" data-tex="f&#x27;(0)=0" data-plain="f′(0) = 0"></span> ist es sogar ein <strong>Sattelpunkt</strong>, den die Schülerin nicht benennt. <span class="m" data-tex="W_2" data-plain="W₂"></span> ist falsch: Es ist <span class="m" data-tex="f(2)=2^4-4\cdot2^3=16-32=-16" data-plain="f(2) = 2⁴ − 4·2³ = 16 − 32 = −16"></span>, also <span class="m" data-tex="W_2(2\,|\,-16)" data-plain="W₂(2 | −16)"></span> (die Steigung der Wendetangente ist <span class="m" data-tex="f&#x27;(2)=32-48=-16" data-plain="f′(2) = 32 − 48 = −16"></span>).<br>
+      <strong>Fazit:</strong> Die Lösung landet bei allen Stellen und beim Tiefpunkt auf richtigen Ergebnissen, hat aber zwei tragende Begründungslücken (3) und (4) und einen Rechenfehler. Gefährlich ist (3): dieselbe Argumentation führt bei <span class="m" data-tex="x^4" data-plain="x⁴"></span> zu einem falschen Ergebnis.</p>
+      <p><strong>Bewertungskriterien.</strong> Schritte (1) und (2) als richtig erkannt · Schritt (3) als Ergebnis-richtig-aber-Begründung-ungültig erkannt, mit Gegenbeispiel <span class="m" data-tex="x^4" data-plain="x⁴"></span> · Ersatzbegründung über den Vorzeichenwechsel von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> mit Zahlenwerten · Lücke in (4) benannt (nur notwendige Bedingung) und behoben mit <span class="m" data-tex="f&#x27;&#x27;&#x27;\neq0" data-plain="f‴ ≠ 0"></span> oder Vorzeichenwechsel · Rechenfehler in (5) gefunden und <span class="m" data-tex="W_2(2\,|\,-16)" data-plain="W₂(2 | −16)"></span> korrekt angegeben · Sattelpunkt bei <span class="m" data-tex="x=0" data-plain="x = 0"></span> erkannt (Zusatz) · saubere Trennung von „Ergebnis richtig“ und „Begründung tragfähig“.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Für jeden Wert von <span class="m" data-tex="a" data-plain="a"></span> ist <span class="m" data-tex="f_a(x)=x^3+a\,x^2+x" data-plain="f_a(x) = x³ + a·x² + x"></span> eine Funktion. Ein Schüler behauptet: „Für jedes <span class="m" data-tex="a" data-plain="a"></span> hat der Graph von <span class="m" data-tex="f_a" data-plain="f_a"></span> einen Hochpunkt und einen Tiefpunkt, denn jede Funktion dritten Grades sieht so aus.“<br>
+      <strong>(a)</strong> Nimm Stellung und belege deine Bewertung mit einem konkreten Parameterwert.<br>
+      <strong>(b)</strong> Gib an, für welche Werte von <span class="m" data-tex="a" data-plain="a"></span> es Extrempunkte gibt, und begründe, was am Übergang passiert.<br>
+      <strong>(c)</strong> Begründe, dass der Graph für <strong>jedes</strong> <span class="m" data-tex="a" data-plain="a"></span> genau einen Wendepunkt hat.</div>
+    <textarea data-offen="Offene Aufgabe: Behauptung zur Schar beurteilen" placeholder="Deine Stellungnahme…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a7">Musterlösung anzeigen</button></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsgerüst</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Ob es Extrempunkte gibt, hängt davon ab, ob die <strong>erste</strong> Ableitung Nullstellen hat, und das ist eine quadratische Gleichung mit dem Parameter.</div>
+    <div class="hilfe-text" data-stufe="2">Bestimme <span class="m" data-tex="f_a&#x27;" data-plain="f_a′"></span> und untersuche mit der Diskriminante, für welche <span class="m" data-tex="a" data-plain="a"></span> es zwei, eine oder keine Nullstelle gibt. Für die Wendestelle brauchst du <span class="m" data-tex="f_a&#x27;&#x27;" data-plain="f_a″"></span> und <span class="m" data-tex="f_a&#x27;&#x27;&#x27;" data-plain="f_a‴"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="f_a&#x27;(x)=3x^2+2ax+1" data-plain="f_a′(x) = 3x² + 2a·x + 1"></span>, Diskriminante <span class="m" data-tex="D=4a^2-12" data-plain="D = 4a² − 12"></span>. Gegenbeispiel <span class="m" data-tex="a=0" data-plain="a = 0"></span>: <span class="m" data-tex="f&#x27;=3x^2+1&gt;0" data-plain="f′ = 3x² + 1 &gt; 0"></span>. Übergang bei <span class="m" data-tex="D=0" data-plain="D = 0"></span>, also <span class="m" data-tex="a=\pm\sqrt3" data-plain="a = ±√3"></span>. Wendestelle: <span class="m" data-tex="f_a&#x27;&#x27;(x)=6x+2a=0" data-plain="f_a″(x) = 6x + 2a = 0"></span> ergibt <span class="m" data-tex="x=-a/3" data-plain="x = −a/3"></span>, und <span class="m" data-tex="f_a&#x27;&#x27;&#x27;=6" data-plain="f_a‴ = 6"></span>. Gliedere: Urteil · Gegenbeispiel · Bedingung an <span class="m" data-tex="a" data-plain="a"></span> · Übergang · Wendepunkt.</div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong><br>
+      <strong>(a)</strong> Die Behauptung ist <strong>falsch</strong>. Dass der Graph einer kubischen Funktion „so aussieht“, ist ein Trugschluss: Jede solche Funktion hat einen Wendepunkt, aber nicht jede Extrempunkte. Gegenbeispiel <span class="m" data-tex="a=0" data-plain="a = 0"></span>: <span class="m" data-tex="f_0(x)=x^3+x" data-plain="f₀(x) = x³ + x"></span> hat <span class="m" data-tex="f_0&#x27;(x)=3x^2+1&gt;0" data-plain="f₀′(x) = 3x² + 1 &gt; 0"></span> für alle <span class="m" data-tex="x" data-plain="x"></span>, ist also streng monoton wachsend und hat weder Hoch- noch Tiefpunkt.<br>
+      <strong>(b)</strong> <span class="m" data-tex="f_a&#x27;(x)=3x^2+2a\,x+1" data-plain="f_a′(x) = 3x² + 2a·x + 1"></span> hat die Diskriminante <span class="m" data-tex="D=4a^2-12" data-plain="D = 4a² − 12"></span>. Es gibt Extrempunkte genau dann, wenn <span class="m" data-tex="D&gt;0" data-plain="D &gt; 0"></span>, also <span class="m" data-tex="a^2&gt;3" data-plain="a² &gt; 3"></span>, also <span class="m" data-tex="|a|&gt;\sqrt3\approx1{,}73" data-plain="|a| &gt; √3 ≈ 1,73"></span>. Beispiel <span class="m" data-tex="a=2" data-plain="a = 2"></span>: <span class="m" data-tex="f_2&#x27;=(x+1)(3x+1)" data-plain="f₂′ = (x + 1)(3x + 1)"></span>, Hochpunkt <span class="m" data-tex="H(-1\,|\,0)" data-plain="H(−1 | 0)"></span>, Tiefpunkt <span class="m" data-tex="T(-\tfrac13\,|\,-\tfrac4{27})" data-plain="T(−1/3 | −4/27)"></span>. Für <span class="m" data-tex="|a|&lt;\sqrt3" data-plain="|a| &lt; √3"></span> hat <span class="m" data-tex="f_a&#x27;" data-plain="f_a′"></span> keine Nullstelle und bleibt positiv (der Graph steigt überall). Am Übergang <span class="m" data-tex="a=\pm\sqrt3" data-plain="a = ±√3"></span> ist <span class="m" data-tex="D=0" data-plain="D = 0"></span>: doppelte Nullstelle von <span class="m" data-tex="f_a&#x27;" data-plain="f_a′"></span>, kein Vorzeichenwechsel, also ein <strong>Sattelpunkt</strong>, an dem Hoch- und Tiefpunkt zusammenfallen und verschwinden.<br>
+      <strong>(c)</strong> <span class="m" data-tex="f_a&#x27;&#x27;(x)=6x+2a=0" data-plain="f_a″(x) = 6x + 2a = 0"></span> hat für <strong>jedes</strong> <span class="m" data-tex="a" data-plain="a"></span> genau die Lösung <span class="m" data-tex="x=-a/3" data-plain="x = −a/3"></span>, und <span class="m" data-tex="f_a&#x27;&#x27;&#x27;(x)=6\neq0" data-plain="f_a‴(x) = 6 ≠ 0"></span> gilt unabhängig von <span class="m" data-tex="a" data-plain="a"></span>: ein Wendepunkt mit <span class="m" data-tex="y=a(2a^2-9)/27" data-plain="y = a(2a² − 9)/27"></span>. Das Vorzeichen von <span class="m" data-tex="f_a&#x27;&#x27;" data-plain="f_a″"></span> wechselt, weil <span class="m" data-tex="f_a&#x27;&#x27;" data-plain="f_a″"></span> eine Gerade mit Steigung 6 ist.<br>
+      <strong>Zusatz (freiwillig):</strong> Ortskurve der Wendepunkte: <span class="m" data-tex="a=-3x" data-plain="a = −3x"></span> eingesetzt ergibt <span class="m" data-tex="y=x-2x^3" data-plain="y = x − 2x³"></span>.</p>
+      <p><strong>Bewertungskriterien.</strong> Behauptung als falsch erkannt · Gegenbeispiel mit Rechnung (<span class="m" data-tex="a=0" data-plain="a = 0"></span>: <span class="m" data-tex="f&#x27;&gt;0" data-plain="f′ &gt; 0"></span>) · Existenzbedingung über die Diskriminante von <span class="m" data-tex="f_a&#x27;" data-plain="f_a′"></span> mit korrektem Bereich <span class="m" data-tex="|a|&gt;\sqrt3" data-plain="|a| &gt; √3"></span> · Übergangsfall <span class="m" data-tex="|a|=\sqrt3" data-plain="|a| = √3"></span> als Sattelpunkt gedeutet · Wendepunkt für alle <span class="m" data-tex="a" data-plain="a"></span> begründet (lineares <span class="m" data-tex="f&#x27;&#x27;" data-plain="f″"></span>, <span class="m" data-tex="f&#x27;&#x27;&#x27;\neq 0" data-plain="f‴ ≠ 0"></span>) · Unterscheidung „Extrempunkte existieren nicht immer, ein Wendepunkt immer“ klar formuliert.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- =============== 6 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">6</div><h2>Abschluss</h2></div>
+
+  <div class="merksatz">
+    <b>1. Null allein entscheidet nichts</b>
+    Eine Nullstelle von <span class="m" data-tex="f&#x27;" data-plain="f′"></span> ist nur ein Kandidat für eine Extremstelle. Sie ist eine, wenn <span class="m" data-tex="f&#x27;" data-plain="f′"></span> dort das Vorzeichen wechselt; die Abkürzung <span class="m" data-tex="f&#x27;&#x27;\neq0" data-plain="f″ ≠ 0"></span> ist bequem, versagt aber genau in den Fällen, in denen <span class="m" data-tex="f&#x27;&#x27;=0" data-plain="f″ = 0"></span> ist.
+  </div>
+  <div class="merksatz">
+    <b>2. Wendestellen sind Extremstellen von f′</b>
+    Eine Wendestelle ist dort, wo sich das Krümmungsverhalten ändert, also <span class="m" data-tex="f&#x27;&#x27;" data-plain="f″"></span> das Vorzeichen wechselt. Hinreichend ist <span class="m" data-tex="f&#x27;&#x27;=0" data-plain="f″ = 0"></span> mit <span class="m" data-tex="f&#x27;&#x27;&#x27;\neq0" data-plain="f‴ ≠ 0"></span>. Ein Sattelpunkt ist ein Wendepunkt mit waagerechter Tangente. In Sachkontexten liegt die größte Änderungsrate eines Bestands an einer Wendestelle des Bestands.
+  </div>
+  <div class="merksatz">
+    <b>3. Ein Ergebnis ist vollständig, wenn es das Ganze beantwortet</b>
+    Zu einem Extrempunkt gehört der y-Wert, zu einem globalen Extremum auf einem Intervall der Vergleich mit den Randwerten, zu einer Behauptung die Begründung oder das Gegenbeispiel. Extremstelle, Extremwert und Extrempunkt sind drei verschiedene Antworten.
+  </div>
+  <div class="merksatz">
+    <b>4. Bei Scharen entscheidet der Parameter über die Sorte des Punktes</b>
+    Beim Ableiten ist der Parameter eine Konstante. Ein vollständiges Ergebnis enthält die Fälle (etwa <span class="m" data-tex="t&gt;0" data-plain="t &gt; 0"></span>, <span class="m" data-tex="t&lt;0" data-plain="t &lt; 0"></span>, <span class="m" data-tex="t=0" data-plain="t = 0"></span>) und die Übergangswerte, an denen Extrempunkte verschmelzen und verschwinden. Die Ortskurve entsteht, indem man den Parameter aus den Koordinaten des Punktes eliminiert.
+  </div>
+
+  <div class="hinweis">
+    <strong>So begegnet dir das im Zentralabitur.</strong> Extrem- und Wendepunkte, Funktionenscharen mit Parameter, Ortskurven und Aufgaben der Art „Für welchen Wert des Parameters …?“ gehören zu den Standardbausteinen der Analysis-Aufgaben im Leistungskurs. Typische Arbeitsaufträge lauten <em>Bestimme</em>, <em>Zeige, dass</em>, <em>Begründe</em> und <em>Beurteile</em>: Das erste verlangt eine saubere Rechnung (Ableitungen, Nullstellen, hinreichende Bedingung, y-Koordinate), das zweite einen lückenlosen Nachweis, das dritte und vierte eine Argumentation mit Gegenbeispiel oder Zahlenwerten. Häufige Punktverluste: die y-Koordinate vergessen, die hinreichende Bedingung nicht prüfen, Randwerte übersehen und bei Scharen die Fallunterscheidung weglassen. Wie die Prüfung in Teile mit und ohne Hilfsmittel gegliedert ist und welche Hilfsmittel zugelassen sind, legen die jeweils gültigen Vorgaben zum Zentralabitur fest; sieh dort nach und übe die Ableitungen und Nullstellen von Hand, ganz gleich, was der Taschenrechner kann.
+  </div>
+
+  <div class="hinweis">
+    <strong>Wie es weitergeht.</strong> Alle Funktionen in dieser Einheit waren ganzrational. Mit der Produkt- und Kettenregel aus der letzten Einheit lassen sich Extrem- und Wendepunkte demnächst auch bei Wurzel- und gebrochenrationalen Funktionen bestimmen, und mit der Exponentialfunktion kommen Funktionen wie <span class="m" data-tex="x\cdot\mathrm{e}^{-x}" data-plain="x · e⁻ˣ"></span> dazu, die weder Nullstellen im Inneren noch ein globales Maximum verstecken. Das Vorgehen bleibt dasselbe: Kandidaten mit <span class="m" data-tex="f&#x27;=0" data-plain="f′ = 0"></span> sammeln, den Vorzeichenwechsel prüfen, Ränder und Verhalten im Unendlichen nicht vergessen.
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Selbstcheck</h3>
+    <div class="check">
+      <label><input type="checkbox"><span>Ich kann mit der ersten und zweiten Ableitung Monotonie und Krümmung eines Graphen beschreiben.</span></label>
+      <label><input type="checkbox"><span>Ich kann Extremstellen ganzrationaler Funktionen bestimmen und mit dem Vorzeichenwechsel von f′ oder mit f″ begründen, und ich weiß, wann das f″-Kriterium nichts entscheidet.</span></label>
+      <label><input type="checkbox"><span>Ich kann Wendestellen und Sattelpunkte bestimmen und hinreichend begründen (Vorzeichenwechsel von f″ oder f‴ ≠ 0).</span></label>
+      <label><input type="checkbox"><span>Ich kann eine ganzrationale Funktion vollständig untersuchen (Symmetrie, Verhalten im Unendlichen, Nullstellen, Extrem- und Wendepunkte) und auf einem Intervall globale Extrema mit den Randwerten bestimmen.</span></label>
+      <label><input type="checkbox"><span>Ich kann bei Funktionenscharen nach x ableiten, Fallunterscheidungen durchführen, Parameter aus Bedingungen bestimmen und Ortskurven berechnen.</span></label>
+      <label><input type="checkbox"><span>Ich kann Behauptungen und Lösungswege zu Extrem- und Wendepunkten beurteilen und mit Gegenbeispielen oder Zahlenwerten begründen.</span></label>
+    </div>
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnis als Text kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+
+  <details class="lehrer">
+    <summary>Didaktische Hinweise (Lehrkraft)</summary>
+    <p><strong>Einordnung.</strong> Das Modul gehört in das Inhaltsfeld <strong>Funktionen und Analysis</strong> und setzt die Analysis der Qualifikationsphase fort. Es steht nach den Ableitungsregeln (Produkt-, Ketten-, Quotientenregel) und vor den Integralen. Die Funktionen sind bewusst ganzrational: Der Erkenntnisgewinn liegt in den <strong>Begründungen</strong> (hinreichend statt nur notwendig) und in der <strong>Schar</strong> als Vorbereitung auf die Abituraufgaben, nicht in neuer Ableitungstechnik.</p>
+    <p><strong>Offene Zuordnung (Rückfrage an die Fachkonferenz).</strong> Die Projektdatei zum Kernlehrplan ordnet die „Funktionsuntersuchung“ der Analysis der Q1 zu. Ob die Grundlagen (Extrem- und Wendepunkte ganzrationaler Funktionen, Monotonie und Krümmung) im schulinternen Lehrplan schon in der Einführungsphase liegen und die Q1 hier nur wiederholt und vertieft, ist offen und wurde nicht geraten. Ebenso offen: die genaue Zuordnung von Funktionenscharen und Ortskurven zu den ausgewiesenen Kompetenzerwartungen. Das Modul zitiert deshalb keine Kompetenzformulierungen; der Chip im Kopf nennt nur das Inhaltsfeld. Der Bezug zu den prozessbezogenen Kompetenzen (Argumentieren, Problemlösen, Modellieren, Werkzeuge nutzen) ist über die Übungen belegt: Aufgaben a6 und a7 (die beiden offenen Aufgaben im Anforderungsbereich III) bedienen das Argumentieren, die Sachaufgaben zu Pegel und Bambus das Modellieren.</p>
+
+    <p><strong>Zeitbedarf.</strong></p>
+    <div class="tabelle">
+    <table>
+      <tr><th>Abschnitt</th><th>Minuten</th><th>Hinweis</th></tr>
+      <tr><td>1 Einstieg (Aufhänger, drei Vorwissensfragen)</td><td>10</td><td>Vorwissensfragen als Blitzrunde</td></tr>
+      <tr><td>2 Erklärteil (2.1–2.6, zwei Herleitungen in Aufklappboxen)</td><td>30</td><td>Herleitungen ggf. als Hausaufgabe</td></tr>
+      <tr><td>3 Vertiefung Funktionsscharen</td><td>20</td><td>3.3 (Ortskurve) kann in Q1 nach hinten rücken</td></tr>
+      <tr><td>4 Simulation mit Beobachtungsauftrag und zwei Fragen</td><td>20</td><td>Paararbeit; Teil 1 und Teil 2 einzeln möglich</td></tr>
+      <tr><td>5 Übungen (zehn Aufgaben)</td><td>45</td><td>Pflicht: Tiefpunkt, Wendetangente, Sattelpunkt begründen, Schar mit Fallunterscheidung und Ortskurve, Zuordnung, Schülerlösung beurteilen; Rest (u. a. Pegel) Differenzierung</td></tr>
+      <tr><td>6 Abschluss und Selbstcheck</td><td>5</td><td></td></tr>
+      <tr><td><strong>Summe</strong></td><td><strong>130</strong></td><td>etwa 1,5 Doppelstunden; bei zwei Doppelstunden Luft für Sicherung</td></tr>
+    </table>
+    </div>
+
+    <p><strong>Typische Schülerfehler und wo anzuhalten ist.</strong></p>
+    <ol>
+      <li><strong>„f′(x₀) = 0 ⟹ Extremum.“</strong> Bei 2.4 anhalten, bevor die Tabelle erscheint: Lernende raten lassen, welche Sorte Punkt x³ bei 0 hat. Danach in der Simulation (Schar 3, x₀ = 0) zeigen, dass f′ und f″ null sein können und trotzdem alles davon abhängt, ob das obere Band die Farbe wechselt.</li>
+      <li><strong>„f″(x₀) = 0 ⟹ Wendepunkt“ oder „⟹ kein Extremum“.</strong> Beide Richtungen kommen vor. Bei der Aufgabe zur Stelle x = 3 und bei Schritt (3) der Schülerlösung anhalten, im Plenum Distraktor 1 und 2 gegeneinander stellen.</li>
+      <li><strong>Extremstelle, Extremwert, Extrempunkt vermischen.</strong> Antwort „T(3)“ oder „−4“ statt „T(3 | −4)“. Bei der ersten Übungsaufgabe liegt der Fall umgekehrt: Dort ist ausdrücklich nur die y-Koordinate gefragt, und −4 ist die richtige Antwort. Nutze das für die Begriffsunterscheidung: Lass mündlich den vollständigen Punkt T(3 | −4) nachliefern und halte daneben, was die Aufgabe verlangt hat.</li>
+      <li><strong>Randextrema übersehen.</strong> Bei 2.6 und beim Pegel anhalten; Lernende zeichnen den Verlauf von h(t) und sehen, dass der Graph an der Grenze noch steigt. Impuls: „Was wäre, wenn der Beobachtungszeitraum sechs Tage lang wäre?“ (Es wäre h(6) = 0,1·(216 − 216 + 54) = 5,4 m, das Modell steigt also weiter.)</li>
+      <li><strong>Parameter wie eine Variable behandeln, nach t ableiten, durch t kürzen.</strong> Bei 3.1 die beiden Fehler an die Tafel; bei der Aufgabe zum Parameter a zeigen, dass „Diskriminante null“ den Übergangswert liefert.</li>
+      <li><strong>Fallunterscheidung vergessen.</strong> In 3.2 die Tabelle t &gt; 0, t &lt; 0, t = 0 von den Lernenden selbst füllen lassen (Rechnung bis f″(0) = −6t und f″(2t) = 6t vorgeben); die Übungsaufgabe zu f_t(x) = x³ − 3t²·x wiederholt diese Technik samt Ortskurve. Bei der letzten Aufgabe erneut: Wer nur „für alle a“ schreibt, verliert die Bedingung |a| &gt; √3.</li>
+      <li><strong>Ortskurve: nur eine Koordinate eliminiert oder Parameter nicht ersetzt.</strong> Bei 3.3 an einem zweiten Beispiel wiederholen (Schar 1 der Simulation: aus f′ = 0 folgt a = x², eingesetzt y = −(2/3)x³ — nur als Zusatz, nicht als Ergebnis vorwegnehmen).</li>
+      <li><strong>Diagramm von f′ als Graph von f lesen.</strong> Bei der Zuordnungsaufgabe anhalten: Erst die Frage „Was sieht man hier eigentlich?“ stellen. Kontrastiere mit der Reihe f, f′, f″ aus der Simulation.</li>
+      <li><strong>Steigungswinkel im Bild als Zahlenwert nehmen.</strong> Die Achsen der Simulation sind ungleich skaliert; bei der Auswertung der Wendetangente ausdrücklich auf die Messwerte verweisen.</li>
+    </ol>
+
+    <p><strong>Differenzierung.</strong></p>
+    <ul>
+      <li><strong>Zum Erleichtern:</strong> die Aufgaben zu Tiefpunkt, Wendetangente und Sattelpunkt mit den Hilfestufen; im Erklärteil 2.5 als Schritt-für-Schritt-Vorlage benutzen; die Simulation nur mit Teil 1 (Schar 2) bearbeiten und die Verständnisfrage zu Schar 2 zuerst ohne Rückmeldung lesen.</li>
+      <li><strong>Standard:</strong> alle Pflichtaufgaben (darunter die Schar-Aufgabe mit Fallunterscheidung und Ortskurve), beide Teile des Beobachtungsauftrags. Die Pegel-Aufgabe (Randextrema) entfällt im Standardweg und wird bei Bedarf mit 2.6 nachgeholt.</li>
+      <li><strong>Zum Vertiefen:</strong> die Übungsaufgabe zu f_t(x) = x³ − 3t²·x (Fallunterscheidung und Ortskurve) und die letzte Aufgabe einschließlich Zusatz (Ortskurve y = x − 2x³), die Herleitungen in den Aufklappboxen selbst nachvollziehen, der Zusatzauftrag zu Schar 1 (Ortskurve aus zwei abgelesenen Punkten bestimmen und mit Abschnitt 3.3 beweisen). Als Anschlussaufgabe: Die Formel der Schar 3 aus den Messwerten rekonstruieren (vorher Formel verdeckt lassen), z. B. „Finde eine Funktion 4. Grades mit f′(x) = x²(x − a)“.</li>
+      <li><strong>Alternative zur verdeckten Formel:</strong> Wer die Simulation lieber mit sichtbarer Formel einsetzt, blendet die Formeln über die Schalterkonstante FORMELN_SICHTBAR am Anfang der Simulation im Quelltext ein; dann sind die beiden Verständnisfragen allerdings auch rechnend lösbar.</li>
+    </ul>
+
+    <p><strong>Bezug zu Realexperimenten und Daten.</strong></p>
+    <ul>
+      <li><strong>Bewegungssensor.</strong> Der Ort-Zeit-Verlauf eines Wagens auf der schiefen Ebene, der abgebremst wird, liefert s(t), v = s′ und a = s″ aus der Messwerttabelle. Die Umkehrpunkte sind Extrempunkte von s, die Stellen mit größter Geschwindigkeit sind Wendepunkte von s. Die Kette f, f′, f″ der Simulation ist genau dieses Diagramm-Trio.</li>
+      <li><strong>Biegelinie eines Lineals oder Balkens.</strong> Ein an beiden Enden fest eingeklemmtes Lineal, in der Mitte belastet: Die Biegelinie ist in der Mitte nach unten durchgebogen und an den Enden entgegengesetzt gekrümmt; dazwischen liegen zwei Wendepunkte. Wendepunkt = Krümmungswechsel, mit bloßem Auge sichtbar.</li>
+      <li><strong>Höhenprofil aus GPS-Daten.</strong> Aufgezeichnete Wanderstrecke; die Steigung aus den Höhendaten liegt als Zahlenreihe vor, größte Steigung = Wendepunkt des Höhenprofils. Passt zum Aufhänger.</li>
+      <li><strong>Wachstumsdaten.</strong> Höhe einer Pflanze über zwei Wochen messen; das Modell der Bambus-Aufgabe ist ein möglicher Fit; die Frage „wann wächst sie am schnellsten?“ ist die Frage nach der Wendestelle.</li>
+      <li><strong>Software.</strong> GeoGebra oder der GTR mit Schieberegler für den Parameter: Die Simulation dieses Moduls lässt sich damit nachbauen, und es entsteht ein zweiter Zugang zur Ortskurve (Spur des Punktes).</li>
+    </ul>
+
+    <p><strong>Zur Gestaltung der Simulationsfragen.</strong> Die beiden Fragen beziehen sich auf Scharen, deren Formel verdeckt ist. Zweck: Sie lassen sich nur durch Bedienen der Simulation beantworten. Die Formel wird erst in der Rückmeldung zur richtigen Option offenbart, und die Lernenden können dann nachrechnen, was sie gesehen haben. Die einzige Frage, die sich auch rechnen ließe (Ortskurve Schar 1), ist absichtlich nur ein Zusatzauftrag ohne Multiple Choice.</p>
+  </details>
+
+  <footer>
+    Mathematik LK Q1 · Funktionsuntersuchung: Extrem- und Wendestellen, Funktionsscharen · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/baustein-formelleiste.md
+var formelDaten = [
+  {abschnitt:"erklaerung", titel:"Extrempunkte, Wendepunkte, Kurvendiskussion", formeln:[
+    {id:"extrem-notwendig", ziel:"f-extrem-notwendig", tex:"f'(x_0)=0", plain:"f′(x₀) = 0",
+     zeichen:[
+       {tex:"f'", plain:"f′", text:"erste Ableitung, die Steigung des Graphen"},
+       {tex:"x_0", plain:"x₀", text:"die untersuchte Stelle"}],
+     gilt:"Notwendige Bedingung für eine lokale Extremstelle im Inneren des Definitionsbereichs. Sie liefert nur Kandidaten, die Umkehrung gilt nicht.",
+     fehler:"Jede Nullstelle von f′ ohne weitere Prüfung als Extremstelle ausgeben. Ob wirklich eine vorliegt, entscheidet erst eine hinreichende Bedingung."},
+    {id:"extrem-hoch", ziel:"f-extrem-hoch", tex:"f''(x_0)<0", plain:"f″(x₀) < 0",
+     zeichen:[
+       {tex:"f''", plain:"f″", text:"zweite Ableitung, die Krümmung des Graphen"},
+       {tex:"x_0", plain:"x₀", text:"Stelle mit f′(x₀) = 0"}],
+     gilt:"Hinreichend für einen Hochpunkt, aber nur zusammen mit f′(x₀) = 0. Ist f″(x₀) = 0, entscheidet dieses Kriterium nichts.",
+     fehler:"Nur f″(x₀) < 0 prüfen und die Bedingung f′(x₀) = 0 vergessen. Ohne waagerechte Tangente ist die Stelle kein Extrempunkt."},
+    {id:"extrem-tief", ziel:"f-extrem-tief", tex:"f''(x_0)>0", plain:"f″(x₀) > 0",
+     zeichen:[
+       {tex:"f''", plain:"f″", text:"zweite Ableitung, die Krümmung des Graphen"},
+       {tex:"x_0", plain:"x₀", text:"Stelle mit f′(x₀) = 0"}],
+     gilt:"Hinreichend für einen Tiefpunkt, aber nur zusammen mit f′(x₀) = 0. Ist f″(x₀) = 0, entscheidet dieses Kriterium nichts.",
+     fehler:"Hoch- und Tiefpunkt verwechseln: Positive zweite Ableitung bedeutet nach oben geöffnet, also Tiefpunkt."},
+    {id:"wende-notwendig", ziel:"f-wende-notwendig", tex:"f''(x_0)=0", plain:"f″(x₀) = 0",
+     zeichen:[
+       {tex:"f''", plain:"f″", text:"zweite Ableitung, die Krümmung des Graphen"},
+       {tex:"x_0", plain:"x₀", text:"die untersuchte Stelle"}],
+     gilt:"Notwendige Bedingung für eine Wendestelle. Sie liefert nur Kandidaten: Ob dort wirklich die Krümmung wechselt, muss noch geprüft werden.",
+     fehler:"Aus f″(x₀) = 0 allein auf einen Wendepunkt schließen. Bei einem Sattelpunkt oder bei x⁴ ist f″ null, ohne dass das Vorzeichen wechselt."},
+    {id:"wende-hinreichend", ziel:"f-wende-hinreichend", tex:"f'''(x_0)\\neq 0", plain:"f‴(x₀) ≠ 0",
+     zeichen:[
+       {tex:"f'''", plain:"f‴", text:"dritte Ableitung"},
+       {tex:"x_0", plain:"x₀", text:"Stelle mit f″(x₀) = 0"}],
+     gilt:"Hinreichend für eine Wendestelle, aber nur zusammen mit f″(x₀) = 0. Ist auch f‴(x₀) = 0, bleibt nur der Vorzeichenwechsel von f″.",
+     fehler:"Aus f‴(x₀) = 0 folgern, dass es keine Wendestelle gibt. Dieses Kriterium ist hinreichend, aber nicht notwendig."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{r:1, fb:[
+    "Das ist die erste Ableitung, f′(x) = 4x³ − 6x² + 5. Die zweite Ableitung ist die Ableitung von f′: Du musst dieses Ergebnis noch einmal ableiten.",
+    "Richtig. Erst f′(x) = 4x³ − 6x² + 5, dann noch einmal: 4x³ → 12x², −6x² → −12x, und die Konstante 5 fällt weg. Faktorisiert: f″(x) = 12x(x − 1).",
+    "Bis 12x² − 12x stimmt alles. Die 5 in f′(x) = 4x³ − 6x² + 5 ist aber eine Konstante, und die hat die Ableitung 0. Wer sie stehen lässt, behandelt sie wie eine Variable."
+  ]},
+  vw2:{r:2, fb:[
+    "x = 2 ist nur der Scheitel der Parabel, −p/2 mit p = −4. Die Lösungen liegen um √(p²/4 − q) = √(4 − 3) = 1 links und rechts davon, also bei 1 und 3. Eine doppelte Lösung gäbe es nur, wenn die Wurzel null wäre.",
+    "Vorzeichenfehler in der pq-Formel: x = −p/2 ± √(…) mit p = −4 ergibt +2, nicht −2. Probe: Bei x = −1 ist 3 + 12 + 9 = 24, nicht 0.",
+    "Richtig. Erst durch 3 teilen: x² − 4x + 3 = 0, dann x = 2 ± √(4 − 3) = 2 ± 1. Probe bei x = 1: 3 − 12 + 9 = 0. Genau diese Gleichung ist die Bedingung für waagerechte Tangenten von f(x) = x³ − 6x² + 9x."
+  ]},
+  vw3:{r:0, fb:[
+    "Richtig. f′(3) = 2 > 0 sagt: Die Tangente steigt. Über die Lage zur x-Achse sagt f′ nichts; dafür ist f(3) = 9 − 12 = −3 zuständig, und das ist negativ. Steigung und Funktionswert sind zwei verschiedene Größen.",
+    "Ein Tiefpunkt bräuchte f′ = 0. Der Tiefpunkt dieser Parabel liegt bei x = 2, denn f′(2) = 2·2 − 4 = 0 (dort ist f(2) = −4). Bei x = 3 ist die Parabel schon wieder auf dem Weg nach oben.",
+    "Du vermischst Ableitung und Funktionswert. f′(3) = 2 ist eine Steigung. Ob der Graph über oder unter der x-Achse liegt, entscheidet f(3) = 9 − 12 = −3 < 0, und das liegt unterhalb."
+  ]},
+  sim1:{r:2, fb:[
+    "Nur der Wendepunkt ändert seine Lage anders, als du beschreibst: Seine x-Koordinate bleibt bei 1,00. Hoch- und Tiefpunkt wandern nicht gemeinsam, sie rücken aufeinander zu: bei a = −1,00 stehen sie bei x = −0,41 und 2,41, bei a = 0,50 bei 0,29 und 1,71. Ein gleichbleibender Abstand ist nicht zu sehen.",
+    "Die Bewegung hast du richtig beschrieben, aber den Wert von a verwechselt. Bei a = 0,00 zeigt die Anzeige noch H(0,00 | 0,00) und T(2,00 | −1,33), und die Wendetangente hat die Steigung −1,00. Das Zusammenfallen passiert dort, wo die Steigung der Wendetangente 0,00 anzeigt, und das ist erst bei a = 1,00 der Fall.",
+    "Richtig. Der Wendepunkt bleibt bei x = 1,00, seine Höhe ist a − 0,67. Hoch- und Tiefpunkt liegen bei 1 ∓ √(1 − a) und rücken zusammen, bei a = 1,00 fallen sie im Wendepunkt zusammen (f′ hat dort eine doppelte Nullstelle, die Wendetangente ist waagerecht, es ist ein Sattelpunkt). Die verdeckte Formel war fₐ(x) = x³/3 − x² + a·x, also fₐ′(x) = x² − 2x + a mit Diskriminante 4 − 4a; sie ist null genau bei a = 1. Nachrechnen lohnt sich.",
+    "Das Verschwinden ist kein Sprung. Bei a = 0,95 stehen Hoch- und Tiefpunkt noch bei x = 0,78 und 1,22, also nur 0,45 auseinander; bei a = 0,75 sind es 1,00. Der Abstand schrumpft stetig auf null. Wenn du den Regler in kleinen Schritten führst, siehst du beide Punkte langsam aufeinander zulaufen."
+  ]},
+  sim2:{r:1, fb:[
+    "Die beiden Fälle sind vertauscht. Für a = 1,00 zeigt das f′-Band bei x = 0 keinen Farbwechsel (links und rechts von 0 beide Male rot), also kein Extremum; für a = 0,00 wechselt es dagegen von rot nach grün, das ist der Tiefpunkt. Achte darauf, wann sich beim Durchgang durch x = 0 die Farbe ändert.",
+    "Richtig. Für a ≠ 0 hat f′ bei x = 0 eine doppelte Nullstelle: f′(0) = f″(0) = 0 ohne Vorzeichenwechsel, das ist ein Sattelpunkt. Für a = 0 fallen die Stelle bei x = 0 und der Tiefpunkt bei x = a zusammen; das f′-Band wechselt jetzt von rot nach grün, obwohl f″(0) = 0 bleibt. Die verdeckte Formel war fₐ(x) = x⁴/4 − a·x³/3 mit fₐ′(x) = x²(x − a): Bei a = 0 ist f′ = x³ und wechselt das Vorzeichen; bei a ≠ 0 ist der Faktor x² nie negativ und der Faktor (x − a) ist in der Nähe von 0 vorzeichenkonstant (er hat dort das Vorzeichen von −a), also gibt es keinen Wechsel.",
+    "Das gilt für a ≠ 0, aber nicht für a = 0. Dort zeigt die Simulation nur noch einen einzigen Punkt, T(0,00 | 0,00), und das f′-Band wechselt bei x = 0 von rot nach grün. Ein Sattelpunkt braucht, dass f′ das Vorzeichen nicht wechselt.",
+    "Aus f″(0) = 0 folgt nichts: Die zweite Ableitung ist nur dann ein Test, wenn sie nicht null ist. Genau bei x = 0 ist f″(0) = 0,00 in allen Fällen, und trotzdem findet die Simulation für a ≠ 0 einen Sattelpunkt und für a = 0 einen Tiefpunkt. Entschieden wird über das Vorzeichen von f′ links und rechts, das siehst du im oberen Band."
+  ]},
+  mc1:{r:3, fb:[
+    "f′(3) = 0 ist nur die notwendige Bedingung. Ob ein Tiefpunkt vorliegt, entscheidet der Vorzeichenwechsel von f′, und den gibt es nicht: f′ = 2x(x − 3)² ist für x > 0 nie negativ, weil (x − 3)² ein Quadrat ist. Bei x = 2,9 ist f′ = +0,058, bei x = 3,1 ist f′ = +0,062, beide Male positiv. Der Graph steigt durch die waagerechte Stelle hindurch.",
+    "„f″ = 0 liefert keine Entscheidung“ stimmt für das f″-Kriterium, heißt aber nur: Du musst mit dem Vorzeichenwechsel weiterprüfen, nicht: Es passiert nichts. Und hier passiert etwas: f″ = 6(x − 1)(x − 3) wechselt bei x = 3 das Vorzeichen (−1,14 bei x = 2,9, +1,26 bei x = 3,1). Das ist eine Wendestelle.",
+    "Das Ergebnis „Wendepunkt“ stimmt, die Begründung reicht aber nicht: f″(3) = 0 ist nur notwendig (x⁴ hat bei 0 f″ = 0 und keinen Wendepunkt). Es fehlt der Vorzeichenwechsel von f″ oder f‴(3) = 12 ≠ 0. Außerdem ist die waagerechte Tangente kein Zufall, sondern macht den Punkt erst zum Sattelpunkt.",
+    "Richtig. Die vollständige Begründung lautet: f′(3) = 0 (waagerecht), kein Vorzeichenwechsel von f′ ⟹ kein Extremum; f″(3) = 0 mit Vorzeichenwechsel (oder f‴(3) = 12 ≠ 0) ⟹ Wendepunkt (3 | 8,5). Waagerechte Tangente plus Wendepunkt heißt Sattelpunkt."
+  ]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{wert:-4, einheit:"LE", tol:0.05,
+      ok:"Richtig. f′(x) = 3x² − 12x + 9 = 3(x − 1)(x − 3), also x = 1 oder x = 3. f″(3) = 6 > 0 ⟹ Tiefpunkt bei x = 3, f(3) = 27 − 54 + 27 − 4 = −4.",
+      falschEinheit:"Der Zahlenwert stimmt. Die y-Koordinate eines Punktes ist eine Länge im Koordinatensystem (LE). FE wäre ein Flächeninhalt, ° ein Winkel.",
+      nah:"Du bist in der Nähe, aber es steckt ein Einsetzfehler drin. Rechne f(3) einzeln: 3³ = 27, −6·3² = −54, 9·3 = 27, dann −4. Summe: 27 − 54 + 27 − 4.",
+      weit:"0 ist die y-Koordinate des Hochpunkts H(1 | 0), nicht des Tiefpunkts: Bei x = 1 ist f″(1) = −6 < 0. 3 ist die x-Koordinate des Tiefpunkts (die Stelle), gefragt ist aber sein y-Wert f(3). +4 ist das richtige Ergebnis mit falschem Vorzeichen: 27 − 54 = −27, plus 27 ergibt 0, minus 4 ergibt −4; der Tiefpunkt liegt unterhalb der x-Achse. Prüfe mit f″, welche der beiden Stellen zum Tiefpunkt gehört, und setze diese in f ein."},
+  a2:{wert:-7, einheit:"1", tol:0.05,
+      ok:"Richtig. f″(x) = 6x − 12 = 0 ⟹ x = 2, f‴ = 6 ≠ 0. Die Steigung dort ist f′(2) = 3·4 − 12·2 + 5 = −7.",
+      falschEinheit:"Der Zahlenwert stimmt. Eine Steigung ist der Quotient zweier Längen und hat keine Einheit. In Grad wäre der Steigungswinkel angegeben, arctan(−7) ≈ −81,87°, und das ist eine andere Größe.",
+      nah:"−6 ist der Funktionswert f(2), also die y-Koordinate des Wendepunkts, nicht die Steigung. Auch bei anderen Werten in dieser Nähe hast du vermutlich in f statt in f′ eingesetzt oder dich verrechnet. Die Steigung liefert f′(2) = 3·2² − 12·2 + 5.",
+      weit:"2 ist die Wendestelle selbst, also die Stelle, an der du f′ auswerten sollst. 5 ist f′(0), die Steigung bei x = 0. +7 hat das falsche Vorzeichen: Die Wendetangente fällt, denn 3·4 = 12 und 12 − 24 = −12, plus 5 ergibt −7."},
+  a3:{wert:2.0, einheit:"m", tol:0.02, alt:{wert:200, einheit:"cm"},
+      ok:"Richtig. h′(t) = 0,3(t − 1)(t − 3): lokales Maximum bei t = 1 mit h(1) = 0,4 m, lokales Minimum bei t = 3 mit h(3) = 0. Der größte Wert liegt aber am Rand: h(5) = 0,1·(125 − 150 + 45) = 2,0 m.",
+      falschEinheit:"Der Zahlenwert stimmt. Ein Wasserstand ist eine Länge: m (oder 200 cm). m/Tag wäre die Änderungsrate, Tage ein Zeitpunkt.",
+      nah:"Prüfe das Einsetzen am Rand: h(5) = 0,1·(5³ − 6·5² + 9·5) = 0,1·(125 − 150 + 45). Liegt dein Wert zwischen 1 und 4, ist dir vermutlich beim Einsetzen ein Rechenfehler unterlaufen oder du hast einen anderen Randwert oder Zeitpunkt benutzt.",
+      weit:"0,4 m ist nur das lokale Maximum bei t = 1 im Inneren des Intervalls; 0 ist das lokale Minimum bei t = 3 und zugleich der Randwert h(0). Bei einem Intervall reicht f′ = 0 nicht: Du musst die Randwerte h(0) und h(5) mit den lokalen Extremwerten vergleichen. 4 ist doppelt so groß wie der gesuchte Wert: Prüfe, ob du 5³ − 6·5² + 9·5 = 20 und den Faktor 0,1 (0,1·20 = 2,0) richtig verrechnet hast."},
+  a4:{wert:6, einheit:"cm/Tag", tol:0.05,
+      ok:"Richtig. Die Wachstumsgeschwindigkeit ist B′(t) = −0,06t² + 1,2t. Ihr Maximum liegt bei B″(t) = −0,12t + 1,2 = 0, also t = 10 (eine Wendestelle von B), und dort ist B′(10) = −6 + 12 = 6 cm pro Tag. Die Randwerte B′(0) = B′(20) = 0 sind kleiner.",
+      falschEinheit:"Der Zahlenwert stimmt. Eine Geschwindigkeit des Wachstums ist eine Länge pro Zeit (cm/Tag). cm wäre die Höhe selbst, Tage ein Zeitpunkt, cm² eine Fläche.",
+      nah:"10 ist die Wendestelle von B, also der Zeitpunkt, zu dem das Wachstum am schnellsten ist (Einheit: Tage). Gefragt ist aber die Geschwindigkeit selbst, also B′(10). Auch bei anderen Werten in dieser Nähe hast du vermutlich in B oder B″ statt in B′ eingesetzt.",
+      weit:"40 cm ist die Höhe B(10) und 80 cm die Endhöhe B(20), das sind Bestände. Gefragt ist die Änderungsrate des Bestands, also B′. 0 sind nur die Randwerte von B′. Bestimme das Maximum der Funktion B′, dazu brauchst du B″. 12 ist nur der lineare Summand 1,2t von B′ bei t = 10; der Term −0,06t² gehört mit dazu (−6 + 12 = 6)."},
+  a5:{wert:12, einheit:"1", tol:0.05,
+      ok:"Richtig. f_a′(x) = 3x² − 12x + a hat genau eine Nullstelle, wenn die Diskriminante 144 − 12a null ist, also a = 12. Dann ist f′ = 3(x − 2)² und der Sattelpunkt liegt bei (2 | 8).",
+      falschEinheit:"Der Zahlenwert stimmt. Der Parameter a hat hier keine Einheit; gefragt ist eine reine Zahl.",
+      nah:"9 ist der Wert, bei dem f′(1) = 0 gilt (Extrempunkt bei x = 1): Dort gibt es aber zwei Stellen mit waagerechter Tangente, x = 1 und x = 3, denn 3x² − 12x + 9 = 3(x − 1)(x − 3). Gesucht ist der Wert, bei dem beide Stellen zu einer zusammenfallen, also die Diskriminante von f′ null wird.",
+      weit:"4 entsteht, wenn du 3x² − 12x + a durch 3 teilst, aber a nicht mitteilst: Aus x² − 4x + a/3 = 0 wird bei dir x² − 4x + a = 0 mit Diskriminante 16 − 4a. 36 entsteht, wenn du bei der Diskriminante den Faktor 3 von 3x² vergisst (144 − 4a). Wende die Diskriminante b² − 4ac direkt auf 3x² − 12x + a an: 144 − 12a. Wer auf 6 kommt, hat die Gleichung 144 − 12a = 0 vermutlich falsch aufgelöst: Bei a = 6 ist D = 72 > 0, es gäbe also noch zwei Stellen."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch. Der Quotient ist hier vorzeichenbehaftet (kein Betrag):
+      // Bei negativem Sollwert ist ein Wert mit falschem Vorzeichen "weit daneben".
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? v / bezug : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.z1 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Richtig. Vorgehen: Nullstellen von f′ zählen, dabei zwischen Schneiden (Vorzeichenwechsel: Extrempunkt) und Berühren (waagerechte Tangente ohne Extremum) unterscheiden; dann die Gipfel und Täler von f′ zählen, denn jede Extremstelle von f′ ist eine Wendestelle von f.";
+    } else if(n === 0){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Keine Zuordnung stimmt. Vermutlich hast du die Diagramme als Graphen von f gelesen. Sie zeigen aber f′: Eine Nullstelle im Diagramm heißt waagerechte Tangente von f, und die Extrempunkte von f stehen dort, wo das Diagramm die x-Achse durchquert.";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " stimmen. Deine Denkstrategie prüfen: Die Diagramme zeigen f′. Zähle zuerst, wo der Graph die x-Achse schneidet, dort wechselt f′ das Vorzeichen (Extrempunkt von f), und wo er sie nur berührt (waagerechte Tangente von f ohne Extrempunkt). Zähle dann die höchsten und tiefsten Stellen des Diagramms im Inneren: Jede ist eine Wendestelle von f. Kontrolliere die Zeilen, die du für falsch hältst, gegen genau diese beiden Zählungen.";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: Scharen, Extrem- und Wendepunkte ============ */
+(function(){
+  /* Umrechnung Pixel <-> Koordinaten (beide Canvas gleich breit, x-Werte stehen senkrecht untereinander):
+       LX = 70, RX = 960          linker/rechter Rand der Zeichenfläche (Pixel, interne Breite 1000)
+       TY = 20, BY = 360          oberer/unterer Rand von cvF
+       px(x) = LX + (x - XMIN) / (XMAX - XMIN) * (RX - LX)
+       py(y) = BY - (y - YMIN) / (YMAX - YMIN) * (BY - TY)
+     Beispiel Schar 1 (x: -3 … 3, y: -6 … 6): px(0) = 515, px(2) = 811,67, py(0) = 190, py(6) = 20.
+     Der Parameter a und die Prüfstelle x0 laufen über ganzzahlige Reglerwerte: a = Wert/20, x0 = Wert/20.
+     Sonderfälle werden über den Ganzzahlwert erkannt, nie über Vergleiche wie a === 1 (Fließkomma).
+
+     Die drei Scharen (Formeln bleiben im sichtbaren Text verdeckt, siehe FORMELN_SICHTBAR):
+       Schar 1:  f(x) = x^3/3 - a*x        f'(x) = x^2 - a          f''(x) = 2x
+       Schar 2:  f(x) = x^3/3 - x^2 + a*x  f'(x) = x^2 - 2x + a     f''(x) = 2(x - 1)
+       Schar 3:  f(x) = x^4/4 - a*x^3/3    f'(x) = x^2 (x - a)      f''(x) = x (3x - 2a) */
+  var FORMELN_SICHTBAR = false;   // true: Formeln der Scharen 2 und 3 im Auswahlfeld anzeigen (Lehrerteil)
+
+  var cvF = document.getElementById("cvF"), cxF = cvF.getContext("2d");
+  var cvA = document.getElementById("cvAbl"), cxA = cvA.getContext("2d");
+  var LX = 70, RX = 960, TY = 20, BY = 360;
+  var AT = 15, AB = 220;                 // Ableitungsfläche in cvAbl
+  var B1Y = 240, B2Y = 266, BH = 16;     // Bänder
+
+  var SCH = {
+    1:{ xmin:-3, xmax:3, ymin:-6, ymax:6, dmin:-6, dmax:10, amin:-20, amax:80, xrmin:-60, xrmax:60, a0:20, x0:40,
+        f:function(x,a){ return x*x*x/3 - a*x; },
+        f1:function(x,a){ return x*x - a; },
+        f2:function(x,a){ return 2*x; } },
+    2:{ xmin:-2, xmax:4, ymin:-4, ymax:6, dmin:-6, dmax:12, amin:-20, amax:80, xrmin:-40, xrmax:80, a0:-10, x0:50,
+        f:function(x,a){ return x*x*x/3 - x*x + a*x; },
+        f1:function(x,a){ return x*x - 2*x + a; },
+        f2:function(x,a){ return 2*(x - 1); } },
+    3:{ xmin:-2, xmax:3, ymin:-2, ymax:3, dmin:-3, dmax:6, amin:-20, amax:40, xrmin:-40, xrmax:60, a0:20, x0:40,
+        f:function(x,a){ return x*x*x*x/4 - a*x*x*x/3; },
+        f1:function(x,a){ return x*x*(x - a); },
+        f2:function(x,a){ return x*(3*x - 2*a); } }
+  };
+
+  var k = 1, aI = SCH[1].a0, xI = SCH[1].x0, xc = xI / 20;
+  var laeuft = false, letzte = null, zieht = false;
+
+  var sSchar = document.getElementById("sSchar"), rA = document.getElementById("rA"), rX = document.getElementById("rX");
+  var cTan = document.getElementById("cTan"), cSpur = document.getElementById("cSpur"), cAufbau = document.getElementById("cAufbau");
+  var bPlay = document.getElementById("bPlay"), bReset = document.getElementById("bReset");
+
+  if(FORMELN_SICHTBAR){
+    sSchar.options[1].text = "Schar 2: fₐ(x) = x³/3 − x² + a·x";
+    sSchar.options[2].text = "Schar 3: fₐ(x) = x⁴/4 − a·x³/3";
+  }
+
+  function fmt(z, n){
+    if(Math.abs(z) < Math.pow(10, -n) / 2) z = 0;
+    return z.toFixed(n).replace(".", ",").replace("-", "−");
+  }
+  function nz(v){ return Math.abs(v) < 0.005 ? 0 : v; }
+  function px(x){ var s = SCH[k]; return LX + (x - s.xmin) / (s.xmax - s.xmin) * (RX - LX); }
+  function py(y){ var s = SCH[k]; return BY - (y - s.ymin) / (s.ymax - s.ymin) * (BY - TY); }
+  function pd(v){ var s = SCH[k]; return AB - (v - s.dmin) / (s.dmax - s.dmin) * (AB - AT); }
+
+  // Charakteristische Punkte aus den geschlossenen Formeln (nicht numerisch)
+  function punkte(kk, aInt){
+    var a = aInt / 20, s = SCH[kk], P = { ext:[], wen:[] }, w, y;
+    if(kk === 1){
+      if(aInt > 0){
+        w = Math.sqrt(a); y = 2 / 3 * a * w;
+        P.ext.push({x:-w, y:y, t:"H"}); P.ext.push({x:w, y:-y, t:"T"});
+      }
+      P.wen.push({x:0, y:0, m:-a, t: aInt === 0 ? "S" : "W"});
+    } else if(kk === 2){
+      if(aInt < 20){
+        w = Math.sqrt(1 - a);
+        P.ext.push({x:1 - w, y:s.f(1 - w, a), t:"H"}); P.ext.push({x:1 + w, y:s.f(1 + w, a), t:"T"});
+      }
+      P.wen.push({x:1, y:a - 2 / 3, m:a - 1, t: aInt === 20 ? "S" : "W"});
+    } else {
+      if(aInt !== 0){
+        P.ext.push({x:a, y:-Math.pow(a, 4) / 12, t:"T"});
+        P.wen.push({x:0, y:0, m:0, t:"S"});
+        P.wen.push({x:2 * a / 3, y:-4 * Math.pow(a, 4) / 81, m:s.f1(2 * a / 3, a), t:"W"});
+      } else {
+        P.ext.push({x:0, y:0, t:"T"});
+      }
+    }
+    return P;
+  }
+  function nullstellenF1(kk, aInt){
+    var a = aInt / 20, r = [], w;
+    if(kk === 1){ if(aInt > 0){ w = Math.sqrt(a); r.push(-w, w); } else if(aInt === 0) r.push(0); }
+    else if(kk === 2){ if(aInt < 20){ w = Math.sqrt(1 - a); r.push(1 - w, 1 + w); } else if(aInt === 20) r.push(1); }
+    else { r.push(0); if(aInt !== 0) r.push(a); }
+    return r;
+  }
+
+  function schriftFaktor(){
+    var w = cvF.getBoundingClientRect().width || 860;
+    return Math.max(1, Math.min(2.7, 900 / w));
+  }
+
+  /* ---------- Anzeigen ---------- */
+  function punktText(p){ return p.t + "(" + fmt(p.x, 2) + " | " + fmt(p.y, 2) + ")"; }
+  function anzeigen(){
+    var s = SCH[k], a = aI / 20, x0 = xI / 20;
+    var f = s.f(x0, a), d1 = s.f1(x0, a), d2 = s.f2(x0, a);
+    var P = punkte(k, aI);
+    document.getElementById("lA").textContent = fmt(a, 2);
+    document.getElementById("lX").textContent = fmt(x0, 2);
+    document.getElementById("anzA").textContent = "a = " + fmt(a, 2);
+    document.getElementById("anzX0").textContent = "x₀ = " + fmt(x0, 2);
+    document.getElementById("anzF").textContent = fmt(f, 2);
+    document.getElementById("anzF1").textContent = fmt(d1, 2);
+    document.getElementById("anzF2").textContent = fmt(d2, 2);
+    var t1 = nz(d1) === 0 ? "waagerechte Tangente" : (d1 > 0 ? "steigt" : "fällt");
+    var t2 = nz(d2) === 0 ? "f″ = 0" : (d2 > 0 ? "Linkskurve" : "Rechtskurve");
+    document.getElementById("anzArt").textContent = t1 + " · " + t2;
+    document.getElementById("anzExt").textContent = P.ext.length ? P.ext.map(punktText).join(" · ") : "keine Extrempunkte";
+    document.getElementById("anzWen").textContent = P.wen.length
+      ? P.wen.map(function(p){ return punktText(p) + ", Steigung " + fmt(p.m, 2); }).join(" · ")
+      : "keine Wendepunkte";
+    var beide = (k === 1 && aI === 0 && xI === 0) || (k === 2 && aI === 20 && xI === 20) || (k === 3 && xI === 0);
+    document.getElementById("anzBefund").textContent = beide ? "An dieser Stelle sind f′ und f″ beide null." : "—";
+  }
+
+  /* ---------- Zeichnen: Graph ---------- */
+  function zeichneF(){
+    var s = SCH[k], a = aI / 20, x0 = xI / 20, kk = schriftFaktor(), fs = Math.round(13 * kk);
+    var rk = 7 * Math.min(kk, 2), lw = 3 * Math.min(kk, 1.5);
+    var i, v, P = punkte(k, aI);
+    cxF.clearRect(0, 0, 1000, 400);
+    cxF.fillStyle = "#fff"; cxF.fillRect(0, 0, 1000, 400);
+
+    // Gitter, Achsen, Teilstriche
+    cxF.font = fs + "px sans-serif"; cxF.lineWidth = 1;
+    for(v = Math.ceil(s.xmin); v <= s.xmax; v++){
+      cxF.strokeStyle = "#eef1f6"; cxF.beginPath(); cxF.moveTo(px(v), TY); cxF.lineTo(px(v), BY); cxF.stroke();
+    }
+    for(v = Math.ceil(s.ymin); v <= s.ymax; v++){
+      cxF.strokeStyle = "#eef1f6"; cxF.beginPath(); cxF.moveTo(LX, py(v)); cxF.lineTo(RX, py(v)); cxF.stroke();
+    }
+    cxF.strokeStyle = "#94a3b8"; cxF.lineWidth = 1.5;
+    cxF.beginPath(); cxF.moveTo(LX, py(0)); cxF.lineTo(RX, py(0)); cxF.stroke();
+    cxF.beginPath(); cxF.moveTo(px(0), TY); cxF.lineTo(px(0), BY); cxF.stroke();
+    cxF.fillStyle = "#5b6b7f"; cxF.textBaseline = "middle";
+    cxF.textAlign = "center";
+    for(v = Math.ceil(s.xmin); v <= s.xmax; v++){ if(v !== 0) cxF.fillText(fmt(v, 0), px(v), py(0) + 8 + fs * 0.7); }
+    cxF.textAlign = "right";
+    for(v = Math.ceil(s.ymin); v <= s.ymax; v++){ if(v !== 0 && v % 2 === 0) cxF.fillText(fmt(v, 0), px(0) - 6, py(v)); }
+    cxF.textAlign = "left"; cxF.fillText("x", RX - fs * 0.6, py(0) - fs * 0.9);
+    cxF.fillText("y", px(0) + 8, TY + fs * 0.6);
+
+    cxF.save();
+    cxF.beginPath(); cxF.rect(LX, TY, RX - LX, BY - TY); cxF.clip();
+
+    // Graph
+    cxF.strokeStyle = "#0d7a52"; cxF.lineWidth = lw; cxF.lineJoin = "round"; cxF.beginPath();
+    for(i = 0; i <= 400; i++){
+      var xx = s.xmin + i / 400 * (s.xmax - s.xmin), yy = s.f(xx, a);
+      if(i === 0) cxF.moveTo(px(xx), py(yy)); else cxF.lineTo(px(xx), py(yy));
+    }
+    cxF.stroke();
+
+    // Spuren der Extrem- und Wendepunkte über den ganzen a-Bereich (ohne Gleichung im Bild)
+    if(cSpur.checked){
+      cxF.strokeStyle = "#94a3b8"; cxF.lineWidth = 2; cxF.setLineDash([2, 6]); cxF.lineCap = "round";
+      var spuren = [];
+      (function(){
+        var n = 200, j, aa, a1 = s.amax / 20, sp = [[], [], []], w;
+        for(j = 0; j <= n; j++){
+          if(k === 1){
+            aa = a1 * j / n; w = Math.sqrt(aa);
+            sp[0].push([-w, 2 / 3 * aa * w]); sp[1].push([w, -2 / 3 * aa * w]);
+          } else if(k === 2){
+            aa = -1 + 2 * j / n; w = Math.sqrt(Math.max(0, 1 - aa));
+            sp[0].push([1 - w, s.f(1 - w, aa)]); sp[1].push([1 + w, s.f(1 + w, aa)]);
+            aa = -1 + (a1 + 1) * j / n; sp[2].push([1, aa - 2 / 3]);
+          } else {
+            aa = -1 + (a1 + 1) * j / n;
+            sp[0].push([aa, -Math.pow(aa, 4) / 12]); sp[1].push([2 * aa / 3, -4 * Math.pow(aa, 4) / 81]);
+          }
+        }
+        spuren = sp;
+      })();
+      spuren.forEach(function(line){
+        if(!line.length) return;
+        cxF.beginPath();
+        line.forEach(function(p, j){ if(j === 0) cxF.moveTo(px(p[0]), py(p[1])); else cxF.lineTo(px(p[0]), py(p[1])); });
+        cxF.stroke();
+      });
+      cxF.setLineDash([]);
+    }
+
+    // Wendetangenten (dünn, strichpunktiert)
+    cxF.strokeStyle = "#b45309"; cxF.lineWidth = 1.5 * Math.min(kk, 1.5); cxF.setLineDash([10, 4, 2, 4]);
+    P.wen.forEach(function(p){
+      cxF.beginPath();
+      cxF.moveTo(px(p.x - 0.9), py(p.y - 0.9 * p.m)); cxF.lineTo(px(p.x + 0.9), py(p.y + 0.9 * p.m)); cxF.stroke();
+    });
+    // Tangente an der Prüfstelle
+    if(cTan.checked){
+      var m = s.f1(x0, a), y0 = s.f(x0, a);
+      cxF.lineWidth = 2.5 * Math.min(kk, 1.5); cxF.setLineDash([9, 6]);
+      cxF.beginPath();
+      cxF.moveTo(px(x0 - 1.2), py(y0 - 1.2 * m)); cxF.lineTo(px(x0 + 1.2), py(y0 + 1.2 * m)); cxF.stroke();
+    }
+    cxF.setLineDash([]);
+
+    // Prüfstelle
+    cxF.strokeStyle = "#5b6b7f"; cxF.lineWidth = 1.5; cxF.setLineDash([2, 4]);
+    cxF.beginPath(); cxF.moveTo(px(x0), TY); cxF.lineTo(px(x0), BY); cxF.stroke(); cxF.setLineDash([]);
+    cxF.fillStyle = "#0f2135"; cxF.beginPath(); cxF.arc(px(x0), py(s.f(x0, a)), 6 * Math.min(kk, 2), 0, Math.PI * 2); cxF.fill();
+
+    // Markierungen
+    cxF.font = "700 " + fs + "px sans-serif"; cxF.textBaseline = "middle";
+    P.ext.forEach(function(p){
+      var X = px(p.x), Y = py(p.y);
+      cxF.fillStyle = p.t === "H" ? "#b91c1c" : "#1d4ed8";
+      cxF.beginPath(); cxF.arc(X, Y, rk, 0, Math.PI * 2); cxF.fill();
+      cxF.strokeStyle = "#fff"; cxF.lineWidth = 2; cxF.stroke();
+      cxF.textAlign = p.t === "H" ? "right" : "left";
+      cxF.fillText(p.t, X + (p.t === "H" ? -1 : 1) * (rk + 10), Y - rk - 2);
+    });
+    P.wen.forEach(function(p){
+      var X = px(p.x), Y = py(p.y), r = rk * 1.05;
+      cxF.fillStyle = p.t === "S" ? "#6d28d9" : "#b45309";
+      cxF.save(); cxF.translate(X, Y); cxF.rotate(Math.PI / 4);
+      cxF.fillRect(-r * 0.8, -r * 0.8, r * 1.6, r * 1.6);
+      cxF.strokeStyle = "#fff"; cxF.lineWidth = 2; cxF.strokeRect(-r * 0.8, -r * 0.8, r * 1.6, r * 1.6);
+      cxF.restore();
+      cxF.textAlign = "center";
+      cxF.fillText(p.t, X, Y + rk + 10 + fs * 0.5);
+    });
+
+    cxF.restore();
+
+    cxF.strokeStyle = "#dbe3ec"; cxF.lineWidth = 1; cxF.strokeRect(LX, TY, RX - LX, BY - TY);
+  }
+
+  /* ---------- Zeichnen: Ableitungen und Vorzeichenbänder ---------- */
+  function vorzeichen(fn, s, a, x0, aufbau){
+    // 445 Spalten à 2 px; Werte nahe null übernehmen das Vorzeichen der vorigen Spalte (keine Lücke am Sattelpunkt)
+    var res = [], prev = 0, i, x, v, first = 0;
+    for(i = 0; i < 445; i++){
+      x = s.xmin + (i + 0.5) / 445 * (s.xmax - s.xmin);
+      v = fn(x, a);
+      var sg = Math.abs(v) < 1e-9 ? prev : (v > 0 ? 1 : -1);
+      if(sg !== 0 && first === 0) first = sg;
+      prev = sg; res.push(sg);
+    }
+    for(i = 0; i < 445 && res[i] === 0; i++) res[i] = first;
+    return res;
+  }
+  function zeichneA(){
+    var s = SCH[k], a = aI / 20, x0 = xI / 20, kk = schriftFaktor(), fs = Math.round(13 * kk);
+    var lw = 3 * Math.min(kk, 1.5), i, v, x;
+    cxA.clearRect(0, 0, 1000, 330);
+    cxA.fillStyle = "#fff"; cxA.fillRect(0, 0, 1000, 330);
+    var auf = cAufbau.checked;
+    var xmaxZ = auf ? x0 : s.xmax;
+
+    // Gitter und Skala
+    cxA.font = fs + "px sans-serif"; cxA.lineWidth = 1;
+    for(v = Math.ceil(s.xmin); v <= s.xmax; v++){
+      cxA.strokeStyle = "#eef1f6"; cxA.beginPath(); cxA.moveTo(px(v), AT); cxA.lineTo(px(v), AB); cxA.stroke();
+    }
+    var st = (s.dmax - s.dmin) > 12 ? 4 : 2;
+    cxA.fillStyle = "#5b6b7f"; cxA.textAlign = "right"; cxA.textBaseline = "middle";
+    for(v = Math.ceil(s.dmin / st) * st; v <= s.dmax; v += st){
+      cxA.strokeStyle = "#eef1f6"; cxA.beginPath(); cxA.moveTo(LX, pd(v)); cxA.lineTo(RX, pd(v)); cxA.stroke();
+      cxA.fillText(fmt(v, 0), LX - 6, pd(v));
+    }
+    cxA.strokeStyle = "#94a3b8"; cxA.lineWidth = 1.5;
+    cxA.beginPath(); cxA.moveTo(LX, pd(0)); cxA.lineTo(RX, pd(0)); cxA.stroke();
+    cxA.beginPath(); cxA.moveTo(px(0), AT); cxA.lineTo(px(0), AB); cxA.stroke();
+
+    // Kurven (mit Aufbau nur bis zur Prüfstelle)
+    cxA.save(); cxA.beginPath(); cxA.rect(LX, AT, RX - LX, AB - AT); cxA.clip();
+    function kurve(fn, farbe, gestrichelt){
+      cxA.strokeStyle = farbe; cxA.lineWidth = lw; cxA.lineJoin = "round";
+      cxA.setLineDash(gestrichelt ? [12, 7] : []); cxA.beginPath();
+      var n = 400, j, xx, gestartet = false;
+      for(j = 0; j <= n; j++){
+        xx = s.xmin + j / n * (s.xmax - s.xmin);
+        if(xx > xmaxZ + 1e-9) break;
+        if(!gestartet){ cxA.moveTo(px(xx), pd(fn(xx, a))); gestartet = true; } else cxA.lineTo(px(xx), pd(fn(xx, a)));
+      }
+      if(auf){ cxA.lineTo(px(x0), pd(fn(x0, a))); }
+      cxA.stroke(); cxA.setLineDash([]);
+    }
+    kurve(s.f1, "#1d4ed8", false);
+    kurve(s.f2, "#b45309", true);
+    // Nullstellen von f′ (offene Kreise)
+    cxA.strokeStyle = "#1d4ed8"; cxA.fillStyle = "#fff"; cxA.lineWidth = 2.5;
+    nullstellenF1(k, aI).forEach(function(z){
+      if(auf && z > x0 + 1e-9) return;
+      cxA.beginPath(); cxA.arc(px(z), pd(0), 7 * Math.min(kk, 2), 0, Math.PI * 2); cxA.fill(); cxA.stroke();
+    });
+    // Prüfstelle: Punkte auf f′ und f″
+    cxA.fillStyle = "#1d4ed8"; cxA.beginPath(); cxA.arc(px(x0), pd(s.f1(x0, a)), 6 * Math.min(kk, 2), 0, Math.PI * 2); cxA.fill();
+    cxA.fillStyle = "#b45309"; cxA.beginPath(); cxA.arc(px(x0), pd(s.f2(x0, a)), 6 * Math.min(kk, 2), 0, Math.PI * 2); cxA.fill();
+    cxA.restore();
+    cxA.strokeStyle = "#5b6b7f"; cxA.lineWidth = 1.5; cxA.setLineDash([2, 4]);
+    cxA.beginPath(); cxA.moveTo(px(x0), AT); cxA.lineTo(px(x0), B2Y + BH); cxA.stroke(); cxA.setLineDash([]);
+    cxA.strokeStyle = "#dbe3ec"; cxA.lineWidth = 1; cxA.strokeRect(LX, AT, RX - LX, AB - AT);
+
+    // Beschriftung der Kurven
+    cxA.font = "700 " + fs + "px sans-serif"; cxA.textAlign = "left"; cxA.textBaseline = "middle";
+    cxA.fillStyle = "#1d4ed8"; cxA.fillText("f′", LX + 8, AT + fs * 0.8);
+    cxA.fillStyle = "#b45309"; cxA.fillText("f″", LX + 8 + fs * 2.2, AT + fs * 0.8);
+
+    // Bänder
+    var b1 = vorzeichen(s.f1, s, a, x0, auf), b2 = vorzeichen(s.f2, s, a, x0, auf);
+    for(i = 0; i < 445; i++){
+      x = s.xmin + (i + 0.5) / 445 * (s.xmax - s.xmin);
+      if(auf && x > x0) break;
+      cxA.fillStyle = b1[i] > 0 ? "rgba(13,122,82,.35)" : "rgba(185,28,28,.35)";
+      cxA.fillRect(LX + i * 2, B1Y, 2, BH);
+      cxA.fillStyle = b2[i] > 0 ? "rgba(29,78,216,.35)" : "rgba(180,83,9,.35)";
+      cxA.fillRect(LX + i * 2, B2Y, 2, BH);
+    }
+    cxA.strokeStyle = "#dbe3ec"; cxA.strokeRect(LX, B1Y, RX - LX, BH); cxA.strokeRect(LX, B2Y, RX - LX, BH);
+    cxA.font = "700 " + fs + "px sans-serif"; cxA.textAlign = "right"; cxA.fillStyle = "#0f2135";
+    cxA.fillText("f′", LX - 8, B1Y + BH / 2); cxA.fillText("f″", LX - 8, B2Y + BH / 2);
+
+    // Legende (auf schmalen Bildschirmen mit Kurzformen, damit sie in eine Zeile passt)
+    var kurz = kk > 1.4;
+    var items = [["rgba(13,122,82,.55)", kurz ? "steigt" : "f′ > 0: steigt"], ["rgba(185,28,28,.55)", kurz ? "fällt" : "f′ < 0: fällt"],
+      ["rgba(29,78,216,.55)", kurz ? "Linkskurve" : "f″ > 0: Linkskurve"], ["rgba(180,83,9,.55)", kurz ? "Rechtskurve" : "f″ < 0: Rechtskurve"]];
+    cxA.font = fs + "px sans-serif"; cxA.textAlign = "left"; cxA.textBaseline = "middle";
+    var lx = LX, ly = 306, sw = Math.round(22 * Math.min(kk, 1.6));
+    items.forEach(function(it){
+      cxA.fillStyle = it[0]; cxA.fillRect(lx, ly - sw / 3, sw, sw * 0.66);
+      cxA.fillStyle = "#0f2135"; cxA.fillText(it[1], lx + sw + 6, ly);
+      lx += sw + 6 + cxA.measureText(it[1]).width + Math.round(26 * Math.min(kk, 1.6));
+    });
+  }
+
+  function alles(){ anzeigen(); zeichneF(); zeichneA(); }
+
+  /* ---------- Bedienung ---------- */
+  function setzeSchar(n){
+    var s = SCH[n];
+    k = n; aI = s.a0; xI = s.x0; xc = xI / 20;
+    rA.min = s.amin; rA.max = s.amax; rA.value = aI;
+    rX.min = s.xrmin; rX.max = s.xrmax; rX.value = xI;
+    stopp();
+  }
+  function stopp(){ laeuft = false; letzte = null; bPlay.textContent = "▶ Prüfstelle wandern lassen"; }
+  function reset(){
+    setzeSchar(k);
+    cTan.checked = true; cSpur.checked = false; cAufbau.checked = false;
+    alles();
+  }
+  sSchar.addEventListener("change", function(){ setzeSchar(parseInt(sSchar.value, 10)); alles(); });
+  rA.addEventListener("input", function(){ aI = parseInt(rA.value, 10); alles(); });
+  rX.addEventListener("input", function(){ xI = parseInt(rX.value, 10); xc = xI / 20; stopp(); alles(); });
+  [cTan, cSpur, cAufbau].forEach(function(c){ c.addEventListener("change", alles); });
+  bReset.addEventListener("click", reset);
+  window.addEventListener("resize", alles);
+
+  function schritt(zeit){
+    if(!laeuft) return;
+    if(letzte === null) letzte = zeit;
+    var dt = Math.min(0.05, (zeit - letzte) / 1000);
+    letzte = zeit;
+    var s = SCH[k], xend = s.xrmax / 20;
+    xc += 1.0 * dt;
+    if(xc >= xend){ xc = xend; stopp(); }
+    xI = Math.round(xc * 20); rX.value = xI;
+    alles();
+    if(laeuft) requestAnimationFrame(schritt);
+  }
+  bPlay.addEventListener("click", function(){
+    if(laeuft){ stopp(); return; }
+    var s = SCH[k];
+    if(xI >= s.xrmax){ xI = s.xrmin; xc = xI / 20; rX.value = xI; alles(); }
+    laeuft = true; letzte = null; bPlay.textContent = "⏸ Pause";
+    requestAnimationFrame(schritt);
+  });
+
+  // Ziehen auf dem Graphen setzt die Prüfstelle
+  function ausPointer(ev){
+    var r = cvF.getBoundingClientRect(), s = SCH[k];
+    var cx = (ev.clientX - r.left) / r.width * 1000;
+    var x = s.xmin + (cx - LX) / (RX - LX) * (s.xmax - s.xmin);
+    xI = Math.max(s.xrmin, Math.min(s.xrmax, Math.round(x * 20)));
+    xc = xI / 20; rX.value = xI; alles();
+  }
+  cvF.addEventListener("pointerdown", function(ev){
+    zieht = true; stopp(); cvF.setPointerCapture(ev.pointerId); ausPointer(ev);
+  });
+  cvF.addEventListener("pointermove", function(ev){ if(zieht){ ausPointer(ev); ev.preventDefault(); } });
+  cvF.addEventListener("pointerup", function(){ zieht = false; });
+  cvF.addEventListener("pointercancel", function(){ zieht = false; });
+
+  reset();
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1 (zweite Ableitung)", vw2:"Vorwissen 2 (quadratische Gleichung)",
+    vw3:"Vorwissen 3 (Steigung und Funktionswert)",
+    sim1:"Simulation 1 (Schar 2: Punkte wandern)", sim2:"Simulation 2 (Schar 3: Stelle x = 0)",
+    a1:"Tiefpunkt (y-Koordinate)", a2:"Steigung der Wendetangente", mc1:"Sattelpunkt begründen",
+    a3:"Pegel: globales Maximum", a4:"Größte Wachstumsgeschwindigkeit", a5:"Parameter für Sattelpunkt",
+    z1:"Ableitungsgraphen zuordnen"
+  };
+  var zeilen = ["Funktionsuntersuchung – Mathematik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push((ta.dataset.offen || ("Offene Aufgabe " + (i + 1))) + ":\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>

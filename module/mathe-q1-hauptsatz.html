@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Der Hauptsatz der Differential- und Integralrechnung – Mathematik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#0d7a52;
+  --akzent-hell:#e7f6ef;
+  --akzent-rand:#b5e0cd;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#0b5c3e,#0d7a52);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#0b6845;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+@media (max-width:600px){
+  button{min-height:44px}
+  .regler input[type=range]{height:32px}
+  #cTan{width:24px !important;height:24px !important}
+}
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Mathematik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Der Hauptsatz der Differential- und Integralrechnung</h1>
+    <div class="meta">
+      <span class="chip">Inhaltsfeld: Funktionen und Analysis</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+      <span class="chip">ca. 90 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Du drehst die Dusche auf. An modernen Armaturen sitzt ein kleiner Durchflussmesser, der dir sekündlich anzeigt, wie viel Wasser gerade läuft – mal 9 Liter pro Minute, mal 4, je nachdem, wie weit du den Hebel aufmachst. Willst du am Ende wissen, wie viel du insgesamt verbraucht hast, müsstest du nach dem Verfahren der letzten Einheit die ganze Kurve in Streifen zerlegen und aufsummieren. Für eine Genauigkeit von einem Zehntel Kubikmeter waren es dort dreihundertzwanzig Streifen – für fünf Minuten Duschen ein absurder Aufwand.</p>
+
+  <p>Im Keller hängt derweil ein Wasserzähler. Der zeigt keine Rate, sondern einen Stand: 1834,62 m³. Du liest ihn vor dem Duschen ab und danach noch einmal, ziehst ab, fertig. Zwei Zahlen statt dreihundertzwanzig Streifen – und beide Wege liefern denselben Liter. Dass das kein Zufall ist, sondern ein Satz, der Ableiten und Integrieren zu zwei Richtungen derselben Straße macht, ist das Thema dieser Einheit. Die eigentliche Frage ist dabei nicht, wie man die Subtraktion ausführt, sondern warum der Zählerstand überhaupt etwas über die Fläche unter dem Ratengraphen weiß.</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Zwei Fragen aus der Einführungsphase, eine aus der letzten Einheit. Wenn du hier hängst, lohnt sich ein Blick zurück, bevor du weitermachst.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Welche der drei Funktionen hat die Ableitung <span class="m" data-tex="f(x) = x^2" data-plain="f(x) = x²"></span>?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span><span class="m" data-tex="F(x) = 2x" data-plain="F(x) = 2x"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span><span class="m" data-tex="F(x) = \tfrac{1}{3}x^3 - 5" data-plain="F(x) = (1/3)·x³ − 5"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span><span class="m" data-tex="F(x) = x^3" data-plain="F(x) = x³"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Für eine auf <span class="m" data-tex="[2;\,5]" data-plain="[2; 5]"></span> differenzierbare Funktion <span class="m" data-tex="F" data-plain="F"></span> gilt <span class="m" data-tex="F'(x) &lt; 0" data-plain="F′(x) < 0"></span> für alle <span class="m" data-tex="x" data-plain="x"></span> aus diesem Intervall. Was folgt daraus sicher?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span><span class="m" data-tex="F(x) &lt; 0" data-plain="F(x) < 0"></span> für alle <span class="m" data-tex="x" data-plain="x"></span> aus <span class="m" data-tex="[2;\,5]" data-plain="[2; 5]"></span>.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span><span class="m" data-tex="F" data-plain="F"></span> hat in <span class="m" data-tex="[2;\,5]" data-plain="[2; 5]"></span> mindestens eine Nullstelle.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span><span class="m" data-tex="F" data-plain="F"></span> ist auf <span class="m" data-tex="[2;\,5]" data-plain="[2; 5]"></span> streng monoton fallend.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Eine Zuflussrate <span class="m" data-tex="f" data-plain="f"></span> ist auf <span class="m" data-tex="[0;\,4]" data-plain="[0; 4]"></span> positiv und auf <span class="m" data-tex="[4;\,6]" data-plain="[4; 6]"></span> negativ. Bekannt sind <span class="m" data-tex="\int_0^4 f(t)\,\mathrm{d}t = 18" data-plain="∫ von 0 bis 4 f(t) dt = 18"></span> und <span class="m" data-tex="\int_4^6 f(t)\,\mathrm{d}t = -6" data-plain="∫ von 4 bis 6 f(t) dt = −6"></span> (jeweils in <span class="m" data-tex="\mathrm{m^3}" data-plain="m³"></span>). Wie groß ist <span class="m" data-tex="\int_0^6 f(t)\,\mathrm{d}t" data-plain="∫ von 0 bis 6 f(t) dt"></span>?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span><span class="m" data-tex="24\,\mathrm{m^3}" data-plain="24 m³"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span><span class="m" data-tex="12\,\mathrm{m^3}" data-plain="12 m³"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span><span class="m" data-tex="18\,\mathrm{m^3}" data-plain="18 m³"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 INTEGRALFUNKTION =============== -->
+<section id="integralfunktion">
+  <div class="stufe"><div class="nr">2</div><h2>Die Integralfunktion und ihre Ableitung</h2></div>
+
+  <h3>Die obere Grenze wird zur Variablen</h3>
+
+  <p>Bisher war ein Integral eine <strong>Zahl</strong>: <span class="m" data-tex="\int_0^6 f(t)\,\mathrm{d}t = 25{,}2\,\mathrm{m^3}" data-plain="∫ von 0 bis 6 f(t) dt = 25,2 m³"></span>. Zwei feste Grenzen hinein, eine Zahl heraus. Der Wasserzähler im Keller macht etwas anderes: Er zeigt zu <em>jedem</em> Zeitpunkt einen Wert an. Sein Stand ist keine Zahl, sondern eine Funktion der Zeit.</p>
+
+  <p>Genau das ist der Schritt. Wir halten die untere Grenze fest und lassen die obere wandern:</p>
+
+  <div class="merksatz">
+    <b>Definition · Integralfunktion</b>
+    <span class="m" data-tex="f" data-plain="f"></span> sei auf einem Intervall <span class="m" data-tex="I" data-plain="I"></span> stetig und <span class="m" data-tex="a \in I" data-plain="a ∈ I"></span> fest. Dann heißt
+    <span class="m block" id="f-integralfunktion" data-tex="I_a(x) = \int_a^x f(t)\,\mathrm{d}t \qquad \text{für } x \in I" data-plain="Iₐ(x) = ∫ von a bis x f(t) dt   für x ∈ I"></span>
+    die <strong>Integralfunktion von <span class="m" data-tex="f" data-plain="f"></span> zur unteren Grenze <span class="m" data-tex="a" data-plain="a"></span></strong>.
+  </div>
+
+  <p>Zwei Dinge an der Schreibweise sind keine Schönheitsfrage, sondern Pflicht:</p>
+
+  <ol>
+    <li><strong>Die Integrationsvariable heißt <span class="m" data-tex="t" data-plain="t"></span>, nicht <span class="m" data-tex="x" data-plain="x"></span>.</strong> <span class="m" data-tex="x" data-plain="x"></span> ist jetzt die obere Grenze und damit die Variable der neuen Funktion. <span class="m" data-tex="\int_a^x f(x)\,\mathrm{d}x" data-plain="∫ von a bis x f(x) dx"></span> wäre so sinnvoll wie eine Laufvariable, die gleichzeitig das Schleifenende ist. Welchen Buchstaben du für die Integrationsvariable nimmst, ist dagegen völlig egal: <span class="m" data-tex="\int_a^x f(t)\,\mathrm{d}t" data-plain="∫ von a bis x f(t) dt"></span> und <span class="m" data-tex="\int_a^x f(u)\,\mathrm{d}u" data-plain="∫ von a bis x f(u) du"></span> sind dieselbe Funktion.</li>
+    <li><strong><span class="m" id="f-nullstelle" data-tex="I_a(a) = 0" data-plain="Iₐ(a) = 0"></span></strong>, denn <span class="m" data-tex="\int_a^a f(t)\,\mathrm{d}t = 0" data-plain="∫ von a bis a f(t) dt = 0"></span>. Jede Integralfunktion hat an ihrer unteren Grenze eine Nullstelle. Merk dir das, es wird in Abschnitt 3 zum Erkennungszeichen.</li>
+  </ol>
+
+  <p><strong>Beispiel mit den Zahlen aus der letzten Einheit.</strong> Der Zufluss in ein Rückhaltebecken war <span class="m" data-tex="f(t) = -0{,}2t^2 + 1{,}6t + 1{,}8" data-plain="f(t) = −0,2t² + 1,6t + 1,8"></span> (in <span class="m" data-tex="\mathrm{m^3/h}" data-plain="m³/h"></span>, <span class="m" data-tex="t" data-plain="t"></span> in h). Die Werte der Integralfunktion <span class="m" data-tex="I_0" data-plain="I₀"></span> hattest du in der Simulation abgelesen:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th><span class="m" data-tex="x" data-plain="x"></span> in h</th><th>0</th><th>3</th><th>6</th><th>9</th><th>12</th></tr>
+    <tr><td><span class="m" data-tex="f(x)" data-plain="f(x)"></span> in <span class="m" data-tex="\mathrm{m^3/h}" data-plain="m³/h"></span></td><td>1,80</td><td>4,80</td><td>4,20</td><td>0,00</td><td>−7,80</td></tr>
+    <tr><td><span class="m" data-tex="I_0(x)" data-plain="I₀(x)"></span> in <span class="m" data-tex="\mathrm{m^3}" data-plain="m³"></span></td><td>0,00</td><td>10,80</td><td>25,20</td><td>32,40</td><td>21,60</td></tr>
+  </table>
+  </div>
+
+  <p>Schau dir die letzte Spalte an: <span class="m" data-tex="I_0" data-plain="I₀"></span> <strong>wächst nicht mehr</strong>, sondern fällt zwischen 9 h und 12 h von 32,40 auf 21,60. Und genau dort ist <span class="m" data-tex="f" data-plain="f"></span> negativ geworden. Das ist kein Zufall.</p>
+
+  <h3>Die Beobachtung: <span class="m" data-tex="I" data-plain="I"></span> weiß von <span class="m" data-tex="f" data-plain="f"></span> mehr, als es müsste</h3>
+
+  <p>Wir messen die Steigung von <span class="m" data-tex="I_0" data-plain="I₀"></span> an der Stelle <span class="m" data-tex="x = 3" data-plain="x = 3"></span> – ganz normal über Differenzenquotienten:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th><span class="m" data-tex="h" data-plain="h"></span></th><th><span class="m" data-tex="\dfrac{I_0(3 + h) - I_0(3)}{h}" data-plain="(I₀(3 + h) − I₀(3)) / h"></span></th></tr>
+    <tr><td>1</td><td>4,93333</td></tr>
+    <tr><td>0,5</td><td>4,88333</td></tr>
+    <tr><td>0,1</td><td>4,81933</td></tr>
+    <tr><td>0,01</td><td>4,80199</td></tr>
+    <tr><td>0,001</td><td>4,80020</td></tr>
+  </table>
+  </div>
+
+  <p>Die Zahlen laufen auf <strong>4,80</strong> zu. Und <span class="m" data-tex="f(3) = -0{,}2\cdot 9 + 1{,}6\cdot 3 + 1{,}8 = -1{,}8 + 4{,}8 + 1{,}8 = 4{,}80" data-plain="f(3) = −0,2·9 + 1,6·3 + 1,8 = −1,8 + 4,8 + 1,8 = 4,80"></span>. Dasselbe an jeder anderen Stelle. Die Vermutung liegt auf dem Tisch:</p>
+
+  <div class="merksatz">
+    <b>Kernaussage 1</b>
+    Ableiten macht das Integrieren rückgängig. Wer eine Rate aufsummiert und dann wieder die Änderungsrate des Aufsummierten bildet, landet bei der Rate, mit der er angefangen hat. Das Integral verliert unterwegs keine Information – es hält sie nur in anderer Form fest.
+  </div>
+
+  <p>Anschaulich ist das auch ohne Rechnung plausibel: Wenn zur Zeit <span class="m" data-tex="x" data-plain="x"></span> gerade 4,80 m³ pro Stunde zulaufen, dann steigt der Zählerstand in diesem Moment eben mit 4,80 m³ pro Stunde. Der Wert der Rate <em>ist</em> die Wachstumsgeschwindigkeit des Bestands. Was fehlt, ist der Beweis, dass das für jede stetige Funktion gilt und nicht nur für unser Beispiel.</p>
+
+  <details>
+    <summary>Warum <span class="m" data-tex="I_a'(x) = f(x)" data-plain="Iₐ′(x) = f(x)"></span> gilt – die Begründung mit einem einzigen Streifen</summary>
+
+    <p><strong>Schritt 1 – den Differenzenquotienten als Integral schreiben.</strong> Für <span class="m" data-tex="h &gt; 0" data-plain="h > 0"></span> liefert die Intervalladditivität, die du schon kennst:</p>
+    <div class="m block" data-tex="I_a(x+h) - I_a(x) = \int_a^{x+h} f - \int_a^{x} f = \int_x^{x+h} f(t)\,\mathrm{d}t" data-plain="Iₐ(x + h) − Iₐ(x) = ∫ von a bis x+h f − ∫ von a bis x f = ∫ von x bis x+h f(t) dt"></div>
+    <p>Der Zähler des Differenzenquotienten ist also das Integral über <strong>ein einziges schmales Intervall</strong> der Breite <span class="m" data-tex="h" data-plain="h"></span>. Genau das Objekt, mit dem du in der letzten Einheit hantiert hast: ein Streifen.</p>
+
+    <p><strong>Schritt 2 – den Streifen einschachteln.</strong> <span class="m" data-tex="f" data-plain="f"></span> ist stetig, und <span class="m" data-tex="[x;\,x+h]" data-plain="[x; x + h]"></span> ist abgeschlossen und beschränkt; also nimmt <span class="m" data-tex="f" data-plain="f"></span> dort ein Minimum <span class="m" data-tex="m(h)" data-plain="m(h)"></span> und ein Maximum <span class="m" data-tex="M(h)" data-plain="M(h)"></span> an (Satz vom Minimum und Maximum). Für diesen einen Streifen sind <span class="m" data-tex="m(h)\cdot h" data-plain="m(h)·h"></span> die Untersumme und <span class="m" data-tex="M(h)\cdot h" data-plain="M(h)·h"></span> die Obersumme, und aus der Definition des Integrals folgt unmittelbar</p>
+    <div class="m block" data-tex="m(h)\cdot h \le \int_x^{x+h} f(t)\,\mathrm{d}t \le M(h)\cdot h" data-plain="m(h)·h ≤ ∫ von x bis x+h f(t) dt ≤ M(h)·h"></div>
+
+    <p><strong>Schritt 3 – durch <span class="m" data-tex="h" data-plain="h"></span> teilen.</strong> Weil <span class="m" data-tex="h &gt; 0" data-plain="h > 0"></span> ist, bleiben die Ungleichheitszeichen stehen:</p>
+    <div class="m block" data-tex="m(h) \le \frac{I_a(x+h) - I_a(x)}{h} \le M(h)" data-plain="m(h) ≤ (Iₐ(x + h) − Iₐ(x)) / h ≤ M(h)"></div>
+
+    <p><strong>Schritt 4 – Grenzübergang.</strong> Für <span class="m" data-tex="h \to 0" data-plain="h → 0"></span> schrumpft das Intervall <span class="m" data-tex="[x;\,x+h]" data-plain="[x; x + h]"></span> auf den Punkt <span class="m" data-tex="x" data-plain="x"></span> zusammen. Weil <span class="m" data-tex="f" data-plain="f"></span> <strong>stetig</strong> ist, streben sowohl das Minimum als auch das Maximum auf diesem Intervall gegen <span class="m" data-tex="f(x)" data-plain="f(x)"></span>:</p>
+    <div class="m block" data-tex="\lim_{h \to 0^+} m(h) = f(x) \qquad \text{und} \qquad \lim_{h \to 0^+} M(h) = f(x)" data-plain="lim (h→0⁺) m(h) = f(x)   und   lim (h→0⁺) M(h) = f(x)"></div>
+    <p>Der Differenzenquotient ist zwischen zwei Größen eingeklemmt, die denselben Grenzwert haben. Nach dem Einschließungskriterium hat er selbst diesen Grenzwert:</p>
+    <div class="m block" data-tex="\lim_{h \to 0^+} \frac{I_a(x+h) - I_a(x)}{h} = f(x)" data-plain="lim (h→0⁺) (Iₐ(x + h) − Iₐ(x)) / h = f(x)"></div>
+
+    <p><strong>Schritt 5 – negative <span class="m" data-tex="h" data-plain="h"></span>.</strong> Für <span class="m" data-tex="h &lt; 0" data-plain="h < 0"></span> läuft die Rechnung gleich, nur heißt das Intervall jetzt <span class="m" data-tex="[x+h;\,x]" data-plain="[x + h; x]"></span>, und die Division durch das negative <span class="m" data-tex="h" data-plain="h"></span> dreht die Ungleichungen um – die Einschachtelung bleibt, nur mit vertauschten Rollen von <span class="m" data-tex="m" data-plain="m"></span> und <span class="m" data-tex="M" data-plain="M"></span>. Rechts- und linksseitiger Grenzwert stimmen überein, also existiert die Ableitung, und es gilt <span class="m" data-tex="I_a'(x) = f(x)" data-plain="Iₐ′(x) = f(x)"></span>. ∎</p>
+
+    <p><strong>Wo genau die Stetigkeit gebraucht wird.</strong> Nur in Schritt 4. Ohne sie könnten <span class="m" data-tex="m(h)" data-plain="m(h)"></span> und <span class="m" data-tex="M(h)" data-plain="M(h)"></span> auch bei beliebig kleinem <span class="m" data-tex="h" data-plain="h"></span> weit auseinanderliegen, und die Zange schließt sich nicht. Das ist derselbe Punkt, an dem in der letzten Einheit die Schere <span class="m" data-tex="O_n - U_n" data-plain="O_n − U_n"></span> gegen null ging: dasselbe Argument, nur auf einen einzigen Streifen angewandt statt auf alle gleichzeitig.</p>
+  </details>
+
+  <h3>Hauptsatz, Teil 1</h3>
+
+  <div class="merksatz">
+    <b>Hauptsatz der Differential- und Integralrechnung, Teil 1</b>
+    Ist <span class="m" data-tex="f" data-plain="f"></span> auf einem Intervall <span class="m" data-tex="I" data-plain="I"></span> stetig und <span class="m" data-tex="a \in I" data-plain="a ∈ I"></span>, so ist die Integralfunktion <span class="m" data-tex="I_a(x) = \int_a^x f(t)\,\mathrm{d}t" data-plain="Iₐ(x) = ∫ von a bis x f(t) dt"></span> auf <span class="m" data-tex="I" data-plain="I"></span> differenzierbar, und es gilt <span class="m" data-tex="I_a'(x) = f(x)" data-plain="Iₐ′(x) = f(x)"></span> für alle <span class="m" data-tex="x \in I" data-plain="x ∈ I"></span>:
+    <span class="m block" id="f-hauptsatz1" data-tex="\frac{\mathrm{d}}{\mathrm{d}x}\int_a^x f(t)\,\mathrm{d}t = f(x)" data-plain="d/dx ∫ von a bis x f(t) dt = f(x)"></span>
+  </div>
+
+  <p>Der Satz sagt zwei Dinge, und das zweite wird gern überlesen:</p>
+  <ul>
+    <li>Ableiten macht das Integrieren rückgängig.</li>
+    <li><strong>Jede stetige Funktion besitzt überhaupt eine Funktion, deren Ableitung sie ist</strong> – nämlich ihre Integralfunktion. Das ist eine Existenzaussage, und sie ist alles andere als selbstverständlich. Zu <span class="m" data-tex="f(x) = e^{-x^2}" data-plain="f(x) = e^(−x²)"></span> etwa findest du durch noch so geschicktes Rückwärtsableiten keine Stammfunktion, weil es keine gibt, die sich mit den Funktionen der Schule hinschreiben lässt. Existieren tut sie trotzdem – der Hauptsatz liefert sie als Integral.</li>
+  </ul>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Wenn <span class="m" data-tex="f" data-plain="f"></span> negativ ist, ist auch <span class="m" data-tex="I" data-plain="I"></span> negativ." Das klingt zwingend und ist falsch. Richtig ist: Wenn <span class="m" data-tex="f" data-plain="f"></span> negativ ist, <strong>fällt</strong> <span class="m" data-tex="I" data-plain="I"></span>. Über die Höhe von <span class="m" data-tex="I" data-plain="I"></span> sagt das Vorzeichen von <span class="m" data-tex="f" data-plain="f"></span> gar nichts. Rechne es an der Modellrate nach: Bei <span class="m" data-tex="x = 10{,}5" data-plain="x = 10,5"></span> ist
+    <span class="m block" data-tex="f(10{,}5) = -0{,}2\cdot 110{,}25 + 1{,}6\cdot 10{,}5 + 1{,}8 = -22{,}05 + 16{,}80 + 1{,}80 = -3{,}45\ \mathrm{m^3/h}" data-plain="f(10,5) = −0,2·110,25 + 1,6·10,5 + 1,8 = −22,05 + 16,80 + 1,80 = −3,45 m³/h"></span>
+    und trotzdem
+    <span class="m block" data-tex="I_0(10{,}5) = -\tfrac{10{,}5^3}{15} + 0{,}8\cdot 10{,}5^2 + 1{,}8\cdot 10{,}5 = -77{,}175 + 88{,}20 + 18{,}90 = 29{,}925\ \mathrm{m^3}" data-plain="I₀(10,5) = −10,5³/15 + 0,8·10,5² + 1,8·10,5 = −77,175 + 88,20 + 18,90 = 29,925 m³"></span>
+    Die Rate ist negativ, der Bestand ist mit knapp 30 m³ immer noch deutlich positiv – er ist eben nur auf dem Rückweg. Wer das verwechselt, hat <span class="m" data-tex="I" data-plain="I"></span> als „Fläche" gelesen statt als Bestand.
+  </div>
+
+  <div class="merksatz">
+    <b>Kernaussage 2</b>
+    Das Vorzeichen von <span class="m" data-tex="f" data-plain="f"></span> steuert die <strong>Monotonie</strong> von <span class="m" data-tex="I" data-plain="I"></span>, nicht das Vorzeichen von <span class="m" data-tex="I" data-plain="I"></span>. <span class="m" data-tex="f &gt; 0" data-plain="f > 0"></span> heißt: <span class="m" data-tex="I" data-plain="I"></span> steigt. <span class="m" data-tex="f &lt; 0" data-plain="f < 0"></span> heißt: <span class="m" data-tex="I" data-plain="I"></span> fällt. Hat <span class="m" data-tex="f" data-plain="f"></span> eine Nullstelle mit Vorzeichenwechsel, so hat <span class="m" data-tex="I" data-plain="I"></span> dort einen Extrempunkt. Alles, was du über Monotonie, Extrem- und Wendepunkte aus der Kurvendiskussion weißt, gilt unverändert weiter – <span class="m" data-tex="f" data-plain="f"></span> ist hier einfach die erste Ableitung von <span class="m" data-tex="I" data-plain="I"></span>.
+  </div>
+</section>
+
+<!-- =============== 3 STAMMFUNKTION =============== -->
+<section id="stammfunktion">
+  <div class="stufe"><div class="nr">3</div><h2>Stammfunktion, Hauptsatz und Rechenpraxis</h2></div>
+
+  <h3>Der Begriff Stammfunktion</h3>
+
+  <p>Die Integralfunktion ist ein Beispiel für etwas Allgemeineres. Wir geben dem Ding einen Namen und lösen es vom Integral ab:</p>
+
+  <div class="merksatz">
+    <b>Definition · Stammfunktion</b>
+    <span class="m" data-tex="F" data-plain="F"></span> heißt <strong>Stammfunktion</strong> von <span class="m" data-tex="f" data-plain="f"></span> auf einem Intervall <span class="m" data-tex="I" data-plain="I"></span>, wenn <span class="m" data-tex="F" data-plain="F"></span> dort differenzierbar ist und <span class="m" id="f-stammfunktion" data-tex="F'(x) = f(x)" data-plain="F′(x) = f(x)"></span> für alle <span class="m" data-tex="x \in I" data-plain="x ∈ I"></span> gilt.
+  </div>
+
+  <p>Nach Teil 1 des Hauptsatzes ist <span class="m" data-tex="I_a" data-plain="Iₐ"></span> eine Stammfunktion von <span class="m" data-tex="f" data-plain="f"></span>. Sie ist aber nicht die einzige: Ist <span class="m" data-tex="F" data-plain="F"></span> eine Stammfunktion, so auch <span class="m" data-tex="F + 7" data-plain="F + 7"></span>, <span class="m" data-tex="F - 1000" data-plain="F − 1000"></span> und <span class="m" data-tex="F + C" data-plain="F + C"></span> für jedes reelle <span class="m" data-tex="C" data-plain="C"></span>, weil Konstanten beim Ableiten wegfallen. Die entscheidende Frage ist, ob es darüber hinaus noch andere gibt.</p>
+
+  <div class="merksatz">
+    <b>Satz · Eindeutigkeit bis auf eine Konstante</b>
+    Sind <span class="m" data-tex="F" data-plain="F"></span> und <span class="m" data-tex="G" data-plain="G"></span> beide Stammfunktionen von <span class="m" data-tex="f" data-plain="f"></span> auf <strong>einem Intervall</strong> <span class="m" data-tex="I" data-plain="I"></span>, so gibt es eine Konstante <span class="m" data-tex="C" data-plain="C"></span> mit <span class="m" id="f-konstante" data-tex="G(x) = F(x) + C" data-plain="G(x) = F(x) + C"></span> für alle <span class="m" data-tex="x \in I" data-plain="x ∈ I"></span>.
+  </div>
+
+  <details>
+    <summary>Beweis: warum sich zwei Stammfunktionen nur um eine Konstante unterscheiden</summary>
+    <p>Setze <span class="m" data-tex="D = G - F" data-plain="D = G − F"></span>. Dann ist <span class="m" data-tex="D'(x) = G'(x) - F'(x) = f(x) - f(x) = 0" data-plain="D′(x) = G′(x) − F′(x) = f(x) − f(x) = 0"></span> für alle <span class="m" data-tex="x \in I" data-plain="x ∈ I"></span>. Eine Funktion, deren Ableitung auf einem Intervall überall null ist, ist dort konstant: Zu je zwei Stellen <span class="m" data-tex="x_1 &lt; x_2" data-plain="x₁ < x₂"></span> aus <span class="m" data-tex="I" data-plain="I"></span> liefert der Mittelwertsatz ein <span class="m" data-tex="\xi" data-plain="ξ"></span> dazwischen mit</p>
+    <div class="m block" data-tex="D(x_2) - D(x_1) = D'(\xi)\cdot(x_2 - x_1) = 0\cdot(x_2 - x_1) = 0," data-plain="D(x₂) − D(x₁) = D′(ξ)·(x₂ − x₁) = 0·(x₂ − x₁) = 0,"></div>
+    <p>also <span class="m" data-tex="D(x_2) = D(x_1)" data-plain="D(x₂) = D(x₁)"></span>. Da <span class="m" data-tex="x_1" data-plain="x₁"></span> und <span class="m" data-tex="x_2" data-plain="x₂"></span> beliebig waren, nimmt <span class="m" data-tex="D" data-plain="D"></span> auf <span class="m" data-tex="I" data-plain="I"></span> überall denselben Wert <span class="m" data-tex="C" data-plain="C"></span> an, und es folgt <span class="m" data-tex="G = F + C" data-plain="G = F + C"></span>. ∎</p>
+    <p><strong>Warum „auf einem Intervall" nicht weggelassen werden darf.</strong> Auf <span class="m" data-tex="\mathbb{R} \setminus \{0\}" data-plain="ℝ ohne {0}"></span> ist sowohl <span class="m" data-tex="F(x) = -\tfrac{1}{x}" data-plain="F(x) = −1/x"></span> eine Stammfunktion von <span class="m" data-tex="f(x) = \tfrac{1}{x^2}" data-plain="f(x) = 1/x²"></span> als auch die Funktion <span class="m" data-tex="G" data-plain="G"></span>, die für <span class="m" data-tex="x &lt; 0" data-plain="x < 0"></span> gleich <span class="m" data-tex="-\tfrac{1}{x}" data-plain="−1/x"></span> und für <span class="m" data-tex="x &gt; 0" data-plain="x > 0"></span> gleich <span class="m" data-tex="-\tfrac{1}{x} + 1" data-plain="−1/x + 1"></span> ist (Probe: <span class="m" data-tex="F'(x) = \tfrac{1}{x^2} = f(x)" data-plain="F′(x) = 1/x² = f(x)"></span>, und <span class="m" data-tex="G" data-plain="G"></span> hat stückweise dieselbe Ableitung). Die Differenz <span class="m" data-tex="G - F" data-plain="G − F"></span> ist links von null gleich 0 und rechts davon gleich 1 – nicht konstant. Der Definitionsbereich zerfällt eben in zwei Intervalle, und auf jedem darf die Konstante anders sein.</p>
+  </details>
+
+  <div class="merksatz">
+    <b>Kernaussage 3</b>
+    Die Menge aller Stammfunktionen einer Funktion auf einem Intervall ist eine <strong>Schar paralleler Graphen</strong>: <span class="m" data-tex="F(x) + C" data-plain="F(x) + C"></span>. Sie unterscheiden sich in der Höhe, nirgends in der Steigung. Deshalb ist das <span class="m" data-tex="+\,C" data-plain="+ C"></span> kein Schönheitsfehler, sondern die Aussage, dass die Ableitung die Höhenlage nicht kennt – und nicht kennen kann.
+  </div>
+
+  <h3>Hauptsatz, Teil 2 – die Berechnungsformel</h3>
+
+  <div class="merksatz">
+    <b>Hauptsatz der Differential- und Integralrechnung, Teil 2</b>
+    Ist <span class="m" data-tex="f" data-plain="f"></span> auf <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span> stetig und <span class="m" data-tex="F" data-plain="F"></span> <strong>irgendeine</strong> Stammfunktion von <span class="m" data-tex="f" data-plain="f"></span> auf <span class="m" data-tex="[a;\,b]" data-plain="[a; b]"></span>, so gilt
+    <span class="m block" id="f-hauptsatz2" data-tex="\int_a^b f(x)\,\mathrm{d}x = F(b) - F(a) = \big[F(x)\big]_a^b" data-plain="∫ von a bis b f(x) dx = F(b) − F(a) = [F(x)] von a bis b"></span>
+  </div>
+
+  <details>
+    <summary>Wie aus Teil 1 die Berechnungsformel wird – und warum das <span class="m" data-tex="+\,C" data-plain="+ C"></span> egal ist</summary>
+    <p>Nach Teil 1 ist <span class="m" data-tex="I_a(x) = \int_a^x f(t)\,\mathrm{d}t" data-plain="Iₐ(x) = ∫ von a bis x f(t) dt"></span> eine Stammfunktion von <span class="m" data-tex="f" data-plain="f"></span>. Sei <span class="m" data-tex="F" data-plain="F"></span> eine beliebige weitere. Nach dem Satz oben unterscheiden sich beide nur um eine Konstante: <span class="m" data-tex="F(x) = I_a(x) + C" data-plain="F(x) = Iₐ(x) + C"></span>. Damit rechnen wir die Differenz aus:</p>
+    <div class="m block" data-tex="F(b) - F(a) = \big(I_a(b) + C\big) - \big(I_a(a) + C\big) = I_a(b) - I_a(a)" data-plain="F(b) − F(a) = (Iₐ(b) + C) − (Iₐ(a) + C) = Iₐ(b) − Iₐ(a)"></div>
+    <p>Das <span class="m" data-tex="C" data-plain="C"></span> kürzt sich weg – <strong>deshalb</strong> darf man irgendeine Stammfunktion nehmen. Und weil <span class="m" data-tex="I_a(a) = \int_a^a f(t)\,\mathrm{d}t = 0" data-plain="Iₐ(a) = ∫ von a bis a f(t) dt = 0"></span> ist, bleibt <span class="m" data-tex="F(b) - F(a) = I_a(b) = \int_a^b f(t)\,\mathrm{d}t" data-plain="F(b) − F(a) = Iₐ(b) = ∫ von a bis b f(t) dt"></span>. ∎</p>
+    <p>Halte fest, was hier eigentlich passiert ist: Ein Grenzwert von Summen mit beliebig vielen Summanden wird durch <strong>zwei Funktionswerte</strong> ersetzt. Der gesamte Aufwand der letzten Einheit – Streifen, Einschachtelung, 320 Rechtecke für ein Zehntel Kubikmeter – schrumpft auf eine Subtraktion. Das ist der Grund, warum dieser Satz „Hauptsatz" heißt und nicht „Satz 7.3".</p>
+  </details>
+
+  <p>Kontrolle am Einstiegsbeispiel: Der Wasserzähler zeigt einen Bestand, also eine Stammfunktion der Durchflussrate. Vorher ablesen, nachher ablesen, subtrahieren – das ist buchstäblich <span class="m" data-tex="F(b) - F(a)" data-plain="F(b) − F(a)"></span>. Der Hauptsatz sagt zusätzlich: Wie der Zähler irgendwann geeicht wurde, ist für den Verbrauch bedeutungslos. Genau das ist das <span class="m" data-tex="+\,C" data-plain="+ C"></span>.</p>
+
+  <h3>Grundintegrale und Regeln</h3>
+
+  <p>Damit ist Integrieren zum Rückwärtsableiten geworden. Die Tabelle liest man von rechts nach links, wenn man ableitet, und von links nach rechts, wenn man integriert:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th><span class="m" data-tex="f(x)" data-plain="f(x)"></span></th><th>Stammfunktion <span class="m" data-tex="F(x)" data-plain="F(x)"></span></th><th>Bedingung</th></tr>
+    <tr><td><span class="m" data-tex="c" data-plain="c"></span> (konstant)</td><td><span class="m" data-tex="c\cdot x" data-plain="c·x"></span></td><td>–</td></tr>
+    <tr><td><span class="m" data-tex="x^n" data-plain="xⁿ"></span></td><td><span class="m" data-tex="\dfrac{x^{n+1}}{n+1}" data-plain="x^(n+1)/(n + 1)"></span></td><td><span class="m" data-tex="n \ne -1;\ x \ne 0 \text{ für } n &lt; 0;\ x &gt; 0 \text{ für } n \notin \mathbb{Z}" data-plain="n ≠ −1; x ≠ 0 für n < 0; x > 0 für nicht ganzzahliges n"></span></td></tr>
+    <tr><td><span class="m" data-tex="\dfrac{1}{x}" data-plain="1/x"></span></td><td><span class="m" data-tex="\ln(|x|)" data-plain="ln(|x|)"></span></td><td><span class="m" data-tex="x \ne 0" data-plain="x ≠ 0"></span></td></tr>
+    <tr><td><span class="m" data-tex="e^x" data-plain="eˣ"></span></td><td><span class="m" data-tex="e^x" data-plain="eˣ"></span></td><td>–</td></tr>
+    <tr><td><span class="m" data-tex="e^{kx}" data-plain="e^(kx)"></span></td><td><span class="m" data-tex="\tfrac{1}{k}\,e^{kx}" data-plain="(1/k)·e^(kx)"></span></td><td><span class="m" data-tex="k \ne 0" data-plain="k ≠ 0"></span></td></tr>
+    <tr><td><span class="m" data-tex="\sin x" data-plain="sin x"></span></td><td><span class="m" data-tex="-\cos x" data-plain="−cos x"></span></td><td>–</td></tr>
+    <tr><td><span class="m" data-tex="\cos x" data-plain="cos x"></span></td><td><span class="m" data-tex="\sin x" data-plain="sin x"></span></td><td>–</td></tr>
+  </table>
+  </div>
+
+  <p>Dazu drei Regeln, die direkt aus den Ableitungsregeln folgen:</p>
+  <ul>
+    <li><strong>Faktorregel:</strong> <span class="m" data-tex="\int c\cdot f(x)\,\mathrm{d}x = c\cdot\int f(x)\,\mathrm{d}x" data-plain="∫ c·f(x) dx = c·∫ f(x) dx"></span></li>
+    <li><strong>Summenregel:</strong> <span class="m" data-tex="\int \big(f(x) + g(x)\big)\,\mathrm{d}x = \int f(x)\,\mathrm{d}x + \int g(x)\,\mathrm{d}x" data-plain="∫ (f(x) + g(x)) dx = ∫ f(x) dx + ∫ g(x) dx"></span></li>
+    <li><strong>Lineare Substitution:</strong> Ist <span class="m" data-tex="F" data-plain="F"></span> Stammfunktion von <span class="m" data-tex="f" data-plain="f"></span> und <span class="m" data-tex="k \ne 0" data-plain="k ≠ 0"></span>, so ist <span class="m" data-tex="\tfrac{1}{k}\,F(kx+b)" data-plain="(1/k)·F(kx + b)"></span> Stammfunktion von <span class="m" data-tex="f(kx+b)" data-plain="f(kx + b)"></span>. Der Faktor <span class="m" data-tex="\tfrac{1}{k}" data-plain="1/k"></span> gleicht die innere Ableitung aus: <span class="m" id="f-substitution" data-tex="\int f(kx+b)\,\mathrm{d}x = \tfrac{1}{k}\,F(kx+b) + C" data-plain="∫ f(kx + b) dx = (1/k)·F(kx + b) + C"></span></li>
+  </ul>
+
+  <div class="hinweis">
+    <strong>Warnung, die im LK jedes Jahr Punkte kostet.</strong> Es gibt <strong>keine</strong> Produktregel und <strong>keine</strong> Quotientenregel für Integrale. <span class="m" data-tex="\int f\cdot g" data-plain="∫ f·g"></span> ist nicht <span class="m" data-tex="\left(\int f\right)\cdot\left(\int g\right)" data-plain="(∫ f)·(∫ g)"></span>. Probe in einer Zeile:
+    <span class="m block" data-tex="\int_0^1 x\cdot x\,\mathrm{d}x = \int_0^1 x^2\,\mathrm{d}x = \tfrac{1}{3} \approx 0{,}3333 \quad\text{aber}\quad \left(\int_0^1 x\,\mathrm{d}x\right)^2 = \tfrac{1}{2}\cdot\tfrac{1}{2} = \tfrac{1}{4} = 0{,}25" data-plain="∫ von 0 bis 1 x·x dx = ∫ von 0 bis 1 x² dx = 1/3 ≈ 0,3333   aber   (∫ von 0 bis 1 x dx)² = (1/2)·(1/2) = 1/4 = 0,25"></span>
+    Die beiden Zahlen sind verschieden, damit ist die Produktregel widerlegt. Die einzige Rückwärtsversion der Kettenregel, die du in Q1 brauchst, ist die lineare Substitution oben.
+  </div>
+
+  <h3>Was die Integralfunktion von <span class="m" data-tex="f" data-plain="f"></span> erbt</h3>
+
+  <p>Weil <span class="m" data-tex="I_a' = f" data-plain="Iₐ′ = f"></span> gilt, verschiebt sich alles um <strong>eine Ableitungsstufe nach oben</strong>. Das ist die Tabelle, die im Abitur bei jeder Graphenzuordnung gebraucht wird:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>am Graphen von <span class="m" data-tex="f" data-plain="f"></span></th><th>folgt für <span class="m" data-tex="I_a" data-plain="Iₐ"></span></th><th>Beleg an der Modellrate</th></tr>
+    <tr><td><span class="m" data-tex="f(x) &gt; 0" data-plain="f(x) > 0"></span></td><td><span class="m" data-tex="I_a" data-plain="Iₐ"></span> streng monoton steigend</td><td>auf <span class="m" data-tex="[0;\,9]" data-plain="[0; 9]"></span> steigt <span class="m" data-tex="I_0" data-plain="I₀"></span> von 0,00 auf 32,40</td></tr>
+    <tr><td><span class="m" data-tex="f(x) &lt; 0" data-plain="f(x) < 0"></span></td><td><span class="m" data-tex="I_a" data-plain="Iₐ"></span> streng monoton fallend</td><td>auf <span class="m" data-tex="[9;\,12]" data-plain="[9; 12]"></span> fällt <span class="m" data-tex="I_0" data-plain="I₀"></span> von 32,40 auf 21,60</td></tr>
+    <tr><td>Nullstelle von <span class="m" data-tex="f" data-plain="f"></span>, VZW <span class="m" data-tex="+ \to -" data-plain="+ → −"></span></td><td>Hochpunkt von <span class="m" data-tex="I_a" data-plain="Iₐ"></span></td><td><span class="m" data-tex="x = 9" data-plain="x = 9"></span>, Hochpunkt <span class="m" data-tex="(9 \mid 32{,}40)" data-plain="(9 | 32,40)"></span></td></tr>
+    <tr><td>Nullstelle von <span class="m" data-tex="f" data-plain="f"></span>, VZW <span class="m" data-tex="- \to +" data-plain="− → +"></span></td><td>Tiefpunkt von <span class="m" data-tex="I_a" data-plain="Iₐ"></span></td><td>Rate B in der Simulation: <span class="m" data-tex="x = 4" data-plain="x = 4"></span></td></tr>
+    <tr><td>Hochpunkt von <span class="m" data-tex="f" data-plain="f"></span></td><td>Wendestelle von <span class="m" data-tex="I_a" data-plain="Iₐ"></span>, größte Steigung</td><td><span class="m" data-tex="x = 4" data-plain="x = 4"></span>, <span class="m" data-tex="I_0(4) = 15{,}73" data-plain="I₀(4) = 15,73"></span>, Steigung <span class="m" data-tex="5{,}00" data-plain="5,00"></span></td></tr>
+    <tr><td><span class="m" data-tex="f" data-plain="f"></span> streng monoton steigend</td><td><span class="m" data-tex="I_a" data-plain="Iₐ"></span> linksgekrümmt</td><td>auf <span class="m" data-tex="[0;\,4]" data-plain="[0; 4]"></span></td></tr>
+    <tr><td><span class="m" data-tex="f" data-plain="f"></span> streng monoton fallend</td><td><span class="m" data-tex="I_a" data-plain="Iₐ"></span> rechtsgekrümmt</td><td>auf <span class="m" data-tex="[4;\,12]" data-plain="[4; 12]"></span></td></tr>
+  </table>
+  </div>
+
+  <h3>Die untere Grenze verschieben</h3>
+
+  <p>Was passiert, wenn man <span class="m" data-tex="a" data-plain="a"></span> ändert? Wieder Intervalladditivität:</p>
+
+  <div class="m block" data-tex="I_b(x) = \int_b^x f(t)\,\mathrm{d}t = \int_a^x f(t)\,\mathrm{d}t - \int_a^b f(t)\,\mathrm{d}t = I_a(x) - I_a(b)" data-plain="I_b(x) = ∫ von b bis x f(t) dt = ∫ von a bis x f(t) dt − ∫ von a bis b f(t) dt = Iₐ(x) − Iₐ(b)"></div>
+
+  <p>Es kommt also nur eine <strong>Konstante</strong> dazu – der Graph verschiebt sich senkrecht, die Form bleibt gleich. Das passt zusammen: Alle Integralfunktionen derselben Funktion sind Stammfunktionen und unterscheiden sich daher höchstens um eine Konstante. Zahlenprobe an der Modellrate mit <span class="m" data-tex="I_0(3) = 10{,}80" data-plain="I₀(3) = 10,80"></span>:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th><span class="m" data-tex="x" data-plain="x"></span> in h</th><th>0</th><th>3</th><th>6</th><th>9</th><th>12</th></tr>
+    <tr><td><span class="m" data-tex="I_0(x)" data-plain="I₀(x)"></span> in <span class="m" data-tex="\mathrm{m^3}" data-plain="m³"></span></td><td>0,00</td><td>10,80</td><td>25,20</td><td>32,40</td><td>21,60</td></tr>
+    <tr><td><span class="m" data-tex="I_3(x)" data-plain="I₃(x)"></span> in <span class="m" data-tex="\mathrm{m^3}" data-plain="m³"></span></td><td>−10,80</td><td>0,00</td><td>14,40</td><td>21,60</td><td>10,80</td></tr>
+    <tr><td>Differenz</td><td>10,80</td><td>10,80</td><td>10,80</td><td>10,80</td><td>10,80</td></tr>
+  </table>
+  </div>
+
+  <p>Die Differenz ist in jeder Spalte 10,80 – konstant, wie behauptet. Und <span class="m" data-tex="I_3(3) = 0" data-plain="I₃(3) = 0"></span>, wie es sein muss. In der Simulation siehst du genau das, wenn du den Regler für <span class="m" data-tex="a" data-plain="a"></span> verschiebst: Die untere Kurve wandert als Ganzes nach oben oder unten.</p>
+
+  <h3>Nicht jede Stammfunktion ist eine Integralfunktion</h3>
+
+  <div class="hinweis">
+    Umgekehrt gilt der Zusammenhang <strong>nicht</strong>. Nimm <span class="m" data-tex="f(x) = e^x" data-plain="f(x) = eˣ"></span>. Die Integralfunktionen sind
+    <span class="m block" data-tex="I_a(x) = \int_a^x e^t\,\mathrm{d}t = \big[e^t\big]_a^x = e^x - e^a" data-plain="Iₐ(x) = ∫ von a bis x e^t dt = [e^t] von a bis x = eˣ − e^a"></span>
+    Weil <span class="m" data-tex="e^a &gt; 0" data-plain="e^a > 0"></span> für jedes reelle <span class="m" data-tex="a" data-plain="a"></span> ist, kann die additive Konstante <span class="m" data-tex="-e^a" data-plain="−e^a"></span> nur <strong>negativ</strong> sein. <span class="m" data-tex="F(x) = e^x - 1" data-plain="F(x) = eˣ − 1"></span> ist also eine Integralfunktion (zu <span class="m" data-tex="a = 0" data-plain="a = 0"></span>), <span class="m" data-tex="F(x) = e^x + 1" data-plain="F(x) = eˣ + 1"></span> dagegen nicht: Man müsste <span class="m" data-tex="e^a = -1" data-plain="e^a = −1"></span> lösen, und das geht nicht.
+  </div>
+
+  <div class="merksatz">
+    <b>Kriterium</b>
+    Eine Stammfunktion <span class="m" data-tex="F" data-plain="F"></span> von <span class="m" data-tex="f" data-plain="f"></span> auf einem Intervall <span class="m" data-tex="I" data-plain="I"></span> ist <strong>genau dann</strong> eine Integralfunktion von <span class="m" data-tex="f" data-plain="f"></span>, wenn sie in <span class="m" data-tex="I" data-plain="I"></span> mindestens eine <strong>Nullstelle</strong> hat. Denn ist <span class="m" data-tex="F(a) = 0" data-plain="F(a) = 0"></span>, so haben <span class="m" data-tex="F" data-plain="F"></span> und <span class="m" data-tex="I_a" data-plain="Iₐ"></span> dieselbe Ableitung und denselben Wert an der Stelle <span class="m" data-tex="a" data-plain="a"></span> – die Konstante zwischen ihnen ist damit null, also <span class="m" data-tex="F = I_a" data-plain="F = Iₐ"></span>. Probe: <span class="m" data-tex="e^x + 1 = 0" data-plain="eˣ + 1 = 0"></span> hat keine Lösung, <span class="m" data-tex="e^x - 1 = 0" data-plain="eˣ − 1 = 0"></span> hat die Lösung <span class="m" data-tex="x = 0" data-plain="x = 0"></span> – und das ist genau die untere Grenze.
+  </div>
+
+  <p>Damit gilt: <strong>Jede Integralfunktion ist eine Stammfunktion, aber nicht jede Stammfunktion ist eine Integralfunktion.</strong> Die Unterscheidung wirkt kleinlich, ist aber ein beliebter Prüfungsgegenstand, weil sie zeigt, ob man den Unterschied zwischen einer Definition und einer Eigenschaft verstanden hat.</p>
+</section>
+
+<!-- =============== 4 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">4</div><h2>Zwei Diagramme, ein Zusammenhang</h2></div>
+
+  <p>Oben läuft die Rate, unten der Bestand. Im oberen Diagramm siehst du den Graphen einer Zuflussrate <span class="m" data-tex="f" data-plain="f"></span> auf <span class="m" data-tex="[0;\,12]" data-plain="[0; 12]"></span> (in <span class="m" data-tex="\mathrm{m^3/h}" data-plain="m³/h"></span>, <span class="m" data-tex="t" data-plain="t"></span> in h); der Bereich zwischen der unteren Grenze <span class="m" data-tex="a" data-plain="a"></span> und der oberen Grenze <span class="m" data-tex="x" data-plain="x"></span> ist eingefärbt — grün, wo <span class="m" data-tex="f" data-plain="f"></span> positiv ist, rot, wo <span class="m" data-tex="f" data-plain="f"></span> negativ ist. Unten entsteht daraus Punkt für Punkt der Graph der Integralfunktion <span class="m" data-tex="I_a(x) = \int_a^x f(t)\,\mathrm{d}t" data-plain="Iₐ(x) = ∫ von a bis x f(t) dt"></span>: durchgezogen bis zur aktuellen Stelle <span class="m" data-tex="x" data-plain="x"></span>, dahinter blass gestrichelt.</p>
+
+  <p>Entscheidend ist, <em>woher</em> die Felder „Rate f(x)“ und „Steigung von <span class="m" data-tex="I_a" data-plain="Iₐ"></span> bei x“ stammen. <span class="m" data-tex="f(x)" data-plain="f(x)"></span> wird aus der Funktionsgleichung berechnet und gehört zum oberen Diagramm. Die Steigung von <span class="m" data-tex="I_a" data-plain="Iₐ"></span> wird dagegen aus der aufsummierten Fläche gewonnen: Die Seite summiert schmale Streifen und bildet daraus einen Differenzenquotienten — sie gehört also zum unteren Diagramm. Beide Zahlen entstehen unabhängig voneinander; der Hauptsatz behauptet, dass sie gleich sind. Das Feld <em>Unterschied</em> misst genau diese Behauptung mit.</p>
+
+  <p>Schiebst du <span class="m" data-tex="x" data-plain="x"></span> unter <span class="m" data-tex="a" data-plain="a"></span>, wird der Integralwert negativ, denn <span class="m" data-tex="\int_a^x f = -\int_x^a f" data-plain="∫ von a bis x f = −∫ von x bis a f"></span>. Stell dazu etwa Rate A mit <span class="m" data-tex="a = 9{,}0" data-plain="a = 9,0"></span> und <span class="m" data-tex="x = 3{,}00" data-plain="x = 3,00"></span> ein: angezeigt werden <span class="m" data-tex="-21{,}60\,\mathrm{m^3}" data-plain="−21,60 m³"></span>.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    Stelle <b>Rate B</b> ein, setze <span class="m" data-tex="a = 0{,}0" data-plain="a = 0,0"></span> und <span class="m" data-tex="x = 0{,}00" data-plain="x = 0,00"></span>. Drück auf „Abspielen" und schau <em>nur auf das untere Diagramm</em>: Bei welchem <span class="m" data-tex="x" data-plain="x"></span> ist die Kurve am tiefsten? Halte dort an und lies im <em>oberen</em> Diagramm ab, welchen Wert <span class="m" data-tex="f" data-plain="f"></span> an dieser Stelle hat.<br>
+    Wiederhole das mit <b>Rate A</b>, diesmal auf der Suche nach dem <em>höchsten</em> Punkt der unteren Kurve, und notiere wieder die Stelle samt zugehörigem <span class="m" data-tex="f" data-plain="f"></span>-Wert.<br>
+    Formuliere aus beiden Beobachtungen einen Satz, der beschreibt, woran man <em>allein im oberen Diagramm</em> erkennt, wo die untere Kurve einen Extrempunkt hat.<br>
+    Prüfe deinen Satz zum Schluss an <b>Rate C</b>: Was sagt er dort voraus — und stimmt es?
+  </div>
+
+  <div class="sim">
+    <canvas id="cvSim" width="1000" height="560"></canvas>
+
+    <div class="anzeige">
+      <div>untere Grenze a<span id="lA">0,0 h</span></div>
+      <div>obere Grenze x<span id="lX">6,00 h</span></div>
+      <div>Rate f(x) (oben)<span id="lF">4,20 m³/h</span></div>
+      <div>Integral Iₐ(x) (unten)<span id="lI">25,20 m³</span></div>
+      <div>Steigung von Iₐ bei x<span id="lM">4,20 m³/h</span></div>
+      <div>Unterschied<span id="lD">0,000</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label>untere Grenze a <b><span id="wA">0,0</span> h</b></label>
+          <input type="range" id="rA" min="0" max="120" value="0">
+        </div>
+        <div>
+          <label>obere Grenze x <b><span id="wX">6,00</span> h</b></label>
+          <input type="range" id="rX" min="0" max="240" value="120">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button class="primaer" data-rate="A">Rate A</button>
+        <button data-rate="B">Rate B</button>
+        <button data-rate="C">Rate C</button>
+        <button id="bPlay">▶ Abspielen</button>
+        <button id="bReset">Zurücksetzen</button>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px;margin-left:6px">
+          <input type="checkbox" id="cTan" checked style="accent-color:var(--akzent);width:16px;height:16px">
+          Tangente an I einblenden
+        </label>
+      </div>
+      <p style="margin:10px 0 0;font-size:14px;color:var(--grau)">Du kannst die Grenzen auch direkt im Bild ziehen: in die obere Hälfte tippen verschiebt <b>x</b>, in die untere Hälfte (oder mit gedrückter Umschalttaste) verschiebt <b>a</b>.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Stell <b>Rate B</b> und <span class="m" data-tex="a = 2{,}0" data-plain="a = 2,0"></span> ein und fahre <span class="m" data-tex="x" data-plain="x"></span> von 0 bis 12. Bei welchen Werten von <span class="m" data-tex="x" data-plain="x"></span> zeigt das Feld „Integral“ genau <span class="m" data-tex="0{,}00\,\mathrm{m^3}" data-plain="0,00 m³"></span>?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>Nur bei <span class="m" data-tex="x = 2{,}00" data-plain="x = 2,00"></span>, denn dort beginnt die Integration.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>Bei <span class="m" data-tex="x = 2{,}00" data-plain="x = 2,00"></span> und noch einmal bei <span class="m" data-tex="x = 6{,}00" data-plain="x = 6,00"></span>.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>Bei <span class="m" data-tex="x = 2{,}00" data-plain="x = 2,00"></span> und bei <span class="m" data-tex="x = 4{,}00" data-plain="x = 4,00"></span>, denn dort hat die Rate ihre Nullstelle.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Stell <b>Rate C</b> und <span class="m" data-tex="a = 0{,}0" data-plain="a = 0,0"></span> ein und fahre <span class="m" data-tex="x" data-plain="x"></span> bis <span class="m" data-tex="x = 12{,}00" data-plain="x = 12,00"></span>. Lies dort das Integral (<span class="m" data-tex="12{,}97\,\mathrm{m^3}" data-plain="12,97 m³"></span>) und die Steigung (<span class="m" data-tex="0{,}11\,\mathrm{m^3/h}" data-plain="0,11 m³/h"></span>) ab. Wie deutest du diese beiden Zahlen?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>Die Steigung ist fast null, also ist <span class="m" data-tex="12{,}97\,\mathrm{m^3}" data-plain="12,97 m³"></span> der Endwert und die Kurve verläuft ab hier waagerecht.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span>Die Steigung ist noch positiv, also wächst der Bestand weiter und nähert sich <span class="m" data-tex="40/3 \approx 13{,}33\,\mathrm{m^3}" data-plain="40/3 ≈ 13,33 m³"></span>, ohne ihn je zu erreichen.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>Die Steigung ist klein geworden, also hat die Kurve ihren Hochpunkt überschritten und der Bestand nimmt danach wieder ab.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+</section>
+
+<!-- =============== 5 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">5</div><h2>Übungen</h2></div>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Berechne <span class="m" data-tex="\int_1^3 \left(3x^2 - 4x + 5\right)\mathrm{d}x" data-plain="∫ von 1 bis 3 (3x² − 4x + 5) dx"></span>. Gib das Ergebnis in Flächeneinheiten (FE) an.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="FE">FE</option>
+        <option value="LE">LE</option>
+        <option value="FE²">FE²</option>
+        <option value="m³">m³</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Du brauchst hier keine Streifen mehr. Gesucht ist eine Funktion, deren Ableitung der Integrand ist – und die findest du summandenweise.</div>
+    <div class="hilfe-text" data-stufe="2">Eine Stammfunktion ist <span class="m" data-tex="F(x) = x^3 - 2x^2 + 5x" data-plain="F(x) = x³ − 2x² + 5x"></span>. Kontrolliere sie durch Ableiten, bevor du weiterrechnest. Danach liefert Teil 2 des Hauptsatzes <span class="m" data-tex="\int_1^3 f(x)\,\mathrm{d}x = F(3) - F(1)" data-plain="∫ von 1 bis 3 f(x) dx = F(3) − F(1)"></span>.</div>
+    <div class="hilfe-text" data-stufe="3">Probe: <span class="m" data-tex="F'(x) = 3x^2 - 4x + 5" data-plain="F′(x) = 3x² − 4x + 5"></span> ✓. <span class="m" data-tex="F(3) = 27 - 2\cdot 9 + 15 = 24" data-plain="F(3) = 27 − 2·9 + 15 = 24"></span>, <span class="m" data-tex="F(1) = 1 - 2 + 5 = 4" data-plain="F(1) = 1 − 2 + 5 = 4"></span>. Also <span class="m" data-tex="\int_1^3 \left(3x^2 - 4x + 5\right)\mathrm{d}x = 24 - 4 = 20\ \text{FE}" data-plain="∫ von 1 bis 3 (3x² − 4x + 5) dx = 24 − 4 = 20 FE"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Der Zufluss in ein Regenrückhaltebecken wird durch <span class="m" data-tex="f(t) = -0{,}2t^2 + 1{,}6t + 1{,}8" data-plain="f(t) = −0,2t² + 1,6t + 1,8"></span> beschrieben (<span class="m" data-tex="f" data-plain="f"></span> in <span class="m" data-tex="\mathrm{m^3/h}" data-plain="m³/h"></span>, <span class="m" data-tex="t" data-plain="t"></span> in h) – dieselbe Rate wie in der letzten Einheit. Berechne mit dem Hauptsatz, wie viel Wasser zwischen <span class="m" data-tex="t = 2\,\mathrm{h}" data-plain="t = 2 h"></span> und <span class="m" data-tex="t = 7\,\mathrm{h}" data-plain="t = 7 h"></span> zufließt. Runde auf zwei Nachkommastellen.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="m³">m³</option>
+        <option value="L">L</option>
+        <option value="m³/h">m³/h</option>
+        <option value="kWh">kWh</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Streifen brauchst du nicht mehr. Suche eine Funktion, deren Ableitung die Rate ist, und setze zwei Werte ein. Achte auf die Grenzen – gefragt ist nicht der Zufluss ab Beginn.</div>
+    <div class="hilfe-text" data-stufe="2"><span class="m" data-tex="F(t) = -\dfrac{t^3}{15} + 0{,}8t^2 + 1{,}8t" data-plain="F(t) = −t³/15 + 0,8t² + 1,8t"></span>. Probe durch Ableiten: <span class="m" data-tex="F'(t) = -\tfrac{3t^2}{15} + 1{,}6t + 1{,}8 = -0{,}2t^2 + 1{,}6t + 1{,}8" data-plain="F′(t) = −3t²/15 + 1,6t + 1,8 = −0,2t² + 1,6t + 1,8"></span> ✓. Der gesuchte Zufluss ist <span class="m" data-tex="\int_2^7 f(t)\,\mathrm{d}t = F(7) - F(2)" data-plain="∫ von 2 bis 7 f(t) dt = F(7) − F(2)"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="F(7) = -\tfrac{343}{15} + 0{,}8\cdot 49 + 1{,}8\cdot 7 = -22{,}8667 + 39{,}20 + 12{,}60 = 28{,}9333\ \mathrm{m^3}" data-plain="F(7) = −343/15 + 0,8·49 + 1,8·7 = −22,8667 + 39,20 + 12,60 = 28,9333 m³"></span> (exakt 434/15).<br>
+      <span class="m" data-tex="F(2) = -\tfrac{8}{15} + 0{,}8\cdot 4 + 1{,}8\cdot 2 = -0{,}5333 + 3{,}20 + 3{,}60 = 6{,}2667\ \mathrm{m^3}" data-plain="F(2) = −8/15 + 0,8·4 + 1,8·2 = −0,5333 + 3,20 + 3,60 = 6,2667 m³"></span> (exakt 94/15).<br>
+      <span class="m" data-tex="\int_2^7 f\,\mathrm{d}t = \tfrac{434}{15} - \tfrac{94}{15} = \tfrac{340}{15} = \tfrac{68}{3} \approx 22{,}67\ \mathrm{m^3}" data-plain="∫ von 2 bis 7 f dt = 434/15 − 94/15 = 340/15 = 68/3 ≈ 22,67 m³"></span>.<br>
+      Plausibilitätsprobe: Die mittlere Rate wäre 22,6667 / 5 = 4,53 m³/h und liegt damit zwischen <span class="m" data-tex="f(7) = 3{,}20" data-plain="f(7) = 3,20"></span> m³/h und dem Maximum <span class="m" data-tex="f(4) = 5{,}00" data-plain="f(4) = 5,00"></span> m³/h – passt.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die vier Diagramme A bis D zeigen jeweils den Graphen einer Rate <span class="m" data-tex="f" data-plain="f"></span> auf dem Intervall <span class="m" data-tex="[0;\,6]" data-plain="[0; 6]"></span>. Ordne jeder Aussage über die zugehörige Integralfunktion <span class="m" data-tex="I_0(x) = \int_0^x f(t)\,\mathrm{d}t" data-plain="I₀(x) = ∫ von 0 bis x f(t) dt"></span> das passende Diagramm zu.</div>
+
+    <div class="diagramme">
+      <figure>
+        <svg viewBox="0 0 160 90"><line x1="12" y1="52.5" x2="156" y2="52.5" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="84" stroke="#94a3b8"/><polyline points="18.0,14.4 150.0,44.9" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>A</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 160 90"><line x1="12" y1="52.5" x2="156" y2="52.5" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="84" stroke="#94a3b8"/><polyline points="18.0,72.9 150.0,42.3" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>B</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 160 90"><line x1="12" y1="52.5" x2="156" y2="52.5" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="84" stroke="#94a3b8"/><polyline points="18.0,65.3 150.0,65.3" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>C</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 160 90"><line x1="12" y1="52.5" x2="156" y2="52.5" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="84" stroke="#94a3b8"/><polyline points="18.0,52.5 29.0,46.7 40.0,41.9 51.0,38.2 62.0,35.6 73.0,34.0 84.0,33.5 95.0,34.0 106.0,35.6 117.0,38.2 128.0,41.9 139.0,46.7 150.0,52.5" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg>
+        <figcaption>D</figcaption>
+      </figure>
+    </div>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="C"><span><span class="m" data-tex="I_0" data-plain="I₀"></span> ist eine fallende Gerade durch den Ursprung.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="D"><span><span class="m" data-tex="I_0" data-plain="I₀"></span> steigt auf dem ganzen Intervall; ihre Steigung ist bei <span class="m" data-tex="x = 3" data-plain="x = 3"></span> am größten.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="B"><span><span class="m" data-tex="I_0" data-plain="I₀"></span> fällt zuerst, hat bei <span class="m" data-tex="x = 4" data-plain="x = 4"></span> einen Tiefpunkt und steigt danach wieder.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="A"><span><span class="m" data-tex="I_0" data-plain="I₀"></span> steigt auf dem ganzen Intervall, wird dabei aber immer flacher.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Aus einem Behälter läuft Wasser mit der Rate <span class="m" data-tex="f(t) = 4\,e^{-0{,}3t}" data-plain="f(t) = 4·e^(−0,3t)"></span> (<span class="m" data-tex="f" data-plain="f"></span> in L/min, <span class="m" data-tex="t" data-plain="t"></span> in min). Berechne, wie viel Wasser in den ersten 5 Minuten ausläuft. Runde auf zwei Nachkommastellen.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="L">L</option>
+        <option value="m³">m³</option>
+        <option value="L/min">L/min</option>
+        <option value="min">min</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Beim Ableiten einer e-Funktion mit linearem Exponenten kommt die innere Ableitung als Faktor dazu. Beim Rückwärtsgehen musst du diesen Faktor also wieder loswerden.</div>
+    <div class="hilfe-text" data-stufe="2">Lineare Substitution: Zu <span class="m" data-tex="f(t) = 4\,e^{-0{,}3t}" data-plain="f(t) = 4·e^(−0,3t)"></span> gehört <span class="m" data-tex="F(t) = \dfrac{4\,e^{-0{,}3t}}{-0{,}3} = -\tfrac{40}{3}\,e^{-0{,}3t}" data-plain="F(t) = 4·e^(−0,3t)/(−0,3) = −(40/3)·e^(−0,3t)"></span>. Kontrolliere durch Ableiten. Danach <span class="m" data-tex="\int_0^5 f(t)\,\mathrm{d}t = F(5) - F(0)" data-plain="∫ von 0 bis 5 f(t) dt = F(5) − F(0)"></span>.</div>
+    <div class="hilfe-text" data-stufe="3">Probe: <span class="m" data-tex="F'(t) = -\tfrac{40}{3}\cdot(-0{,}3)\,e^{-0{,}3t} = 4\,e^{-0{,}3t}" data-plain="F′(t) = −(40/3)·(−0,3)·e^(−0,3t) = 4·e^(−0,3t)"></span> ✓.<br>
+      <span class="m" data-tex="F(5) = -\tfrac{40}{3}\,e^{-1{,}5} = -13{,}33333\cdot 0{,}2231302 = -2{,}97507" data-plain="F(5) = −(40/3)·e^(−1,5) = −13,33333 · 0,2231302 = −2,97507"></span>, <span class="m" data-tex="F(0) = -\tfrac{40}{3}\,e^{0} = -13{,}33333" data-plain="F(0) = −(40/3)·e⁰ = −13,33333"></span>.<br>
+      <span class="m" data-tex="\int_0^5 f\,\mathrm{d}t = -2{,}97507 - (-13{,}33333) = 10{,}35826 \approx 10{,}36\ \text{L}" data-plain="∫ von 0 bis 5 f dt = −2,97507 − (−13,33333) = 10,35826 ≈ 10,36 L"></span>.<br>
+      Kurzform: <span class="m" data-tex="I_0(x) = \tfrac{40}{3}\left(1 - e^{-0{,}3x}\right)" data-plain="I₀(x) = (40/3)·(1 − e^(−0,3x))"></span>, also <span class="m" data-tex="I_0(5) = 13{,}33333\cdot 0{,}7768698 = 10{,}35826" data-plain="I₀(5) = 13,33333 · 0,7768698 = 10,35826"></span>. Nebenbei: Für <span class="m" data-tex="x \to \infty" data-plain="x → ∞"></span> strebt <span class="m" data-tex="I_0(x)" data-plain="I₀(x)"></span> gegen 40/3 ≈ 13,33 L – mehr kann aus dem Behälter nie auslaufen.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Dasselbe Rückhaltebecken wie in Aufgabe 2 mit der Zuflussrate <span class="m" data-tex="f(t) = -0{,}2t^2 + 1{,}6t + 1{,}8" data-plain="f(t) = −0,2t² + 1,6t + 1,8"></span> (<span class="m" data-tex="\mathrm{m^3/h}" data-plain="m³/h"></span>). Zum Zeitpunkt <span class="m" data-tex="t = 0" data-plain="t = 0"></span> enthält es bereits <span class="m" data-tex="8{,}5\,\mathrm{m^3}" data-plain="8,5 m³"></span>. Bestimme den größten Wasserbestand, den das Becken im Zeitraum <span class="m" data-tex="0 \le t \le 12" data-plain="0 ≤ t ≤ 12"></span> erreicht.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="m³">m³</option>
+        <option value="L">L</option>
+        <option value="m³/h">m³/h</option>
+        <option value="h">h</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Der Bestand ist dann am größten, wenn er aufhört zu wachsen und anfängt zu fallen. Was macht die Zuflussrate genau in diesem Moment? Und: Wie viel war zu Beginn schon da?</div>
+    <div class="hilfe-text" data-stufe="2">Die Bestandsfunktion ist <span class="m" data-tex="V(t) = 8{,}5 + \int_0^t f(u)\,\mathrm{d}u" data-plain="V(t) = 8,5 + ∫ von 0 bis t f(u) du"></span>, ausgerechnet <span class="m" data-tex="V(t) = 8{,}5 - \tfrac{t^3}{15} + 0{,}8t^2 + 1{,}8t" data-plain="V(t) = 8,5 − t³/15 + 0,8t² + 1,8t"></span>. Nach dem Hauptsatz gilt <span class="m" data-tex="V'(t) = f(t)" data-plain="V′(t) = f(t)"></span>. Setze also <span class="m" data-tex="f(t) = 0" data-plain="f(t) = 0"></span>, prüfe den Vorzeichenwechsel und vergleiche den gefundenen Wert am Ende mit den Randwerten <span class="m" data-tex="V(0)" data-plain="V(0)"></span> und <span class="m" data-tex="V(12)" data-plain="V(12)"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="-0{,}2t^2 + 1{,}6t + 1{,}8 = 0 \;\Rightarrow\; t^2 - 8t - 9 = 0 \;\Rightarrow\; t = \tfrac{8 \pm \sqrt{64 + 36}}{2} = \tfrac{8 \pm 10}{2}" data-plain="−0,2t² + 1,6t + 1,8 = 0 ⟹ t² − 8t − 9 = 0 ⟹ t = (8 ± √(64 + 36))/2 = (8 ± 10)/2"></span>, also <span class="m" data-tex="t_1 = 9" data-plain="t₁ = 9"></span> und <span class="m" data-tex="t_2 = -1" data-plain="t₂ = −1"></span> (entfällt).<br>
+      Vorzeichenwechsel: <span class="m" data-tex="f(8) = +1{,}80" data-plain="f(8) = +1,80"></span>, <span class="m" data-tex="f(10) = -2{,}20" data-plain="f(10) = −2,20"></span>, also <span class="m" data-tex="+ \to -" data-plain="+ → −"></span>: Hochpunkt von <span class="m" data-tex="V" data-plain="V"></span>.<br>
+      <span class="m" data-tex="V(9) = 8{,}5 + \left(-\tfrac{729}{15} + 0{,}8\cdot 81 + 1{,}8\cdot 9\right) = 8{,}5 + (-48{,}60 + 64{,}80 + 16{,}20) = 8{,}5 + 32{,}40 = 40{,}90\ \mathrm{m^3}" data-plain="V(9) = 8,5 + (−729/15 + 0,8·81 + 1,8·9) = 8,5 + (−48,60 + 64,80 + 16,20) = 8,5 + 32,40 = 40,90 m³"></span>.<br>
+      Randvergleich: <span class="m" data-tex="V(0) = 8{,}50\ \mathrm{m^3}" data-plain="V(0) = 8,50 m³"></span> und <span class="m" data-tex="V(12) = 8{,}5 + 21{,}60 = 30{,}10\ \mathrm{m^3}" data-plain="V(12) = 8,5 + 21,60 = 30,10 m³"></span> – beide kleiner. Der größte Bestand ist <strong>40,90 m³</strong>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a6">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Lena schreibt in ihr Heft: „Wenn eine Funktion <span class="m" data-tex="f" data-plain="f"></span> auf einem Intervall durchgehend negativ ist, dann ist dort auch jede Stammfunktion <span class="m" data-tex="F" data-plain="F"></span> von <span class="m" data-tex="f" data-plain="f"></span> negativ." Nimm zu dieser Aussage begründet Stellung. Geh dabei auch darauf ein, warum Lenas Behauptung für die <strong>Integralfunktion</strong> <span class="m" data-tex="I_a" data-plain="Iₐ"></span> rechts von <span class="m" data-tex="a" data-plain="a"></span> trotzdem zutrifft.</div>
+    <textarea placeholder="Deine Stellungnahme…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a6">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Die Aussage ist <strong>falsch</strong>; ein Gegenbeispiel genügt. Betrachte <span class="m" data-tex="f(t) = -1" data-plain="f(t) = −1"></span> auf <span class="m" data-tex="[0;\,10]" data-plain="[0; 10]"></span> – ein Becken, aus dem gleichmäßig mit 1 m³/h abläuft. Die Funktion <span class="m" data-tex="F(t) = 100 - t" data-plain="F(t) = 100 − t"></span> ist eine Stammfunktion, denn <span class="m" data-tex="F'(t) = -1 = f(t)" data-plain="F′(t) = −1 = f(t)"></span>. Sie ist auf <span class="m" data-tex="[0;\,10]" data-plain="[0; 10]"></span> durchgehend <strong>positiv</strong>: <span class="m" data-tex="F(0) = 100" data-plain="F(0) = 100"></span>, <span class="m" data-tex="F(2) = 98" data-plain="F(2) = 98"></span>, <span class="m" data-tex="F(5) = 95" data-plain="F(5) = 95"></span>, <span class="m" data-tex="F(10) = 90" data-plain="F(10) = 90"></span>. Damit ist Lenas Behauptung widerlegt.</p>
+      <p>Warum sie im Allgemeinen scheitert: <span class="m" data-tex="f = F'" data-plain="f = F′"></span> steuert die <strong>Steigung</strong> von <span class="m" data-tex="F" data-plain="F"></span>, nicht die Höhe. Aus <span class="m" data-tex="f &lt; 0" data-plain="f < 0"></span> folgt über das Monotoniekriterium nur, dass <span class="m" data-tex="F" data-plain="F"></span> streng monoton <strong>fällt</strong>. Wo <span class="m" data-tex="F" data-plain="F"></span> dabei verläuft, hängt vom Anfangswert ab – und den legt erst die Integrationskonstante fest. Zu jeder Stammfunktion <span class="m" data-tex="F" data-plain="F"></span> ist auch <span class="m" data-tex="F + C" data-plain="F + C"></span> eine, man kann den Graphen also beliebig weit nach oben schieben, ohne dass sich an <span class="m" data-tex="f" data-plain="f"></span> das Geringste ändert.</p>
+      <p>Warum die Behauptung für die Integralfunktion doch gilt: <span class="m" data-tex="I_a" data-plain="Iₐ"></span> ist unter allen Stammfunktionen diejenige mit <span class="m" data-tex="I_a(a) = 0" data-plain="Iₐ(a) = 0"></span>. Für <span class="m" data-tex="x &gt; a" data-plain="x > a"></span> ist <span class="m" data-tex="I_a(x) = \int_a^x f(t)\,\mathrm{d}t" data-plain="Iₐ(x) = ∫ von a bis x f(t) dt"></span>, und weil <span class="m" data-tex="f" data-plain="f"></span> auf <span class="m" data-tex="[a;\,x]" data-plain="[a; x]"></span> negativ ist, nimmt <span class="m" data-tex="f" data-plain="f"></span> als stetige Funktion dort ein Maximum <span class="m" data-tex="M &lt; 0" data-plain="M < 0"></span> an. Jeder Streifen der Breite <span class="m" data-tex="\Delta t" data-plain="Δt"></span> hat dann höchstens die Fläche <span class="m" data-tex="M\,\Delta t" data-plain="M·Δt"></span>, und für den Grenzwert folgt <span class="m" data-tex="I_a(x) \le M\cdot(x - a) &lt; 0" data-plain="Iₐ(x) ≤ M·(x − a) < 0"></span>. Die Integralfunktion startet zwingend bei null und kann von dort nur nach unten. Für <span class="m" data-tex="x &lt; a" data-plain="x < a"></span> dreht sich das Vorzeichen um: Dann ist <span class="m" data-tex="I_a(x) = -\int_x^a f(t)\,\mathrm{d}t &gt; 0" data-plain="Iₐ(x) = −∫ von x bis a f(t) dt > 0"></span>. Im Gegenbeispiel: <span class="m" data-tex="I_0(x) = F(x) - F(0) = (100 - x) - 100 = -x" data-plain="I₀(x) = F(x) − F(0) = (100 − x) − 100 = −x"></span>, also <span class="m" data-tex="I_0(10) = -10 &lt; 0" data-plain="I₀(10) = −10 < 0"></span> ✓. Der Fall <span class="m" data-tex="x &lt; a" data-plain="x < a"></span> zeigt sich, wenn du das Beispiel auf ganz <span class="m" data-tex="\mathbb{R}" data-plain="ℝ"></span> fortsetzt (<span class="m" data-tex="f(t) = -1" data-plain="f(t) = −1"></span> überall): Dann ist <span class="m" data-tex="I_0(-3) = 3 &gt; 0" data-plain="I₀(−3) = 3 > 0"></span>.</p>
+      <p><strong>Bewertungskriterien.</strong> Aussage klar als falsch gekennzeichnet · konkretes Gegenbeispiel mit Nachweis <span class="m" data-tex="F' = f" data-plain="F′ = f"></span> · Unterscheidung zwischen Steigung und Höhe bzw. ausdrücklicher Bezug auf das Monotoniekriterium · Rolle der Integrationskonstanten benannt · Sonderstellung der Integralfunktion über <span class="m" data-tex="I_a(a) = 0" data-plain="Iₐ(a) = 0"></span> begründet · Hinweis auf die Umkehrung des Vorzeichens für <span class="m" data-tex="x &lt; a" data-plain="x < a"></span>.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-num="a7">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Gegeben ist <span class="m" data-tex="f(x) = e^x" data-plain="f(x) = eˣ"></span>.<br>
+      <strong>a)</strong> Zeige, dass <span class="m" data-tex="F_1(x) = e^x - 1" data-plain="F₁(x) = eˣ − 1"></span> eine Integralfunktion von <span class="m" data-tex="f" data-plain="f"></span> ist, und gib die zugehörige untere Grenze an.<br>
+      <strong>b)</strong> Begründe, dass <span class="m" data-tex="F_2(x) = e^x + 1" data-plain="F₂(x) = eˣ + 1"></span> zwar eine Stammfunktion, aber <strong>keine</strong> Integralfunktion von <span class="m" data-tex="f" data-plain="f"></span> ist.<br>
+      <strong>c)</strong> Formuliere ein allgemeines Kriterium dafür, wann eine Stammfunktion einer stetigen Funktion eine Integralfunktion ist, und begründe es in beiden Richtungen.</div>
+    <textarea placeholder="Deine Lösung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a7">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>a)</strong> Eine Stammfunktion von <span class="m" data-tex="e^x" data-plain="eˣ"></span> ist <span class="m" data-tex="e^x" data-plain="eˣ"></span> selbst. Nach Teil 2 des Hauptsatzes gilt <span class="m" data-tex="\int_0^x e^t\,\mathrm{d}t = \big[e^t\big]_0^x = e^x - e^0 = e^x - 1 = F_1(x)" data-plain="∫ von 0 bis x e^t dt = [e^t] von 0 bis x = eˣ − e⁰ = eˣ − 1 = F₁(x)"></span>. Also ist <span class="m" data-tex="F_1" data-plain="F₁"></span> die Integralfunktion von <span class="m" data-tex="f" data-plain="f"></span> zur unteren Grenze <strong><span class="m" data-tex="a = 0" data-plain="a = 0"></span></strong>. Kontrolle: <span class="m" data-tex="F_1(0) = e^0 - 1 = 0" data-plain="F₁(0) = e⁰ − 1 = 0"></span> ✓, wie es für jede Integralfunktion an ihrer unteren Grenze sein muss.</p>
+      <p><strong>b)</strong> <span class="m" data-tex="F_2'(x) = e^x = f(x)" data-plain="F₂′(x) = eˣ = f(x)"></span>, also ist <span class="m" data-tex="F_2" data-plain="F₂"></span> eine Stammfunktion. Wäre <span class="m" data-tex="F_2" data-plain="F₂"></span> zusätzlich eine Integralfunktion, gäbe es ein <span class="m" data-tex="a" data-plain="a"></span> mit <span class="m" data-tex="e^x + 1 = \int_a^x e^t\,\mathrm{d}t = e^x - e^a" data-plain="eˣ + 1 = ∫ von a bis x e^t dt = eˣ − e^a"></span> für alle <span class="m" data-tex="x" data-plain="x"></span>. Subtraktion von <span class="m" data-tex="e^x" data-plain="eˣ"></span> liefert <span class="m" data-tex="1 = -e^a" data-plain="1 = −e^a"></span>, also <span class="m" data-tex="e^a = -1" data-plain="e^a = −1"></span>. Die Exponentialfunktion nimmt aber nur positive Werte an; die Gleichung ist unlösbar. Folglich ist <span class="m" data-tex="F_2" data-plain="F₂"></span> keine Integralfunktion von <span class="m" data-tex="f" data-plain="f"></span>. Anschaulich: <span class="m" data-tex="F_2(x) = e^x + 1 &gt; 1 &gt; 0" data-plain="F₂(x) = eˣ + 1 > 1 > 0"></span> für alle <span class="m" data-tex="x" data-plain="x"></span> – der Graph hat keine Nullstelle, eine Integralfunktion muss aber an ihrer unteren Grenze eine haben.</p>
+      <p><strong>c) Kriterium:</strong> Eine Stammfunktion <span class="m" data-tex="F" data-plain="F"></span> von <span class="m" data-tex="f" data-plain="f"></span> auf einem Intervall <span class="m" data-tex="I" data-plain="I"></span> ist genau dann eine Integralfunktion von <span class="m" data-tex="f" data-plain="f"></span>, wenn <span class="m" data-tex="F" data-plain="F"></span> in <span class="m" data-tex="I" data-plain="I"></span> mindestens eine Nullstelle besitzt.<br>
+        <em>„⟸":</em> Sei <span class="m" data-tex="F(a) = 0" data-plain="F(a) = 0"></span> für ein <span class="m" data-tex="a \in I" data-plain="a ∈ I"></span>. Nach Teil 1 des Hauptsatzes ist <span class="m" data-tex="I_a" data-plain="Iₐ"></span> ebenfalls eine Stammfunktion von <span class="m" data-tex="f" data-plain="f"></span> auf <span class="m" data-tex="I" data-plain="I"></span>. Nach dem Satz über die Eindeutigkeit bis auf eine Konstante gibt es ein <span class="m" data-tex="C" data-plain="C"></span> mit <span class="m" data-tex="F = I_a + C" data-plain="F = Iₐ + C"></span>. Einsetzen von <span class="m" data-tex="a" data-plain="a"></span>: <span class="m" data-tex="0 = F(a) = I_a(a) + C = 0 + C" data-plain="0 = F(a) = Iₐ(a) + C = 0 + C"></span>, also <span class="m" data-tex="C = 0" data-plain="C = 0"></span> und damit <span class="m" data-tex="F = I_a" data-plain="F = Iₐ"></span>.<br>
+        <em>„⟹":</em> Ist <span class="m" data-tex="F = I_a" data-plain="F = Iₐ"></span> für ein <span class="m" data-tex="a \in I" data-plain="a ∈ I"></span>, so ist <span class="m" data-tex="F(a) = \int_a^a f(t)\,\mathrm{d}t = 0" data-plain="F(a) = ∫ von a bis a f(t) dt = 0"></span>, also hat <span class="m" data-tex="F" data-plain="F"></span> eine Nullstelle.</p>
+      <p><em>Ergänzung zum Beispiel:</em> Für <span class="m" data-tex="f(x) = e^x" data-plain="f(x) = eˣ"></span> sind die Stammfunktionen genau die Funktionen <span class="m" data-tex="e^x + c" data-plain="eˣ + c"></span>. Sie sind genau dann Integralfunktionen, wenn <span class="m" data-tex="c &lt; 0" data-plain="c < 0"></span> ist, denn dann hat <span class="m" data-tex="e^x + c = 0" data-plain="eˣ + c = 0"></span> die Lösung <span class="m" data-tex="a = \ln(-c)" data-plain="a = ln(−c)"></span>. Für <span class="m" data-tex="c = -0{,}5" data-plain="c = −0,5"></span> etwa ist <span class="m" data-tex="a = \ln 0{,}5 = -0{,}6931" data-plain="a = ln 0,5 = −0,6931"></span>; Probe: <span class="m" data-tex="e^{-0{,}6931} = 0{,}5000 = -c" data-plain="e^(−0,6931) = 0,5000 = −c"></span> ✓. Für <span class="m" data-tex="c \ge 0" data-plain="c ≥ 0"></span> gibt es kein solches <span class="m" data-tex="a" data-plain="a"></span>.</p>
+      <p><strong>Bewertungskriterien.</strong> a) korrekte Anwendung von Teil 2 des Hauptsatzes und Angabe <span class="m" data-tex="a = 0" data-plain="a = 0"></span> · b) Nachweis <span class="m" data-tex="F_2' = f" data-plain="F₂′ = f"></span> und Widerspruchsargument über <span class="m" data-tex="e^a = -1" data-plain="e^a = −1"></span> (alternativ über die fehlende Nullstelle) · c) Kriterium korrekt als „genau dann, wenn" formuliert · beide Beweisrichtungen ausgeführt · Verwendung des Satzes über die Eindeutigkeit bis auf eine Konstante · saubere Trennung zwischen dem Begriff Stammfunktion (Eigenschaft <span class="m" data-tex="F' = f" data-plain="F′ = f"></span>) und dem Begriff Integralfunktion (Darstellung als Integral mit fester unterer Grenze).</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 6 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">6</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="merksatz">
+    <b>Kernaussage 1 – Integrieren und Ableiten sind Hin- und Rückweg</b>
+    Für stetiges <span class="m" data-tex="f" data-plain="f"></span> ist die Integralfunktion <span class="m" data-tex="I_a(x) = \int_a^x f(t)\,\mathrm{d}t" data-plain="Iₐ(x) = ∫ von a bis x f(t) dt"></span> differenzierbar mit <span class="m" data-tex="I_a'(x) = f(x)" data-plain="Iₐ′(x) = f(x)"></span>. Wer eine Rate aufsummiert und vom Ergebnis wieder die Änderungsrate bildet, landet bei der Rate, mit der er begonnen hat. Der Beweis steckt in einem einzigen Streifen: <span class="m" data-tex="m(h)\cdot h \le \int_x^{x+h} f \le M(h)\cdot h" data-plain="m(h)·h ≤ ∫ von x bis x+h f ≤ M(h)·h"></span>, geteilt durch <span class="m" data-tex="h" data-plain="h"></span>, und die Stetigkeit schließt die Zange.
+  </div>
+  <div class="merksatz">
+    <b>Kernaussage 2 – <span class="m" data-tex="f" data-plain="f"></span> ist die Ableitung von <span class="m" data-tex="I" data-plain="I"></span>, also gelten alle Regeln der Kurvendiskussion</b>
+    <span class="m" data-tex="f &gt; 0" data-plain="f > 0"></span> heißt: <span class="m" data-tex="I" data-plain="I"></span> steigt. <span class="m" data-tex="f &lt; 0" data-plain="f < 0"></span> heißt: <span class="m" data-tex="I" data-plain="I"></span> fällt – <strong>nicht</strong>, dass <span class="m" data-tex="I" data-plain="I"></span> negativ wird. Eine Nullstelle von <span class="m" data-tex="f" data-plain="f"></span> mit Vorzeichenwechsel ergibt einen Extrempunkt von <span class="m" data-tex="I" data-plain="I"></span>, ein Extrempunkt von <span class="m" data-tex="f" data-plain="f"></span> eine Wendestelle von <span class="m" data-tex="I" data-plain="I"></span>. Alles rutscht um eine Ableitungsstufe nach oben.
+  </div>
+  <div class="merksatz">
+    <b>Kernaussage 3 – Die Stammfunktion ist nur bis auf eine Konstante bestimmt</b>
+    Auf einem Intervall unterscheiden sich je zwei Stammfunktionen derselben Funktion nur um ein <span class="m" data-tex="+\,C" data-plain="+ C"></span>; der Beweis läuft über <span class="m" data-tex="D' = 0" data-plain="D′ = 0"></span> und den Mittelwertsatz. Auf einem Definitionsbereich, der in mehrere Intervalle zerfällt, gilt das nicht mehr – dort darf auf jedem Stück eine andere Konstante stehen.
+  </div>
+  <div class="merksatz">
+    <b>Kernaussage 4 – Der Hauptsatz ersetzt einen Grenzwert durch zwei Funktionswerte</b>
+    <span class="m" data-tex="\int_a^b f(x)\,\mathrm{d}x = F(b) - F(a)" data-plain="∫ von a bis b f(x) dx = F(b) − F(a)"></span> für <strong>irgendeine</strong> Stammfunktion <span class="m" data-tex="F" data-plain="F"></span>, denn die Konstante kürzt sich in der Differenz heraus. Statt 320 Streifen genügen zwei Einsetzungen. Vorausgesetzt wird dabei die Stetigkeit von <span class="m" data-tex="f" data-plain="f"></span> auf dem ganzen Intervall – nicht jedes Integral löst sich so, aber jedes, dessen Integrand eine hinschreibbare Stammfunktion hat.
+  </div>
+
+  <div class="hinweis">
+    <strong>Blick aufs Zentralabitur.</strong> Der Hauptsatz ist kein eigenes Aufgabenthema, sondern das Werkzeug, mit dem fast jede Analysis-Aufgabe der Q1 gerechnet wird. Diese Gestalten begegnen dir regelmäßig:
+    <ul>
+      <li><strong>Bestimmtes Integral berechnen</strong>, meist als Teilaufgabe im Anforderungsbereich I. Die Stammfunktion wird verlangt, und es lohnt sich, sie vor dem Einsetzen einmal abzuleiten – der Vorzeichenfehler bei <span class="m" data-tex="e^{kx}" data-plain="e^(kx)"></span> und der vergessene Faktor <span class="m" data-tex="1/k" data-plain="1/k"></span> sind die zwei häufigsten Fehlerquellen.</li>
+      <li><strong>Graphenzuordnung <span class="m" data-tex="f \leftrightarrow F" data-plain="f ↔ F"></span>.</strong> Gegeben sind mehrere Graphen, zugeordnet werden soll, welcher die Stammfunktion welches anderen ist. Argumentiert wird über Nullstellen mit Vorzeichenwechsel (Extremstellen der Stammfunktion) und über Extremstellen (Wendestellen der Stammfunktion) – nie über „sieht ähnlich aus".</li>
+      <li><strong>Sachkontext mit Anfangsbestand.</strong> Eine Rate ist gegeben, gefragt ist ein Bestand. Der Anfangswert steht im Text, nicht im Graphen; das Integral liefert nur die Änderung.</li>
+      <li><strong>Steckbriefaufgaben zur Stammfunktion:</strong> „Bestimme die Stammfunktion <span class="m" data-tex="F" data-plain="F"></span> von <span class="m" data-tex="f" data-plain="f"></span> mit <span class="m" data-tex="F(2) = 5" data-plain="F(2) = 5"></span>." Gemeint ist: allgemeine Stammfunktion aufstellen, Bedingung einsetzen, <span class="m" data-tex="C" data-plain="C"></span> bestimmen.</li>
+      <li><strong>Begründungsaufgaben im LK:</strong> Warum darf man irgendeine Stammfunktion nehmen? Warum ist eine Integralfunktion immer eine Stammfunktion, aber nicht umgekehrt? Warum braucht der Satz die Stetigkeit? Genau solche Fragen hast du in den Aufgaben 6 und 7 geübt.</li>
+      <li><strong>Anschlussthema</strong> ist die Fläche zwischen zwei Graphen. Dort wird zusätzlich an den Schnittstellen zerlegt und mit Beträgen gearbeitet – der Hauptsatz selbst bleibt derselbe.</li>
+    </ul>
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Selbstcheck</h3>
+    <p style="color:var(--grau);font-size:15px">Hak ehrlich ab. Was du hier nicht ankreuzen kannst, holst du besser jetzt nach als in der Klausur.</p>
+    <div class="check">
+      <label><input type="checkbox"><span>Ich kann die Integralfunktion <span class="m" data-tex="I_a(x) = \int_a^x f(t)\,\mathrm{d}t" data-plain="Iₐ(x) = ∫ von a bis x f(t) dt"></span> definieren, erklären, warum die Integrationsvariable anders heißen muss als die obere Grenze, und begründen, warum stets <span class="m" data-tex="I_a(a) = 0" data-plain="Iₐ(a) = 0"></span> gilt.</span></label>
+      <label><input type="checkbox"><span>Ich kann den Hauptsatz in beiden Teilen formulieren und die Aussage <span class="m" data-tex="I_a' = f" data-plain="Iₐ′ = f"></span> über die Einschachtelung eines einzelnen Streifens begründen, einschließlich der Stelle, an der die Stetigkeit von <span class="m" data-tex="f" data-plain="f"></span> gebraucht wird.</span></label>
+      <label><input type="checkbox"><span>Ich kann zu einer gegebenen Funktion eine Stammfunktion angeben – auch bei <span class="m" data-tex="e^{kx}" data-plain="e^(kx)"></span> und linearer Substitution – und meine Stammfunktion durch Ableiten selbst überprüfen.</span></label>
+      <label><input type="checkbox"><span>Ich kann bestimmte Integrale mit <span class="m" data-tex="\int_a^b f = F(b) - F(a)" data-plain="∫ von a bis b f = F(b) − F(a)"></span> berechnen und begründen, warum dabei jede beliebige Stammfunktion zum selben Ergebnis führt.</span></label>
+      <label><input type="checkbox"><span>Ich kann aus dem Graphen einer Funktion <span class="m" data-tex="f" data-plain="f"></span> auf Monotonie, Extrem- und Wendestellen ihrer Integralfunktion schließen und dabei sicher zwischen dem Vorzeichen von <span class="m" data-tex="f" data-plain="f"></span> und dem Vorzeichen von <span class="m" data-tex="I" data-plain="I"></span> unterscheiden.</span></label>
+      <label><input type="checkbox"><span>Ich kann in einem Sachzusammenhang aus einer Änderungsrate und einem Anfangswert die Bestandsfunktion aufstellen, ihren größten Wert bestimmen und meine Wahl der Randbetrachtung begründen.</span></label>
+    </div>
+  </div>
+
+  <div class="hinweis">
+    <strong>Wie es weitergeht.</strong> Du kannst jetzt ein bestimmtes Integral in zwei Zeilen ausrechnen. Was du damit noch nicht kannst, ist der ehrliche Flächeninhalt: Wenn der Graph die Achse schneidet, zählt das Integral die Stücke darunter negativ, und ein Ergebnis von null heißt dann nicht, dass nichts da wäre. Im nächsten Schritt kommen deshalb die Zerlegung an Nullstellen, der Betrag und die Fläche <strong>zwischen zwei Graphen</strong> dazu. Das Werkzeug bleibt dasselbe – nur die Frage, was man überhaupt integriert, wird genauer gestellt.
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnis als Text kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+
+  <details class="lehrer">
+    <summary>Für die Lehrkraft</summary>
+
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Funktionen und Analysis" (Kernlehrplan Mathematik, gymnasiale Oberstufe NRW). Das Modul deckt das Kernstück der Integralrechnung ab: Integralfunktion, Hauptsatz in beiden Teilen, Stammfunktion, Grundintegrale, lineare Substitution. Prozessbezogene Schwerpunkte sind <em>Argumentieren</em> (Beweis in Abschnitt 2, Aufgaben 6 und 7), <em>Werkzeuge nutzen</em> (die Simulation als Messinstrument, nicht als Illustration) und <em>Modellieren</em> (Aufgaben 2, 4, 5). Vorausgesetzt werden Ableitungsregeln, Monotonie- und Krümmungsverhalten, Extremstellenkriterien sowie aus dem Vorgängermodul <em>mathe-q1-integral-rekonstruktion</em> das bestimmte Integral als gemeinsamer Grenzwert von Unter- und Obersumme, Intervalladditivität und orientierter Flächeninhalt. Stellung in der Reihe: unmittelbar danach und vor der Fläche zwischen Graphen. Wird das Modul vor dem Rekonstruktionsmodul eingesetzt, verliert der Hauptsatz seine Pointe – ohne die Erfahrung, dass 320 Streifen für ein Zehntel Kubikmeter nötig sind, ist <span class="m" data-tex="F(b) - F(a)" data-plain="F(b) − F(a)"></span> bloß eine weitere Formel.</p>
+    <p><em>Offen markiert:</em> Die Reihenfolge „Integralfunktion vor Stammfunktion" ist eine fachdidaktische Entscheidung dieses Moduls, keine Vorgabe des Kernlehrplans. Ebenso eine Setzung ist, dass der Mittelwertsatz benutzt, aber nicht bewiesen wird.</p>
+
+    <p><strong>Zeitbedarf.</strong> Ausgelegt auf eine Doppelstunde von 90 Minuten:</p>
+    <div class="tabelle">
+    <table>
+      <tr><th>Abschnitt</th><th>Zeit</th><th>Sozialform</th></tr>
+      <tr><td>1 Einstieg (Wasserzähler, drei Vorwissensfragen)</td><td>8 min</td><td>Plenum, Fragen in Einzelarbeit</td></tr>
+      <tr><td>2 Integralfunktion, Differenzenquotienten-Tabelle, Hauptsatz Teil 1</td><td>20 min</td><td>lehrergelenkt, Details-Block je nach Kurs</td></tr>
+      <tr><td>3 Stammfunktion, Hauptsatz Teil 2, Grundintegrale, Vererbungstabelle</td><td>22 min</td><td>Plenum mit Sicherungsphasen</td></tr>
+      <tr><td>4 Simulation mit Beobachtungsauftrag und zwei MC-Fragen</td><td>20 min</td><td>Partnerarbeit am Gerät</td></tr>
+      <tr><td>5 Übungen (Auswahl, siehe Differenzierung)</td><td>15 min</td><td>Einzel- oder Partnerarbeit</td></tr>
+      <tr><td>6 Abschluss, Selbstcheck, Export</td><td>5 min</td><td>Plenum</td></tr>
+    </table>
+    </div>
+    <p>Realistisch in 90 Minuten schaffbar sind die Abschnitte 1 bis 4 vollständig sowie die Aufgaben 1 und 2. Der Rest ist Hausaufgabe oder Material für die Folgestunde. Wer den Beweis aus Abschnitt 2 im Plenum entwickelt, braucht dafür allein 12 bis 15 Minuten – dann fällt der Übungsteil in der Stunde aus. Bei zwei Einzelstunden bietet sich der Schnitt nach Abschnitt 3 an; die Simulation eröffnet dann die zweite Stunde.</p>
+
+    <p><strong>Typische Schülerfehler – und wo anzuhalten ist.</strong></p>
+    <ul>
+      <li><strong>„<span class="m" data-tex="f" data-plain="f"></span> negativ, also <span class="m" data-tex="I" data-plain="I"></span> negativ."</strong> Der Leitfehler des Moduls; Ursache ist das Flächenbild. Anhalten am Ende des Fehlerkastens in Abschnitt 2: „Bei <span class="m" data-tex="x = 10{,}5" data-plain="x = 10,5"></span> fließt Wasser ab. Ist das Becken deshalb leer?" Danach <span class="m" data-tex="f(10{,}5) = -3{,}45" data-plain="f(10,5) = −3,45"></span> und <span class="m" data-tex="I_0(10{,}5) = 29{,}925" data-plain="I₀(10,5) = 29,925"></span> an die Tafel. Der Fehlerkasten in Abschnitt 2 und Aufgabe 6 prüfen es; Simulationsfrage 2 sichert die verwandte Verwechslung „sinkende Rate ⇒ sinkender Bestand“ ab.</li>
+      <li><strong>Integrationsvariable und Grenze gleich benannt.</strong> Wird oft als Pedanterie abgetan, führt aber beim Ableiten der Integralfunktion in die Irre. Anhalten direkt nach der Definition; Analogie zum Laufindex einer Summe.</li>
+      <li><strong>Vergessene Subtraktion der unteren Grenze.</strong> In Aufgabe 1 ist bewusst <span class="m" data-tex="F(1) = 4 \ne 0" data-plain="F(1) = 4 ≠ 0"></span> gewählt. Die eckige Klammer <span class="m" data-tex="\big[F(x)\big]_a^b" data-plain="[F(x)] von a bis b"></span> als Schreibdisziplin einführen: erst Klammer, dann Grenzen, dann einsetzen.</li>
+      <li><strong>Fehlender Faktor <span class="m" data-tex="1/k" data-plain="1/k"></span> bei <span class="m" data-tex="e^{kx}" data-plain="e^(kx)"></span>.</strong> Klassiker in Aufgabe 4. Anhalten bei der Grundintegral-Tabelle. Regel für den Kurs: Jede Stammfunktion wird abgeleitet, bevor sie benutzt wird.</li>
+      <li><strong>Erfundene Produktregel für Integrale.</strong> Anhalten bei der Warnung; das Gegenbeispiel <span class="m" data-tex="\int_0^1 x\cdot x\,\mathrm{d}x = \tfrac{1}{3}" data-plain="∫ von 0 bis 1 x·x dx = 1/3"></span> gegen <span class="m" data-tex="\tfrac{1}{2}\cdot\tfrac{1}{2} = \tfrac{1}{4}" data-plain="(1/2)·(1/2) = 1/4"></span> gemeinsam rechnen lassen.</li>
+      <li><strong>Extremstelle der Rate wird mit Extremstelle des Bestands verwechselt</strong> (<span class="m" data-tex="t = 4" data-plain="t = 4"></span> gegen <span class="m" data-tex="t = 9" data-plain="t = 9"></span>). Im Beobachtungsauftrag und in Aufgabe 5 direkt geprüft; Simulationsfrage 1 prüft zusätzlich die Verwechslung „Nullstelle der Rate = Nullstelle des Integrals“. Anhalten in der Simulation bei Rate A; die Vererbungstabelle danach gemeinsam ausfüllen lassen, statt sie vorzulesen.</li>
+      <li><strong>Stammfunktion und Integralfunktion werden gleichgesetzt.</strong> Anhalten bei dem Kasten „Nicht jede Stammfunktion ist eine Integralfunktion"; das Gegenbeispiel <span class="m" data-tex="e^x + 1" data-plain="eˣ + 1"></span> ist in einer Minute erklärt.</li>
+      <li><strong>„Der Hauptsatz gilt immer."</strong> Die Stetigkeitsvoraussetzung wird überlesen. Anhalten nach Schritt 4 im Beweis: der einzige Ort, an dem die Stetigkeit gebraucht wird.</li>
+    </ul>
+
+    <p><strong>Differenzierung.</strong></p>
+    <ul>
+      <li><em>Schnellere Lernende:</em> Warum darf man <span class="m" data-tex="\mathbb{R}\setminus\{0\}" data-plain="ℝ ohne {0}"></span> nicht als „ein Intervall" behandeln? (Zeige, dass <span class="m" data-tex="-1/x" data-plain="−1/x"></span> und die stückweise um 1 verschobene Funktion beide Stammfunktionen von <span class="m" data-tex="1/x^2" data-plain="1/x²"></span> sind, ihre Differenz aber nicht konstant ist.) Die Integralfunktion von <span class="m" data-tex="f(x) = |x|" data-plain="f(x) = |x|"></span> untersuchen: <span class="m" data-tex="I_0" data-plain="I₀"></span> ist differenzierbar, obwohl <span class="m" data-tex="f" data-plain="f"></span> bei 0 einen Knick hat. In der Simulation <span class="m" data-tex="a" data-plain="a"></span> systematisch verändern und daraus <span class="m" data-tex="I_b = I_a - I_a(b)" data-plain="I_b = Iₐ − Iₐ(b)"></span> selbst formulieren. Zusatzfrage zu Aufgabe 7: Für welche <span class="m" data-tex="c" data-plain="c"></span> ist <span class="m" data-tex="x^3/3 + c" data-plain="x³/3 + c"></span> eine Integralfunktion von <span class="m" data-tex="x^2" data-plain="x²"></span>? Für jedes <span class="m" data-tex="c" data-plain="c"></span>, weil <span class="m" data-tex="x^3" data-plain="x³"></span> surjektiv ist – der Unterschied zu <span class="m" data-tex="e^x" data-plain="eˣ"></span> ist die Wertemenge der Stammfunktion.</li>
+      <li><em>Lernende, die mehr Zeit brauchen:</em> Pflichtteil sind Aufgaben 1, 2 und 3. Die Vererbungstabelle in Abschnitt 3 vorab gemeinsam ausfüllen und als Merkblatt mitgeben; damit ist Aufgabe 3 ohne weitere Hilfe lösbar. Von den beiden AB-III-Aufgaben genügt Aufgabe 6. Der Beweis in Abschnitt 2 kann übersprungen werden; die Differenzenquotienten-Tabelle trägt die Einsicht auch allein.</li>
+    </ul>
+
+    <p><strong>Experimentbezug.</strong> Wasserzähler und Durchflussmesser: Mit zwei Handyfotos wird der Einstieg zum echten Experiment – Zählerstand vor und nach einem Vorgang, parallel die Momentanrate mitfilmen; „Differenz der Zählerstände" gegen „aufsummierte Rate" ist der Hauptsatz samt Messabweichung. Analog Tacho und Kilometerzähler im Auto. Die Rate C der Simulation ist exakt die Kondensatorentladung <span class="m" data-tex="I(t) = I_0\,e^{-t/RC}" data-plain="I(t) = I₀·e^(−t/RC)"></span> mit <span class="m" data-tex="1/RC = 0{,}3" data-plain="1/RC = 0,3"></span>; eine Absprache mit der Physik-Fachschaft lohnt sich. Pegel- und Abflussdaten der Landesbehörden lassen sich in einer Tabellenkalkulation zur Summenkurve aufaddieren, deren Steigung mit den Rohdaten verglichen wird. CAS/GTR sinnvoll erst nach dieser Stunde – wer <code>fnInt</code> kennt, bevor er den Hauptsatz kennt, hält das Integral für eine Taste; gut geeignet ist dagegen die Kontrolle eigener Stammfunktionen durch Ableiten.</p>
+  </details>
+
+  <footer>
+    Mathematik LK Q1 · Stammfunktion, Hauptsatz und Integralfunktion · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/baustein-formelleiste.md
+var formelDaten = [
+  {abschnitt:"integralfunktion", titel:"Die Integralfunktion und ihre Ableitung", formeln:[
+    {id:"integralfunktion", ziel:"f-integralfunktion", tex:"I_a(x) = \\int_a^x f(t)\\,\\mathrm{d}t", plain:"Iₐ(x) = ∫ von a bis x f(t) dt",
+     zeichen:[
+       {tex:"I_a", plain:"Iₐ", text:"Integralfunktion: ordnet jeder oberen Grenze x den Wert des Integrals von a bis x zu"},
+       {tex:"a", plain:"a", text:"feste untere Grenze"},
+       {tex:"x", plain:"x", text:"variable obere Grenze, zugleich Argument von Iₐ"},
+       {tex:"f(t)", plain:"f(t)", text:"stetige Funktion, deren Werte aufsummiert werden (Integrand)"},
+       {tex:"t", plain:"t", text:"Integrationsvariable, nur ein Platzhalter"}],
+     gilt:"f ist auf dem Intervall I stetig, a und x liegen in I. Die untere Grenze a ist fest, die obere Grenze x ist die Variable.",
+     fehler:"Die Integrationsvariable ebenfalls x nennen und f(x) dx schreiben. Dann steht x zugleich als Grenze und als Laufvariable, und der Ausdruck ist nicht mehr eindeutig."},
+    {id:"nullstelle", ziel:"f-nullstelle", tex:"I_a(a) = 0", plain:"Iₐ(a) = 0",
+     zeichen:[
+       {tex:"I_a", plain:"Iₐ", text:"Integralfunktion zur unteren Grenze a"},
+       {tex:"a", plain:"a", text:"untere Grenze, zugleich die Stelle, an der Iₐ null ist"}],
+     gilt:"Für jede Integralfunktion, gleich welche Funktion f integriert wird: Das Integral über ein Intervall der Länge null ist null.",
+     fehler:"Annehmen, eine Integralfunktion sei immer bei x = 0 gleich null. Die Nullstelle liegt bei x = a, und a ist die gewählte untere Grenze."},
+    {id:"hauptsatz1", ziel:"f-hauptsatz1", tex:"\\dfrac{\\mathrm{d}}{\\mathrm{d}x}\\int_a^x f(t)\\,\\mathrm{d}t = f(x)", plain:"d/dx ∫ von a bis x f(t) dt = f(x)",
+     zeichen:[
+       {tex:"\\dfrac{\\mathrm{d}}{\\mathrm{d}x}", plain:"d/dx", text:"Ableitung nach der oberen Grenze x"},
+       {tex:"f(x)", plain:"f(x)", text:"Wert der integrierten Funktion an der Stelle x"}],
+     gilt:"f ist auf dem Intervall stetig, sonst gilt die Aussage im Allgemeinen nicht. Die Ableitung wird nach der oberen Grenze gebildet.",
+     fehler:"Den Integranden noch einmal ableiten oder erst das Integral ausrechnen wollen. Abgeleitet wird nach der oberen Grenze x, und dabei kommt der Integrand unverändert heraus."}
+  ]},
+  {abschnitt:"stammfunktion", titel:"Stammfunktion, Hauptsatz und Rechenpraxis", formeln:[
+    {id:"stammfunktion", ziel:"f-stammfunktion", tex:"F'(x) = f(x)", plain:"F′(x) = f(x)",
+     zeichen:[
+       {tex:"F", plain:"F", text:"Stammfunktion von f"},
+       {tex:"F'(x)", plain:"F′(x)", text:"Ableitung von F an der Stelle x"},
+       {tex:"f(x)", plain:"f(x)", text:"gegebene Funktion"}],
+     gilt:"F ist auf dem Intervall I differenzierbar, und die Gleichung gilt für jedes x aus I.",
+     fehler:"Die Ableitung von f bilden, statt eine Funktion zu suchen, deren Ableitung f ist. Eine Stammfunktion geht den Weg rückwärts."},
+    {id:"konstante", ziel:"f-konstante", tex:"G(x) = F(x) + C", plain:"G(x) = F(x) + C",
+     zeichen:[
+       {tex:"F", plain:"F", text:"eine Stammfunktion von f"},
+       {tex:"G", plain:"G", text:"eine weitere Stammfunktion derselben Funktion f"},
+       {tex:"C", plain:"C", text:"Konstante, die sich nicht mit x ändert"}],
+     gilt:"F und G sind Stammfunktionen derselben Funktion auf einem gemeinsamen Intervall. Über eine Definitionslücke hinweg kann C auf jedem Teilintervall anders sein.",
+     fehler:"Von der Stammfunktion sprechen und die Konstante weglassen. Zu f gehören unendlich viele Stammfunktionen, die sich nur um C unterscheiden."},
+    {id:"hauptsatz2", ziel:"f-hauptsatz2", tex:"\\int_a^b f(x)\\,\\mathrm{d}x = F(b) - F(a)", plain:"∫ von a bis b f(x) dx = F(b) − F(a)",
+     zeichen:[
+       {tex:"a", plain:"a", text:"untere Integrationsgrenze"},
+       {tex:"b", plain:"b", text:"obere Integrationsgrenze"},
+       {tex:"f", plain:"f", text:"stetige Funktion auf [a; b]"},
+       {tex:"F", plain:"F", text:"irgendeine Stammfunktion von f"}],
+     gilt:"f ist auf [a; b] stetig und F ist eine Stammfunktion von f auf [a; b]. Welche Stammfunktion man nimmt, ist gleichgültig, denn C fällt bei der Differenz heraus.",
+     fehler:"Obere und untere Grenze vertauschen. Es heißt F(b) − F(a); mit vertauschten Grenzen kippt das Vorzeichen des Ergebnisses."},
+    {id:"substitution", ziel:"f-substitution", tex:"\\int f(kx+b)\\,\\mathrm{d}x = \\tfrac{1}{k}\\,F(kx+b) + C", plain:"∫ f(kx + b) dx = (1/k)·F(kx + b) + C",
+     zeichen:[
+       {tex:"k", plain:"k", text:"Faktor vor x im Argument, k ≠ 0"},
+       {tex:"b", plain:"b", text:"Verschiebung im Argument"},
+       {tex:"F", plain:"F", text:"Stammfunktion von f"},
+       {tex:"C", plain:"C", text:"Integrationskonstante"}],
+     gilt:"Nur für ein lineares Argument kx + b. Steht etwas Nichtlineares wie x² im Argument, ist diese Regel nicht anwendbar.",
+     fehler:"Den Faktor 1/k weglassen oder mit k multiplizieren. Zur Probe die Stammfunktion ableiten: Die innere Ableitung k muss sich mit dem Vorfaktor zu 1 ergänzen."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{r:1, fb:[
+    "Du hast abgeleitet statt rückwärts gedacht: Aus x² wird beim Ableiten 2x. Gesucht ist aber die Funktion, die man ableiten muss, um x² zu bekommen – dabei wächst der Exponent um 1, er schrumpft nicht.",
+    "Richtig. F′(x) = (1/3)·3x² = x², und die Konstante −5 fällt beim Ableiten weg. Genau diese drei Beobachtungen – Exponent plus eins, Vorfaktor ausgleichen, Konstante beliebig – tragen die ganze Einheit.",
+    "Fast. Der Exponent stimmt, aber (x³)′ = 3x² – das ist dreimal zu viel. Der Faktor 1/3 muss vorgezogen werden, damit beim Ableiten wieder genau x² herauskommt."
+  ]},
+  vw2:{r:2, fb:[
+    "Das ist die häufigste Verwechslung im ganzen Kapitel – sie wird dich hier noch verfolgen. Die Ableitung sagt etwas über die Steigung, nicht über die Höhe. F(x) = 100 − x hat überall die Ableitung −1 < 0 und ist auf [2; 5] trotzdem durchgehend positiv (von 98 bis 95).",
+    "Eine Nullstelle ist nicht erzwungen. F(x) = 100 − x fällt auf [2; 5] streng monoton und kommt der Null nicht einmal nahe. Fallen heißt nicht, dass man unterwegs die Achse trifft.",
+    "Richtig. Eine negative Ableitung auf einem Intervall heißt streng monoton fallend (Monotoniekriterium aus der Einführungsphase). Mehr folgt daraus nicht – insbesondere nichts über das Vorzeichen von F selbst."
+  ]},
+  vw3:{r:1, fb:[
+    "Du hast die Beträge addiert. 24 m³ ist die insgesamt bewegte Wassermenge – zugeflossen plus abgeflossen. Das Integral zählt aber orientiert: Was unterhalb der Achse liegt, wird abgezogen.",
+    "Richtig. Intervalladditivität: ∫₀⁶ = ∫₀⁴ + ∫₄⁶ = 18 + (−6) = 12. Der Bestand ist am Ende um 12 m³ gewachsen, obwohl zwischendurch 6 m³ wieder abgeflossen sind.",
+    "Du hast den negativen Anteil weggelassen. 18 m³ ist der Zuwachs bis t = 4 – danach passiert aber noch etwas, und zwar in die andere Richtung. Ein Integral über ein größeres Intervall kann durchaus kleiner sein als über ein kleineres."
+  ]},
+  sim1:{r:1, fb:[
+    "Bei x = 2,00 steht die Anzeige auf 0,00 m³ – das ist die Definition Iₐ(a) = 0. Aber die Kurve läuft danach nicht ewig in eine Richtung: Bei x = 4,00 zeigt sie I₂(4,00) = −1,60 m³, also nicht null. Nach der Nullstelle der Rate steigt sie wieder und kreuzt die Achse ein zweites Mal.",
+    "Richtig. Von x = 2 bis 4 fließt netto Wasser ab (f < 0), die Kurve fällt bis I₂(4,00) = −1,60 m³. Danach ist f > 0, die Kurve steigt und erreicht bei x = 6,00 wieder I₂(6,00) = 0,00 m³: Die Fläche von 4 bis 6 gleicht die Fläche von 2 bis 4 exakt aus. Bei x = 0 steht übrigens +4,80 m³, weil dort x < a gilt.",
+    "Die Rate hat bei x = 4,00 ihre Nullstelle, aber das heißt nur, dass die Steigung der unteren Kurve dort null ist – ihr Tiefpunkt. Die Anzeige liefert I₂(4,00) = −1,60 m³. Der Wert des Integrals ist null, wenn sich Flächenanteile aufheben, nicht dort, wo f null ist."
+  ]},
+  sim2:{r:1, fb:[
+    "Fast null ist nicht null: Die Anzeige zeigt bei x = 12,00 noch 0,11 m³/h, und die Exponentialfunktion 4·e^(−0,3·x) wird nie null. Die Kurve flacht ab, steigt aber weiter. 12,97 m³ ist deshalb noch nicht der Endwert, sondern eine Zwischenstation auf dem Weg zu 40/3 ≈ 13,33 m³.",
+    "Richtig. Die Steigung der unteren Kurve ist f(x), und die bleibt positiv, wird aber klein: bei x = 12,00 nur noch 0,11 m³/h. Der Bestand ist dort auf 12,97 m³ gewachsen und nähert sich dem Wert 40/3 ≈ 13,33 m³, den er nie ganz erreicht.",
+    "Eine kleine Steigung ist keine negative. Die Kurve fällt nur, wo f negativ ist, und Rate C ist überall positiv (kleinster Wert 0,11 m³/h). Eine sinkende Rate heißt: Der Zuwachs wird kleiner, der Bestand wächst trotzdem weiter. Einen Hochpunkt gibt es nicht."
+  ]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{wert:20, einheit:"FE", tol:0.05,
+      ok:"Richtig. F(x) = x³ − 2x² + 5x mit F(3) = 24 und F(1) = 4, Differenz 20 FE.",
+      falschEinheit:"Der Zahlenwert stimmt. Ein bestimmtes Integral über eine einheitenlose Funktion ist ein orientierter Flächeninhalt und wird in Flächeneinheiten (FE) angegeben. Längeneinheiten tragen die Achsen, nicht das Produkt aus beiden.",
+      nah:"Dicht dran, aber ein Schritt fehlt. 24 bekommt, wer nur F(3) einsetzt und F(1) = 4 vergisst – die untere Grenze wird immer abgezogen. 28 entsteht beim Addieren statt Subtrahieren. 16 ist f(3) − f(1), also die Differenz der Integrandwerte: Damit hättest du abgeleitet gedacht statt integriert.",
+      weit:"10 bekommt man mit F(x) = x³ − 2x² + 5. Aus der Konstanten 5 wird beim Rückwärtsableiten 5x, nicht wieder 5 – leite deine Stammfunktion zur Probe ab, es muss genau 3x² − 4x + 5 herauskommen. Die Hilfen führen dich Schritt für Schritt."},
+  a2:{wert:22.67, einheit:"m³", tol:0.05, alt:{wert:22670, einheit:"L"},
+      ok:"Richtig. F(t) = −t³/15 + 0,8t² + 1,8t, F(7) = 434/15 = 28,93 m³, F(2) = 94/15 = 6,27 m³, Differenz 68/3 ≈ 22,67 m³ (rund 22 670 L).",
+      falschEinheit:"Der Zahlenwert stimmt. m³/h mal h ergibt m³ – das Integral über eine Rate ist eine Menge, keine Rate. In Litern wären es rund 22 670 L.",
+      nah:"18,50 m³ bekommt, wer den Mittelwert der Randraten (4,20 + 3,20)/2 = 3,70 m³/h mit den 5 Stunden multipliziert. Das ist die Trapezformel mit einem einzigen Streifen; sie unterschätzt hier, weil der Graph zwischen t = 2 und t = 7 rechtsgekrümmt ist. 28,93 m³ ist F(7) allein – dann hast du ab t = 0 gerechnet statt ab t = 2.",
+      weit:"Steht bei dir etwa −1,0, hast du f(7) − f(2) = 3,20 − 4,20 gerechnet, also die Änderung der Rate statt des Zuflusses. Der Hauptsatz verlangt die Differenz der Werte einer Stammfunktion, nicht der Funktionswerte selbst. Die Hilfen zeigen dir die Stammfunktion."},
+  a4:{wert:10.36, einheit:"L", tol:0.05, alt:{wert:0.01036, einheit:"m³", tol:0.0005},
+      ok:"Richtig. F(t) = −(40/3)·e^(−0,3t), also ∫₀⁵ f dt = (40/3)·(1 − e^(−1,5)) = 13,3333 · 0,77687 = 10,36 L.",
+      falschEinheit:"Der Zahlenwert stimmt. L/min mal min ergibt Liter – herausgekommen ist eine Menge, keine Rate und keine Zeit. In Kubikmetern wären es 0,01036 m³.",
+      nah:"13,33 L ist der Grenzwert für unendlich lange Zeit, nicht der Wert nach 5 Minuten; dann hast du e^(−1,5) wie null behandelt, es ist aber 0,2231. 20,00 L bekommt, wer die Anfangsrate f(0) = 4 L/min mit 5 min multipliziert – die Rate fällt jedoch, also muss weniger herauskommen.",
+      weit:"Steht bei dir etwa −3,11, fehlt der Faktor 1/(−0,3); du hast mit F(t) = 4·e^(−0,3t) gerechnet. Leite das zur Probe ab: Wegen der Kettenregel kommt −1,2·e^(−0,3t) heraus, nicht die Rate. 4,46 L wäre f(5)·5, also die Rate am Ende mal die Zeit – das unterschätzt, weil die Rate vorher größer war."},
+  a5:{wert:40.9, einheit:"m³", tol:0.05, alt:{wert:40900, einheit:"L"},
+      ok:"Richtig. V′(t) = f(t) = 0 liefert t = 9 h mit Vorzeichenwechsel + → −; V(9) = 8,50 m³ + 32,40 m³ = 40,90 m³, und die Randwerte 8,50 m³ und 30,10 m³ sind kleiner.",
+      falschEinheit:"Der Zahlenwert stimmt. Gefragt ist ein Bestand, also ein Volumen in m³ (oder 40 900 L) – nicht der Zeitpunkt in Stunden und auch keine Rate in m³/h.",
+      nah:"32,40 m³ ist der Zuwachs von 0 h bis 9 h; der Anfangsbestand von 8,50 m³ fehlt. 30,10 m³ wäre der Bestand am rechten Rand bei t = 12 h – zwischendurch war mehr Wasser im Becken. 24,23 m³ ergibt sich für t = 4 h, also am Hochpunkt der Rate: Dort fließt am schnellsten zu, das Becken ist aber noch nicht am vollsten.",
+      weit:"Prüf zuerst, welche Größe du überhaupt bestimmst. Gesucht ist der maximale Wert von V, nicht der Zeitpunkt (9 h) und nicht der maximale Zufluss (5,00 m³/h). Und V ist nicht das Integral allein: V(t) = 8,5 + ∫₀ᵗ f – der Anfangsbestand steht im Text, nicht im Graphen."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.a3 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier richtig. Entscheidend war jedes Mal, dass f die Ableitung von I₀ ist: Das Vorzeichen von f gibt die Monotonie, die Nullstelle mit Vorzeichenwechsel den Extrempunkt, und der Hochpunkt von f die Stelle größter Steigung, also die Wendestelle.";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Geh jede Aussage in derselben Reihenfolge durch: Erstens Vorzeichen von f – steigt oder fällt I₀? Zweitens Nullstellen von f mit Vorzeichenwechsel – wo hat I₀ einen Extrempunkt? Drittens Extremstellen von f – wo ist I₀ am steilsten? Wer über die Fläche nachdenkt, kommt langsamer ans Ziel als wer f als erste Ableitung liest.";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: Rate und Integralfunktion ============ */
+(function(){
+  var cv = document.getElementById("cvSim");
+  if(!cv) return;
+  var ctx = cv.getContext("2d");
+  cv.style.touchAction = "none";
+
+  /* ---- feste Umrechnung zwischen Pixeln und physikalischer Groesse ----
+     t-Achse:   t in [0; 12] auf die Pixel 70 … 970  =>  75,0 px je Stunde
+                tPx(t) = 70 + 75*t,  Umkehrung pxT(p) = (p - 70)/75
+     oberes Diagramm (Rate f):         Zeichenflaeche y = 30 … 260 (230 px hoch)
+     unteres Diagramm (Integral I_a):  Zeichenflaeche y = 320 … 540 (220 px hoch)
+     Die Werteachsen haengen an der gewaehlten Rate, siehe raten[...].      */
+  var T_MIN = 0, T_MAX = 12, PX_LI = 70, PX_RE = 970;
+  var PX_H = (PX_RE - PX_LI) / (T_MAX - T_MIN);   // 75 px je Stunde
+  var O_OBEN = 30, O_UNTEN = 260, U_OBEN = 320, U_UNTEN = 540;
+  var TRENN_Y = (O_UNTEN + U_OBEN) / 2;           // 290 px: oben zieht x, unten zieht a
+  var TEMPO = 2.0;                                // Abspielgeschwindigkeit in h je Sekunde
+
+  var raten = {
+    A:{ titel:"Rate A · Regenrückhaltebecken", formel:"f(t) = −0,2t² + 1,6t + 1,8",
+        f:function(t){ return -0.2*t*t + 1.6*t + 1.8; },
+        fMin:-9, fMax:6, iMin:-36, iMax:36 },
+    B:{ titel:"Rate B · Zulauf setzt spät ein", formel:"f(t) = 0,8t − 3,2",
+        f:function(t){ return 0.8*t - 3.2; },
+        fMin:-4, fMax:7, iMin:-28, iMax:28 },
+    C:{ titel:"Rate C · auslaufender Tank", formel:"f(t) = 4·e^(−0,3·t)",
+        f:function(t){ return 4*Math.exp(-0.3*t); },
+        fMin:-1, fMax:5, iMin:-15, iMax:15 }
+  };
+
+  var schluessel = "A", a = 0, x = 6;
+  var laeuft = false, letzteZeit = null, greift = null;
+  var kurve = [];          // kumuliertes Integral ab t = 0 fuer die aktuelle Rate
+
+  var rA = document.getElementById("rA"), rX = document.getElementById("rX");
+  var wA = document.getElementById("wA"), wX = document.getElementById("wX");
+  var bPlay = document.getElementById("bPlay"), bReset = document.getElementById("bReset");
+  var cTan = document.getElementById("cTan");
+  var lA = document.getElementById("lA"), lX = document.getElementById("lX"),
+      lF = document.getElementById("lF"), lI = document.getElementById("lI"),
+      lM = document.getElementById("lM"), lD = document.getElementById("lD");
+
+  function fmt(z, n){
+    if(!isFinite(z)) z = 0;
+    if(Math.abs(z) < 0.5 * Math.pow(10, -n)) z = 0;      // "−0,00" vermeiden
+    return z.toFixed(n).replace(".", ",").replace("-", "−");
+  }
+
+  /* Integral als Streifensumme (Simpson-Regel, n = 200 Teilintervalle).
+     Fuer o < u liefert die Formel automatisch den negativen Wert, denn
+     die Schrittweite h wird negativ - genau das ist die Konvention
+     Integral von a bis x = −(Integral von x bis a). */
+  function Isum(f, u, o){
+    if(Math.abs(o - u) < 1e-12) return 0;
+    var n = 200, h = (o - u)/n, s = f(u) + f(o);
+    for(var k = 1; k < n; k++) s += (k % 2 ? 4 : 2) * f(u + k*h);
+    return s * h / 3;
+  }
+
+  /* Stuetzstellen der Integralfunktion ab t = 0, alle 0,05 h aufsummiert.
+     Jeder Teilschritt wieder mit der Simpson-Regel; fuer die Polynome A und B
+     ist das exakt, fuer die e-Funktion C liegt der Fehler unter 10^-9. */
+  function kurveBauen(){
+    var f = raten[schluessel].f, h = 0.05, n = Math.round((T_MAX - T_MIN)/h), s = 0;
+    kurve = [{t:T_MIN, g:0}];
+    for(var k = 1; k <= n; k++){
+      var t0 = T_MIN + (k - 1)*h, t1 = T_MIN + k*h;
+      s += (h/6) * (f(t0) + 4*f((t0 + t1)/2) + f(t1));
+      kurve.push({t:t1, g:s});
+    }
+  }
+
+  function tPx(t){ return PX_LI + PX_H * t; }
+  function pxT(p){ return (p - PX_LI) / PX_H; }
+  function yF(v){ var r = raten[schluessel];
+    return O_UNTEN - (v - r.fMin) * (O_UNTEN - O_OBEN) / (r.fMax - r.fMin); }
+  function yI(v){ var r = raten[schluessel];
+    return U_UNTEN - (v - r.iMin) * (U_UNTEN - U_OBEN) / (r.iMax - r.iMin); }
+
+  /* ---------------- Zeichnen ---------------- */
+  // Schriftfaktor: auf schmalen Bildschirmen wird die Canvas stark verkleinert, die Schrift waechst mit
+  function kk(){ var w = cv.clientWidth || 1000; return Math.max(1, Math.min(1.7, 700 / w)); }
+
+  function gitter(oben, unten, yNull, yMax, yMin, titel, einheit){
+    ctx.strokeStyle = "#eef1f6"; ctx.lineWidth = 1;
+    for(var t = 0; t <= 12; t++){
+      ctx.beginPath(); ctx.moveTo(tPx(t), oben); ctx.lineTo(tPx(t), unten); ctx.stroke();
+    }
+    ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(PX_LI, oben - 8); ctx.lineTo(PX_LI, unten); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(PX_LI, yNull); ctx.lineTo(PX_RE + 16, yNull); ctx.stroke();
+
+    ctx.fillStyle = "#94a3b8"; ctx.font = Math.round(12*kk()) + "px sans-serif";
+    ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for(var t2 = 0; t2 <= 10; t2 += 2) ctx.fillText(String(t2), tPx(t2), unten + 5);
+    ctx.textAlign = "right";
+    ctx.fillText("t in h", PX_RE + 14, unten + 5);
+    ctx.textBaseline = "middle";
+    ctx.fillText(fmt(yMax, 0), PX_LI - 7, oben + 2);
+    ctx.fillText("0", PX_LI - 7, yNull);
+    ctx.fillText(fmt(yMin, 0), PX_LI - 7, unten - 2);
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "600 " + Math.round(13*kk()) + "px sans-serif";
+    ctx.textBaseline = "top"; ctx.textAlign = "left";
+    ctx.fillText(titel, PX_LI, oben - 24);
+    ctx.textAlign = "right";
+    ctx.fillText(einheit, PX_RE, oben - 24);
+  }
+
+  function flaecheFuellen(f, lo, hi){
+    if(hi - lo < 1e-9) return;
+    var y0 = yF(0), n = Math.max(2, Math.round((hi - lo) * PX_H / 2)), h = (hi - lo)/n;
+    for(var k = 0; k < n; k++){
+      var t1 = lo + k*h, t2 = t1 + h, v = f((t1 + t2)/2);
+      if(Math.abs(v) < 1e-12) continue;
+      var yv = yF(v);
+      ctx.fillStyle = v > 0 ? "#e7f6ef" : "#fee2e2";
+      ctx.fillRect(tPx(t1) - 0.4, Math.min(y0, yv), tPx(t2) - tPx(t1) + 0.8, Math.abs(yv - y0));
+    }
+  }
+
+  function zeichneRate(){
+    var r = raten[schluessel], f = r.f, i, t;
+    gitter(O_OBEN, O_UNTEN, yF(0), r.fMax, r.fMin, r.titel + ":  " + r.formel, "f in m³/h");
+
+    var lo = Math.min(a, x), hi = Math.max(a, x);
+    flaecheFuellen(f, lo, hi);
+
+    // Graph der Rate ueber dem ganzen Intervall
+    ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.8; ctx.beginPath();
+    for(i = 0; i <= 240; i++){
+      t = T_MIN + i*(T_MAX - T_MIN)/240;
+      if(i === 0) ctx.moveTo(tPx(t), yF(f(t))); else ctx.lineTo(tPx(t), yF(f(t)));
+    }
+    ctx.stroke();
+
+    // der betrachtete Abschnitt, eingefaerbt nach dem Vorzeichen von f
+    var n = Math.max(2, Math.round((hi - lo) * PX_H / 3)), h = (hi - lo)/n;
+    ctx.lineWidth = 3.2; ctx.lineJoin = "round";
+    for(i = 0; i < n; i++){
+      var t1 = lo + i*h, t2 = t1 + h;
+      ctx.strokeStyle = f((t1 + t2)/2) >= 0 ? "#0d7a52" : "#dc2626";
+      ctx.beginPath(); ctx.moveTo(tPx(t1), yF(f(t1))); ctx.lineTo(tPx(t2), yF(f(t2))); ctx.stroke();
+    }
+
+    // Grenzen: a gestrichelt, x durchgezogen
+    ctx.save();
+    ctx.setLineDash([6,5]); ctx.strokeStyle = "#5b6b7f"; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(tPx(a), O_OBEN - 8); ctx.lineTo(tPx(a), O_UNTEN); ctx.stroke();
+    ctx.restore();
+    ctx.strokeStyle = "#0d7a52"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(tPx(x), O_OBEN - 8); ctx.lineTo(tPx(x), U_UNTEN); ctx.stroke();
+
+    // Beschriftung der Grenzen, auf weissem Grund damit sie ueber der Kurve lesbar bleibt
+    ctx.font = "700 " + Math.round(14*kk()) + "px sans-serif"; ctx.textBaseline = "top";
+    marke("a", tPx(a), "#5b6b7f");
+    marke("x", tPx(x), "#0d7a52");
+  }
+
+  function marke(text, px, farbe){
+    var rechts = px > 930, bx = rechts ? px - 18 : px + 4;
+    ctx.fillStyle = "#fff"; ctx.fillRect(bx, O_OBEN + 2, Math.round(14*kk()), Math.round(17*kk()));
+    ctx.fillStyle = farbe; ctx.textAlign = "left";
+    ctx.fillText(text, bx + 3, O_OBEN + 3);
+  }
+
+  function zeichneIntegral(){
+    var r = raten[schluessel], f = r.f, i, p;
+    gitter(U_OBEN, U_UNTEN, yI(0), r.iMax, r.iMin, "Integralfunktion Iₐ(x) = Integral von a bis x über f", "I in m³");
+
+    var gA = Isum(f, T_MIN, a);
+
+    // hinter der aktuellen Stelle blass gestrichelt
+    ctx.save();
+    ctx.setLineDash([5,5]); ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 2; ctx.beginPath();
+    var begonnen = false;
+    for(i = 0; i < kurve.length; i++){
+      p = kurve[i];
+      if(p.t < x - 1e-9) continue;
+      if(begonnen) ctx.lineTo(tPx(p.t), yI(p.g - gA));
+      else { ctx.moveTo(tPx(p.t), yI(p.g - gA)); begonnen = true; }
+    }
+    ctx.stroke(); ctx.restore();
+
+    // bis zur aktuellen Stelle durchgezogen
+    ctx.strokeStyle = "#0d7a52"; ctx.lineWidth = 2.6; ctx.lineJoin = "round"; ctx.beginPath();
+    var erster = true;
+    for(i = 0; i < kurve.length; i++){
+      p = kurve[i];
+      if(p.t > x + 1e-9) break;
+      if(erster){ ctx.moveTo(tPx(p.t), yI(p.g - gA)); erster = false; }
+      else ctx.lineTo(tPx(p.t), yI(p.g - gA));
+    }
+    var Ix = Isum(f, a, x);
+    if(!erster) ctx.lineTo(tPx(x), yI(Ix));
+    ctx.stroke();
+
+    // Nullstelle der Integralfunktion an der unteren Grenze
+    ctx.fillStyle = "#94a3b8";
+    ctx.beginPath(); ctx.arc(tPx(a), yI(0), 3.5, 0, Math.PI*2); ctx.fill();
+
+    // Tangente mit der gemessenen Steigung von I, gezeichnet ueber x ± 1,5 h
+    if(cTan && cTan.checked){
+      var m = (Isum(f, a, x + 0.02) - Isum(f, a, x - 0.02)) / 0.04, t1 = Math.max(T_MIN, x - 1.5), t2 = Math.min(T_MAX, x + 1.5);
+      ctx.strokeStyle = "#8a6100"; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(tPx(t1), yI(Ix + m*(t1 - x)));
+      ctx.lineTo(tPx(t2), yI(Ix + m*(t2 - x)));
+      ctx.stroke();
+      ctx.fillStyle = "#8a6100"; ctx.font = "600 " + Math.round(13*kk()) + "px sans-serif";
+      ctx.textAlign = tPx(x) > 820 ? "right" : "left"; ctx.textBaseline = "bottom";
+      ctx.fillText("Steigung " + fmt(m, 2), tPx(x) + (tPx(x) > 820 ? -10 : 10), yI(Ix) - 12);
+    }
+
+    ctx.fillStyle = "#0d7a52";
+    ctx.beginPath(); ctx.arc(tPx(x), yI(Ix), 5, 0, Math.PI*2); ctx.fill();
+    ctx.font = "600 " + Math.round(13*kk()) + "px sans-serif"; ctx.textBaseline = "top";
+    ctx.textAlign = tPx(x) > 820 ? "right" : "left";
+    ctx.fillText(fmt(Ix, 2) + " m³", tPx(x) + (tPx(x) > 820 ? -10 : 10), yI(Ix) + 8);
+  }
+
+  function zeichnen(){
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, cv.width, cv.height);
+    zeichneRate();
+    zeichneIntegral();
+  }
+
+  /* ---------------- Anzeige ---------------- */
+  function aktualisieren(){
+    var f = raten[schluessel].f;
+    var fx = f(x);
+    var I = Isum(f, a, x);
+    // zentrale Differenz auf derselben Streifensumme - unabhaengig von f(x) gewonnen
+    var mS = (Isum(f, a, x + 0.02) - Isum(f, a, x - 0.02)) / 0.04;
+
+    wA.textContent = fmt(a, 1); wX.textContent = fmt(x, 2);
+    lA.textContent = fmt(a, 1) + " h";
+    lX.textContent = fmt(x, 2) + " h";
+    lF.textContent = fmt(fx, 2) + " m³/h";
+    lI.textContent = fmt(I, 2) + " m³";
+    lM.textContent = fmt(mS, 2) + " m³/h";
+    lD.textContent = fmt(Math.abs(fx - mS), 3);
+    zeichnen();
+  }
+
+  /* ---------------- Bedienung ---------------- */
+  function setzeA(v){
+    a = Math.max(T_MIN, Math.min(T_MAX, Math.round(v*10)/10));
+    rA.value = String(Math.round(a*10));
+  }
+  function setzeX(v){
+    x = Math.max(T_MIN, Math.min(T_MAX, Math.round(v*20)/20));
+    rX.value = String(Math.round(x*20));
+  }
+  // beim Abspielen laeuft x stetig; nur der Regler rastet auf 0,05 h ein
+  function setzeXRoh(v){
+    x = Math.max(T_MIN, Math.min(T_MAX, v));
+    rX.value = String(Math.round(x*20));
+  }
+
+  rA.addEventListener("input", function(){ a = parseInt(rA.value, 10)/10; aktualisieren(); });
+  rX.addEventListener("input", function(){ x = parseInt(rX.value, 10)/20; aktualisieren(); });
+  if(cTan) cTan.addEventListener("change", zeichnen);
+
+  document.querySelectorAll("[data-rate]").forEach(function(b){
+    b.addEventListener("click", function(){
+      schluessel = b.getAttribute("data-rate");
+      document.querySelectorAll("[data-rate]").forEach(function(o){
+        o.classList.toggle("primaer", o === b);
+      });
+      kurveBauen(); aktualisieren();
+    });
+  });
+
+  bPlay.addEventListener("click", function(){
+    if(!laeuft && x >= T_MAX - 1e-6) setzeX(T_MIN);
+    laeuft = !laeuft;
+    bPlay.textContent = laeuft ? "❚❚ Pause" : "▶ Abspielen";
+    aktualisieren();
+  });
+
+  bReset.addEventListener("click", function(){
+    schluessel = "A"; laeuft = false; bPlay.textContent = "▶ Abspielen";
+    document.querySelectorAll("[data-rate]").forEach(function(o){
+      o.classList.toggle("primaer", o.getAttribute("data-rate") === "A");
+    });
+    setzeA(0); setzeX(6); kurveBauen(); aktualisieren();
+  });
+
+  // Ziehen mit Maus, Finger oder Stift
+  function ausEvent(ev){
+    var r = cv.getBoundingClientRect();
+    return { t: pxT((ev.clientX - r.left) * (cv.width / r.width)),
+             y: (ev.clientY - r.top) * (cv.height / r.height) };
+  }
+  function zieheAuf(p){
+    if(greift === "a") setzeA(p);
+    else { setzeX(p); laeuft = false; bPlay.textContent = "▶ Abspielen"; }
+    aktualisieren();
+  }
+  cv.addEventListener("pointerdown", function(ev){
+    var p = ausEvent(ev);
+    greift = (ev.shiftKey || p.y > TRENN_Y) ? "a" : "x";
+    try{ cv.setPointerCapture(ev.pointerId); }catch(e){}
+    zieheAuf(p.t); ev.preventDefault();
+  });
+  cv.addEventListener("pointermove", function(ev){
+    if(!greift) return;
+    zieheAuf(ausEvent(ev).t); ev.preventDefault();
+  });
+  function loslassen(ev){
+    if(!greift) return;
+    greift = null;
+    try{ cv.releasePointerCapture(ev.pointerId); }catch(e){}
+  }
+  cv.addEventListener("pointerup", loslassen);
+  cv.addEventListener("pointercancel", loslassen);
+
+  function schritt(zeit){
+    if(letzteZeit === null) letzteZeit = zeit;
+    var dt = Math.min(0.05, (zeit - letzteZeit)/1000);
+    letzteZeit = zeit;
+    if(laeuft){
+      var neu = x + TEMPO*dt;
+      if(neu >= T_MAX){ neu = T_MAX; laeuft = false; bPlay.textContent = "▶ Abspielen"; }
+      setzeXRoh(neu); aktualisieren();
+    }
+    requestAnimationFrame(schritt);
+  }
+
+  setzeA(0); setzeX(6); kurveBauen(); aktualisieren();
+  requestAnimationFrame(schritt);
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1 – Stammfunktion erkennen", vw2:"Vorwissen 2 – Monotoniekriterium",
+    vw3:"Vorwissen 3 – Intervalladditivität",
+    sim1:"Simulation 1 – Nullstellen der Integralfunktion", sim2:"Simulation 2 – sinkende Rate, steigender Bestand",
+    a1:"Aufgabe 1 – bestimmtes Integral eines Polynoms", a2:"Aufgabe 2 – Zufluss mit dem Hauptsatz",
+    a3:"Aufgabe 3 – Zuordnung Rate zu Integralfunktion", a4:"Aufgabe 4 – Integral einer e-Funktion",
+    a5:"Aufgabe 5 – maximaler Bestand"
+  };
+  var zeilen = ["Der Hauptsatz der Differential- und Integralrechnung – Mathematik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Aufgabe " + (i + 6) + " (offen):\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>

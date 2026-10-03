@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exponentialfunktionen – Mathematik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#0d7a52;
+  --akzent-hell:#e7f6ef;
+  --akzent-rand:#b5e0cd;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#0b5c3e,#0d7a52);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#0b6845;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+@media (max-width:600px){
+  button{min-height:44px}
+  .regler input[type=range]{height:32px}
+  .zeile select,.eingabe select,.eingabe input[type=number]{min-height:44px}
+  #cSchn{width:24px !important;height:24px !important}
+}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Mathematik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Exponentialfunktionen – Wachstum, Zerfall und die Zahl e</h1>
+    <div class="meta">
+      <span class="chip">Inhaltsfeld: Funktionen und Analysis</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+      <span class="chip">ca. 135 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Um acht Uhr trinkst du einen Kaffee, danach sind etwa 80 mg Koffein im Blut. Der Körper baut den Stoff ab, und zwar nicht mit einer festen Menge pro Stunde, sondern mit einem festen <strong>Anteil</strong>: In jeder Stunde verschwindet derselbe Bruchteil dessen, was gerade noch da ist. Als Modellwert nehmen wir eine Halbwertszeit von fünf Stunden an (bei echten Menschen schwankt sie stark). Dann sind um 13 Uhr noch 40 mg übrig, um 18 Uhr noch 20 mg und um 23 Uhr noch 10 mg. Der Bestand wird nie genau null, er wird nur immer kleiner.</p>
+
+  <details>
+    <summary>Woher kommen 10 mg um 23 Uhr?</summary>
+    <p>Von acht bis dreiundzwanzig Uhr vergehen 15 Stunden, das sind drei Halbwertszeiten. Dreimal halbieren heißt: <span class="m" data-tex="80\,\mathrm{mg}\cdot\left(\tfrac{1}{2}\right)^{3} = 10\,\mathrm{mg}" data-plain="80 mg · (1/2)³ = 10 mg"></span>. In Abschnitt 2 lernst du, wie sich das auch für Zeiten schreiben lässt, die keine ganzen Halbwertszeiten sind.</p>
+  </details>
+
+  <p>Bei Bakterien läuft derselbe Mechanismus in die andere Richtung. Unter günstigen Bedingungen teilt sich jede Zelle in festen Zeitabständen, aus einer Zelle werden zwei, vier, acht. Nach zehn Verdopplungen sind es über tausend Zellen, nach zwanzig mehr als eine Million (<span class="m" data-tex="2^{10} = 1024" data-plain="2¹⁰ = 1024"></span> und <span class="m" data-tex="2^{20} = 1\,048\,576" data-plain="2²⁰ = 1 048 576"></span>). Wachstum und Zerfall folgen dabei demselben Gesetz: Die Änderung in einem kleinen Zeitabschnitt ist <strong>proportional zum Bestand</strong>, der gerade vorhanden ist.</p>
+
+  <p>Auf dieser Seite klärst du drei Fragen: Wie beschreibt man so einen Vorgang mit einem Term? Warum taucht dabei immer die Zahl <span class="m" data-tex="e" data-plain="e"></span> auf, und was hat sie mit der Ableitung zu tun? Und wann passt das Modell nicht mehr, denn eine Tasse Kaffee kühlt zwar ab, aber nicht bis auf 0 °C? Am Ende prüfst du in einer Simulation Modelle gegen Messwerte.</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Drei Fragen aus der Sekundarstufe I, der Einführungsphase und dem Modul zu den Ableitungsregeln. Wenn du hier hängst, lohnt sich ein Blick zurück, bevor du weitermachst.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Vier Wertetabellen gehören zu den Stellen 0, 1, 2 und 3. Welche beschreibt exponentielles Wachstum?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span>4; 7; 10; 13, weil die Werte mit jedem Schritt größer werden.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span>4; 8; 16; 32, weil jeder Wert das Doppelte des vorigen ist.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span>4; 7; 12; 19, weil die Zuwächse immer größer werden.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Gegeben ist <span class="m" data-tex="f(x) = (3x - 2)^{4}" data-plain="f(x) = (3x − 2)⁴"></span>. Wie lautet die Ableitung?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span><span class="m" data-tex="f'(x) = 4\,(3x - 2)^{3}" data-plain="f′(x) = 4·(3x − 2)³"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span><span class="m" data-tex="f'(x) = 12\,(3x - 2)^{3}" data-plain="f′(x) = 12·(3x − 2)³"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span><span class="m" data-tex="f'(x) = 12\,(3x - 2)^{4}" data-plain="f′(x) = 12·(3x − 2)⁴"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Welchen Wert hat die Potenz <span class="m" data-tex="2^{-3}" data-plain="2⁻³"></span>?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span><span class="m" data-tex="-8" data-plain="−8"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span><span class="m" data-tex="\tfrac{1}{8}" data-plain="1/8"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span><span class="m" data-tex="-6" data-plain="−6"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 ERKLÄRTEIL =============== -->
+<section id="grundlagen">
+  <div class="stufe"><div class="nr">2</div><h2>Wachstumsfaktor, Ableitung und die Zahl e</h2></div>
+
+  <h3>Gleicher Faktor statt gleicher Zuwachs</h3>
+  <p>Bei linearem Wachstum kommt in jedem Schritt dieselbe Zahl hinzu, bei exponentiellem Wachstum wird in jedem Schritt mit demselben <strong>Faktor</strong> multipliziert. Das eine ist eine Addition, das andere eine Multiplikation, und deshalb sehen die Graphen so verschieden aus: eine Gerade gegen eine Kurve, die immer steiler wird oder sich immer flacher der Achse nähert. Als Term:</p>
+
+  <div class="m block" id="f-expo" data-tex="f(x) = c\cdot a^{x}" data-plain="f(x) = c·a^x"></div>
+
+  <p>Dabei ist <span class="m" data-tex="c = f(0)" data-plain="c = f(0)"></span> der Anfangswert und <span class="m" data-tex="a" data-plain="a"></span> der Wachstumsfaktor je Schritt, mit <span class="m" data-tex="a &gt; 0" data-plain="a &gt; 0"></span> und <span class="m" data-tex="a \neq 1" data-plain="a ≠ 1"></span>. Für <span class="m" data-tex="a &gt; 1" data-plain="a &gt; 1"></span> wächst der Bestand, für <span class="m" data-tex="0 &lt; a &lt; 1" data-plain="0 &lt; a &lt; 1"></span> nimmt er ab. Verändert sich der Bestand je Schritt um <span class="m" data-tex="p" data-plain="p"></span> Prozent, gilt:</p>
+
+  <div class="m block" id="f-prozent" data-tex="a = 1 + \dfrac{p}{100}" data-plain="a = 1 + p/100"></div>
+
+  <p>Bei einer Abnahme ist <span class="m" data-tex="p" data-plain="p"></span> negativ. Zwei Beispiele: Ein Guthaben von 2000 € wird mit 3 % pro Jahr verzinst, also ist <span class="m" data-tex="a = 1{,}03" data-plain="a = 1,03"></span>, und nach zehn Jahren sind es <span class="m" data-tex="2000\,\text{Euro}\cdot 1{,}03^{10} = 2687{,}83\,\text{Euro}" data-plain="2000 € · 1,03¹⁰ = 2687,83 €"></span>. Beim Koffein bleiben in jeder Stunde etwa 87 % übrig, also ist <span class="m" data-tex="a = 0{,}87" data-plain="a = 0,87"></span> (das entspricht <span class="m" data-tex="p = -13" data-plain="p = −13"></span>), und nach fünf Stunden sind es <span class="m" data-tex="80\,\mathrm{mg}\cdot 0{,}87^{5} = 39{,}9\,\mathrm{mg}" data-plain="80 mg · 0,87⁵ = 39,9 mg"></span>, etwa die Hälfte. Das passt zur Halbwertszeit von fünf Stunden.</p>
+
+  <p>Wechselst du die Schrittweite, wechselt der Faktor mit: Für eine halbe Stunde beim Koffein ist er <span class="m" data-tex="\sqrt{0{,}87} = 0{,}933" data-plain="√0,87 = 0,933"></span>, denn zwei halbe Stunden müssen zusammen wieder <span class="m" data-tex="0{,}87" data-plain="0,87"></span> ergeben. Ein Bruchteil eines Schritts ist also eine Potenz mit gebrochenem Exponenten, und <span class="m" data-tex="a^{x}" data-plain="a^x"></span> ist für jede reelle Zahl <span class="m" data-tex="x" data-plain="x"></span> erklärt.</p>
+
+  <div class="merksatz">
+    <b>Linear oder exponentiell?</b>
+    Bildest du bei gleichen Schritten die Unterschiede benachbarter Werte, und sie sind immer gleich, wächst der Bestand linear. Bildest du stattdessen die Quotienten, und die sind immer gleich, wächst er exponentiell. Der Graph von <span class="m" data-tex="c\cdot a^{x}" data-plain="c·a^x"></span> mit <span class="m" data-tex="c &gt; 0" data-plain="c &gt; 0"></span> verläuft immer oberhalb der x-Achse und schneidet sie nie. Für <span class="m" data-tex="0 &lt; a &lt; 1" data-plain="0 &lt; a &lt; 1"></span> nähert er sich ihr beliebig dicht an.
+  </div>
+
+  <h3>Wie steil ist der Graph von a<sup>x</sup>? Die Zahl e</h3>
+  <p>Um <span class="m" data-tex="f(x) = a^{x}" data-plain="f(x) = a^x"></span> abzuleiten, bildest du den Differenzenquotienten an einer beliebigen Stelle <span class="m" data-tex="x" data-plain="x"></span> und lässt <span class="m" data-tex="h" data-plain="h"></span> gegen null gehen. Mit dem Potenzgesetz <span class="m" data-tex="a^{x+h} = a^{x}\cdot a^{h}" data-plain="a^(x+h) = a^x·a^h"></span> kannst du <span class="m" data-tex="a^{x}" data-plain="a^x"></span> ausklammern:</p>
+
+  <div class="m block" data-tex="\dfrac{a^{x+h} - a^{x}}{h} = a^{x}\cdot\dfrac{a^{h} - 1}{h}" data-plain="(a^(x+h) − a^x)/h = a^x · (a^h − 1)/h"></div>
+
+  <p>Der zweite Faktor hängt nicht von <span class="m" data-tex="x" data-plain="x"></span> ab. Für <span class="m" data-tex="h \to 0" data-plain="h → 0"></span> ist er die Steigung des Graphen an der Stelle 0, denn dort ist <span class="m" data-tex="a^{0} = 1" data-plain="a⁰ = 1"></span>. Nennen wir diesen Grenzwert <span class="m" data-tex="m(a)" data-plain="m(a)"></span>. Dann gilt <span class="m" data-tex="(a^{x})' = m(a)\cdot a^{x}" data-plain="(a^x)′ = m(a)·a^x"></span>: Die Steigung ist an jeder Stelle ein festes Vielfaches des Funktionswerts. Je größer der Bestand, desto schneller ändert er sich.</p>
+
+  <p>Wie groß ist <span class="m" data-tex="m(a)" data-plain="m(a)"></span>? Die Tabelle zeigt den Faktor für kleiner werdende <span class="m" data-tex="h" data-plain="h"></span> bei drei Basen.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Basis a</th><th>h = 0,1</th><th>h = 0,01</th><th>h = 0,001</th></tr>
+    <tr><td>2</td><td>0,7177</td><td>0,6956</td><td>0,6934</td></tr>
+    <tr><td>2,5</td><td>0,9596</td><td>0,9205</td><td>0,9167</td></tr>
+    <tr><td>3</td><td>1,1612</td><td>1,1047</td><td>1,0992</td></tr>
+  </table>
+  </div>
+
+  <p>Die Werte laufen bei den drei Basen gegen etwa 0,693; 0,916 und 1,099. Für die Basis 2 ist die Steigung bei 0 kleiner als 1, für die Basis 3 größer. Dazwischen muss es eine Basis geben, bei der sie genau 1 ist. Sie liegt bei 2,71828…: Für <span class="m" data-tex="a = 2{,}7" data-plain="a = 2,7"></span> ist der Grenzwert etwa 0,993, für <span class="m" data-tex="a = 2{,}8" data-plain="a = 2,8"></span> etwa 1,030.</p>
+
+  <div class="merksatz">
+    <b>Die Euler'sche Zahl e</b>
+    Die Zahl <span class="m" data-tex="e = 2{,}71828\ldots" data-plain="e = 2,71828…"></span> ist die Basis, für die <span class="m" data-tex="m(e) = 1" data-plain="m(e) = 1"></span> gilt. Dann steht in der Ableitung gar kein Zusatzfaktor mehr: Die Funktion ist ihre eigene Ableitung. Dass es keine andere solche Funktion mit dem Wert 1 bei 0 gibt, zeigen wir in Abschnitt 3.
+    <div class="m block" id="f-eabl" data-tex="\left(e^{x}\right)' = e^{x}" data-plain="(e^x)′ = e^x"></div>
+  </div>
+
+  <p>Alle anderen Exponentialfunktionen lassen sich auf <span class="m" data-tex="e^{x}" data-plain="e^x"></span> zurückführen. Dazu brauchst du den <strong>natürlichen Logarithmus</strong>. Er ist die Umkehrung: <span class="m" data-tex="\ln a" data-plain="ln a"></span> ist die Zahl, mit der du <span class="m" data-tex="e" data-plain="e"></span> potenzieren musst, um <span class="m" data-tex="a" data-plain="a"></span> zu erhalten, also <span class="m" data-tex="e^{\ln a} = a" data-plain="e^(ln a) = a"></span> für <span class="m" data-tex="a &gt; 0" data-plain="a &gt; 0"></span>. Setzt du das in <span class="m" data-tex="a^{x}" data-plain="a^x"></span> ein und nutzt <span class="m" data-tex="\left(e^{u}\right)^{x} = e^{u\cdot x}" data-plain="(e^u)^x = e^(u·x)"></span>, folgt:</p>
+
+  <div class="m block" id="f-aumschr" data-tex="a^{x} = e^{x\cdot\ln a}" data-plain="a^x = e^(x·ln a)"></div>
+
+  <p>Damit lässt sich auch <span class="m" data-tex="a^{x}" data-plain="a^x"></span> ableiten, nämlich mit der Kettenregel (innere Funktion <span class="m" data-tex="x\cdot\ln a" data-plain="x·ln a"></span>, innere Ableitung <span class="m" data-tex="\ln a" data-plain="ln a"></span>):</p>
+
+  <div class="m block" id="f-aabl" data-tex="\left(a^{x}\right)' = \ln a\cdot a^{x}" data-plain="(a^x)′ = ln a·a^x"></div>
+
+  <p>Der Grenzwert <span class="m" data-tex="m(a)" data-plain="m(a)"></span> aus der Tabelle ist also nichts anderes als <span class="m" data-tex="\ln a" data-plain="ln a"></span>: <span class="m" data-tex="\ln 2 = 0{,}693" data-plain="ln 2 = 0,693"></span>, <span class="m" data-tex="\ln 2{,}5 = 0{,}916" data-plain="ln 2,5 = 0,916"></span> und <span class="m" data-tex="\ln 3 = 1{,}099" data-plain="ln 3 = 1,099"></span>.</p>
+
+  <details>
+    <summary>Herleitung: Warum der Grenzwert m(a) gleich ln a ist</summary>
+    <p><strong>Schritt 1 – Jede Exponentialfunktion hat eine e-Schreibweise.</strong> Für jedes <span class="m" data-tex="a &gt; 0" data-plain="a &gt; 0"></span> gilt <span class="m" data-tex="a = e^{\ln a}" data-plain="a = e^(ln a)"></span>, und mit dem Potenzgesetz wird daraus <span class="m" data-tex="a^{x} = \left(e^{\ln a}\right)^{x} = e^{x\cdot\ln a}" data-plain="a^x = (e^(ln a))^x = e^(x·ln a)"></span>.</p>
+    <p><strong>Schritt 2 – Ableiten mit der Kettenregel.</strong> Äußere Funktion ist <span class="m" data-tex="e^{u}" data-plain="e^u"></span> mit der Ableitung <span class="m" data-tex="e^{u}" data-plain="e^u"></span>, innere Funktion ist <span class="m" data-tex="u = x\cdot\ln a" data-plain="u = x·ln a"></span> mit der Ableitung <span class="m" data-tex="\ln a" data-plain="ln a"></span>. Also ist <span class="m" data-tex="\left(a^{x}\right)' = e^{x\cdot\ln a}\cdot\ln a = \ln a\cdot a^{x}" data-plain="(a^x)′ = e^(x·ln a)·ln a = ln a·a^x"></span>.</p>
+    <p><strong>Schritt 3 – Vergleich.</strong> Aus dem Differenzenquotienten folgt <span class="m" data-tex="\left(a^{x}\right)' = m(a)\cdot a^{x}" data-plain="(a^x)′ = m(a)·a^x"></span>, aus Schritt 2 folgt <span class="m" data-tex="\left(a^{x}\right)' = \ln a\cdot a^{x}" data-plain="(a^x)′ = ln a·a^x"></span>. Setzt du <span class="m" data-tex="x = 0" data-plain="x = 0"></span> ein, ist <span class="m" data-tex="a^{0} = 1" data-plain="a⁰ = 1"></span>, und es bleibt <span class="m" data-tex="m(a) = \ln a" data-plain="m(a) = ln a"></span>. Für <span class="m" data-tex="a = e" data-plain="a = e"></span> ist das <span class="m" data-tex="m(e) = \ln e = 1" data-plain="m(e) = ln e = 1"></span>, weil <span class="m" data-tex="e^{1} = e" data-plain="e¹ = e"></span> gilt. Die Zahl e ist also genau die Basis mit <span class="m" data-tex="\ln e = 1" data-plain="ln e = 1"></span>.</p>
+  </details>
+
+  <h3>Ableiten mit der Kettenregel</h3>
+  <p>Kommt im Exponenten mehr als <span class="m" data-tex="x" data-plain="x"></span> vor, brauchst du die Kettenregel, die du im Modul zu den Ableitungsregeln geübt hast. Äußere Funktion ist <span class="m" data-tex="e^{u}" data-plain="e^u"></span>, innere Funktion ist der Exponent <span class="m" data-tex="g(x)" data-plain="g(x)"></span>:</p>
+
+  <div class="m block" id="f-kette" data-tex="\left(e^{g(x)}\right)' = g'(x)\cdot e^{g(x)}" data-plain="(e^(g(x)))′ = g′(x)·e^(g(x))"></div>
+
+  <p>Der häufigste Sonderfall ist <span class="m" data-tex="g(x) = kx" data-plain="g(x) = kx"></span> mit einer Konstanten <span class="m" data-tex="k" data-plain="k"></span>: Dann ist <span class="m" data-tex="\left(e^{kx}\right)' = k\cdot e^{kx}" data-plain="(e^(kx))′ = k·e^(kx)"></span>. Drei Beispiele:</p>
+  <ul>
+    <li><span class="m" data-tex="f(x) = 2\,e^{0{,}3x}" data-plain="f(x) = 2·e^(0,3x)"></span> hat die Ableitung <span class="m" data-tex="f'(x) = 0{,}6\,e^{0{,}3x}" data-plain="f′(x) = 0,6·e^(0,3x)"></span>. Der Faktor 2 bleibt stehen, und die innere Ableitung 0,3 kommt dazu.</li>
+    <li><span class="m" data-tex="f(x) = e^{-x^{2}}" data-plain="f(x) = e^(−x²)"></span> hat die Ableitung <span class="m" data-tex="f'(x) = -2x\,e^{-x^{2}}" data-plain="f′(x) = −2x·e^(−x²)"></span>. Die innere Funktion ist <span class="m" data-tex="-x^{2}" data-plain="−x²"></span>, ihre Ableitung <span class="m" data-tex="-2x" data-plain="−2x"></span>.</li>
+    <li><span class="m" data-tex="f(x) = x\,e^{-0{,}5x}" data-plain="f(x) = x·e^(−0,5x)"></span> braucht Produkt- und Kettenregel und ergibt <span class="m" data-tex="f'(x) = (1 - 0{,}5x)\,e^{-0{,}5x}" data-plain="f′(x) = (1 − 0,5x)·e^(−0,5x)"></span>.</li>
+  </ul>
+
+  <div class="hinweis">
+    <strong>Für die Funktionsuntersuchung.</strong> Der Faktor <span class="m" data-tex="e^{g(x)}" data-plain="e^(g(x))"></span> ist für jedes <span class="m" data-tex="x" data-plain="x"></span> positiv, nie null. Beim Lösen von <span class="m" data-tex="f'(x) = 0" data-plain="f′(x) = 0"></span> entscheidet deshalb nur der andere Faktor. Im dritten Beispiel ist das <span class="m" data-tex="1 - 0{,}5x = 0" data-plain="1 − 0,5x = 0"></span>, also <span class="m" data-tex="x = 2" data-plain="x = 2"></span>. Rückwärts gilt: Weil <span class="m" data-tex="\left(e^{kx}\right)' = k\,e^{kx}" data-plain="(e^(kx))′ = k·e^(kx)"></span> ist, hat <span class="m" data-tex="e^{kx}" data-plain="e^(kx)"></span> für <span class="m" data-tex="k \neq 0" data-plain="k ≠ 0"></span> die Stammfunktion <span class="m" data-tex="\tfrac{1}{k}\,e^{kx}" data-plain="(1/k)·e^(kx)"></span>.
+  </div>
+
+  <h3>Exponentialgleichungen lösen</h3>
+  <p>Steht die gesuchte Größe im Exponenten, hilft der Logarithmus. Aus <span class="m" data-tex="a^{x} = b" data-plain="a^x = b"></span> folgt durch Logarithmieren <span class="m" data-tex="x\cdot\ln a = \ln b" data-plain="x·ln a = ln b"></span>, und damit:</p>
+
+  <div class="m block" id="f-lngl" data-tex="a^{x} = b \;\Longleftrightarrow\; x = \dfrac{\ln b}{\ln a}" data-plain="a^x = b ⟺ x = ln b / ln a"></div>
+
+  <p>Ein Beispiel: <span class="m" data-tex="1{,}5^{x} = 10" data-plain="1,5^x = 10"></span> gibt <span class="m" data-tex="x = \dfrac{\ln 10}{\ln 1{,}5} = \dfrac{2{,}3026}{0{,}4055} = 5{,}68" data-plain="x = ln 10 / ln 1,5 = 2,3026 / 0,4055 = 5,68"></span>. Die Probe: <span class="m" data-tex="1{,}5^{5{,}68} \approx 10" data-plain="1,5^(5,68) ≈ 10"></span>. Zwei Dinge sind zu beachten. Erstens muss <span class="m" data-tex="b &gt; 0" data-plain="b &gt; 0"></span> sein, denn <span class="m" data-tex="a^{x}" data-plain="a^x"></span> ist nie null oder negativ; eine Gleichung wie <span class="m" data-tex="2^{x} = -4" data-plain="2^x = −4"></span> hat keine Lösung. Zweitens zerlegt der Logarithmus nur Produkte, keine Summen: <span class="m" data-tex="\ln(u\cdot v) = \ln u + \ln v" data-plain="ln(u·v) = ln u + ln v"></span>, aber <span class="m" data-tex="\ln(u + v)" data-plain="ln(u + v)"></span> lässt sich nicht aufspalten.</p>
+</section>
+
+<!-- =============== 3 VERTIEFUNG =============== -->
+<section id="vertiefung">
+  <div class="stufe"><div class="nr">3</div><h2>Wachstumsmodelle: Änderungsrate und Bestand</h2></div>
+
+  <h3>Exponentielles Wachstum als Gleichung für die Änderungsrate</h3>
+  <p>In der Einleitung stand der Satz: Die Änderung ist proportional zum Bestand. Als Gleichung, mit <span class="m" data-tex="f(t)" data-plain="f(t)"></span> als Bestand zur Zeit <span class="m" data-tex="t" data-plain="t"></span> und <span class="m" data-tex="f'(t)" data-plain="f′(t)"></span> als Änderungsrate:</p>
+
+  <div class="m block" id="f-dgl" data-tex="f'(t) = k\cdot f(t)" data-plain="f′(t) = k·f(t)"></div>
+
+  <p>Das ist eine Gleichung, in der die gesuchte Funktion und ihre Ableitung vorkommen, eine <strong>Differenzialgleichung</strong>. Gesucht sind alle Funktionen, die sie erfüllen. Eine kennst du schon: Nach der Kettenregel ist <span class="m" data-tex="\left(e^{kt}\right)' = k\,e^{kt}" data-plain="(e^(kt))′ = k·e^(kt)"></span>, und ein konstanter Faktor ändert daran nichts. Mit dem Anfangswert <span class="m" data-tex="f(0) = B_0" data-plain="f(0) = B₀"></span> erhältst du:</p>
+
+  <div class="m block" id="f-expoe" data-tex="f(t) = B_{0}\cdot e^{kt}" data-plain="f(t) = B₀·e^(kt)"></div>
+
+  <details>
+    <summary>Herleitung: Es gibt keine weitere Lösung</summary>
+    <p><strong>Schritt 1 – Hilfsfunktion.</strong> Sei <span class="m" data-tex="f" data-plain="f"></span> irgendeine Lösung von <span class="m" data-tex="f' = k\,f" data-plain="f′ = k·f"></span>. Betrachte <span class="m" data-tex="g(t) = f(t)\cdot e^{-kt}" data-plain="g(t) = f(t)·e^(−kt)"></span>.</p>
+    <p><strong>Schritt 2 – Ableiten.</strong> Mit Produkt- und Kettenregel ist <span class="m" data-tex="g'(t) = f'(t)\,e^{-kt} + f(t)\cdot(-k)\,e^{-kt} = \bigl(f'(t) - k\,f(t)\bigr)\,e^{-kt}" data-plain="g′(t) = f′(t)·e^(−kt) + f(t)·(−k)·e^(−kt) = (f′(t) − k·f(t))·e^(−kt)"></span>. Weil <span class="m" data-tex="f' = k\,f" data-plain="f′ = k·f"></span> gilt, steht in der Klammer null, also ist <span class="m" data-tex="g'(t) = 0" data-plain="g′(t) = 0"></span> für jedes <span class="m" data-tex="t" data-plain="t"></span>.</p>
+    <p><strong>Schritt 3 – Schluss.</strong> Eine Funktion, deren Ableitung überall null ist, ist konstant. Also ist <span class="m" data-tex="g(t) = g(0) = f(0) = B_0" data-plain="g(t) = g(0) = f(0) = B₀"></span>, und aus <span class="m" data-tex="f(t)\,e^{-kt} = B_0" data-plain="f(t)·e^(−kt) = B₀"></span> folgt <span class="m" data-tex="f(t) = B_0\,e^{kt}" data-plain="f(t) = B₀·e^(kt)"></span>. Mit <span class="m" data-tex="k = 1" data-plain="k = 1"></span> und <span class="m" data-tex="B_0 = 1" data-plain="B₀ = 1"></span> heißt das: Die e-Funktion ist die einzige Funktion mit <span class="m" data-tex="f' = f" data-plain="f′ = f"></span> und <span class="m" data-tex="f(0) = 1" data-plain="f(0) = 1"></span>. Damit ist die Behauptung aus Abschnitt 2 gezeigt.</p>
+  </details>
+
+  <p>Die beiden Schreibweisen <span class="m" data-tex="B_0\cdot a^{t}" data-plain="B₀·a^t"></span> und <span class="m" data-tex="B_0\cdot e^{kt}" data-plain="B₀·e^(kt)"></span> beschreiben dieselbe Funktion, wenn für einen Schritt von einer Zeiteinheit <span class="m" data-tex="e^{k} = a" data-plain="e^k = a"></span> gilt. Daraus folgt der Zusammenhang zwischen der Rate <span class="m" data-tex="k" data-plain="k"></span> und dem Faktor <span class="m" data-tex="a" data-plain="a"></span>:</p>
+
+  <div class="m block" id="f-ka" data-tex="k = \ln a \qquad (a = e^{k})" data-plain="k = ln a     (a = e^k)"></div>
+
+  <p>Zu <span class="m" data-tex="a &gt; 1" data-plain="a &gt; 1"></span> gehört <span class="m" data-tex="k &gt; 0" data-plain="k &gt; 0"></span> (Wachstum), zu <span class="m" data-tex="0 &lt; a &lt; 1" data-plain="0 &lt; a &lt; 1"></span> gehört <span class="m" data-tex="k &lt; 0" data-plain="k &lt; 0"></span> (Zerfall). Beim Koffein ist <span class="m" data-tex="a = 0{,}87" data-plain="a = 0,87"></span> und damit <span class="m" data-tex="k = \ln 0{,}87 = -0{,}139\,\mathrm{h^{-1}}" data-plain="k = ln 0,87 = −0,139 1/h"></span>. Die Zahl <span class="m" data-tex="k" data-plain="k"></span> ist nicht die Prozentzahl: Im Augenblick nimmt der Bestand mit 13,9 % seines aktuellen Werts pro Stunde ab. Weil der Bestand dabei schrumpft und die Abnahme mit ihm, sind es über eine ganze Stunde nur 13 %, also <span class="m" data-tex="a = 0{,}87" data-plain="a = 0,87"></span>.</p>
+
+  <p>Wie lange dauert es, bis sich der Bestand verdoppelt (<span class="m" data-tex="k &gt; 0" data-plain="k &gt; 0"></span>) oder halbiert (<span class="m" data-tex="k &lt; 0" data-plain="k &lt; 0"></span>)? Gesucht ist die Zeit <span class="m" data-tex="T" data-plain="T"></span> mit <span class="m" data-tex="e^{kT} = 2" data-plain="e^(kT) = 2"></span> beziehungsweise <span class="m" data-tex="e^{kT} = \tfrac{1}{2}" data-plain="e^(kT) = 1/2"></span>. Logarithmieren gibt <span class="m" data-tex="kT = \ln 2" data-plain="kT = ln 2"></span> beziehungsweise <span class="m" data-tex="kT = -\ln 2" data-plain="kT = −ln 2"></span>, in beiden Fällen:</p>
+
+  <div class="m block" id="f-halbwert" data-tex="T = \dfrac{\ln 2}{|k|}" data-plain="T = ln 2 / |k|"></div>
+
+  <p>Die Zeit <span class="m" data-tex="T" data-plain="T"></span> hängt nur von <span class="m" data-tex="k" data-plain="k"></span> ab, nicht vom Anfangsbestand und nicht davon, wann du zu zählen beginnst. Beim Koffein mit <span class="m" data-tex="k = -\ln 2/5 = -0{,}1386\,\mathrm{h^{-1}}" data-plain="k = −ln 2 / 5 = −0,1386 1/h"></span> kommt die Halbwertszeit 5,0 h heraus, bei Bakterien mit <span class="m" data-tex="k = 0{,}50\,\mathrm{h^{-1}}" data-plain="k = 0,50 1/h"></span> die Verdopplungszeit <span class="m" data-tex="T = \ln 2/0{,}50 = 1{,}39\,\mathrm{h}" data-plain="T = ln 2 / 0,50 = 1,39 h"></span>.</p>
+
+  <div class="merksatz">
+    <b>Exponentielles Modell</b>
+    Wachstum oder Zerfall ist exponentiell, wenn die Änderungsrate proportional zum Bestand ist. Gleichwertig sind <span class="m" data-tex="f(t) = B_0\,a^{t}" data-plain="f(t) = B₀·a^t"></span> und <span class="m" data-tex="f(t) = B_0\,e^{kt}" data-plain="f(t) = B₀·e^(kt)"></span> mit <span class="m" data-tex="k = \ln a" data-plain="k = ln a"></span>. Das Verhältnis <span class="m" data-tex="f'(t)/f(t)" data-plain="f′(t)/f(t)"></span> ist dann zu jedem Zeitpunkt dieselbe Zahl <span class="m" data-tex="k" data-plain="k"></span>.
+  </div>
+
+  <h3>Beschränktes Wachstum</h3>
+  <p>Nicht alles wächst oder zerfällt auf null zu. Eine Tasse Kaffee mit 85 °C in einem 20 °C warmen Raum kühlt anfangs schnell ab, später immer langsamer, und sie wird nie kälter als 20 °C. Die Modellannahme lautet: Die Änderungsrate ist nicht proportional zum Bestand, sondern zum <strong>Abstand von einer Schranke</strong> <span class="m" data-tex="S" data-plain="S"></span>, hier der Raumtemperatur:</p>
+
+  <div class="m block" data-tex="f'(t) = k\cdot\bigl(S - f(t)\bigr) \quad (k &gt; 0)" data-plain="f′(t) = k·(S − f(t))    (k &gt; 0)"></div>
+
+  <p>Ist <span class="m" data-tex="f(t) &lt; S" data-plain="f(t) &lt; S"></span>, ist die Rate positiv, und der Bestand wächst auf <span class="m" data-tex="S" data-plain="S"></span> zu. Ist <span class="m" data-tex="f(t) &gt; S" data-plain="f(t) &gt; S"></span>, ist sie negativ, und er sinkt auf <span class="m" data-tex="S" data-plain="S"></span> zu, wie beim Kaffee. Die Lösung mit <span class="m" data-tex="f(0) = B_0" data-plain="f(0) = B₀"></span> lautet:</p>
+
+  <div class="m block" id="f-beschr" data-tex="f(t) = S - (S - B_{0})\,e^{-kt}" data-plain="f(t) = S − (S − B₀)·e^(−kt)"></div>
+
+  <details>
+    <summary>Herleitung: Zurückführen auf das exponentielle Modell</summary>
+    <p><strong>Schritt 1 – Abstand als neue Größe.</strong> Sei <span class="m" data-tex="g(t) = S - f(t)" data-plain="g(t) = S − f(t)"></span> der Abstand zur Schranke. Dann ist <span class="m" data-tex="g'(t) = -f'(t)" data-plain="g′(t) = −f′(t)"></span>.</p>
+    <p><strong>Schritt 2 – Gleichung für den Abstand.</strong> Aus <span class="m" data-tex="f' = k\,(S - f)" data-plain="f′ = k·(S − f)"></span> folgt <span class="m" data-tex="g' = -k\,(S - f) = (-k)\,g" data-plain="g′ = −k·(S − f) = (−k)·g"></span>. Das ist das exponentielle Modell mit der Rate <span class="m" data-tex="-k" data-plain="−k"></span>.</p>
+    <p><strong>Schritt 3 – Lösung und Rückweg.</strong> Also ist <span class="m" data-tex="g(t) = g(0)\,e^{-kt} = (S - B_0)\,e^{-kt}" data-plain="g(t) = g(0)·e^(−kt) = (S − B₀)·e^(−kt)"></span> und <span class="m" data-tex="f(t) = S - g(t) = S - (S - B_0)\,e^{-kt}" data-plain="f(t) = S − g(t) = S − (S − B₀)·e^(−kt)"></span>.</p>
+  </details>
+
+  <p>Für die Tasse gilt <span class="m" data-tex="S = 20\,°\mathrm{C}" data-plain="S = 20 °C"></span>, <span class="m" data-tex="B_0 = 85\,°\mathrm{C}" data-plain="B₀ = 85 °C"></span> und etwa <span class="m" data-tex="k = 0{,}07\,\mathrm{min^{-1}}" data-plain="k = 0,07 1/min"></span>. Dann ist <span class="m" data-tex="f(t) = 20 - (20 - 85)\,e^{-0{,}07t} = 20 + 65\,e^{-0{,}07t}" data-plain="f(t) = 20 − (20 − 85)·e^(−0,07t) = 20 + 65·e^(−0,07t)"></span>, und nach zehn Minuten hat der Kaffee <span class="m" data-tex="f(10) = 20 + 65\,e^{-0{,}7} = 52{,}3\,°\mathrm{C}" data-plain="f(10) = 20 + 65·e^(−0,7) = 52,3 °C"></span>. Der Abstand zur Raumtemperatur halbiert sich dabei etwa alle <span class="m" data-tex="\ln 2/0{,}07 = 9{,}9\,\mathrm{min}" data-plain="ln 2 / 0,07 = 9,9 min"></span>.</p>
+
+  <h3>Modelle prüfen</h3>
+  <p>Ein Modell ist nicht wahr oder falsch, es passt zur Situation oder nicht. Drei Fragen helfen beim Prüfen.</p>
+  <ul>
+    <li><strong>Wohin läuft der Bestand für große Zeiten?</strong> Gegen null, gegen einen Wert ungleich null oder über alle Grenzen? Das legt fest, ob ein exponentielles oder ein beschränktes Modell in Frage kommt.</li>
+    <li><strong>Wovon hängt die Änderungsrate ab?</strong> Trägst du die Rate gegen den Bestand auf, entsteht beim exponentiellen Modell eine Gerade durch den Ursprung und beim beschränkten eine fallende Gerade, die die Bestandsachse bei <span class="m" data-tex="S" data-plain="S"></span> schneidet. Logarithmierst du <span class="m" data-tex="f(t) = B_0\,e^{kt}" data-plain="f(t) = B₀·e^(kt)"></span>, erhältst du <span class="m" data-tex="\ln f(t) = \ln B_0 + k\,t" data-plain="ln f(t) = ln B₀ + k·t"></span>, also bei einem exponentiellen Vorgang eine Gerade mit der Steigung <span class="m" data-tex="k" data-plain="k"></span>.</li>
+    <li><strong>Für welchen Zeitraum gilt das Modell?</strong> Kein reales Wachstum bleibt dauerhaft exponentiell. Nach 40 Verdopplungen hätte eine einzelne Bakterienzelle mehr als eine Billion Nachkommen (<span class="m" data-tex="2^{40} \approx 1{,}1\cdot 10^{12}" data-plain="2⁴⁰ ≈ 1,1·10¹²"></span>). Irgendwann fehlen Nahrung oder Platz, und die Rate sinkt.</li>
+  </ul>
+</section>
+
+<!-- =============== 4 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">4</div><h2>Modelle an Messwerten prüfen</h2></div>
+
+  <p>Die Simulation zeigt Messwerte als Punkte und ein Modell als Kurve, die du mit Reglern einstellst. Drei Beispieldatensätze stehen zur Wahl: eine Bakterienkultur, die Koffeinmenge im Blut und eine abkühlende Tasse Kaffee. Die Daten sind für diese Seite konstruiert und streuen leicht, so wie echte Messwerte es tun. Im oberen Diagramm vergleichst du Modell und Messwerte. Im unteren Diagramm ist die <strong>Änderungsrate gegen den Bestand</strong> aufgetragen: Die schwarzen Punkte sind die Differenzenquotienten der Messwerte, die Gerade gehört zum Modell, der goldene Punkt zur Stelle <span class="m" data-tex="t_0" data-plain="t₀"></span>, die du oben ziehst oder mit dem Regler einstellst. Die mittlere Abweichung ist die Wurzel aus dem Mittelwert der quadrierten Abstände zwischen Messwert und Kurve, gemessen in der Einheit der senkrechten Achse.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    1. Wähle „Bakterienkultur“ mit dem exponentiellen Modell. Stelle <span class="m" data-tex="B_0" data-plain="B₀"></span> und <span class="m" data-tex="k" data-plain="k"></span> so ein, dass die Kurve möglichst nah an den Punkten liegt, und beobachte die mittlere Abweichung. Lies am Graphen ab, in welcher Zeit sich der Bestand von 4 auf 8 Tsd. Zellen verdoppelt, und vergleiche mit der Anzeige „Verdopplungszeit“.<br>
+    2. Schalte die senkrechte Achse auf logarithmisch und verändere <span class="m" data-tex="k" data-plain="k"></span>. Beschreibe, wie die Kurve aussieht und was sich an ihr ändert. Schalte die Tangente ein, ziehe die Stelle <span class="m" data-tex="t_0" data-plain="t₀"></span> entlang der Zeitachse und beobachte den goldenen Punkt im unteren Diagramm: Wo liegt er, wenn <span class="m" data-tex="t_0" data-plain="t₀"></span> wandert?<br>
+    3. Wähle „Tasse Kaffee“ mit dem exponentiellen Modell und mache die Abweichung möglichst klein. Sieh dir dazu auch das untere Diagramm an: Liegen die Punkte auf der Geraden des Modells, und geht diese Gerade durch den Ursprung? Wechsle dann auf das beschränkte Modell, stelle <span class="m" data-tex="S" data-plain="S"></span> ein und vergleiche. Formuliere einen Satz: Woran erkennst du, dass ein exponentielles Modell für einen Vorgang ungeeignet ist?
+  </div>
+
+  <div class="sim">
+    <canvas id="cvM" width="1000" height="320" role="img" aria-label="Messwerte als Punkte und Modellkurve, Stelle t0 verschiebbar"></canvas>
+    <div class="trenner"></div>
+    <canvas id="cvR" width="1000" height="240" role="img" aria-label="Änderungsrate gegen Bestand: Differenzenquotienten der Messwerte und Gerade des Modells"></canvas>
+
+    <div class="anzeige">
+      <div>Stelle t₀<span id="aT">4,0 h</span></div>
+      <div>Modellwert f(t₀)<span id="aF">2,00 Tsd. Zellen</span></div>
+      <div>Steigung f′(t₀)<span id="aS">0,00 Tsd. Zellen/h</span></div>
+      <div><em id="aQName" style="font-style:normal">f′ : f</em><span id="aQ">0,000 1/h</span></div>
+      <div><em id="aZName" style="font-style:normal">Verdopplungszeit</em><span id="aZ">–</span></div>
+      <div>Mittlere Abweichung<span id="aRms">27,70 Tsd. Zellen</span></div>
+      <div>Bestwert B₀ · k<span id="aBest">–</span></div>
+      <div>Bestwert S<span id="aBestS">–</span></div>
+      <div>Kleinste Abweichung<span id="aBestQ">–</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label for="sDaten">Datensatz</label>
+          <select id="sDaten" style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px;background:#fff">
+            <option value="0">Bakterienkultur</option>
+            <option value="1">Koffein im Blut</option>
+            <option value="2">Tasse Kaffee</option>
+          </select>
+        </div>
+        <div>
+          <label for="sModell">Modell</label>
+          <select id="sModell" style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px;background:#fff">
+            <option value="exp">exponentiell</option>
+            <option value="besch">beschränkt</option>
+          </select>
+        </div>
+        <div>
+          <label for="rB">Anfangswert B₀ <b><span id="lB">2,0</span> <span id="uB">Tsd. Zellen</span></b></label>
+          <input type="range" id="rB" min="0.5" max="6" step="0.1" value="2">
+        </div>
+        <div>
+          <label for="rK"><span id="nK">Rate k im Exponenten</span> <b><span id="lK">0,000</span> <span id="uK">1/h</span></b></label>
+          <input type="range" id="rK" min="-0.6" max="0.6" step="0.005" value="0">
+        </div>
+        <div id="zS" style="display:none">
+          <label for="rS">Schranke S <b><span id="lS">0</span> <span id="uS">Tsd. Zellen</span></b></label>
+          <input type="range" id="rS" min="0" max="120" step="1" value="0">
+        </div>
+        <div>
+          <label for="rT">Stelle t₀ <b><span id="lT">4,0</span> <span id="uT">h</span></b></label>
+          <input type="range" id="rT" min="0" max="100" step="1" value="50">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button class="primaer" id="bBest">Bestanpassung zeigen</button>
+        <button id="bReset">Zurücksetzen</button>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px;margin-left:6px">
+          <input type="checkbox" id="cLog" style="accent-color:var(--akzent);width:16px;height:16px">
+          Senkrechte Achse logarithmisch
+        </label>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px">
+          <input type="checkbox" id="cTang" style="accent-color:var(--akzent);width:16px;height:16px">
+          Tangente zeigen
+        </label>
+      </div>
+      <p id="simHinweis" aria-live="polite" style="margin:10px 0 0;font-size:14px;color:var(--grau)"></p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Du wählst „Tasse Kaffee“ mit dem exponentiellen Modell und stellst <span class="m" data-tex="B_0" data-plain="B₀"></span> und <span class="m" data-tex="k" data-plain="k"></span> so ein, dass die mittlere Abweichung möglichst klein wird. Was stellst du fest?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>Mit etwas Geduld sinkt die Abweichung unter 0,5 °C, das Modell passt also.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>Die Abweichung bleibt bei etwa 2 °C, denn die Kurve läuft gegen 0 °C, die Messwerte aber gegen etwa 20 °C.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>Die Abweichung wird klein, sobald <span class="m" data-tex="k" data-plain="k"></span> negativ ist, denn die Temperatur sinkt.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Du wählst „Koffein im Blut“ mit dem beschränkten Modell und suchst die Einstellung mit der kleinsten Abweichung, von Hand oder mit „Bestanpassung zeigen“. Welchen Wert hat die Schranke <span class="m" data-tex="S" data-plain="S"></span>?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span><span class="m" data-tex="S \approx 0\,\mathrm{mg}" data-plain="S ≈ 0 mg"></span>: Die Menge geht gegen null, der Abbau ist im Kern exponentiell.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span><span class="m" data-tex="S \approx 40\,\mathrm{mg}" data-plain="S ≈ 40 mg"></span>, denn nach einer Halbwertszeit ist noch die Hälfte übrig.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span><span class="m" data-tex="S \approx 20\,\mathrm{mg}" data-plain="S ≈ 20 mg"></span>, denn der letzte Messwert liegt bei etwa 20 mg.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+</section>
+
+<!-- =============== 5 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">5</div><h2>Übungen</h2></div>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Eine Bakterienkultur enthält zu Beginn 500 Zellen und wächst unter günstigen Bedingungen um 12 % pro Stunde. Wie viele Zellen sind es nach 6 Stunden? Runde auf ganze Zellen.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="Zellen">Zellen</option>
+        <option value="%">%</option>
+        <option value="Zellen/h">Zellen/h</option>
+        <option value="h">h</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Frag nicht, wie viele Zellen pro Stunde dazukommen, sondern mit welcher Zahl der Bestand in einer Stunde multipliziert wird.</div>
+    <div class="hilfe-text" data-stufe="2">Der Wachstumsfaktor folgt aus dem Prozentsatz, <span class="m" data-tex="a = 1 + p/100" data-plain="a = 1 + p/100"></span>. Der Bestand nach <span class="m" data-tex="t" data-plain="t"></span> Stunden ist <span class="m" data-tex="B(t) = 500\cdot a^{t}" data-plain="B(t) = 500·a^t"></span>. Setze <span class="m" data-tex="t = 6" data-plain="t = 6"></span> ein.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="a = 1 + \dfrac{12}{100} = 1{,}12" data-plain="a = 1 + 12/100 = 1,12"></span>. Damit ist <span class="m" data-tex="B(6) = 500\cdot 1{,}12^{6} = 500\cdot 1{,}9738 = 986{,}9 \approx 987" data-plain="B(6) = 500 · 1,12⁶ = 500 · 1,9738 = 986,9 ≈ 987"></span> Zellen.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Der Bestand eines Stoffes in einem Reaktor wird modellhaft durch <span class="m" data-tex="B(t) = 3\,e^{0{,}5t}" data-plain="B(t) = 3·e^(0,5t)"></span> beschrieben (<span class="m" data-tex="t" data-plain="t"></span> in Stunden, <span class="m" data-tex="B" data-plain="B"></span> in Gramm). Berechne die momentane Änderungsrate des Bestands zur Zeit <span class="m" data-tex="t = 2\,\mathrm{h}" data-plain="t = 2 h"></span>.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="g/h">g/h</option>
+        <option value="g">g</option>
+        <option value="h">h</option>
+        <option value="g·h">g·h</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die momentane Änderungsrate ist die Ableitung. Beachte, dass im Exponenten mehr steht als nur <span class="m" data-tex="t" data-plain="t"></span>.</div>
+    <div class="hilfe-text" data-stufe="2">Leite mit der Kettenregel ab, <span class="m" data-tex="\left(e^{kt}\right)' = k\,e^{kt}" data-plain="(e^(kt))′ = k·e^(kt)"></span>. Der Faktor 3 bleibt stehen. Setze erst danach <span class="m" data-tex="t = 2" data-plain="t = 2"></span> ein.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="B'(t) = 3\cdot 0{,}5\,e^{0{,}5t} = 1{,}5\,e^{0{,}5t}" data-plain="B′(t) = 3 · 0,5 · e^(0,5t) = 1,5 · e^(0,5t)"></span>. Bei <span class="m" data-tex="t = 2" data-plain="t = 2"></span> ist <span class="m" data-tex="B'(2) = 1{,}5\,e^{1} = 1{,}5\cdot 2{,}71828 = 4{,}077 \approx 4{,}08\,\mathrm{g/h}" data-plain="B′(2) = 1,5 · e¹ = 1,5 · 2,71828 = 4,077 ≈ 4,08 g/h"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die vier Graphen gehören zu vier Funktionen für <span class="m" data-tex="x \geq 0" data-plain="x ≥ 0"></span>; die senkrechte Achse ist bei 6 abgeschnitten. Ordne jedem Term den passenden Graphen zu.</div>
+
+    <div class="diagramme">
+      <figure><svg viewBox="0 0 160 104"><line x1="14" y1="88.0" x2="154" y2="88.0" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="92" stroke="#94a3b8"/><line x1="16" y1="62.7" x2="20" y2="62.7" stroke="#94a3b8"/><text x="12" y="65.7" font-size="8" fill="#64748b" text-anchor="end">2</text><line x1="16" y1="37.3" x2="20" y2="37.3" stroke="#94a3b8"/><text x="12" y="40.3" font-size="8" fill="#64748b" text-anchor="end">4</text><line x1="16" y1="12.0" x2="20" y2="12.0" stroke="#94a3b8"/><text x="12" y="15.0" font-size="8" fill="#64748b" text-anchor="end">6</text><line x1="50.5" y1="86" x2="50.5" y2="90" stroke="#94a3b8"/><text x="50.5" y="98" font-size="8" fill="#64748b" text-anchor="middle">1</text><line x1="83.0" y1="86" x2="83.0" y2="90" stroke="#94a3b8"/><text x="83.0" y="98" font-size="8" fill="#64748b" text-anchor="middle">2</text><line x1="115.5" y1="86" x2="115.5" y2="90" stroke="#94a3b8"/><text x="115.5" y="98" font-size="8" fill="#64748b" text-anchor="middle">3</text><line x1="148.0" y1="86" x2="148.0" y2="90" stroke="#94a3b8"/><text x="148.0" y="98" font-size="8" fill="#64748b" text-anchor="middle">4</text><text x="150" y="82" font-size="9" fill="#64748b">x</text><text x="22" y="12" font-size="9" fill="#64748b">f</text><polyline points="18.0,24.7 18.8,25.9 19.6,27.1 20.4,28.3 21.2,29.5 22.1,30.6 22.9,31.7 23.7,32.8 24.5,33.9 25.3,34.9 26.1,35.9 26.9,36.8 27.8,37.8 28.6,38.7 29.4,39.6 30.2,40.5 31.0,41.4 31.8,42.2 32.6,43.0 33.4,43.8 34.2,44.6 35.1,45.4 35.9,46.1 36.7,46.8 37.5,47.5 38.3,48.2 39.1,48.9 39.9,49.5 40.8,50.2 41.6,50.8 42.4,51.4 43.2,52.0 44.0,52.6 44.8,53.1 45.6,53.7 46.4,54.2 47.2,54.7 48.1,55.2 48.9,55.7 49.7,56.2 50.5,56.7 51.3,57.2 52.1,57.6 52.9,58.0 53.8,58.5 54.6,58.9 55.4,59.3 56.2,59.7 57.0,60.1 57.8,60.4 58.6,60.8 59.4,61.2 60.2,61.5 61.1,61.9 61.9,62.2 62.7,62.5 63.5,62.8 64.3,63.1 65.1,63.4 65.9,63.7 66.8,64.0 67.6,64.3 68.4,64.6 69.2,64.8 70.0,65.1 70.8,65.4 71.6,65.6 72.4,65.8 73.2,66.1 74.1,66.3 74.9,66.5 75.7,66.7 76.5,67.0 77.3,67.2 78.1,67.4 78.9,67.6 79.8,67.8 80.6,67.9 81.4,68.1 82.2,68.3 83.0,68.5 83.8,68.6 84.6,68.8 85.4,69.0 86.2,69.1 87.1,69.3 87.9,69.4 88.7,69.6 89.5,69.7 90.3,69.9 91.1,70.0 91.9,70.1 92.8,70.3 93.6,70.4 94.4,70.5 95.2,70.6 96.0,70.7 96.8,70.9 97.6,71.0 98.4,71.1 99.2,71.2 100.1,71.3 100.9,71.4 101.7,71.5 102.5,71.6 103.3,71.7 104.1,71.8 104.9,71.8 105.8,71.9 106.6,72.0 107.4,72.1 108.2,72.2 109.0,72.3 109.8,72.3 110.6,72.4 111.4,72.5 112.2,72.5 113.1,72.6 113.9,72.7 114.7,72.7 115.5,72.8 116.3,72.9 117.1,72.9 117.9,73.0 118.8,73.1 119.6,73.1 120.4,73.2 121.2,73.2 122.0,73.3 122.8,73.3 123.6,73.4 124.4,73.4 125.2,73.5 126.1,73.5 126.9,73.6 127.7,73.6 128.5,73.6 129.3,73.7 130.1,73.7 130.9,73.8 131.8,73.8 132.6,73.8 133.4,73.9 134.2,73.9 135.0,73.9 135.8,74.0 136.6,74.0 137.4,74.0 138.2,74.1 139.1,74.1 139.9,74.1 140.7,74.2 141.5,74.2 142.3,74.2 143.1,74.3 143.9,74.3 144.8,74.3 145.6,74.3 146.4,74.4 147.2,74.4 148.0,74.4" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg><figcaption>A</figcaption></figure>
+      <figure><svg viewBox="0 0 160 104"><line x1="14" y1="88.0" x2="154" y2="88.0" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="92" stroke="#94a3b8"/><line x1="16" y1="62.7" x2="20" y2="62.7" stroke="#94a3b8"/><text x="12" y="65.7" font-size="8" fill="#64748b" text-anchor="end">2</text><line x1="16" y1="37.3" x2="20" y2="37.3" stroke="#94a3b8"/><text x="12" y="40.3" font-size="8" fill="#64748b" text-anchor="end">4</text><line x1="16" y1="12.0" x2="20" y2="12.0" stroke="#94a3b8"/><text x="12" y="15.0" font-size="8" fill="#64748b" text-anchor="end">6</text><line x1="50.5" y1="86" x2="50.5" y2="90" stroke="#94a3b8"/><text x="50.5" y="98" font-size="8" fill="#64748b" text-anchor="middle">1</text><line x1="83.0" y1="86" x2="83.0" y2="90" stroke="#94a3b8"/><text x="83.0" y="98" font-size="8" fill="#64748b" text-anchor="middle">2</text><line x1="115.5" y1="86" x2="115.5" y2="90" stroke="#94a3b8"/><text x="115.5" y="98" font-size="8" fill="#64748b" text-anchor="middle">3</text><line x1="148.0" y1="86" x2="148.0" y2="90" stroke="#94a3b8"/><text x="148.0" y="98" font-size="8" fill="#64748b" text-anchor="middle">4</text><text x="150" y="82" font-size="9" fill="#64748b">x</text><text x="22" y="12" font-size="9" fill="#64748b">f</text><polyline points="18.0,75.3 18.8,75.2 19.6,75.0 20.4,74.8 21.2,74.7 22.1,74.5 22.9,74.3 23.7,74.2 24.5,74.0 25.3,73.8 26.1,73.6 26.9,73.5 27.8,73.3 28.6,73.1 29.4,72.9 30.2,72.7 31.0,72.5 31.8,72.3 32.6,72.1 33.4,71.9 34.2,71.7 35.1,71.5 35.9,71.3 36.7,71.1 37.5,70.9 38.3,70.7 39.1,70.5 39.9,70.2 40.8,70.0 41.6,69.8 42.4,69.6 43.2,69.3 44.0,69.1 44.8,68.9 45.6,68.6 46.4,68.4 47.2,68.1 48.1,67.9 48.9,67.6 49.7,67.4 50.5,67.1 51.3,66.9 52.1,66.6 52.9,66.3 53.8,66.0 54.6,65.8 55.4,65.5 56.2,65.2 57.0,64.9 57.8,64.6 58.6,64.3 59.4,64.0 60.2,63.7 61.1,63.4 61.9,63.1 62.7,62.8 63.5,62.5 64.3,62.2 65.1,61.8 65.9,61.5 66.8,61.2 67.6,60.8 68.4,60.5 69.2,60.2 70.0,59.8 70.8,59.5 71.6,59.1 72.4,58.7 73.2,58.4 74.1,58.0 74.9,57.6 75.7,57.2 76.5,56.8 77.3,56.5 78.1,56.1 78.9,55.7 79.8,55.2 80.6,54.8 81.4,54.4 82.2,54.0 83.0,53.6 83.8,53.1 84.6,52.7 85.4,52.3 86.2,51.8 87.1,51.3 87.9,50.9 88.7,50.4 89.5,49.9 90.3,49.5 91.1,49.0 91.9,48.5 92.8,48.0 93.6,47.5 94.4,47.0 95.2,46.5 96.0,45.9 96.8,45.4 97.6,44.9 98.4,44.3 99.2,43.8 100.1,43.2 100.9,42.7 101.7,42.1 102.5,41.5 103.3,40.9 104.1,40.3 104.9,39.7 105.8,39.1 106.6,38.5 107.4,37.9 108.2,37.3 109.0,36.6 109.8,36.0 110.6,35.3 111.4,34.7 112.2,34.0 113.1,33.3 113.9,32.6 114.7,31.9 115.5,31.2 116.3,30.5 117.1,29.8 117.9,29.1 118.8,28.3 119.6,27.6 120.4,26.8 121.2,26.0 122.0,25.3 122.8,24.5 123.6,23.7 124.4,22.9 125.2,22.0 126.1,21.2 126.9,20.4 127.7,19.5 128.5,18.7 129.3,17.8 130.1,16.9 130.9,16.0 131.8,15.1 132.6,14.2 133.4,13.3 134.2,12.3 134.5,12.0" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg><figcaption>B</figcaption></figure>
+      <figure><svg viewBox="0 0 160 104"><line x1="14" y1="88.0" x2="154" y2="88.0" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="92" stroke="#94a3b8"/><line x1="16" y1="62.7" x2="20" y2="62.7" stroke="#94a3b8"/><text x="12" y="65.7" font-size="8" fill="#64748b" text-anchor="end">2</text><line x1="16" y1="37.3" x2="20" y2="37.3" stroke="#94a3b8"/><text x="12" y="40.3" font-size="8" fill="#64748b" text-anchor="end">4</text><line x1="16" y1="12.0" x2="20" y2="12.0" stroke="#94a3b8"/><text x="12" y="15.0" font-size="8" fill="#64748b" text-anchor="end">6</text><line x1="50.5" y1="86" x2="50.5" y2="90" stroke="#94a3b8"/><text x="50.5" y="98" font-size="8" fill="#64748b" text-anchor="middle">1</text><line x1="83.0" y1="86" x2="83.0" y2="90" stroke="#94a3b8"/><text x="83.0" y="98" font-size="8" fill="#64748b" text-anchor="middle">2</text><line x1="115.5" y1="86" x2="115.5" y2="90" stroke="#94a3b8"/><text x="115.5" y="98" font-size="8" fill="#64748b" text-anchor="middle">3</text><line x1="148.0" y1="86" x2="148.0" y2="90" stroke="#94a3b8"/><text x="148.0" y="98" font-size="8" fill="#64748b" text-anchor="middle">4</text><text x="150" y="82" font-size="9" fill="#64748b">x</text><text x="22" y="12" font-size="9" fill="#64748b">f</text><polyline points="18.0,24.7 18.8,26.2 19.6,27.8 20.4,29.2 21.2,30.7 22.1,32.1 22.9,33.5 23.7,34.8 24.5,36.1 25.3,37.4 26.1,38.7 26.9,39.9 27.8,41.1 28.6,42.2 29.4,43.4 30.2,44.5 31.0,45.5 31.8,46.6 32.6,47.6 33.4,48.6 34.2,49.6 35.1,50.5 35.9,51.5 36.7,52.4 37.5,53.2 38.3,54.1 39.1,54.9 39.9,55.8 40.8,56.5 41.6,57.3 42.4,58.1 43.2,58.8 44.0,59.5 44.8,60.2 45.6,60.9 46.4,61.6 47.2,62.3 48.1,62.9 48.9,63.5 49.7,64.1 50.5,64.7 51.3,65.3 52.1,65.8 52.9,66.4 53.8,66.9 54.6,67.4 55.4,67.9 56.2,68.4 57.0,68.9 57.8,69.4 58.6,69.9 59.4,70.3 60.2,70.7 61.1,71.2 61.9,71.6 62.7,72.0 63.5,72.4 64.3,72.8 65.1,73.1 65.9,73.5 66.8,73.9 67.6,74.2 68.4,74.6 69.2,74.9 70.0,75.2 70.8,75.5 71.6,75.8 72.4,76.1 73.2,76.4 74.1,76.7 74.9,77.0 75.7,77.3 76.5,77.5 77.3,77.8 78.1,78.0 78.9,78.3 79.8,78.5 80.6,78.8 81.4,79.0 82.2,79.2 83.0,79.4 83.8,79.6 84.6,79.8 85.4,80.0 86.2,80.2 87.1,80.4 87.9,80.6 88.7,80.8 89.5,81.0 90.3,81.2 91.1,81.3 91.9,81.5 92.8,81.7 93.6,81.8 94.4,82.0 95.2,82.1 96.0,82.3 96.8,82.4 97.6,82.5 98.4,82.7 99.2,82.8 100.1,82.9 100.9,83.1 101.7,83.2 102.5,83.3 103.3,83.4 104.1,83.5 104.9,83.6 105.8,83.7 106.6,83.8 107.4,84.0 108.2,84.1 109.0,84.1 109.8,84.2 110.6,84.3 111.4,84.4 112.2,84.5 113.1,84.6 113.9,84.7 114.7,84.8 115.5,84.8 116.3,84.9 117.1,85.0 117.9,85.1 118.8,85.1 119.6,85.2 120.4,85.3 121.2,85.4 122.0,85.4 122.8,85.5 123.6,85.5 124.4,85.6 125.2,85.7 126.1,85.7 126.9,85.8 127.7,85.8 128.5,85.9 129.3,85.9 130.1,86.0 130.9,86.0 131.8,86.1 132.6,86.1 133.4,86.2 134.2,86.2 135.0,86.3 135.8,86.3 136.6,86.4 137.4,86.4 138.2,86.4 139.1,86.5 139.9,86.5 140.7,86.5 141.5,86.6 142.3,86.6 143.1,86.7 143.9,86.7 144.8,86.7 145.6,86.7 146.4,86.8 147.2,86.8 148.0,86.8" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg><figcaption>C</figcaption></figure>
+      <figure><svg viewBox="0 0 160 104"><line x1="14" y1="88.0" x2="154" y2="88.0" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="92" stroke="#94a3b8"/><line x1="16" y1="62.7" x2="20" y2="62.7" stroke="#94a3b8"/><text x="12" y="65.7" font-size="8" fill="#64748b" text-anchor="end">2</text><line x1="16" y1="37.3" x2="20" y2="37.3" stroke="#94a3b8"/><text x="12" y="40.3" font-size="8" fill="#64748b" text-anchor="end">4</text><line x1="16" y1="12.0" x2="20" y2="12.0" stroke="#94a3b8"/><text x="12" y="15.0" font-size="8" fill="#64748b" text-anchor="end">6</text><line x1="50.5" y1="86" x2="50.5" y2="90" stroke="#94a3b8"/><text x="50.5" y="98" font-size="8" fill="#64748b" text-anchor="middle">1</text><line x1="83.0" y1="86" x2="83.0" y2="90" stroke="#94a3b8"/><text x="83.0" y="98" font-size="8" fill="#64748b" text-anchor="middle">2</text><line x1="115.5" y1="86" x2="115.5" y2="90" stroke="#94a3b8"/><text x="115.5" y="98" font-size="8" fill="#64748b" text-anchor="middle">3</text><line x1="148.0" y1="86" x2="148.0" y2="90" stroke="#94a3b8"/><text x="148.0" y="98" font-size="8" fill="#64748b" text-anchor="middle">4</text><text x="150" y="82" font-size="9" fill="#64748b">x</text><text x="22" y="12" font-size="9" fill="#64748b">f</text><polyline points="18.0,75.3 18.8,74.1 19.6,72.9 20.4,71.7 21.2,70.5 22.1,69.4 22.9,68.3 23.7,67.2 24.5,66.1 25.3,65.1 26.1,64.1 26.9,63.2 27.8,62.2 28.6,61.3 29.4,60.4 30.2,59.5 31.0,58.6 31.8,57.8 32.6,57.0 33.4,56.2 34.2,55.4 35.1,54.6 35.9,53.9 36.7,53.2 37.5,52.5 38.3,51.8 39.1,51.1 39.9,50.5 40.8,49.8 41.6,49.2 42.4,48.6 43.2,48.0 44.0,47.4 44.8,46.9 45.6,46.3 46.4,45.8 47.2,45.3 48.1,44.8 48.9,44.3 49.7,43.8 50.5,43.3 51.3,42.8 52.1,42.4 52.9,42.0 53.8,41.5 54.6,41.1 55.4,40.7 56.2,40.3 57.0,39.9 57.8,39.6 58.6,39.2 59.4,38.8 60.2,38.5 61.1,38.1 61.9,37.8 62.7,37.5 63.5,37.2 64.3,36.9 65.1,36.6 65.9,36.3 66.8,36.0 67.6,35.7 68.4,35.4 69.2,35.2 70.0,34.9 70.8,34.6 71.6,34.4 72.4,34.2 73.2,33.9 74.1,33.7 74.9,33.5 75.7,33.3 76.5,33.0 77.3,32.8 78.1,32.6 78.9,32.4 79.8,32.2 80.6,32.1 81.4,31.9 82.2,31.7 83.0,31.5 83.8,31.4 84.6,31.2 85.4,31.0 86.2,30.9 87.1,30.7 87.9,30.6 88.7,30.4 89.5,30.3 90.3,30.1 91.1,30.0 91.9,29.9 92.8,29.7 93.6,29.6 94.4,29.5 95.2,29.4 96.0,29.3 96.8,29.1 97.6,29.0 98.4,28.9 99.2,28.8 100.1,28.7 100.9,28.6 101.7,28.5 102.5,28.4 103.3,28.3 104.1,28.2 104.9,28.2 105.8,28.1 106.6,28.0 107.4,27.9 108.2,27.8 109.0,27.7 109.8,27.7 110.6,27.6 111.4,27.5 112.2,27.5 113.1,27.4 113.9,27.3 114.7,27.3 115.5,27.2 116.3,27.1 117.1,27.1 117.9,27.0 118.8,26.9 119.6,26.9 120.4,26.8 121.2,26.8 122.0,26.7 122.8,26.7 123.6,26.6 124.4,26.6 125.2,26.5 126.1,26.5 126.9,26.4 127.7,26.4 128.5,26.4 129.3,26.3 130.1,26.3 130.9,26.2 131.8,26.2 132.6,26.2 133.4,26.1 134.2,26.1 135.0,26.1 135.8,26.0 136.6,26.0 137.4,26.0 138.2,25.9 139.1,25.9 139.9,25.9 140.7,25.8 141.5,25.8 142.3,25.8 143.1,25.7 143.9,25.7 144.8,25.7 145.6,25.7 146.4,25.6 147.2,25.6 148.0,25.6" fill="none" stroke="#0d7a52" stroke-width="2.5"/></svg><figcaption>D</figcaption></figure>
+    </div>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="B"><span><span class="m" data-tex="f(x) = e^{0{,}5x}" data-plain="f(x) = e^(0,5x)"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="A"><span><span class="m" data-tex="f(x) = 1 + 4\,e^{-x}" data-plain="f(x) = 1 + 4·e^(−x)"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="D"><span><span class="m" data-tex="f(x) = 5 - 4\,e^{-x}" data-plain="f(x) = 5 − 4·e^(−x)"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="C"><span><span class="m" data-tex="f(x) = 5\,e^{-x}" data-plain="f(x) = 5·e^(−x)"></span></span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Zwei Merkmale reichen: der Funktionswert bei <span class="m" data-tex="x = 0" data-plain="x = 0"></span> und die Frage, wohin der Graph für große <span class="m" data-tex="x" data-plain="x"></span> läuft.</div>
+    <div class="hilfe-text" data-stufe="2">Setze <span class="m" data-tex="x = 0" data-plain="x = 0"></span> ein, dort ist <span class="m" data-tex="e^{0} = 1" data-plain="e⁰ = 1"></span>. Überlege dann, was für große <span class="m" data-tex="x" data-plain="x"></span> aus <span class="m" data-tex="e^{-x}" data-plain="e^(−x)"></span> wird und was vom Term übrig bleibt.</div>
+    <div class="hilfe-text" data-stufe="3">Bei <span class="m" data-tex="e^{0{,}5x}" data-plain="e^(0,5x)"></span> ist <span class="m" data-tex="f(0) = 1" data-plain="f(0) = 1"></span>, und der Graph wächst ohne Grenze: B. Bei <span class="m" data-tex="1 + 4\,e^{-x}" data-plain="1 + 4·e^(−x)"></span> ist <span class="m" data-tex="f(0) = 5" data-plain="f(0) = 5"></span>, und wegen <span class="m" data-tex="e^{-x} \to 0" data-plain="e^(−x) → 0"></span> läuft der Graph gegen 1: A. Bei <span class="m" data-tex="5 - 4\,e^{-x}" data-plain="5 − 4·e^(−x)"></span> ist <span class="m" data-tex="f(0) = 1" data-plain="f(0) = 1"></span>, und der Graph läuft gegen 5: D. Bei <span class="m" data-tex="5\,e^{-x}" data-plain="5·e^(−x)"></span> ist <span class="m" data-tex="f(0) = 5" data-plain="f(0) = 5"></span>, und der Graph läuft gegen 0: C.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die Zahl der Atomkerne eines radioaktiven Präparats folgt modellhaft <span class="m" data-tex="N(t) = N_0\,e^{-0{,}035\,t}" data-plain="N(t) = N₀·e^(−0,035·t)"></span> (<span class="m" data-tex="t" data-plain="t"></span> in Tagen). Nach wie vielen Tagen ist die Hälfte der Kerne zerfallen?</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="d">d</option>
+        <option value="1/d">1/d</option>
+        <option value="h">h</option>
+        <option value="Kerne">Kerne</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Gesucht ist die Zeit, nach der nur noch die Hälfte des Anfangswerts übrig ist. Den Anfangswert selbst brauchst du nicht.</div>
+    <div class="hilfe-text" data-stufe="2">Setze <span class="m" data-tex="N(T) = \tfrac{1}{2}\,N_0" data-plain="N(T) = ½·N₀"></span> und kürze <span class="m" data-tex="N_0" data-plain="N₀"></span>. Die Zeit steht im Exponenten, also hilft der natürliche Logarithmus.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="e^{-0{,}035\,T} = \tfrac{1}{2}" data-plain="e^(−0,035·T) = 1/2"></span> gibt <span class="m" data-tex="-0{,}035\,T = \ln\tfrac{1}{2} = -\ln 2" data-plain="−0,035·T = ln(1/2) = −ln 2"></span>. Also ist <span class="m" data-tex="T = \dfrac{\ln 2}{0{,}035} = \dfrac{0{,}6931}{0{,}035} = 19{,}8\,\mathrm{d}" data-plain="T = ln 2 / 0,035 = 0,6931 / 0,035 = 19,8 d"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die Kultur aus Aufgabe 1 (500 Zellen zu Beginn, Zuwachs 12 % je Stunde) soll sich verdreifachen. Nach wie vielen Stunden ist das der Fall?</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="h">h</option>
+        <option value="min">min</option>
+        <option value="1/h">1/h</option>
+        <option value="Zellen">Zellen</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Stelle eine Gleichung für die gesuchte Zeit auf: Wie viele Zellen sollen es dann sein? Die Zeit steht dabei im Exponenten.</div>
+    <div class="hilfe-text" data-stufe="2">Löse <span class="m" data-tex="500\cdot 1{,}12^{t} = 1500" data-plain="500·1,12^t = 1500"></span> nach <span class="m" data-tex="t" data-plain="t"></span>. Teile zuerst durch 500, dann logarithmiere beide Seiten oder benutze die Lösungsformel für <span class="m" data-tex="a^{t} = b" data-plain="a^t = b"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="1{,}12^{t} = 3" data-plain="1,12^t = 3"></span> gibt <span class="m" data-tex="t = \dfrac{\ln 3}{\ln 1{,}12} = \dfrac{1{,}0986}{0{,}1133} = 9{,}69\,\mathrm{h}" data-plain="t = ln 3 / ln 1,12 = 1,0986 / 0,1133 = 9,69 h"></span>, das sind etwa 582 Minuten. Probe: <span class="m" data-tex="1{,}12^{9{,}69} \approx 3{,}0" data-plain="1,12^(9,69) ≈ 3,0"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a6">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Eine Zeitung schreibt: „Das soziale Netzwerk X hat 50 Millionen Nutzer und verdoppelt seine Nutzerzahl jedes Jahr. In zehn Jahren hat es deshalb über 50 Milliarden Nutzer.“ Beurteile diese Aussage mit Hilfe der Modelle aus dieser Seite.</div>
+    <textarea placeholder="Deine Beurteilung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a6">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Rechnerisch folgt die Aussage aus der Annahme eines gleichbleibenden Verdopplungsfaktors: <span class="m" data-tex="50\cdot 10^{6}\cdot 2^{10} = 5{,}12\cdot 10^{10}" data-plain="50·10⁶ · 2¹⁰ = 5,12·10¹⁰"></span>, also etwa 51 Milliarden. Dieses exponentielle Modell kann aber nur für die Anfangsphase gelten. Nach sieben Jahren wären es <span class="m" data-tex="50\cdot 10^{6}\cdot 2^{7} = 6{,}4\cdot 10^{9}" data-plain="50·10⁶ · 2⁷ = 6,4·10⁹"></span>, nach acht Jahren <span class="m" data-tex="1{,}28\cdot 10^{10}" data-plain="1,28·10¹⁰"></span>, also mehr Nutzer, als es Menschen auf der Erde gibt (etwa 8 Milliarden).</p>
+      <p>Die Modellannahme, dass die Zunahme proportional zum Bestand bleibt und immer neue Nutzer verfügbar sind, trägt dann nicht mehr. Realistischer ist ein beschränktes Modell mit einer Schranke <span class="m" data-tex="S" data-plain="S"></span> unterhalb der Weltbevölkerung, in dem sich das Wachstum abschwächt, sobald viele Menschen schon Nutzer sind. Als Beschreibung der ersten Jahre kann die Aussage stimmen, als Prognose für zehn Jahre ist sie nicht belastbar.</p>
+      <p><strong>Bewertungskriterien.</strong> Rechnung im exponentiellen Modell (etwa 51 Milliarden) · Vergleich mit der Weltbevölkerung als Obergrenze · Nennung der Modellannahme (Rate proportional zum Bestand) · Vorschlag eines beschränkten Modells mit Schranke · Unterscheidung von Anfangsphase und Langzeitprognose.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-num="a7">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Ein Mitschüler leitet <span class="m" data-tex="f(x) = e^{x^{2}}" data-plain="f(x) = e^(x²)"></span> so ab: <span class="m" data-tex="f'(x) = x^{2}\,e^{x^{2}-1}" data-plain="f′(x) = x²·e^(x²−1)"></span>. Finde den Fehler, erkläre ihn und gib die richtige Ableitung an. Zeige außerdem mit einer Probe bei <span class="m" data-tex="x = 1" data-plain="x = 1"></span>, dass seine Ableitung nicht stimmen kann.</div>
+    <textarea placeholder="Deine Erklärung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a7">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Der Mitschüler hat die Potenzregel <span class="m" data-tex="(x^{n})' = n\,x^{n-1}" data-plain="(x^n)′ = n·x^(n−1)"></span> auf <span class="m" data-tex="e^{x^{2}}" data-plain="e^(x²)"></span> angewendet, als wäre <span class="m" data-tex="x^{2}" data-plain="x²"></span> der Exponent einer Potenzfunktion. Die Variable steht aber im Exponenten, es ist eine e-Funktion. Nach der Kettenregel gilt <span class="m" data-tex="\left(e^{u}\right)' = u'\,e^{u}" data-plain="(e^u)′ = u′·e^u"></span> mit der inneren Funktion <span class="m" data-tex="u(x) = x^{2}" data-plain="u(x) = x²"></span> und <span class="m" data-tex="u'(x) = 2x" data-plain="u′(x) = 2x"></span>. Richtig ist also <span class="m" data-tex="f'(x) = 2x\,e^{x^{2}}" data-plain="f′(x) = 2x·e^(x²)"></span>.</p>
+      <p>Probe bei <span class="m" data-tex="x = 1" data-plain="x = 1"></span>: Der Differenzenquotient mit <span class="m" data-tex="h = 0{,}001" data-plain="h = 0,001"></span> ist <span class="m" data-tex="\dfrac{e^{1{,}001^{2}} - e^{1}}{0{,}001} \approx 5{,}44" data-plain="(e^(1,001²) − e¹) / 0,001 ≈ 5,44"></span>. Die richtige Ableitung liefert <span class="m" data-tex="2e = 5{,}44" data-plain="2e = 5,44"></span>, der Term des Mitschülers dagegen <span class="m" data-tex="1^{2}\,e^{0} = 1" data-plain="1²·e⁰ = 1"></span>. Sein Term passt also nicht zur Steigung von etwa 5,4.</p>
+      <p><strong>Bewertungskriterien.</strong> Falsch angewendete Potenzregel erkannt · äußere und innere Funktion benannt · richtige Ableitung <span class="m" data-tex="2x\,e^{x^{2}}" data-plain="2x·e^(x²)"></span> · Probe mit Zahlenwerten (Differenzenquotient gegen beide Terme).</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 6 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">6</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Das Wichtigste in sechs Sätzen</h3>
+    <ul>
+      <li>Exponentielles Wachstum heißt: In gleichen Schritten wird mit demselben Faktor multipliziert, <span class="m" data-tex="f(x) = c\cdot a^{x}" data-plain="f(x) = c·a^x"></span>. Ändert sich der Bestand je Schritt um <span class="m" data-tex="p" data-plain="p"></span> Prozent, ist <span class="m" data-tex="a = 1 + p/100" data-plain="a = 1 + p/100"></span>.</li>
+      <li>Die Zahl <span class="m" data-tex="e" data-plain="e"></span> ist die Basis, bei der die Funktion ihre eigene Ableitung ist, <span class="m" data-tex="\left(e^{x}\right)' = e^{x}" data-plain="(e^x)′ = e^x"></span>. Jede andere Basis lässt sich mit <span class="m" data-tex="a^{x} = e^{x\cdot\ln a}" data-plain="a^x = e^(x·ln a)"></span> darauf zurückführen, und es gilt <span class="m" data-tex="\left(a^{x}\right)' = \ln a\cdot a^{x}" data-plain="(a^x)′ = ln a·a^x"></span>.</li>
+      <li>Mit der Kettenregel ist <span class="m" data-tex="\left(e^{g(x)}\right)' = g'(x)\cdot e^{g(x)}" data-plain="(e^(g(x)))′ = g′(x)·e^(g(x))"></span>. Der Faktor <span class="m" data-tex="e^{g(x)}" data-plain="e^(g(x))"></span> ist nie null, beim Nullsetzen der Ableitung entscheidet der andere Faktor.</li>
+      <li>Exponentialgleichungen löst du mit dem Logarithmus: <span class="m" data-tex="a^{x} = b" data-plain="a^x = b"></span> gibt <span class="m" data-tex="x = \ln b/\ln a" data-plain="x = ln b / ln a"></span>, vorausgesetzt <span class="m" data-tex="b &gt; 0" data-plain="b &gt; 0"></span>.</li>
+      <li>Exponentielles Wachstum oder Zerfall bedeutet, dass die Änderungsrate proportional zum Bestand ist, <span class="m" data-tex="f' = k\,f" data-plain="f′ = k·f"></span>, und führt auf <span class="m" data-tex="f(t) = B_0\,e^{kt}" data-plain="f(t) = B₀·e^(kt)"></span> mit <span class="m" data-tex="k = \ln a" data-plain="k = ln a"></span>. Die Verdopplungs- oder Halbwertszeit ist <span class="m" data-tex="T = \ln 2/|k|" data-plain="T = ln 2 / |k|"></span> und hängt nicht vom Anfangsbestand ab.</li>
+      <li>Ist die Rate proportional zum Abstand von einer Schranke, entsteht beschränktes Wachstum, <span class="m" data-tex="f(t) = S - (S - B_0)\,e^{-kt}" data-plain="f(t) = S − (S − B₀)·e^(−kt)"></span>. Ob ein Modell passt, prüfst du am Verhalten für große Zeiten, an der Rate gegen den Bestand und am Gültigkeitsbereich.</li>
+    </ul>
+  </div>
+
+  <div class="hinweis">
+    <strong>Blick aufs Zentralabitur.</strong> Exponentialfunktionen kommen in Analysis-Aufgaben selten als eigenes Thema vor, sondern als Werkzeug und als Sachkontext. Diese Gestalten begegnen dir typischerweise:
+    <ul style="margin:8px 0 0">
+      <li>die Untersuchung einer Funktion oder Schar mit e-Term: Ableiten mit Produkt- und Kettenregel, Nullsetzen, bei dem der e-Faktor wegfällt, und das Verhalten für große und kleine <span class="m" data-tex="x" data-plain="x"></span>;</li>
+      <li>ein Sachzusammenhang mit Bestand und Änderungsrate, etwa Wirkstoffabbau, Temperatur oder Zufluss, mit der Frage nach einer Halbwertszeit oder nach dem Zeitpunkt, an dem eine Schwelle erreicht wird (eine Exponentialgleichung);</li>
+      <li>Modellkritik: Wie verhält sich das Modell für große Zeiten, und wo passt es nicht mehr zur Situation?</li>
+      <li>die Verbindung zur Integralrechnung: Weil <span class="m" data-tex="\left(e^{kt}\right)' = k\,e^{kt}" data-plain="(e^(kt))′ = k·e^(kt)"></span> gilt, liefert <span class="m" data-tex="\tfrac{1}{k}\,e^{kt}" data-plain="(1/k)·e^(kt)"></span> eine Stammfunktion, und Integrale von Änderungsraten ergeben Bestandsänderungen.</li>
+    </ul>
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Ich kann …</h3>
+    <div class="check">
+      <label><input type="checkbox"><span>… an einer Wertetabelle erkennen, ob ein Vorgang linear oder exponentiell verläuft, und Wachstumsfaktor und Anfangswert bestimmen.</span></label>
+      <label><input type="checkbox"><span>… begründen, warum die Zahl e durch die Bedingung „Funktion gleich Ableitung“ festgelegt ist, und Exponentialfunktionen mit beliebiger Basis auf e zurückführen.</span></label>
+      <label><input type="checkbox"><span>… e-Funktionen mit Produkt- und Kettenregel ableiten und die Ableitung in der Funktionsuntersuchung nutzen.</span></label>
+      <label><input type="checkbox"><span>… Exponentialgleichungen mit dem natürlichen Logarithmus lösen und die Lösung durch eine Probe prüfen.</span></label>
+      <label><input type="checkbox"><span>… Wachstums- und Zerfallsvorgänge mit der Gleichung <span class="m" data-tex="f' = k\,f" data-plain="f′ = k·f"></span> beschreiben und Verdopplungs- und Halbwertszeiten berechnen.</span></label>
+      <label><input type="checkbox"><span>… beschränktes Wachstum erkennen, die Schranke deuten und begründet entscheiden, welches Modell zu Messwerten passt.</span></label>
+    </div>
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnis als Text kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+
+  <details class="lehrer">
+    <summary>Didaktische Hinweise (Lehrkraft)</summary>
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Funktionen und Analysis“ (Kernlehrplan Mathematik, gymnasiale Oberstufe NRW). Q1 umfasst laut Verteilung dieses Projekts die natürliche Exponentialfunktion; dieses Modul deckt ab: Wachstumsfaktor und Wachstum in Schritten, die Zahl e über die Ableitung, den natürlichen Logarithmus als Umkehrung, die Kettenregel für e-Funktionen, Exponentialgleichungen, die Differenzialgleichung <span class="m" data-tex="f' = k\,f" data-plain="f′ = k·f"></span> mit Eindeutigkeit der Lösung, beschränktes Wachstum und die Prüfung von Modellen an Messwerten. Prozessbezogene Schwerpunkte sind <em>Modellieren</em> (Einstieg, Simulation, Aufgaben a1, a4, a5, a6), <em>Argumentieren</em> (die drei Herleitungen, a6 und a7), <em>Werkzeuge nutzen</em> (die Simulation als Messinstrument, der Taschenrechner für ln) und <em>Kommunizieren</em> (Tabelle, Graph und Term als Darstellungen). Vorausgesetzt werden aus <code>mathe-q1-ableitungsregeln</code> die Produkt- und die Kettenregel, aus der Sekundarstufe I Potenzgesetze und Prozentrechnung. Die Module zu Ableitungsregeln, Hauptsatz und Flächen zwischen Kurven benutzen <span class="m" data-tex="e^{kx}" data-plain="e^(kx)"></span> bereits als gegeben; hier wird es begründet. Die Stellung im Schuljahr ist schulintern verschiebbar.</p>
+    <p><strong>Offene Punkte.</strong> Nicht geklärt ist, ob für den Leistungskurs in Q1 auch das logistische Wachstum verlangt wird. Dieses Modul behandelt exponentielles und beschränktes Wachstum, das logistische nicht. Offen ist außerdem, ob der natürliche Logarithmus schon als Funktion mit Graph und Ableitung <span class="m" data-tex="1/x" data-plain="1/x"></span> verlangt wird; das Modul verwendet <span class="m" data-tex="\ln" data-plain="ln"></span> nur als Umkehrung zum Lösen von Gleichungen. Dass die Zahl e über die Steigung der Exponentialfunktionen an der Stelle 0 eingeführt wird und nicht über den Grenzwert von <span class="m" data-tex="\left(1 + 1/n\right)^{n}" data-plain="(1 + 1/n)^n"></span>, ist eine didaktische Entscheidung; ob eure Schule e über Zinseszins einführt, ist schulintern. Es wurden keine Kernlehrplan-Zitate eingetragen, die sich nicht belegen ließen.</p>
+    <p><strong>Zeitbedarf.</strong> Abschnitte 1 und 2 etwa 45 Minuten, Abschnitt 3 etwa 35 Minuten, Simulation mit Beobachtungsauftrag 25 Minuten, Übungen 30 Minuten. Die beiden Aufgaben im Anforderungsbereich III eignen sich für eine Hausaufgabe oder eine Partnerarbeit mit anschließendem Vergleich der Musterlösung.</p>
+    <p><strong>Typische Hürden.</strong> Erstens die Verwechslung von Zuwachs und Faktor: Bei 12 % Zuwachs wird mit 1,12 multipliziert, nicht mit 0,12 (Aufgaben a1 und a5). Zweitens die Potenzregel auf e-Funktionen (Aufgabe a7): In <span class="m" data-tex="e^{x}" data-plain="e^x"></span> steht die Variable im Exponenten. Drittens die vergessene innere Ableitung (Aufgabe a2). Viertens das Zerlegen von <span class="m" data-tex="\ln(u + v)" data-plain="ln(u + v)"></span>. Fünftens <span class="m" data-tex="k" data-plain="k"></span> und Prozentzahl gleichsetzen: Die Rate im Exponenten ist der Logarithmus des Faktors. Sechstens das exponentielle Modell für Vorgänge mit Schranke, etwa die Abkühlung bis auf null (Simulation, Aufgabe a6). Siebtens der Alltagsgebrauch von „exponentiell“ für „sehr stark“, der die Proportionalität zum Bestand ausblendet.</p>
+    <p><strong>Modellgrenzen.</strong> Die Datensätze der Simulation sind konstruiert und streuen mit festen, kleinen Abweichungen; sie stammen nicht aus echten Messungen. Die Bestanpassung minimiert die Summe der quadrierten Abstände in der Einheit der senkrechten Achse. Sie kann deshalb vom Ergebnis einer Ausgleichsgeraden im logarithmischen Bild leicht abweichen, weil dort relative Abweichungen gewichtet werden. Die Simulation kennt nur das exponentielle und das beschränkte Modell.</p>
+    <p><strong>Formelleiste.</strong> Der Zusammenhang „gleiche Quotienten heißen exponentiell“ und die Potenz <span class="m" data-tex="2^{-3}" data-plain="2⁻³"></span> stehen bewusst nicht in der Leiste, weil sie die Antworten auf die Vorwissensfragen vw1 und vw3 wären. Formeln, die nur in Aufgaben und Musterlösungen vorkommen, fehlen ebenfalls.</p>
+    <p><strong>Experimentbezug.</strong> Die Simulation ersetzt keinen Versuch. Sinnvoll sind ein Abkühlversuch mit Thermometer oder Temperatursensor und Stoppuhr, die Entladung eines Kondensators über einen Widerstand (Anschluss an die Physik) und das Würfelmodell zum radioaktiven Zerfall: Von 100 Würfeln werden nach jedem Wurf alle Sechser entfernt, der erwartete Faktor je Wurf ist 5/6.</p>
+    <p><strong>Differenzierung.</strong> Das dreistufige Hilfesystem trägt die Binnendifferenzierung. Schnelle Gruppen können die Faustregel „Verdopplungszeit ≈ 70 / p“ für p Prozent Zuwachs prüfen und erklären, warum sie gilt, oder zeigen, dass die Tangente an den Graphen von <span class="m" data-tex="e^{x}" data-plain="e^x"></span> an der Stelle 1 durch den Ursprung geht.</p>
+  </details>
+
+  <footer>
+    Mathematik LK Q1 · Exponentialfunktionen · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/baustein-formelleiste.md
+var formelDaten = [
+  {abschnitt:"grundlagen", titel:"Wachstumsfaktor, Ableitung und die Zahl e", formeln:[
+    {id:"expo", ziel:"f-expo", tex:"f(x) = c\\cdot a^{x}", plain:"f(x) = c·a^x",
+     zeichen:[
+       {tex:"f(x)", plain:"f(x)", text:"Bestand nach x Schritten"},
+       {tex:"c", plain:"c", text:"Anfangswert, also f(0)"},
+       {tex:"a", plain:"a", text:"Wachstumsfaktor je Schritt, a > 0 und a ≠ 1"},
+       {tex:"x", plain:"x", text:"Zahl der Schritte, zum Beispiel die Zeit"}],
+     gilt:"Gilt, wenn der Bestand in gleichen Schritten immer mit demselben Faktor a multipliziert wird. Für a > 1 wächst er, für 0 < a < 1 nimmt er ab.",
+     fehler:"Den Zuwachs statt des Faktors einsetzen. Bei 3 % Zuwachs je Schritt ist a = 1,03 und nicht 0,03."},
+    {id:"prozent", ziel:"f-prozent", tex:"a = 1 + \\dfrac{p}{100}", plain:"a = 1 + p/100",
+     zeichen:[
+       {tex:"a", plain:"a", text:"Wachstumsfaktor je Schritt"},
+       {tex:"p", plain:"p", text:"prozentuale Änderung je Schritt, bei Abnahme negativ"}],
+     gilt:"Gilt, wenn sich der Bestand je Schritt um denselben Prozentsatz p ändert. Bei Abnahme ist p negativ, etwa p = −13 für a = 0,87.",
+     fehler:"Bei einer Abnahme mit positivem p rechnen. Eine Abnahme um 13 % je Schritt gibt a = 0,87 und nicht 1,13."},
+    {id:"eabl", ziel:"f-eabl", tex:"\\left(e^{x}\\right)' = e^{x}", plain:"(e^x)′ = e^x",
+     zeichen:[
+       {tex:"e", plain:"e", text:"Euler'sche Zahl, e ≈ 2,71828"},
+       {tex:"x", plain:"x", text:"beliebige reelle Zahl"}],
+     gilt:"Gilt für alle reellen x. Es ist die einzige Basis, bei der Funktion und Ableitung übereinstimmen.",
+     fehler:"Die Potenzregel anwenden und x·e^(x−1) schreiben. Bei e^x steht die Variable im Exponenten, nicht in der Basis."},
+    {id:"aumschr", ziel:"f-aumschr", tex:"a^{x} = e^{x\\cdot\\ln a}", plain:"a^x = e^(x·ln a)",
+     zeichen:[
+       {tex:"a", plain:"a", text:"Basis, a > 0"},
+       {tex:"\\ln a", plain:"ln a", text:"natürlicher Logarithmus von a, die Zahl mit e^(ln a) = a"},
+       {tex:"x", plain:"x", text:"Exponent"}],
+     gilt:"Gilt für a > 0. Sie folgt aus a = e^(ln a) und dem Potenzgesetz (e^u)^x = e^(u·x).",
+     fehler:"Den Faktor x im Exponenten vergessen. Aus e^(ln a) würde nur die Konstante a, nicht die Funktion a^x."},
+    {id:"aabl", ziel:"f-aabl", tex:"\\left(a^{x}\\right)' = \\ln a\\cdot a^{x}", plain:"(a^x)′ = ln a·a^x",
+     zeichen:[
+       {tex:"a", plain:"a", text:"Basis, a > 0"},
+       {tex:"\\ln a", plain:"ln a", text:"natürlicher Logarithmus von a, Faktor vor der Funktion"},
+       {tex:"x", plain:"x", text:"beliebige reelle Zahl"}],
+     gilt:"Gilt für a > 0. Für a = e ist ln a = 1, und es bleibt (e^x)′ = e^x.",
+     fehler:"Wie bei einer Potenzfunktion ableiten und x·a^(x−1) schreiben. Bei a^x ist die Basis fest und der Faktor ln a kommt dazu."},
+    {id:"kette", ziel:"f-kette", tex:"\\left(e^{g(x)}\\right)' = g'(x)\\cdot e^{g(x)}", plain:"(e^(g(x)))′ = g′(x)·e^(g(x))",
+     zeichen:[
+       {tex:"g(x)", plain:"g(x)", text:"innere Funktion, der Exponent"},
+       {tex:"g'(x)", plain:"g′(x)", text:"Ableitung der inneren Funktion"}],
+     gilt:"Gilt für jede differenzierbare innere Funktion g. Im Sonderfall g(x) = k·x ergibt sich k·e^(kx). Der Faktor e^(g(x)) ist nie null.",
+     fehler:"Die innere Ableitung vergessen. Die Ableitung von e^(−0,5x) ist −0,5·e^(−0,5x) und nicht e^(−0,5x)."},
+    {id:"lngl", ziel:"f-lngl", tex:"a^{x} = b \\;\\Longleftrightarrow\\; x = \\dfrac{\\ln b}{\\ln a}", plain:"a^x = b ⟺ x = ln b / ln a",
+     zeichen:[
+       {tex:"a", plain:"a", text:"Basis, a > 0 und a ≠ 1"},
+       {tex:"b", plain:"b", text:"rechte Seite, muss positiv sein"},
+       {tex:"x", plain:"x", text:"gesuchter Exponent"}],
+     gilt:"Gilt nur für b > 0. Eine Potenz mit positiver Basis ist nie null und nie negativ, deshalb hat a^x = b für b ≤ 0 keine Lösung.",
+     fehler:"Zähler und Nenner vertauschen. Die Probe fängt das ab: a hoch das Ergebnis muss wieder b ergeben."}
+  ]},
+  {abschnitt:"vertiefung", titel:"Wachstumsmodelle: Änderungsrate und Bestand", formeln:[
+    {id:"dgl", ziel:"f-dgl", tex:"f'(t) = k\\cdot f(t)", plain:"f′(t) = k·f(t)",
+     zeichen:[
+       {tex:"f(t)", plain:"f(t)", text:"Bestand zur Zeit t"},
+       {tex:"f'(t)", plain:"f′(t)", text:"momentane Änderungsrate des Bestands"},
+       {tex:"k", plain:"k", text:"Proportionalitätsfaktor, k > 0 bei Wachstum und k < 0 bei Zerfall"}],
+     gilt:"Die Änderungsrate ist zu jedem Zeitpunkt proportional zum Bestand. Die Lösung mit Anfangswert steht in der nächsten Formel.",
+     fehler:"Die Gleichung für die Funktion halten. f′ = k·f ist eine Bedingung an f, nicht die Funktion selbst. Gesucht ist das f, das sie erfüllt."},
+    {id:"expoe", ziel:"f-expoe", tex:"f(t) = B_{0}\\cdot e^{kt}", plain:"f(t) = B₀·e^(kt)",
+     zeichen:[
+       {tex:"f(t)", plain:"f(t)", text:"Bestand zur Zeit t"},
+       {tex:"B_{0}", plain:"B₀", text:"Anfangsbestand, also f(0)"},
+       {tex:"k", plain:"k", text:"Wachstumsrate, der Faktor im Exponenten"},
+       {tex:"t", plain:"t", text:"Zeit"}],
+     gilt:"Löst f′ = k·f mit f(0) = B₀, und es gibt keine weitere Lösung mit diesem Anfangswert. Mit a = e^k ist es dieselbe Funktion wie c·a^t.",
+     fehler:"k mit dem Wachstumsfaktor a verwechseln. Im Exponenten steht k = ln a. Bei a = 1,05 ist k = 0,0488 und nicht 0,05."},
+    {id:"ka", ziel:"f-ka", tex:"k = \\ln a", plain:"k = ln a",
+     zeichen:[
+       {tex:"k", plain:"k", text:"Rate im Exponenten der e-Schreibweise"},
+       {tex:"a", plain:"a", text:"Wachstumsfaktor je Zeiteinheit, a > 0"}],
+     gilt:"Gilt für a > 0. Zu a > 1 gehört k > 0, zu 0 < a < 1 gehört k < 0.",
+     fehler:"Die Prozentzahl direkt als k verwenden. Bei einer Abnahme um 13 % je Schritt ist k = ln 0,87 = −0,139 und nicht −0,13."},
+    {id:"halbwert", ziel:"f-halbwert", tex:"T = \\dfrac{\\ln 2}{|k|}", plain:"T = ln 2 / |k|",
+     zeichen:[
+       {tex:"T", plain:"T", text:"Verdopplungszeit bei k > 0, Halbwertszeit bei k < 0"},
+       {tex:"k", plain:"k", text:"Rate im Exponenten von f(t) = B₀·e^(kt)"}],
+     gilt:"Gilt für exponentielles Wachstum oder Zerfall, also f(t) = B₀·e^(kt). Für k = 0 ändert sich nichts, es gibt keine solche Zeit.",
+     fehler:"1/k statt ln 2 / |k| verwenden. Die Zeit 1/k ist die, in der der Bestand auf das e-Fache wächst oder auf das 1/e-Fache fällt, nicht auf das Doppelte oder die Hälfte."},
+    {id:"beschr", ziel:"f-beschr", tex:"f(t) = S - (S - B_{0})\\,e^{-kt}", plain:"f(t) = S − (S − B₀)·e^(−kt)",
+     zeichen:[
+       {tex:"f(t)", plain:"f(t)", text:"Bestand zur Zeit t"},
+       {tex:"S", plain:"S", text:"Schranke, der Grenzwert für t → ∞"},
+       {tex:"B_{0}", plain:"B₀", text:"Anfangsbestand, also f(0)"},
+       {tex:"k", plain:"k", text:"Annäherungsrate, k > 0"},
+       {tex:"t", plain:"t", text:"Zeit"}],
+     gilt:"Löst f′ = k·(S − f) mit k > 0 und f(0) = B₀. Der Bestand nähert sich S von unten oder von oben, erreicht S aber nie.",
+     fehler:"Die Klammer (S − B₀) umdrehen. Die Probe bei t = 0 fängt das ab: f(0) muss B₀ ergeben."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{"r": 1, "fb": ["Hier kommen mit jedem Schritt 3 hinzu: 4, 7, 10, 13. Gleiche Zuwächse heißen lineares Wachstum. Exponentiell wäre, wenn mit demselben Faktor multipliziert wird.", "Richtig. 4 · 2 = 8, 8 · 2 = 16, 16 · 2 = 32: Jeder Wert ist das Doppelte des vorigen, die Quotienten sind gleich. Das ist das Kennzeichen des exponentiellen Wachstums. Die Zuwächse 4, 8, 16 werden dabei selbst immer größer.", "Die Zuwächse 3, 5, 7 werden größer, aber sie wachsen um dieselbe Zahl (je 2). Das ist kein konstanter Faktor: Die Quotienten 7/4, 12/7, 19/12 sind 1,75; 1,71; 1,58 und nehmen ab. Wachsende Zuwächse allein machen ein Wachstum noch nicht exponentiell."]},
+  vw2:{"r": 1, "fb": ["Das ist nur die äußere Ableitung: 4·(3x − 2)³. Nach der Kettenregel wird noch mit der Ableitung der inneren Funktion 3x − 2 multipliziert, und die ist 3. Fehlt dieser Faktor, stimmt schon die Steigung bei x = 1 nicht mehr (4 statt 12).", "Richtig. Äußere Funktion u⁴ mit Ableitung 4u³, innere Funktion 3x − 2 mit Ableitung 3: f′(x) = 4·(3x − 2)³·3 = 12·(3x − 2)³. Dasselbe Muster brauchst du gleich bei e-Funktionen.", "Hier wurde der Exponent nicht um 1 verkleinert: Die Potenzregel macht aus u⁴ den Term 4u³ und nicht 4u⁴. Probe bei x = 2, dort ist 3x − 2 = 4: Richtig sind 12·4³ = 768, mit dem falschen Exponenten wären es 12·4⁴ = 3072."]},
+  vw3:{"r": 1, "fb": ["Das Minuszeichen im Exponenten macht das Ergebnis nicht negativ: 2⁻³ ist der Kehrwert von 2³, also positiv. Eine Potenz mit positiver Basis ist nie negativ.", "Richtig. Ein negativer Exponent bedeutet den Kehrwert: 2⁻³ = 1/2³ = 1/8. Genau so werden später abnehmende Größen wie 0,87^x oder e^(−kx) gelesen.", "Hier wurde 2·(−3) gerechnet. Ein Exponent sagt aber, wie oft die Basis als Faktor vorkommt, nicht womit sie multipliziert wird. Bei negativem Exponenten steht diese Potenz im Nenner: 2⁻³ = 1/(2·2·2)."]},
+  sim1:{"r": 1, "fb": ["Das gelingt nicht, auch mit viel Geduld. Öffne „Bestanpassung zeigen“: Selbst die bestmögliche Kurve des exponentiellen Modells liegt im Mittel etwa 2,0 °C neben den Messwerten, deren Streuung nur etwa 0,3 °C beträgt. Die Abweichung ist also kein Einstellproblem, sondern ein Modellproblem.", "Richtig. Die e-Kurve läuft gegen 0 °C, die Tasse aber auf die Raumtemperatur von etwa 20 °C zu. Wer den Anfang trifft, liegt am Ende zu tief, wer das Ende trifft, liegt am Anfang zu tief. Das beschränkte Modell hat dafür die Schranke S.", "Dass k negativ sein muss, stimmt: Die Temperatur sinkt. Es reicht aber nicht. Auch beim besten negativen k bleibt die Abweichung bei etwa 2 °C, weil die Kurve gegen null statt gegen die Raumtemperatur läuft."]},
+  sim2:{"r": 0, "fb": ["Richtig. Mit der besten Anpassung liegt S bei etwa 0 mg (Anzeige: 0,1 mg), und die Abweichung ist genauso klein wie beim exponentiellen Modell. Der Stoff wird bis auf null abgebaut, das beschränkte Modell enthält den Zerfall gegen null als Sonderfall S = 0.", "40 mg wäre die Menge nach einer Halbwertszeit, aber eine Schranke ist der Wert, gegen den die Kurve für sehr große Zeiten läuft. Die Messwerte fallen auch nach 5 h weiter, bis unter 20 mg. Setzt du S = 40 mg, passen die Punkte ab etwa 5 h nicht mehr.", "Der letzte Messwert liegt bei etwa 20 mg, aber die Menge fällt dort noch. Eine Schranke ist kein gemessener Wert, sondern der Grenzwert für t → ∞. Mit S = 20 mg wird die Kurve zu flach und liegt bei den letzten Punkten klar zu hoch; in der Bestanpassung erscheint S bei etwa 0,1 mg."]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{"wert": 987, "einheit": "Zellen", "tol": 2, "ok": "Richtig. Der Wachstumsfaktor ist a = 1 + 12/100 = 1,12, und B(6) = 500·1,12⁶ = 500·1,9738 = 986,9 ≈ 987 Zellen.", "falschEinheit": "Der Zahlenwert passt. Gefragt ist ein Bestand, also eine Anzahl von Zellen. Prozent beschreibt die Zunahme, Zellen pro Stunde wäre eine Rate und Stunden eine Zeit.", "nah": "860 bekommt, wer linear rechnet: 500·(1 + 6·0,12). Dann kämen jede Stunde 60 Zellen dazu. Bei 12 % Zuwachs wächst der Bestand aber jeweils um 12 % des aktuellen Bestands: Der Faktor 1,12 wird sechsmal angewendet, also 1,12⁶.", "weit": "3360 entsteht aus 500·1,12·6: Der Faktor wird mit 6 multipliziert statt sechsmal angewendet. Bei sehr kleinen Werten wurde 0,12 als Faktor benutzt. Die Hilfen führen dich: erst der Wachstumsfaktor, dann die Potenz."},
+  a2:{"wert": 4.08, "einheit": "g/h", "tol": 0.03, "ok": "Richtig. B′(t) = 3·0,5·e^(0,5t) = 1,5·e^(0,5t), also B′(2) = 1,5·e ≈ 4,08 g/h.", "falschEinheit": "Der Zahlenwert passt. Die Änderungsrate hat die Einheit Bestand je Zeit, hier g/h. Gramm wäre der Bestand selbst, Stunden eine Zeit.", "nah": "8,15 ist der Wert von B(2) = 3·e. Den bekommt, wer die Funktion auswertet statt abzuleiten oder wer die innere Ableitung 0,5 vergisst. Gefragt ist die Änderungsrate, also B′(2).", "weit": "1,5 ist B′(0): Hier wurde t = 0 statt t = 2 eingesetzt. Die Hilfen führen dich: erst mit der Kettenregel ableiten, dann t = 2 einsetzen."},
+  a4:{"wert": 19.8, "einheit": "d", "tol": 0.1, "alt": {"wert": 475.3, "einheit": "h"}, "ok": "Richtig. N₀·e^(−0,035·T) = ½·N₀ führt auf T = ln 2 / 0,035 = 19,8 d, das sind etwa 475 h.", "falschEinheit": "Der Zahlenwert passt. Gefragt ist eine Zeit, hier in Tagen (oder gut 475 h). Die Einheit 1/d gehört zur Rate k, und Kerne zählen den Bestand.", "nah": "28,6 ist 1/0,035: die Zeit, in der der Bestand auf das 1/e-Fache sinkt, nicht auf die Hälfte. Dort fehlt der Faktor ln 2. Auch 0,5/0,035 = 14,3 passt nicht, denn „halb“ steht im Logarithmus: ln 2 durch 0,035.", "weit": "Sehr kleine Werte wie 0,024 entstehen, wenn 0,035 mit ln 2 multipliziert statt durch 0,035 geteilt wird. Die Hilfen führen dich: Ansatz N(T) = ½·N₀, e^(−0,035·T) = ½, dann logarithmieren."},
+  a5:{"wert": 9.69, "einheit": "h", "tol": 0.05, "alt": {"wert": 581.6, "einheit": "min"}, "ok": "Richtig. 500·1,12^t = 1500 führt auf 1,12^t = 3 und t = ln 3 / ln 1,12 = 1,0986 / 0,1133 = 9,69 h, das sind etwa 582 min.", "falschEinheit": "Der Zahlenwert passt. Gefragt ist eine Zeit, hier in Stunden (oder etwa 582 Minuten). Zellen zählen den Bestand, 1/h wäre eine Rate.", "nah": "9,16 bekommt, wer ln 3 durch 0,12 teilt. Im Nenner steht aber ln 1,12 = 0,1133 und nicht der Prozentwert 0,12: Die Rate im Exponenten ist der Logarithmus des Wachstumsfaktors.", "weit": "25 erhältst du mit 3/0,12. Das ist lineares Denken: Jede Stunde kämen 12 % des Anfangsbestands dazu. Bei 12 % Zuwachs je Stunde wächst der Bestand aber jeweils um 12 % des aktuellen Werts, daher geht es schneller. Die Zahl 3 ist der gesuchte Faktor 1500/500, noch nicht die Zeit."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.a3 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier richtig. Zwei Fragen haben jede Zuordnung entschieden: Steigt oder fällt die Kurve, also welches Vorzeichen hat der Exponent? Und läuft sie gegen null oder gegen einen anderen Wert, steht im Term also eine Konstante neben dem e-Anteil?";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Geh jeden Term in zwei Schritten durch: Steigt oder fällt er, wenn x größer wird? Läuft er gegen null oder gegen einen Wert ungleich null? Der Funktionswert bei x = 0 hilft beim Unterscheiden, denn dort ist e^0 = 1.";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: Modelle an Messwerten prüfen ============ */
+(function(){
+  var cvM = document.getElementById("cvM"), cM = cvM.getContext("2d");
+  var cvR = document.getElementById("cvR"), cR = cvR.getContext("2d");
+  var $ = function(id){ return document.getElementById(id); };
+  var LN2 = Math.LN2;
+
+  // Rand um die Zeichenfläche in Pixeln; beide Diagramme haben dieselben Ränder
+  var ML = 78, MR = 24, MT = 26, MB = 58;
+  var farbM = "#0d7a52", farbP = "#0f2135", farbB = "#8a6100", farbG = "#94a3b8", farbT = "#5b6b7f", farbGitter = "#e2e8f0";
+
+  // Beispieldaten: für diese Seite konstruiert, keine echten Messungen
+  var DATEN = [{"id": "bakt", "titel": "Bakterienkultur", "xName": "Zeit t", "xEin": "h", "yName": "Bestand B", "yEin": "Tsd. Zellen", "xmax": 8, "xstep": 1, "ymax": 80, "ystep": 10, "logMin": 1, "logMax": 100, "b0": {"min": 0.5, "max": 6, "step": 0.1, "start": 2.0, "dez": 1}, "rx": 80, "rxstep": 20, "ry": 30, "rystep": 10, "t": [0, 1, 2, 3, 4, 5, 6, 7], "y": [2.0, 3.2, 5.7, 8.6, 15.4, 23.9, 41.4, 64.2]}, {"id": "koffein", "titel": "Koffein im Blut", "xName": "Zeit t", "xEin": "h", "yName": "Menge M", "yEin": "mg", "xmax": 12, "xstep": 2, "ymax": 100, "ystep": 20, "logMin": 10, "logMax": 100, "b0": {"min": 40, "max": 120, "step": 1, "start": 80, "dez": 0}, "rx": 100, "rxstep": 20, "ry": 15, "rystep": 5, "t": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "y": [80.0, 71.0, 59.4, 54.4, 44.6, 40.8, 34.1, 31.2, 25.6, 23.4, 19.8]}, {"id": "kaffee", "titel": "Tasse Kaffee", "xName": "Zeit t", "xEin": "min", "yName": "Temperatur T", "yEin": "°C", "xmax": 40, "xstep": 5, "ymax": 100, "ystep": 20, "logMin": 10, "logMax": 100, "b0": {"min": 40, "max": 120, "step": 1, "start": 85, "dez": 0}, "rx": 100, "rxstep": 20, "ry": 6, "rystep": 2, "t": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30], "y": [85.0, 76.9, 68.8, 63.2, 56.7, 52.5, 47.6, 44.7, 41.0, 38.8, 35.7, 34.0, 31.7, 30.8, 29.0, 28.2]}];
+
+  var ds = 0, modell = "exp", B0 = 2, k = 0, S = 0, pct = 50, logAchse = false, tang = false, zeigeBest = false;
+  var cache = {};
+
+  function q(){ return DATEN[ds]; }
+  function fmt(z, n){ return z.toFixed(n).replace(".", ","); }
+  function minus(s){ return s.replace("-", "−"); }
+  function zahl(v, n){
+    if(!isFinite(v) || Math.abs(v) >= 1e6) return v < 0 ? "unter −1 000 000" : "über 1 000 000";
+    return minus(fmt(Math.abs(v) < 0.5 * Math.pow(10, -n) ? 0 : v, n));
+  }
+  function t0(){ return q().xmax * pct / 100; }
+  function kk(){ return Math.abs(k) < 1e-9 ? 0 : k; }
+
+  /* ---------- Modell ---------- */
+  function fp(p, t){ return p.m === "exp" ? p.B0 * Math.exp(p.k * t) : p.S - (p.S - p.B0) * Math.exp(-p.k * t); }
+  function par(){ return {m: modell, B0: B0, k: kk(), S: S}; }
+  function F(t){ return fp(par(), t); }
+  function dF(t){
+    return modell === "exp" ? kk() * B0 * Math.exp(kk() * t) : kk() * (S - B0) * Math.exp(-kk() * t);
+  }
+  function rms(p){
+    var dd = q(), s = 0;
+    for(var i = 0; i < dd.t.length; i++){ var r = dd.y[i] - fp(p, dd.t[i]); s += r * r; }
+    return Math.sqrt(s / dd.t.length);
+  }
+
+  /* ---------- Bestanpassung (kleinste Summe der Abweichungsquadrate) ---------- */
+  // exponentiell: zu festem k ist B0 eine lineare Kleinste-Quadrate-Aufgabe; k wird abgetastet.
+  // beschränkt:   f = S + A·e^(−kt) ist zu festem k linear in S und A; k wird abgetastet.
+  function bestExp(){
+    var dd = q(), best = null;
+    for(var i = -6000; i <= 6000; i++){
+      var kx = i / 10000, sxy = 0, sxx = 0;
+      for(var j = 0; j < dd.t.length; j++){ var e = Math.exp(kx * dd.t[j]); sxy += dd.y[j] * e; sxx += e * e; }
+      var p = {m: "exp", B0: sxy / sxx, k: kx, S: 0}, r = rms(p);
+      if(!best || r < best.rms){ best = p; best.rms = r; }
+    }
+    return best;
+  }
+  function bestBesch(){
+    var dd = q(), n = dd.t.length, best = null;
+    for(var i = 1; i <= 6000; i++){
+      var kx = i / 10000, se = 0, sy = 0, see = 0, sey = 0;
+      for(var j = 0; j < n; j++){
+        var e = Math.exp(-kx * dd.t[j]);
+        se += e; sy += dd.y[j]; see += e * e; sey += e * dd.y[j];
+      }
+      var det = n * see - se * se;
+      if(Math.abs(det) < 1e-12) continue;
+      var A = (n * sey - se * sy) / det, Sx = (sy - A * se) / n;
+      var p = {m: "besch", B0: Sx + A, k: kx, S: Sx}, r = rms(p);
+      if(!best || r < best.rms){ best = p; best.rms = r; }
+    }
+    return best;
+  }
+  function bestwert(){
+    var key = ds + modell;
+    if(!cache[key]) cache[key] = modell === "exp" ? bestExp() : bestBesch();
+    return cache[key];
+  }
+
+  /* ---------- Zeichnen: gemeinsame Hilfen ---------- */
+  function strecke(ctx, x1, y1, x2, y2, farbe, breite){
+    ctx.strokeStyle = farbe; ctx.lineWidth = breite;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+  function punkt(ctx, x, y, r, fuell, rand){
+    ctx.fillStyle = fuell; ctx.strokeStyle = rand; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+  }
+  function klemme(y){ return Math.max(-1e4, Math.min(1e4, y)); }
+  function text(ctx, s, x, y, ausr, farbe, font){
+    ctx.fillStyle = farbe || farbT; ctx.font = font || "13px sans-serif";
+    ctx.textAlign = ausr || "left"; ctx.textBaseline = "alphabetic"; ctx.fillText(s, x, y);
+  }
+  function achsentitel(ctx, W, H, xs, ys){
+    text(ctx, xs, ML + (W - ML - MR) / 2, H - 10, "center", farbT, "600 14px sans-serif");
+    ctx.save(); ctx.translate(18, MT + (H - MT - MB) / 2); ctx.rotate(-Math.PI / 2);
+    text(ctx, ys, 0, 0, "center", farbT, "600 14px sans-serif"); ctx.restore();
+  }
+
+  /* ---------- Zeichnen: Daten und Modell ---------- */
+  function zeichneMessung(){
+    var ctx = cM, W = cvM.width, H = cvM.height, dd = q();
+    var pw = W - ML - MR, ph = H - MT - MB;
+    var lo = Math.log10(dd.logMin), hi = Math.log10(dd.logMax);
+    function X(t){ return ML + t / dd.xmax * pw; }
+    function Y(v){
+      return logAchse ? MT + ph - (Math.log10(v) - lo) / (hi - lo) * ph : MT + ph - v / dd.ymax * ph;
+    }
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+
+    // Gitter und Skalen
+    var t, v;
+    for(t = 0; t <= dd.xmax + 1e-9; t += dd.xstep){
+      strecke(ctx, X(t), MT, X(t), MT + ph, farbGitter, 1);
+      text(ctx, fmt(t, 0), X(t), MT + ph + 20, "center");
+    }
+    if(logAchse){
+      for(var dek = Math.round(lo); dek <= Math.round(hi); dek++){
+        for(var m = 1; m < 10; m++){
+          v = m * Math.pow(10, dek);
+          if(v < dd.logMin - 1e-9 || v > dd.logMax + 1e-9) continue;
+          strecke(ctx, ML, Y(v), ML + pw, Y(v), m === 1 ? "#cbd5e1" : farbGitter, 1);
+          if(m === 1) text(ctx, String(v), ML - 8, Y(v) + 4, "right");
+        }
+      }
+    } else {
+      for(v = 0; v <= dd.ymax + 1e-9; v += dd.ystep){
+        strecke(ctx, ML, Y(v), ML + pw, Y(v), farbGitter, 1);
+        text(ctx, fmt(v, 0), ML - 8, Y(v) + 4, "right");
+      }
+    }
+    strecke(ctx, ML, MT + ph, ML + pw, MT + ph, farbT, 2);
+    strecke(ctx, ML, MT, ML, MT + ph, farbT, 2);
+    achsentitel(ctx, W, H, dd.xName + " in " + dd.xEin, dd.yName + " in " + dd.yEin + (logAchse ? " (logarithmisch)" : ""));
+
+    ctx.save(); ctx.beginPath(); ctx.rect(ML, MT, pw, ph); ctx.clip();
+
+    // Schranke S
+    if(modell === "besch"){
+      ctx.setLineDash([8, 6]); strecke(ctx, ML, Y(Math.max(S, 1e-9)), ML + pw, Y(Math.max(S, 1e-9)), farbG, 2); ctx.setLineDash([]);
+    }
+    // Stelle t0
+    var ts = t0();
+    ctx.setLineDash([4, 5]); strecke(ctx, X(ts), MT, X(ts), MT + ph, farbB, 1.5); ctx.setLineDash([]);
+
+    function kurve(p, farbe, breite, strich){
+      ctx.strokeStyle = farbe; ctx.lineWidth = breite; ctx.setLineDash(strich || []);
+      ctx.beginPath(); var offen = false;
+      for(var px = 0; px <= pw; px += 2){
+        var tt = px / pw * dd.xmax, w = fp(p, tt);
+        if(!isFinite(w) || (logAchse && w <= 0)){ offen = false; continue; }
+        var yy = klemme(Y(w));
+        if(!offen){ ctx.moveTo(ML + px, yy); offen = true; } else ctx.lineTo(ML + px, yy);
+      }
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+    if(zeigeBest) kurve(bestwert(), "#64748b", 2.5, [9, 6]);
+    kurve(par(), farbM, 3.5);
+
+    // Tangente an der Stelle t0
+    if(tang){
+      var ft = F(ts), m0 = dF(ts), dt = dd.xmax * 0.12;
+      ctx.strokeStyle = farbB; ctx.lineWidth = 2.5; ctx.beginPath(); var auf = false;
+      for(var j = -20; j <= 20; j++){
+        var tt2 = ts + dt * j / 20, w2 = ft + m0 * (tt2 - ts);
+        if(logAchse && w2 <= 0){ auf = false; continue; }
+        var y2 = klemme(Y(w2));
+        if(!auf){ ctx.moveTo(X(tt2), y2); auf = true; } else ctx.lineTo(X(tt2), y2);
+      }
+      ctx.stroke();
+    }
+    // Messpunkte
+    for(var i = 0; i < dd.t.length; i++) punkt(ctx, X(dd.t[i]), Y(dd.y[i]), 5.5, farbP, "#fff");
+    var fw = F(ts);
+    if(isFinite(fw) && (!logAchse || fw > 0)) punkt(ctx, X(ts), klemme(Y(fw)), 6.5, farbB, "#fff");
+    ctx.restore();
+
+    // Legende, nach rechts gerückt, damit sie bei fallenden Kurven den ersten Messpunkt nicht verdeckt
+    var lx = ML + Math.round(pw * 0.30), ly = MT + 18;
+    punkt(ctx, lx, ly - 4, 5, farbP, "#fff"); text(ctx, "Messwerte", lx + 12, ly);
+    strecke(ctx, lx + 100, ly - 4, lx + 128, ly - 4, farbM, 3.5); text(ctx, "Modell", lx + 136, ly);
+    if(zeigeBest){ ctx.setLineDash([9, 6]); strecke(ctx, lx + 200, ly - 4, lx + 228, ly - 4, "#64748b", 2.5); ctx.setLineDash([]); text(ctx, "Bestanpassung", lx + 236, ly); }
+  }
+
+  /* ---------- Zeichnen: Änderungsrate gegen Bestand ---------- */
+  function zeichneRate(){
+    var ctx = cR, W = cvR.width, H = cvR.height, dd = q();
+    var pw = W - ML - MR, ph = H - MT - MB;
+    function X(f){ return ML + f / dd.rx * pw; }
+    function Y(r){ return MT + ph / 2 - r / dd.ry * ph / 2; }
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+
+    var f, r;
+    for(f = 0; f <= dd.rx + 1e-9; f += dd.rxstep){
+      strecke(ctx, X(f), MT, X(f), MT + ph, farbGitter, 1);
+      text(ctx, fmt(f, 0), X(f), MT + ph + 20, "center");
+    }
+    for(r = -dd.ry; r <= dd.ry + 1e-9; r += dd.rystep){
+      strecke(ctx, ML, Y(r), ML + pw, Y(r), farbGitter, 1);
+      text(ctx, minus(fmt(r, 0)), ML - 8, Y(r) + 4, "right");
+    }
+    strecke(ctx, ML, Y(0), ML + pw, Y(0), farbT, 2);
+    strecke(ctx, ML, MT, ML, MT + ph, farbT, 2);
+    achsentitel(ctx, W, H, "Bestand f in " + dd.yEin, "Rate f′ in " + dd.yEin + "/" + dd.xEin);
+
+    ctx.save(); ctx.beginPath(); ctx.rect(ML, MT, pw, ph); ctx.clip();
+    // Modell: Gerade f′ = k·f (exponentiell) bzw. f′ = k·(S − f) (beschränkt)
+    var f0 = 0, f1 = dd.rx, kx = kk();
+    var r0 = modell === "exp" ? kx * f0 : kx * (S - f0), r1 = modell === "exp" ? kx * f1 : kx * (S - f1);
+    strecke(ctx, X(f0), klemme(Y(r0)), X(f1), klemme(Y(r1)), farbM, 3.5);
+    // Differenzenquotienten der Messwerte
+    for(var i = 0; i + 1 < dd.t.length; i++){
+      var fm = (dd.y[i] + dd.y[i + 1]) / 2, rq = (dd.y[i + 1] - dd.y[i]) / (dd.t[i + 1] - dd.t[i]);
+      punkt(ctx, X(fm), Y(rq), 4.5, farbP, "#fff");
+    }
+    // aktuelle Stelle
+    var ts = t0(), fa = F(ts), ra = dF(ts);
+    if(isFinite(fa) && isFinite(ra)) punkt(ctx, X(fa), klemme(Y(ra)), 7, farbB, "#fff");
+    ctx.restore();
+
+    var lx = ML + 14, ly = MT + 18;
+    punkt(ctx, lx, ly - 4, 4.5, farbP, "#fff"); text(ctx, "Differenzenquotienten der Messwerte", lx + 12, ly);
+    strecke(ctx, lx + 270, ly - 4, lx + 298, ly - 4, farbM, 3.5); text(ctx, "Modell", lx + 306, ly);
+    punkt(ctx, lx + 380, ly - 4, 6, farbB, "#fff"); text(ctx, "Stelle t₀", lx + 392, ly);
+  }
+
+  /* ---------- Anzeigen ---------- */
+  function anzeigen(){
+    var dd = q(), ts = t0(), kx = kk(), p = par(), fa = F(ts), ra = dF(ts), kEin = "1/" + dd.xEin;
+    $("aT").textContent = fmt(ts, 1) + " " + dd.xEin;
+    $("aF").textContent = zahl(fa, 2) + " " + dd.yEin;
+    $("aS").textContent = zahl(ra, 2) + " " + dd.yEin + "/" + dd.xEin;
+    if(modell === "exp"){
+      $("aQName").textContent = "f′ : f";
+      $("aQ").textContent = Math.abs(fa) > 1e-9 ? zahl(ra / fa, 3) + " " + kEin : "–";
+      $("aZName").textContent = kx < 0 ? "Halbwertszeit" : "Verdopplungszeit";
+      $("aZ").textContent = kx !== 0 ? zahl(LN2 / Math.abs(kx), 2) + " " + dd.xEin : "–";
+    } else {
+      $("aQName").textContent = "f′ : (S − f)";
+      $("aQ").textContent = Math.abs(S - fa) > 1e-9 ? zahl(ra / (S - fa), 3) + " " + kEin : "–";
+      $("aZName").textContent = "Halbwertszeit des Abstands zu S";
+      $("aZ").textContent = kx > 0 ? zahl(LN2 / kx, 2) + " " + dd.xEin : "–";
+    }
+    $("aRms").textContent = zahl(rms(p), 2) + " " + dd.yEin;
+    if(zeigeBest){
+      var b = bestwert();
+      $("aBest").textContent = zahl(b.B0, dd.b0.dez + 1) + " · " + zahl(b.k, 3);
+      $("aBestS").textContent = modell === "besch" ? zahl(b.S, 1) + " " + dd.yEin : "–";
+      $("aBestQ").textContent = zahl(b.rms, 2) + " " + dd.yEin;
+    } else {
+      $("aBest").textContent = "–"; $("aBestS").textContent = "–"; $("aBestQ").textContent = "–";
+    }
+    var h = "";
+    if(modell === "besch" && kx < 0) h = "Bei k < 0 entfernt sich die Kurve von der Schranke S, statt sich ihr anzunähern.";
+    else if(logAchse) h = "Die senkrechte Achse ist logarithmisch: gleiche Abstände bedeuten gleiche Faktoren. Werte unter " + dd.logMin + " und Werte ≤ 0 sind nicht zu sehen.";
+    $("simHinweis").textContent = h;
+  }
+
+  function zeichne(){ zeichneMessung(); zeichneRate(); anzeigen(); }
+
+  /* ---------- Bedienung ---------- */
+  function beschriftung(){
+    var dd = q();
+    $("lB").textContent = fmt(B0, dd.b0.dez); $("uB").textContent = dd.yEin;
+    $("lK").textContent = minus(fmt(kk(), 3)); $("uK").textContent = "1/" + dd.xEin;
+    $("lS").textContent = fmt(S, 0); $("uS").textContent = dd.yEin;
+    $("lT").textContent = fmt(t0(), 1); $("uT").textContent = dd.xEin;
+    $("nK").textContent = modell === "exp" ? "Rate k im Exponenten" : "Rate k, Annäherung an S";
+    $("zS").style.display = modell === "besch" ? "" : "none";
+    $("bBest").textContent = zeigeBest ? "Bestanpassung verbergen" : "Bestanpassung zeigen";
+  }
+
+  function setze(i){
+    ds = i; var dd = q();
+    modell = "exp"; B0 = dd.b0.start; k = 0; S = 0; pct = 50; logAchse = false; tang = false; zeigeBest = false;
+    $("sModell").value = "exp"; $("cLog").checked = false; $("cTang").checked = false;
+    var rb = $("rB");
+    rb.min = dd.b0.min; rb.max = dd.b0.max; rb.step = dd.b0.step; rb.value = B0;
+    $("rK").value = 0; $("rS").value = 0; $("rT").value = 50;
+    beschriftung(); zeichne();
+  }
+
+  $("sDaten").addEventListener("change", function(){ setze(parseInt(this.value, 10)); });
+  $("sModell").addEventListener("change", function(){
+    var vorher = modell;
+    modell = this.value; zeigeBest = false;
+    // Ein Abfall auf null entspricht im beschränkten Modell S = 0 mit positivem k: Das Vorzeichen wird übernommen
+    if(vorher === "exp" && modell === "besch" && k < 0){ k = -k; $("rK").value = k; }
+    beschriftung(); zeichne();
+  });
+  [["rB", function(z){ B0 = z; }], ["rK", function(z){ k = z; }], ["rS", function(z){ S = z; }], ["rT", function(z){ pct = z; }]].forEach(function(a){
+    $(a[0]).addEventListener("input", function(){ a[1](parseFloat(this.value)); beschriftung(); zeichne(); });
+  });
+  $("cLog").addEventListener("change", function(){ logAchse = this.checked; zeichne(); });
+  $("cTang").addEventListener("change", function(){ tang = this.checked; zeichne(); });
+  $("bBest").addEventListener("click", function(){ zeigeBest = !zeigeBest; beschriftung(); zeichne(); });
+  $("bReset").addEventListener("click", function(){ setze(ds); });
+
+  // Stelle t0 durch Ziehen im oberen Diagramm setzen
+  var zieht = false;
+  function setzeT(e){
+    var r = cvM.getBoundingClientRect(), x = (e.clientX - r.left) * cvM.width / r.width;
+    pct = Math.max(0, Math.min(100, Math.round((x - ML) / (cvM.width - ML - MR) * 100)));
+    $("rT").value = pct; beschriftung(); zeichne();
+  }
+  cvM.style.touchAction = "pan-y";
+  cvM.addEventListener("pointerdown", function(e){ zieht = true; cvM.setPointerCapture(e.pointerId); setzeT(e); });
+  cvM.addEventListener("pointermove", function(e){ if(zieht) setzeT(e); });
+  cvM.addEventListener("pointerup", function(){ zieht = false; });
+  cvM.addEventListener("pointercancel", function(){ zieht = false; });
+
+  setze(0);
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1 – linear oder exponentiell",
+    vw2:"Vorwissen 2 – Kettenregel",
+    vw3:"Vorwissen 3 – negative Exponenten",
+    sim1:"Simulation 1 – exponentielles Modell bei der Kaffeetasse",
+    sim2:"Simulation 2 – Schranke beim Koffeinabbau",
+    a1:"Aufgabe 1 – Bakterienkultur",
+    a2:"Aufgabe 2 – Änderungsrate ablesen",
+    a3:"Aufgabe 3 – Zuordnung Term und Graph",
+    a4:"Aufgabe 4 – Halbwertszeit",
+    a5:"Aufgabe 5 – Verdreifachung",
+    a6:"Aufgabe 6 – Netzwerk mit Nutzerwachstum",
+    a7:"Aufgabe 7 – Fehler beim Ableiten"
+  };
+  var zeilen = ["Exponentialfunktionen – Mathematik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Aufgabe " + (i + 6) + " (offen):\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,2428 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lineare Datenstrukturen – Informatik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#b45309;
+  --akzent-hell:#fef6e7;
+  --akzent-rand:#f3ddb3;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#92400e,#b45309);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#92400e;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Informatik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Lineare Datenstrukturen</h1>
+    <p style="margin:0 0 14px;font-size:16px;opacity:.9">Liste, Schlange und Stapel — und was dahinter wirklich passiert</p>
+    <div class="meta">
+      <span class="chip">Informatik · Leistungskurs Q1</span>
+      <span class="chip">Inhaltsfeld: Daten und ihre Strukturierung</span>
+      <span class="chip">Java / BlueJ</span>
+      <span class="chip">ca. 135 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Du tippst in einem Editor drei Sätze, löschst versehentlich einen Absatz und drückst Strg+Z. Der Absatz ist wieder da. Drückst du noch einmal, verschwindet der Satz davor. Der Editor macht die Schritte also in genau der umgekehrten Reihenfolge rückgängig, in der du sie gemacht hast — der zuletzt abgelegte kommt zuerst wieder heraus. Zwei Zimmer weiter schickt eine ganze Klasse Dokumente an denselben Drucker. Auch dort werden Aufträge gesammelt, aber niemand würde akzeptieren, dass der zuletzt gesendete zuerst gedruckt wird. Dort gilt: wer zuerst kommt, mahlt zuerst.</p>
+
+  <p>Beide Programme lagern Daten zwischen. Beide brauchen dafür kaum Code. Der einzige Unterschied liegt in der Frage, an welcher Stelle etwas hinein- und an welcher Stelle es wieder herauskommt — und genau dieser Unterschied entscheidet, ob die Anwendung tut, was sie soll. In dieser Einheit baust du die drei Strukturen, die diese Frage beantworten, von unten auf: aus einzelnen Objekten, die nichts weiter können, als auf ihren Nachfolger zu zeigen. Am Ende weißt du nicht nur, was <code>push</code> und <code>enqueue</code> tun, sondern welche einzelne Referenz sich dabei ändert.</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Drei Fragen zu Objekten, Referenzen und Arrays aus der Einführungsphase. Wenn du hier hängst, lohnt sich ein Blick zurück, bevor du weitermachst.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">In BlueJ läuft <code>Knoten k1 = new Knoten("A"); Knoten k2 = k1;</code>. Anschließend wird <code>k2.setzeInhalt("B")</code> aufgerufen. Was gilt danach?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span>Es gibt zwei Knotenobjekte; <code>k1</code> enthält weiterhin <code>"A"</code>.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span>Es gibt ein einziges Knotenobjekt, auf das beide Variablen verweisen; <code>k1.gibInhalt()</code> liefert <code>"B"</code>.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span>Es gibt zwei Knotenobjekte, deren Inhalte automatisch gleich gehalten werden.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Ein Array <code>String[] daten = new String[5];</code> ist vollständig gefüllt. Nun soll ein sechster Eintrag hinzukommen. Was ist in Java nötig?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span>Nichts Besonderes — das Array vergrößert sich beim Schreiben auf Index 5 von selbst.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span>Der Eintrag an Index 4 wird überschrieben, mehr geht nicht.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span>Es muss ein neues, größeres Array angelegt und der alte Inhalt umkopiert werden.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Eine Objektvariable <code>Knoten k</code> hat den Wert <code>null</code>. Was passiert beim Aufruf <code>k.gibInhalt()</code>?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span>Das Programm bricht zur Laufzeit mit einer <code>NullPointerException</code> ab.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span>Der Aufruf liefert <code>null</code> zurück, weil es nichts zu holen gibt.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span>BlueJ meldet schon beim Übersetzen einen Fehler.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 KNOTEN UND REFERENZEN =============== -->
+<section id="knoten">
+  <div class="stufe"><div class="nr">2</div><h2>Knoten und Referenzen</h2></div>
+
+  <p>Ein Array ist ein durchnummerierter Block im Speicher. Das macht es schnell — du kommst mit <code>daten[742]</code> in einem Schritt an jedes Element — und zugleich starr: Die Länge steht bei <code>new</code> fest, und wer vorn etwas einfügen will, muss alles dahinter um eine Stelle verschieben.</p>
+
+  <p>Die verkettete Struktur dreht diesen Handel um. Sie gibt die Nummerierung auf. Statt eines zusammenhängenden Blocks gibt es viele kleine Objekte, die irgendwo im Speicher liegen dürfen, und jedes von ihnen merkt sich, wer als Nächstes kommt. Ein solches Objekt heißt <strong>Knoten</strong>. Es trägt zwei Dinge: seinen Inhalt und eine Referenz auf den nächsten Knoten. Mehr nicht.</p>
+
+  <p>Der letzte Knoten hat keinen Nachfolger mehr. Seine Referenz hat den Wert <code>null</code>. Das ist kein Notbehelf, sondern die Abbruchbedingung jeder Schleife, die du in dieser Einheit schreiben wirst: Solange <code>gibNachfolger()</code> nicht <code>null</code> liefert, geht es weiter.</p>
+
+  <pre style="background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:14px;line-height:1.55"><code>public class Knoten
+{
+    private String inhalt;
+    private Knoten nachfolger;
+
+    public Knoten(String pInhalt)
+    {
+        inhalt = pInhalt;
+        nachfolger = null;
+    }
+
+    public String gibInhalt()
+    {
+        return inhalt;
+    }
+
+    public void setzeInhalt(String pInhalt)
+    {
+        inhalt = pInhalt;
+    }
+
+    public Knoten gibNachfolger()
+    {
+        return nachfolger;
+    }
+
+    public void setzeNachfolger(Knoten pKnoten)
+    {
+        nachfolger = pKnoten;
+    }
+}</code></pre>
+
+  <p>Schau dir die zweite Zeile genau an: Ein <code>Knoten</code> hat als Attribut eine Referenz auf einen <code>Knoten</code>. Eine Klasse verwendet sich selbst. Das ist erlaubt, weil das Attribut kein Knotenobjekt <em>enthält</em>, sondern nur auf eines <em>zeigt</em> — beim Anlegen steht dort <code>null</code>, und ein <code>null</code>-Verweis braucht keinen Platz für ein weiteres Objekt. Diese eine Zeile ist der ganze Trick hinter allem, was jetzt folgt.</p>
+
+  <p>Aus einzelnen Knoten wird eine Kette, sobald jeder auf den nächsten zeigt. Zusätzlich braucht es eine Variable außerhalb der Kette, die auf ihren Anfang zeigt — sonst findet das Programm den ersten Knoten nicht wieder. Diese Variable heißt je nach Struktur <code>anfang</code> oder <code>kopf</code>, und sie liegt in der Klasse, die die Kette verwaltet. Die Knoten selbst wissen nichts davon; sie kennen nur ihren Nachfolger.</p>
+
+  <div class="merksatz">
+    <b>Kernaussage</b>
+    Eine verkettete Struktur besteht aus zwei getrennten Dingen: den Knoten, die den Inhalt tragen, und den Zeigern der verwaltenden Klasse, die festlegen, wo man einsteigen darf. Alle Operationen dieser Einheit ändern nur Referenzen — kein einziges Inhaltsobjekt wird dabei angefasst, verschoben oder kopiert.
+  </div>
+
+  <details>
+    <summary>Warum jede Struktur genau die Zeiger bekommt, die sie braucht — eine Herleitung</summary>
+    <p>Man könnte auf den Gedanken kommen, jeder Struktur vorsichtshalber alle denkbaren Zeiger zu geben. Rechne einmal nach, was das kostet, und du siehst, warum das niemand tut. Wir leiten die nötige Zeigermenge aus den geforderten Operationen her.</p>
+    <p>Der <strong>Stapel</strong> darf nur an einem Ende arbeiten: <code>push</code>, <code>pop</code> und <code>top</code> fassen alle dieselbe Stelle an. Ein Zeiger <code>kopf</code> genügt also, und alle drei Operationen kommen mit einer festen Anzahl Schritte aus, unabhängig davon, wie lang die Kette ist. Die <strong>Schlange</strong> dagegen fügt an einem Ende ein und entnimmt am anderen. Mit nur einem Zeiger <code>kopf</code> müsste <code>enqueue</code> jedes Mal bis ans Ende der Kette laufen — bei <span class="m" data-tex="n" data-plain="n"></span> Knoten sind das <span class="m" data-tex="n" data-plain="n"></span> Knotenbesuche. Ein zweiter Zeiger <code>ende</code>, der immer auf den letzten Knoten zeigt, drückt diesen Aufwand auf null Besuche. Der Preis ist eine einzige zusätzliche Referenz für die ganze Struktur — nicht pro Knoten. Das ist ein außerordentlich guter Handel.</p>
+    <p>Die <strong>Liste</strong> ist die anspruchsvollste der drei, weil sie an <em>jeder</em> Stelle arbeiten soll. Dafür führt sie einen wandernden Zeiger <code>aktuell</code> ein, das sogenannte aktuelle Objekt. Damit lässt sich lesen, ändern und weiterrücken. Zum Löschen reicht <code>aktuell</code> aber nicht: Wer einen Knoten aus der Kette nehmen will, muss die Referenz seines <strong>Vorgängers</strong> umbiegen, und vom aktuellen Knoten aus kommt man nicht rückwärts — die Pfeile zeigen nur in eine Richtung. Entweder man läuft für jedes <code>remove</code> erneut von vorn los (teuer), oder man führt einen dritten Zeiger <code>vorgaenger</code> mit, der bei jedem <code>next()</code> einfach mitwandert (fast gratis). Wir nehmen den dritten Zeiger. Merke dir diese Begründung — sie ist die Antwort auf die häufigste Prüfungsfrage zu diesem Thema.</p>
+  </details>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Einen Knoten löscht man, indem man seinen Nachfolger auf <code>null</code> setzt." Das ist genau falsch herum. <code>aktuell.setzeNachfolger(null)</code> hängt nicht den aktuellen Knoten ab, sondern <strong>den gesamten Rest der Liste hinter ihm</strong>. Der aktuelle Knoten bliebe drin, alles danach wäre weg. Gelöscht wird ein Knoten nie von sich aus, sondern immer von seinem Vorgänger her: Der Vorgänger überspringt ihn. Danach zeigt keine Referenz mehr auf den Knoten, und der Garbage Collector räumt ihn irgendwann weg — man muss in Java nichts freigeben.
+  </div>
+</section>
+
+<!-- =============== 3 DIE DREI STRUKTUREN =============== -->
+<section id="strukturen">
+  <div class="stufe"><div class="nr">3</div><h2>Die drei Strukturen und ihre Schnittstellen</h2></div>
+
+  <p>Die folgenden Schnittstellen sind nicht frei erfunden. Sie stammen aus den Vorgaben zum Zentralabitur Informatik in Nordrhein-Westfalen; die Klassen <code>List</code>, <code>Queue</code> und <code>Stack</code> werden dort als fertige Java-Klassen bereitgestellt und dürfen in der Prüfung ohne Implementierung benutzt werden. Du musst ihre Wirkung kennen und begründen können — und im Leistungskurs zusätzlich wissen, wie sie innen funktionieren. Genau das bauen wir hier nach.</p>
+
+  <p>Alle drei Klassen sind generisch, in der Prüfung also etwa <code>Stack&lt;Auftrag&gt;</code>. Damit der Blick auf die Referenzen frei bleibt, arbeiten wir hier mit <code>String</code> als Inhaltstyp und mit eigenen Klassennamen (<code>EinfacherStapel</code>, <code>EinfacheSchlange</code>, <code>EinfacheListe</code>). Die Methodennamen übernehmen wir eins zu eins — sie sind die verbindliche Schnittstelle.</p>
+
+  <h3>Schnittstelle 1: <code>Stack</code> (Stapel), LIFO</h3>
+  <div class="tabelle">
+  <table>
+    <tr><th>Methode</th><th>Wirkung</th></tr>
+    <tr><td><code>Stack()</code></td><td>erzeugt einen leeren Stapel</td></tr>
+    <tr><td><code>boolean isEmpty()</code></td><td>liefert <code>true</code>, wenn der Stapel keine Elemente enthält</td></tr>
+    <tr><td><code>void push(ContentType pContent)</code></td><td>legt <code>pContent</code> oben auf den Stapel</td></tr>
+    <tr><td><code>void pop()</code></td><td>entfernt das oberste Element; ist der Stapel leer, bleibt er unverändert</td></tr>
+    <tr><td><code>ContentType top()</code></td><td>liefert das oberste Element, ohne es zu entfernen; bei leerem Stapel <code>null</code></td></tr>
+  </table>
+  </div>
+
+  <h3>Schnittstelle 2: <code>Queue</code> (Schlange), FIFO</h3>
+  <div class="tabelle">
+  <table>
+    <tr><th>Methode</th><th>Wirkung</th></tr>
+    <tr><td><code>Queue()</code></td><td>erzeugt eine leere Schlange</td></tr>
+    <tr><td><code>boolean isEmpty()</code></td><td>liefert <code>true</code>, wenn die Schlange keine Elemente enthält</td></tr>
+    <tr><td><code>void enqueue(ContentType pContent)</code></td><td>hängt <code>pContent</code> hinten an</td></tr>
+    <tr><td><code>void dequeue()</code></td><td>entfernt das vorderste Element; ist die Schlange leer, bleibt sie unverändert</td></tr>
+    <tr><td><code>ContentType front()</code></td><td>liefert das vorderste Element, ohne es zu entfernen; bei leerer Schlange <code>null</code></td></tr>
+  </table>
+  </div>
+
+  <h3>Schnittstelle 3: <code>List</code> (Liste) mit aktuellem Objekt</h3>
+  <div class="tabelle">
+  <table>
+    <tr><th>Methode</th><th>Wirkung</th></tr>
+    <tr><td><code>List()</code></td><td>erzeugt eine leere Liste ohne aktuelles Objekt</td></tr>
+    <tr><td><code>boolean isEmpty()</code></td><td>liefert <code>true</code>, wenn die Liste keine Elemente enthält</td></tr>
+    <tr><td><code>boolean hasAccess()</code></td><td>liefert <code>true</code>, wenn es ein aktuelles Objekt gibt</td></tr>
+    <tr><td><code>void toFirst()</code></td><td>macht das erste Element zum aktuellen Objekt; bei leerer Liste passiert nichts</td></tr>
+    <tr><td><code>void toLast()</code></td><td>macht das letzte Element zum aktuellen Objekt; bei leerer Liste passiert nichts</td></tr>
+    <tr><td><code>void next()</code></td><td>rückt zum nachfolgenden Element vor; hinter dem letzten gibt es kein aktuelles Objekt mehr</td></tr>
+    <tr><td><code>ContentType getContent()</code></td><td>liefert den Inhalt des aktuellen Objekts, sonst <code>null</code></td></tr>
+    <tr><td><code>void setContent(ContentType pContent)</code></td><td>ersetzt den Inhalt des aktuellen Objekts</td></tr>
+    <tr><td><code>void insert(ContentType pContent)</code></td><td>fügt <strong>vor</strong> dem aktuellen Objekt ein; das aktuelle Objekt bleibt dasselbe</td></tr>
+    <tr><td><code>void append(ContentType pContent)</code></td><td>hängt am <strong>Ende</strong> der Liste an; das aktuelle Objekt bleibt unverändert</td></tr>
+    <tr><td><code>void concat(List&lt;ContentType&gt; pList)</code></td><td>hängt <code>pList</code> hinten an und leert <code>pList</code> anschließend</td></tr>
+    <tr><td><code>void remove()</code></td><td>entfernt das aktuelle Objekt; <strong>der Nachfolger wird zum neuen aktuellen Objekt</strong></td></tr>
+  </table>
+  </div>
+
+  <div class="hinweis">
+    <strong>Drei Randfälle, an denen im Abitur Punkte hängen.</strong> <code>insert</code> fügt <em>vor</em> dem aktuellen Objekt ein, und das aktuelle Objekt bleibt danach dasselbe wie vorher — nicht das neu eingefügte. · Nach <code>remove</code> ist der <strong>Nachfolger</strong> des gelöschten Knotens das aktuelle Objekt; war der gelöschte Knoten der letzte, gibt es danach kein aktuelles Objekt mehr, <code>hasAccess()</code> liefert <code>false</code>. · Gibt es kein aktuelles Objekt und ist die Liste nicht leer, so lässt <code>insert</code> die Liste unverändert. Bei leerer Liste dagegen wird eingefügt — und es gibt weiterhin kein aktuelles Objekt.
+  </div>
+
+  <h3>Der Stapel</h3>
+
+  <p>Der Stapel ist die kürzeste der drei Klassen, weil alles an einer Stelle passiert. Der Zeiger <code>kopf</code> zeigt auf das oberste Element. Neu ankommende Knoten schieben sich davor: Erst zeigt der Neue auf den bisherigen Kopf, dann wandert der Kopfzeiger auf den Neuen. Diese Reihenfolge ist zwingend. Machst du es andersherum und setzt zuerst <code>kopf = neu</code>, hast du die Adresse des alten Kopfes verloren und damit den ganzen restlichen Stapel.</p>
+
+  <pre style="background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:14px;line-height:1.55"><code>public class EinfacherStapel
+{
+    private Knoten kopf;
+
+    public EinfacherStapel()
+    {
+        kopf = null;
+    }
+
+    public boolean isEmpty()
+    {
+        return kopf == null;
+    }
+
+    public void push(String pInhalt)
+    {
+        if (pInhalt == null) { return; }
+        Knoten neu = new Knoten(pInhalt);   // 1. neuen Knoten anlegen
+        neu.setzeNachfolger(kopf);          // 2. er zeigt auf den bisherigen Kopf
+        kopf = neu;                         // 3. der Kopfzeiger wandert
+    }
+
+    public void pop()
+    {
+        if (kopf == null) { return; }       // leerer Stapel bleibt unveraendert
+        kopf = kopf.gibNachfolger();
+    }
+
+    public String top()
+    {
+        if (kopf == null) { return null; }
+        return kopf.gibInhalt();
+    }
+}</code></pre>
+
+  <p>Beachte, dass <code>pop()</code> den alten Kopfknoten nirgends „löscht". Es genügt, dass keine Referenz mehr auf ihn zeigt. Und beachte, dass die Kette dadurch <strong>umgekehrt</strong> zur Einfügereihenfolge im Speicher liegt: Wer zuletzt kam, steht vorn. Das ist LIFO — <em>last in, first out</em>.</p>
+
+  <h3>Die Schlange</h3>
+
+  <p>Die Schlange braucht zwei Zeiger: <code>kopf</code> für die Entnahme, <code>ende</code> für das Anhängen. Beide zeigen in dieselbe Kette, nur an verschiedene Stellen. Der Sonderfall, an dem erfahrungsgemäß die meisten Implementierungen scheitern, ist der Übergang zwischen leer und nicht leer — und zwar in beide Richtungen.</p>
+
+  <pre style="background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:14px;line-height:1.55"><code>public class EinfacheSchlange
+{
+    private Knoten kopf;
+    private Knoten ende;
+
+    public EinfacheSchlange()
+    {
+        kopf = null;
+        ende = null;
+    }
+
+    public boolean isEmpty()
+    {
+        return kopf == null;
+    }
+
+    public void enqueue(String pInhalt)
+    {
+        if (pInhalt == null) { return; }
+        Knoten neu = new Knoten(pInhalt);
+        if (kopf == null)                   // Sonderfall: Schlange war leer
+        {
+            kopf = neu;
+            ende = neu;                     // beide Zeiger auf denselben Knoten
+        }
+        else
+        {
+            ende.setzeNachfolger(neu);      // der bisher letzte zeigt auf den neuen
+            ende = neu;                     // der Endzeiger wandert
+        }
+    }
+
+    public void dequeue()
+    {
+        if (kopf == null) { return; }
+        kopf = kopf.gibNachfolger();
+        if (kopf == null) { ende = null; }  // war das letzte Element: ende mitfuehren
+    }
+
+    public String front()
+    {
+        if (kopf == null) { return null; }
+        return kopf.gibInhalt();
+    }
+}</code></pre>
+
+  <div class="hinweis">
+    <strong>Der teuerste vergessene Zweig.</strong> Lässt man in <code>dequeue</code> die letzte Zeile weg, funktioniert die Schlange scheinbar tadellos — bis man sie einmal ganz leert und danach wieder etwas einfügt. Dann ist <code>kopf == null</code>, <code>enqueue</code> nimmt den Sonderfallzweig, setzt <code>kopf</code> und <code>ende</code> neu, und alles läuft weiter. Der Fehler fällt also nicht sofort auf. Baut man <code>enqueue</code> dagegen ohne diesen Sonderfallzweig, hängt <code>enqueue</code> das neue Element an den längst entfernten alten Knoten — und die Schlange bleibt für immer leer, obwohl man einfügt. Beide Fehler gehören zusammen und werden zusammen geprüft.
+  </div>
+
+  <h3>Die Liste</h3>
+
+  <p>Die Liste bekommt drei Zeiger: <code>anfang</code> als festen Einstiegspunkt, <code>aktuell</code> als wandernden Lesezeiger und <code>vorgaenger</code> als dessen Schatten, der immer einen Knoten zurückliegt. Ist <code>aktuell</code> der erste Knoten, so ist <code>vorgaenger</code> gleich <code>null</code> — das ist in jeder Methode der Fall, den du getrennt behandeln musst, weil es dann keinen Knoten gibt, dessen Referenz man umbiegen könnte. Stattdessen wird <code>anfang</code> umgebogen.</p>
+
+  <pre style="background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:14px;line-height:1.55"><code>public class EinfacheListe
+{
+    private Knoten anfang;
+    private Knoten aktuell;
+    private Knoten vorgaenger;
+
+    public EinfacheListe()
+    {
+        anfang = null;
+        aktuell = null;
+        vorgaenger = null;
+    }
+
+    public boolean isEmpty()
+    {
+        return anfang == null;
+    }
+
+    public boolean hasAccess()
+    {
+        return aktuell != null;
+    }
+
+    public void toFirst()
+    {
+        aktuell = anfang;
+        vorgaenger = null;
+    }
+
+    public void toLast()
+    {
+        if (anfang == null) { return; }
+        aktuell = anfang;
+        vorgaenger = null;
+        while (aktuell.gibNachfolger() != null)
+        {
+            vorgaenger = aktuell;
+            aktuell = aktuell.gibNachfolger();
+        }
+    }
+
+    public void next()
+    {
+        if (aktuell == null) { return; }
+        vorgaenger = aktuell;               // der Schatten rueckt nach
+        aktuell = aktuell.gibNachfolger();
+    }
+
+    public String getContent()
+    {
+        if (aktuell == null) { return null; }
+        return aktuell.gibInhalt();
+    }
+
+    public void setContent(String pInhalt)
+    {
+        if (aktuell == null || pInhalt == null) { return; }
+        aktuell.setzeInhalt(pInhalt);
+    }
+
+    public void append(String pInhalt)
+    {
+        if (pInhalt == null) { return; }
+        Knoten neu = new Knoten(pInhalt);
+        if (anfang == null)
+        {
+            anfang = neu;
+            return;
+        }
+        Knoten lauf = anfang;               // Hilfszeiger, laeuft bis ans Ende
+        while (lauf.gibNachfolger() != null)
+        {
+            lauf = lauf.gibNachfolger();
+        }
+        lauf.setzeNachfolger(neu);
+    }
+
+    public void insert(String pInhalt)
+    {
+        if (pInhalt == null) { return; }
+        if (aktuell == null)
+        {
+            if (anfang == null)             // leere Liste: einfuegen, kein aktuelles Objekt
+            {
+                anfang = new Knoten(pInhalt);
+            }
+            return;                         // sonst: Liste bleibt unveraendert
+        }
+        Knoten neu = new Knoten(pInhalt);
+        neu.setzeNachfolger(aktuell);       // 1. der Neue zeigt auf das aktuelle Objekt
+        if (vorgaenger == null)
+        {
+            anfang = neu;                   // 2a. vorne einfuegen
+        }
+        else
+        {
+            vorgaenger.setzeNachfolger(neu);// 2b. der Vorgaenger zeigt auf den Neuen
+        }
+        vorgaenger = neu;                   // 3. der Neue ist jetzt der Vorgaenger
+    }
+
+    public void remove()
+    {
+        if (aktuell == null) { return; }
+        if (vorgaenger == null)
+        {
+            anfang = aktuell.gibNachfolger();               // erster Knoten faellt weg
+        }
+        else
+        {
+            vorgaenger.setzeNachfolger(aktuell.gibNachfolger()); // Vorgaenger ueberspringt
+        }
+        aktuell = aktuell.gibNachfolger();                  // Nachfolger wird aktuell
+    }
+}</code></pre>
+
+  <p>Vergleiche <code>insert</code> und <code>remove</code> Zeile für Zeile. Beide bestehen aus derselben Fallunterscheidung — „gibt es einen Vorgänger oder ist das aktuelle Objekt der erste Knoten?" — und beide ändern danach genau die Referenz, die auf den betroffenen Knoten zeigt. Wenn du diese eine Struktur verstanden hast, hast du alle Einfüge- und Löschoperationen einfach verketteter Listen verstanden.</p>
+
+  <p>Beachte in <code>remove</code> die Reihenfolge der letzten beiden Anweisungen. Der abgehängte Knoten zeigt selbst weiterhin auf seinen alten Nachfolger; deshalb liefert <code>aktuell.gibNachfolger()</code> auch nach dem Umbiegen noch den richtigen Knoten. Das ist kein Zufall, sondern der Grund, warum man hier keine Hilfsvariable braucht.</p>
+
+  <details>
+    <summary>Die zwölfte Methode: <code>concat</code> — und warum sie die andere Liste leert</summary>
+    <p><code>concat(pList)</code> hängt eine zweite Liste hinten an und macht <code>pList</code> anschließend leer. Der zweite Teil klingt nach Schikane, ist aber notwendig: Nach dem Anhängen zeigen zwei Listenobjekte auf dieselben Knoten. Ein <code>remove</code> in der einen Liste würde die andere stillschweigend verändern. Indem <code>concat</code> die Quelle leert, kann dieser Zustand gar nicht erst entstehen.</p>
+    <pre style="background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:14px;line-height:1.55"><code>public void concat(EinfacheListe pListe)
+{
+    if (pListe == null || pListe == this || pListe.isEmpty()) { return; }
+    if (anfang == null)
+    {
+        anfang = pListe.anfang;
+    }
+    else
+    {
+        Knoten lauf = anfang;
+        while (lauf.gibNachfolger() != null)
+        {
+            lauf = lauf.gibNachfolger();
+        }
+        lauf.setzeNachfolger(pListe.anfang);
+    }
+    pListe.anfang = null;       // Quelle leeren: erlaubt, da gleiche Klasse
+    pListe.aktuell = null;
+    pListe.vorgaenger = null;
+}</code></pre>
+    <p>Die drei Zuweisungen am Schluss greifen auf private Attribute eines <em>anderen</em> Objekts zu. Das ist in Java erlaubt, solange beide Objekte zur selben Klasse gehören — der Zugriffsschutz gilt pro Klasse, nicht pro Objekt.</p>
+  </details>
+
+  <div class="merksatz">
+    <b>Kernaussage</b>
+    Stapel, Schlange und Liste speichern dieselben Daten in derselben Art von Kette. Sie unterscheiden sich einzig darin, welche Zugriffsstellen ihre Schnittstelle nach außen freigibt. Eine Struktur zu wählen heißt deshalb nicht, Speicher zu wählen, sondern sich auf eine Zugriffsdisziplin festzulegen — und genau diese Beschränkung ist der Gewinn.
+  </div>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „<code>aktuell</code> ist so etwas wie ein Index." Nein. <code>aktuell</code> ist eine Referenz auf ein Knotenobjekt, keine Zahl. Es gibt in einer verketteten Liste kein „Element Nummer 7", das man direkt ansteuern könnte. Wer zum siebten Element will, ruft <code>toFirst()</code> und danach sechsmal <code>next()</code> auf — und besucht dabei sieben Knoten. Genau deshalb steht in der Laufzeittabelle im nächsten Abschnitt beim Zugriff ein <span class="m" data-tex="\mathcal{O}(n)" data-plain="O(n)"></span> und kein <span class="m" data-tex="\mathcal{O}(1)" data-plain="O(1)"></span>.
+  </div>
+</section>
+
+
+<!-- =============== 4 VERTIEFUNG =============== -->
+<section id="laufzeit">
+  <div class="stufe"><div class="nr">4</div><h2>Vertiefung: Laufzeit, Speicher und die Wahl der Struktur</h2></div>
+
+  <p>Bis hierhin funktionieren alle drei Strukturen. Die Frage ist jetzt eine andere: Was kosten sie? Im Leistungskurs misst man das nicht in Sekunden — die hängen vom Rechner ab, vom Betriebssystem und davon, was sonst gerade läuft. Man misst in <strong>Knotenbesuchen</strong>: Wie oft muss das Programm einem Nachfolgerzeiger folgen, bis es an der Stelle ist, an der es arbeiten will? Diese Zahl hängt nur vom Algorithmus ab und lässt sich abzählen, ohne das Programm überhaupt zu starten.</p>
+
+  <p>Schau dir dazu noch einmal die drei Implementierungen an. In <code>push</code>, <code>pop</code>, <code>top</code>, <code>enqueue</code>, <code>dequeue</code> und <code>front</code> steht keine einzige Schleife. Diese sechs Methoden arbeiten immer an einem Zeiger, den die Struktur ohnehin schon in der Hand hält, und brauchen deshalb stets gleich viele Schritte — egal, ob die Kette drei Knoten hat oder drei Millionen. Man schreibt das als <span class="m" data-tex="\mathcal{O}(1)" data-plain="O(1)"></span> und sagt „konstante Laufzeit". In <code>append</code> und <code>toLast</code> steht dagegen eine <code>while</code>-Schleife, die bis ans Ende läuft. Ihre Kosten wachsen proportional zur Länge der Kette: <span class="m" data-tex="\mathcal{O}(n)" data-plain="O(n)"></span>.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Operation</th><th>Stapel</th><th>Schlange</th><th>Liste</th><th>Grund</th></tr>
+    <tr>
+      <td>einfügen an der Zugriffsstelle</td>
+      <td><span class="m" data-tex="\mathcal{O}(1)" data-plain="O(1)"></span></td>
+      <td><span class="m" data-tex="\mathcal{O}(1)" data-plain="O(1)"></span></td>
+      <td><span class="m" data-tex="\mathcal{O}(1)" data-plain="O(1)"></span></td>
+      <td><code>push</code> / <code>enqueue</code> / <code>insert</code>: der nötige Zeiger ist schon bekannt</td>
+    </tr>
+    <tr>
+      <td>entnehmen</td>
+      <td><span class="m" data-tex="\mathcal{O}(1)" data-plain="O(1)"></span></td>
+      <td><span class="m" data-tex="\mathcal{O}(1)" data-plain="O(1)"></span></td>
+      <td><span class="m" data-tex="\mathcal{O}(1)" data-plain="O(1)"></span></td>
+      <td><code>pop</code> / <code>dequeue</code> / <code>remove</code>: es werden nur Referenzen umgebogen</td>
+    </tr>
+    <tr>
+      <td>hinten anhängen</td>
+      <td>—</td>
+      <td><span class="m" data-tex="\mathcal{O}(1)" data-plain="O(1)"></span></td>
+      <td><span class="m" data-tex="\mathcal{O}(n)" data-plain="O(n)"></span></td>
+      <td>die Schlange führt <code>ende</code> mit, die Liste muss das Ende suchen</td>
+    </tr>
+    <tr>
+      <td>Zugriff auf das <span class="m" data-tex="k" data-plain="k"></span>-te Element</td>
+      <td>—</td>
+      <td>—</td>
+      <td><span class="m" data-tex="\mathcal{O}(n)" data-plain="O(n)"></span></td>
+      <td>kein Index, nur <code>toFirst()</code> und wiederholtes <code>next()</code></td>
+    </tr>
+    <tr>
+      <td>Speicher je Element</td>
+      <td>2 Referenzen</td>
+      <td>2 Referenzen</td>
+      <td>2 Referenzen</td>
+      <td>Inhalt und Nachfolger</td>
+    </tr>
+  </table>
+  </div>
+
+  <p style="color:var(--grau);font-size:14px">Ein „—" heißt nicht „langsam", sondern: Diese Struktur bietet die Operation gar nicht an. Genau darin besteht ihre Zugriffsdisziplin.</p>
+
+  <details>
+    <summary>Der teuerste Anfängerfehler: eine Liste mit <code>append</code> in einer Schleife aufbauen</summary>
+    <p>Unser <code>append</code> läuft jedes Mal von <code>anfang</code> bis ans Ende. Das kostet bei einer Liste mit <span class="m" data-tex="n" data-plain="n"></span> Knoten genau <span class="m" data-tex="n" data-plain="n"></span> Knotenbesuche — einen für <code>lauf = anfang</code> und <span class="m" data-tex="n-1" data-plain="n−1"></span> weitere im Schleifenrumpf. Baut man nun eine Liste von null an mit <span class="m" data-tex="n" data-plain="n"></span> Aufrufen auf, so ist die Liste beim <span class="m" data-tex="i" data-plain="i"></span>-ten Aufruf erst <span class="m" data-tex="i-1" data-plain="i−1"></span> Knoten lang. Die Gesamtkosten sind also die Summe der Zahlen von 0 bis <span class="m" data-tex="n-1" data-plain="n−1"></span>:</p>
+    <div class="m block" id="f-aufbau-summe" data-tex="0 + 1 + 2 + \dots + (n-1) = \frac{n\,(n-1)}{2}" data-plain="0 + 1 + 2 + … + (n−1) = n · (n−1) / 2"></div>
+    <p>Für <span class="m" data-tex="n = 1200" data-plain="n = 1200"></span> sind das <span class="m" data-tex="\frac{1200 \cdot 1199}{2} = 719\,400" data-plain="1200 · 1199 / 2 = 719 400"></span> Knotenbesuche, nur um 1200 Elemente einzufügen. Verdoppelst du die Anzahl der Elemente, so vervierfacht sich der Aufwand — das ist quadratisches Wachstum, <span class="m" data-tex="\mathcal{O}(n^2)" data-plain="O(n²)"></span>.</p>
+    <p>Die Abhilfe kennst du bereits: Ein zusätzlicher Endzeiger, wie ihn die Schlange führt, drückt jedes einzelne <code>append</code> auf null Knotenbesuche und damit den Aufbau der gesamten Liste auf <span class="m" data-tex="\mathcal{O}(n)" data-plain="O(n)"></span>. Unsere <code>EinfacheListe</code> verzichtet bewusst darauf, damit an dieser Stelle sichtbar wird, was ein Endzeiger überhaupt einspart. Merke dir die Zahl 719 400 — sie ist ein gutes Argument in jeder Bewertungsaufgabe.</p>
+  </details>
+
+  <h3>Speicher: Was die Verkettung kostet</h3>
+
+  <p>Geschwindigkeit ist nicht umsonst. Jeder Knoten trägt neben seinem Inhalt eine zweite Referenz, die im Array niemand braucht. Rechnen wir das an einem Modell durch: Ein Bibliothekssystem verwaltet 1200 ausgeliehene Medien, und eine Referenz belege 4 Byte.</p>
+
+  <div class="m block" data-tex="S_{\text{Kette}} = 1200 \cdot (4\,\mathrm{B} + 4\,\mathrm{B}) = 9600\,\mathrm{B} = 9{,}6\,\mathrm{kB}" data-plain="S_Kette = 1200 · (4 B + 4 B) = 9600 B = 9,6 kB"></div>
+
+  <div class="m block" data-tex="S_{\text{Array}} = 1200 \cdot 4\,\mathrm{B} = 4800\,\mathrm{B} = 4{,}8\,\mathrm{kB}" data-plain="S_Array = 1200 · 4 B = 4800 B = 4,8 kB"></div>
+
+  <p>Die Verkettung braucht in diesem Modell doppelt so viel Verwaltungsspeicher wie das Array, also 4,8 kB mehr. Das ist bei heutigen Speichergrößen wenig — und man kauft sich dafür etwas, das ein Array nicht liefern kann: Einfügen und Löschen an einer bekannten Stelle ohne jedes Umkopieren.</p>
+
+  <div class="hinweis">
+    <strong>Was diese Modellrechnung nicht sagt.</strong> Sie zählt ausschließlich die Referenzen. Ein echtes Java-Objekt trägt zusätzlich einen Objektkopf von typischerweise 12 bis 16 Byte, und der belegte Speicher wird auf 8-Byte-Grenzen aufgerundet. In der Praxis kostet ein Knoten daher eher das Vier- bis Fünffache einer Arrayzelle, nicht das Doppelte. Für den Vergleich der Größenordnungen genügt das einfache Modell; behaupte in einer Klausur aber nie, du habest den <em>tatsächlichen</em> Speicherbedarf berechnet. Sage: „in diesem Modell".
+  </div>
+
+  <h3>Der Zugriff auf das <span class="m" data-tex="k" data-plain="k"></span>-te Element</h3>
+
+  <p>Die auffälligste Schwäche der verketteten Liste steht in der vierten Zeile der Tabelle. Weil es keinen Index gibt, kostet der Weg zum Element mit Index <span class="m" data-tex="k" data-plain="k"></span> genau <span class="m" id="f-zugriff-index" data-tex="k+1" data-plain="k+1"></span> Knotenbesuche: einen für <code>toFirst()</code> und <span class="m" data-tex="k" data-plain="k"></span> weitere für die <code>next()</code>-Aufrufe. Beim ersten Element ist das 1 Besuch, beim letzten der 1200er-Liste sind es 1200. Greift man auf gleichverteilt zufällige Positionen zu, liegt der Mittelwert bei</p>
+
+  <div class="m block" data-tex="\overline{b} = \frac{1 + 1200}{2} = 600{,}5" data-plain="b̄ = (1 + 1200) / 2 = 600,5"></div>
+
+  <p>Knotenbesuchen — für <strong>einen einzigen</strong> Zugriff, den ein Array in genau einem Schritt erledigt. Wer viel wahlfrei zugreift und selten einfügt, ist mit einem Array besser bedient. Wer viel einfügt und löscht und dabei ohnehin schon an der richtigen Stelle steht, mit der Liste. Diese Abwägung, nicht die Frage „was ist schneller", ist die eigentliche Prüfungsfrage.</p>
+
+  <h3>Derselbe Algorithmus, zwei Strukturen</h3>
+
+  <p>Jetzt der Punkt, an dem der Unterschied zwischen LIFO und FIFO aufhört, Geschmackssache zu sein. Ein Roboter soll in einem Gitter aus freien und blockierten Feldern einen Weg von links oben nach rechts unten finden. Der Algorithmus ist in beiden Fällen <strong>wörtlich derselbe</strong>:</p>
+
+  <pre style="background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:14px;line-height:1.55"><code>Startfeld in den Behaelter legen
+solange der Behaelter nicht leer ist:
+    Feld aus dem Behaelter entnehmen
+    wenn es das Ziel ist: fertig
+    jeden freien, noch nicht besuchten Nachbarn
+        als besucht markieren und in den Behaelter legen</code></pre>
+
+  <p>In diesem Text steht kein Wort darüber, ob der Behälter eine Schlange oder ein Stapel ist. Tauscht man nur diese eine Entscheidung aus, ändert sich das Verhalten grundlegend.</p>
+
+  <p>Mit der <strong>Schlange</strong> werden die Felder in genau der Reihenfolge abgearbeitet, in der sie entdeckt wurden. Der Suchbereich wächst deshalb wie ein Ring gleichmäßig nach außen: erst alle Felder in einem Schritt Entfernung, dann alle in zwei Schritten, und so weiter. Das Ziel wird dadurch zwangsläufig auf einem <strong>kürzesten</strong> Weg erreicht — das ist die Breitensuche.</p>
+
+  <p>Mit dem <strong>Stapel</strong> wird stets der zuletzt entdeckte Nachbar zuerst weiterverfolgt. Die Suche rennt in eine Richtung, bis es nicht mehr weitergeht, und kehrt erst dann zur letzten Abzweigung zurück — das ist die Tiefensuche. Sie findet ebenfalls ein Ziel, aber der gefundene Weg ist im Allgemeinen <strong>nicht</strong> der kürzeste.</p>
+
+  <pre style="background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:14px;line-height:1.55"><code>  Spalte  0 1 2 3 4 5
+Zeile 0   . . . . . .
+Zeile 1   . # # # # .
+Zeile 2   . # . . . .
+Zeile 3   . # . # # .
+Zeile 4   . . . # . .
+Zeile 5   . # . . . .</code></pre>
+
+  <p>Die Nachbarn werden in beiden Fällen in derselben Reihenfolge betrachtet: rechts, unten, links, oben. Nur der Behälter unterscheidet sich.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Behälter</th><th>Suchverfahren</th><th>gefundener Weg</th><th>Länge</th></tr>
+    <tr>
+      <td>Schlange (FIFO)</td><td>Breitensuche</td>
+      <td>(0,0) → (0,1) → (0,2) → (0,3) → (0,4) → (0,5) → (1,5) → (2,5) → (3,5) → (4,5) → (5,5)</td>
+      <td><strong>10 Schritte</strong></td>
+    </tr>
+    <tr>
+      <td>Stapel (LIFO)</td><td>Tiefensuche</td>
+      <td>(0,0) → (1,0) → (2,0) → (3,0) → (4,0) → (4,1) → (4,2) → (3,2) → (2,2) → (2,3) → (2,4) → (2,5) → (3,5) → (4,5) → (5,5)</td>
+      <td><strong>14 Schritte</strong></td>
+    </tr>
+  </table>
+  </div>
+
+  <div class="merksatz">
+    <b>Kernaussage</b>
+    Der Behälter ist kein Detail der Umsetzung, sondern Teil des Algorithmus. Dieselben Programmzeilen liefern mit einer Schlange garantiert einen kürzesten Weg und mit einem Stapel irgendeinen Weg — hier einen um 4 Schritte längeren. Wer eine Datenstruktur wählt, legt damit eine Eigenschaft des Ergebnisses fest, nicht bloß die Geschwindigkeit.
+  </div>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Die Breitensuche ist besser." Nein — sie ist <em>anders</em>. Die Tiefensuche kommt mit deutlich weniger gleichzeitig gemerkten Feldern aus und ist überall dort im Vorteil, wo der Speicher knapp ist oder wo <em>irgendeine</em> Lösung genügt: bei der Labyrinth-Erzeugung, beim Backtracking, im Sudokulöser. Die richtige Antwort auf „welche ist besser?" beginnt immer mit einer Gegenfrage: „Wofür?"
+  </div>
+</section>
+
+<!-- =============== 5 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">5</div><h2>Referenzen selbst umbiegen</h2></div>
+
+  <p>Unten siehst du dieselben Knotenobjekte, die du gerade in Java gelesen hast — als Kästen mit zwei Feldern: links der Inhalt, rechts die Referenz auf den Nachfolger. Die Zeiger der verwaltenden Klasse hängen als beschriftete Pfeile darüber und darunter.</p>
+
+  <p>Wichtig: Hier läuft keine abgespielte Animation. Unter der Zeichnung arbeitet dasselbe Modell, das du in Java gebaut hast — echte Objekte mit echten Nachfolgerreferenzen. Wenn du im Schrittmodus arbeitest, wird pro Klick <strong>genau eine Java-Zeile</strong> ausgeführt und die Referenz, die sich dabei ändert, rot hervorgehoben. Was du siehst, ist der Zustand des Modells, nicht ein Bild davon.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    Setze die Simulation zurück und wähle <strong>Stapel</strong>. Füge nacheinander A, B, C, D und E ein. Notiere die Reihenfolge der Kette von links nach rechts sowie beide Zähler. Wiederhole das Ganze — jedes Mal nach <em>Zurücksetzen</em> — für <strong>Schlange</strong> und für <strong>Liste</strong>, jeweils mit derselben Eingabefolge und der jeweiligen Einfügeoperation (<code>push</code>, <code>enqueue</code>, <code>append</code>). Zwei der drei Ketten sehen am Ende gleich aus, eine nicht. Vergleiche für die beiden gleich aussehenden Ketten den Zähler „besuchte Knoten" — er unterscheidet sich um 10. Schreibe einen Satz auf, der erklärt, wie dasselbe Ergebnis zu so verschiedenen Kosten kommen kann.
+  </div>
+
+  <div class="sim">
+    <canvas id="cvSim" width="1000" height="340"></canvas>
+
+    <div class="anzeige">
+      <div>Struktur<span id="aStruktur">Stapel</span></div>
+      <div>Knoten in der Kette<span id="aLaenge">0</span></div>
+      <div>Referenzänderungen<span id="aRef">0</span></div>
+      <div>besuchte Knoten<span id="aBes">0</span></div>
+      <div>letzter Rückgabewert<span id="aWert">—</span></div>
+    </div>
+
+    <div class="steuer">
+      <p id="pProtokoll" style="background:#fff;border:1px solid var(--akzent-rand);border-radius:8px;padding:12px 14px;min-height:78px;margin:0 0 14px"></p>
+
+      <div class="knopfleiste" style="margin-bottom:12px">
+        <button class="primaer" data-struktur="stapel">Stapel</button>
+        <button data-struktur="schlange">Schlange</button>
+        <button data-struktur="liste">Liste</button>
+      </div>
+
+      <div class="regler">
+        <div>
+          <label for="eInhalt">Inhalt des nächsten Knotens</label>
+          <input type="text" id="eInhalt" maxlength="3" value="A" style="width:90px;font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px">
+        </div>
+        <div>
+          <label>Ausführung</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:15px;color:var(--text);margin:0">
+            <input type="checkbox" id="cSchritt" checked style="accent-color:var(--akzent);width:16px;height:16px">
+            Schritt für Schritt
+          </label>
+        </div>
+      </div>
+
+      <div class="knopfleiste" style="margin-bottom:12px">
+        <button data-op="push" data-fuer="stapel">push(x)</button>
+        <button data-op="pop" data-fuer="stapel">pop()</button>
+        <button data-op="top" data-fuer="stapel">top()</button>
+        <button data-op="enqueue" data-fuer="schlange">enqueue(x)</button>
+        <button data-op="dequeue" data-fuer="schlange">dequeue()</button>
+        <button data-op="front" data-fuer="schlange">front()</button>
+        <button data-op="toFirst" data-fuer="liste">toFirst()</button>
+        <button data-op="next" data-fuer="liste">next()</button>
+        <button data-op="append" data-fuer="liste">append(x)</button>
+        <button data-op="insert" data-fuer="liste">insert(x)</button>
+        <button data-op="remove" data-fuer="liste">remove()</button>
+        <button data-op="setContent" data-fuer="liste">setContent(x)</button>
+        <button data-op="getContent" data-fuer="liste">getContent()</button>
+      </div>
+
+      <div class="knopfleiste">
+        <button class="primaer" id="bSchritt">Nächster Schritt</button>
+        <button id="bReset">Zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Du hast in jede der drei Strukturen aus dem leeren Zustand nacheinander A, B, C, D und E eingefügt. In welchen Strukturen steht danach A am Kopf der Kette — also dort, wohin <code>kopf</code> beziehungsweise <code>anfang</code> zeigt?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>Nur im Stapel, weil A zuerst eingefügt wurde und deshalb ganz vorn liegt.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>In der Schlange und in der Liste; im Stapel zeigt <code>kopf</code> auf E.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>In allen drei Strukturen, weil alle A als Erstes aufgenommen haben.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Du hast die Zähler vor jedem Durchgang zurückgesetzt und dann fünfmal eingefügt. Welche Werte zeigt der Zähler <strong>„besuchte Knoten"</strong> anschließend an?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>Liste 10, Schlange 0, Stapel 0</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span>Liste 5, Schlange 5, Stapel 5</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>Liste 0, Schlange 10, Stapel 10</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+</section>
+
+
+<!-- =============== 6 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">6</div><h2>Übungen</h2></div>
+
+  <p>Acht Aufgaben, vom Nachvollziehen bis zum Bewerten. Bei den letzten beiden gibt es keine Zahl als Lösung, sondern eine Begründung — und die Bewertungskriterien stehen dabei, damit du selbst prüfen kannst, ob deine Antwort trägt.</p>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Auf einen leeren Stapel wird folgende Befehlsfolge angewendet: <code>push("A")</code>, <code>push("B")</code>, <code>pop()</code>, <code>push("C")</code>, <code>push("D")</code>, <code>pop()</code>, <code>pop()</code>, <code>push("E")</code>. Wie viele Elemente enthält der Stapel danach?</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="Elemente">Elemente</option>
+        <option value="Knotenbesuche">Knotenbesuche</option>
+        <option value="Referenzänderungen">Referenzänderungen</option>
+        <option value="Byte">Byte</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Schreibe den Stapel nach jedem einzelnen Befehl als Liste von unten nach oben auf. Acht Zeilen, mehr braucht es nicht.</div>
+    <div class="hilfe-text" data-stufe="2">Jedes <code>push</code> legt genau ein Element oben auf, jedes <code>pop</code> nimmt genau eines oben weg. Prüfe bei jedem <code>pop</code>, ob der Stapel überhaupt etwas enthält — sonst passiert nichts. Zähle am Ende, was übrig ist.</div>
+    <div class="hilfe-text" data-stufe="3"><code>push("A")</code> → A · <code>push("B")</code> → A, B · <code>pop()</code> → A · <code>push("C")</code> → A, C · <code>push("D")</code> → A, C, D · <code>pop()</code> → A, C · <code>pop()</code> → A · <code>push("E")</code> → A, E. Kein <code>pop</code> trifft auf einen leeren Stapel. Es bleiben <strong>2 Elemente</strong>; <code>top()</code> liefert <code>"E"</code>, darunter liegt <code>"A"</code>. Beachte: <code>"A"</code> ist nie entfernt worden, obwohl es zuerst eingefügt wurde — das ist LIFO.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Eine <code>EinfacheListe</code> enthält die Elemente A, B, C. Es wird <code>toFirst()</code> und danach <code>next()</code> aufgerufen; anschließend <code>insert("X")</code>. Wie viele Referenzen werden <strong>allein durch den Aufruf von <code>insert</code></strong> verändert?</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="Referenzänderungen">Referenzänderungen</option>
+        <option value="Knotenbesuche">Knotenbesuche</option>
+        <option value="Knoten">Knoten</option>
+        <option value="Byte">Byte</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Stelle zuerst fest, welcher Knoten nach <code>toFirst(); next()</code> das aktuelle Objekt ist und wer sein Vorgänger ist. Erst dann schau in den Rumpf von <code>insert</code>.</div>
+    <div class="hilfe-text" data-stufe="2">Zähle im Rumpf von <code>insert</code> genau die Zuweisungen, deren linke Seite ein Referenzfeld ist: <code>neu.nachfolger</code>, dann entweder <code>anfang</code> oder <code>vorgaenger.nachfolger</code>, und schließlich <code>vorgaenger</code> selbst. <code>new Knoten(...)</code> ist keine Referenzänderung.</div>
+    <div class="hilfe-text" data-stufe="3">Nach <code>toFirst()</code> ist <code>aktuell</code> = A und <code>vorgaenger</code> = <code>null</code>; nach <code>next()</code> ist <code>aktuell</code> = B und <code>vorgaenger</code> = A. <code>insert("X")</code> führt aus: (1) <code>neu.setzeNachfolger(aktuell)</code> — X zeigt auf B; (2) <code>vorgaenger</code> ist nicht <code>null</code>, also <code>vorgaenger.setzeNachfolger(neu)</code> — A zeigt auf X; (3) <code>vorgaenger = neu</code> — X ist der neue Vorgänger. Das sind <strong>3 Referenzänderungen</strong> und 0 Knotenbesuche. Ergebnis: A, X, B, C; das aktuelle Objekt ist unverändert B.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Eine <code>EinfacheListe</code> in der Fassung aus Abschnitt 3 — also <strong>ohne</strong> Endzeiger — enthält 1200 Knoten. Nun wird dreimal hintereinander <code>append</code> aufgerufen. Wie viele Knotenbesuche fallen dabei insgesamt an? Ein Knotenbesuch ist jede Auswertung, die den Hilfszeiger <code>lauf</code> auf einen Knoten setzt, <code>lauf = anfang</code> eingeschlossen.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="Knotenbesuche">Knotenbesuche</option>
+        <option value="Referenzänderungen">Referenzänderungen</option>
+        <option value="Byte">Byte</option>
+        <option value="kB">kB</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die Liste ist nach dem ersten <code>append</code> nicht mehr 1200 Knoten lang. Schreibe die drei Aufrufe einzeln untereinander.</div>
+    <div class="hilfe-text" data-stufe="2">Ein <code>append</code> an eine Liste mit <span class="m" data-tex="n" data-plain="n"></span> Knoten kostet genau <span class="m" data-tex="n" data-plain="n"></span> Besuche: einen für <code>lauf = anfang</code> und <span class="m" data-tex="n-1" data-plain="n−1"></span> weitere im Schleifenrumpf. Addiere die drei Werte für <span class="m" data-tex="n = 1200,\ 1201,\ 1202" data-plain="n = 1200, 1201, 1202"></span>.</div>
+    <div class="hilfe-text" data-stufe="3">1. Aufruf: Liste hat 1200 Knoten → 1200 Besuche. 2. Aufruf: Liste hat 1201 Knoten → 1201 Besuche. 3. Aufruf: Liste hat 1202 Knoten → 1202 Besuche. Summe: <span class="m" data-tex="1200 + 1201 + 1202 = 3603" data-plain="1200 + 1201 + 1202 = 3603"></span> <strong>Knotenbesuche</strong>. Gegenprobe über den mittleren Wert: <span class="m" data-tex="3 \cdot 1201 = 3603" data-plain="3 · 1201 = 3603"></span>. Mit einem Endzeiger wären es <strong>0</strong> Besuche gewesen — für drei zusätzliche Zeilen Code.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Ein Bibliothekssystem verwaltet 1200 ausgeliehene Medien. Verglichen werden eine verkettete Liste, bei der jeder Knoten eine Inhalts- und eine Nachfolgerreferenz trägt, und ein Array, das nur die Inhaltsreferenzen speichert. Eine Referenz belege 4 Byte; Objektköpfe und Ausrichtung bleiben in diesem Modell unberücksichtigt. Wie viel Speicher braucht die verkettete Liste <strong>mehr</strong> als das Array?</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="B">B</option>
+        <option value="kB">kB</option>
+        <option value="MB">MB</option>
+        <option value="Knoten">Knoten</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Zähle zuerst, wie viele Referenzen ein einzelner Knoten trägt und wie viele eine Arrayzelle. Der Unterschied ist eine einzige Referenz.</div>
+    <div class="hilfe-text" data-stufe="2"><span class="m" data-tex="S_{\text{Kette}} = n \cdot 2 \cdot 4\,\mathrm{B}" data-plain="S_Kette = n · 2 · 4 B"></span> und <span class="m" data-tex="S_{\text{Array}} = n \cdot 4\,\mathrm{B}" data-plain="S_Array = n · 4 B"></span>. Gesucht ist <span class="m" data-tex="S_{\text{Kette}} - S_{\text{Array}}" data-plain="S_Kette − S_Array"></span>. Rechne mit <span class="m" data-tex="1\,\mathrm{kB} = 1000\,\mathrm{B}" data-plain="1 kB = 1000 B"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="S_{\text{Kette}} = 1200 \cdot (4\,\mathrm{B} + 4\,\mathrm{B}) = 9600\,\mathrm{B}" data-plain="S_Kette = 1200 · (4 B + 4 B) = 9600 B"></span>; <span class="m" data-tex="S_{\text{Array}} = 1200 \cdot 4\,\mathrm{B} = 4800\,\mathrm{B}" data-plain="S_Array = 1200 · 4 B = 4800 B"></span>. Mehrbedarf: <span class="m" data-tex="9600\,\mathrm{B} - 4800\,\mathrm{B} = 4800\,\mathrm{B} = 4{,}8\,\mathrm{kB}" data-plain="9600 B − 4800 B = 4800 B = 4,8 kB"></span>, also <strong>Faktor 2</strong>. Zur Einordnung: Für diesen Aufschlag bekommt man Einfügen und Löschen an bekannter Stelle ohne jedes Umkopieren. In einem echten Java-Programm fiele der Aufschlag wegen der Objektköpfe deutlich größer aus — deshalb steht „in diesem Modell" in der Aufgabe.</div>
+  </div>
+
+  <div class="aufgabe" data-mc="a5">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">In der Methode <code>dequeue()</code> der <code>EinfacheSchlange</code> wird die letzte Zeile <code>if (kopf == null) { ende = null; }</code> vergessen. Alles andere bleibt wie im Java-Block aus Abschnitt 3. Wie wirkt sich dieser Fehler aus?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="a5"><span>Sofort: Nach dem letzten <code>dequeue()</code> liefert <code>front()</code> einen falschen Wert statt <code>null</code>.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="a5"><span>Erst später und nur indirekt: <code>enqueue</code> repariert beide Zeiger über seinen Leer-Zweig, aber bis dahin hält <code>ende</code> einen Knoten fest, der die Schlange längst verlassen hat.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="a5"><span>Gar nicht: <code>ende</code> wird bei jedem <code>enqueue</code> ohnehin neu gesetzt, die Zeile kann ersatzlos entfallen.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-num="a6">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Ordne jeder Anwendung die Struktur zu, die zu ihrem Zugriffsmuster passt. Die vier Skizzen A bis D zeigen dieselben Daten mit unterschiedlichen Zugriffsstellen.</div>
+
+    <div class="diagramme">
+      <figure>
+        <svg viewBox="0 0 200 110">
+          <defs><marker id="spA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b45309"/></marker></defs>
+          <g fill="#fef6e7" stroke="#b45309" stroke-width="1.5">
+            <rect x="12" y="52" width="34" height="24" rx="4"/><rect x="58" y="52" width="34" height="24" rx="4"/>
+            <rect x="104" y="52" width="34" height="24" rx="4"/><rect x="150" y="52" width="34" height="24" rx="4"/>
+          </g>
+          <g font-size="12" text-anchor="middle" fill="#111827"><text x="29" y="69">P</text><text x="75" y="69">Q</text><text x="121" y="69">R</text><text x="167" y="69">S</text></g>
+          <g stroke="#b45309" stroke-width="1.5" fill="none" marker-end="url(#spA)"><path d="M46 64 H55"/><path d="M92 64 H101"/><path d="M138 64 H147"/></g>
+          <line x1="29" y1="88" x2="29" y2="79" stroke="#b45309" stroke-width="1.5" marker-end="url(#spA)"/>
+          <text x="29" y="99" font-size="10" text-anchor="middle" fill="#b45309">kopf</text>
+          <g stroke="#b45309" stroke-width="1.5" fill="none" marker-end="url(#spA)"><path d="M6 22 q 10 -12 20 0 L26 48"/><path d="M40 46 L40 20 q 10 -12 20 0"/></g>
+          <text x="10" y="42" font-size="9" fill="#b45309">push</text><text x="58" y="42" font-size="9" fill="#b45309">pop</text>
+        </svg>
+        <figcaption>A</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 200 110">
+          <defs><marker id="spB" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b45309"/></marker></defs>
+          <g fill="#fef6e7" stroke="#b45309" stroke-width="1.5">
+            <rect x="12" y="52" width="34" height="24" rx="4"/><rect x="58" y="52" width="34" height="24" rx="4"/>
+            <rect x="104" y="52" width="34" height="24" rx="4"/><rect x="150" y="52" width="34" height="24" rx="4"/>
+          </g>
+          <g font-size="12" text-anchor="middle" fill="#111827"><text x="29" y="69">P</text><text x="75" y="69">Q</text><text x="121" y="69">R</text><text x="167" y="69">S</text></g>
+          <g stroke="#b45309" stroke-width="1.5" fill="none" marker-end="url(#spB)"><path d="M46 64 H55"/><path d="M92 64 H101"/><path d="M138 64 H147"/></g>
+          <g stroke="#b45309" stroke-width="1.5" marker-end="url(#spB)"><line x1="29" y1="88" x2="29" y2="79"/><line x1="167" y1="88" x2="167" y2="79"/></g>
+          <text x="29" y="99" font-size="10" text-anchor="middle" fill="#b45309">kopf</text>
+          <text x="167" y="99" font-size="10" text-anchor="middle" fill="#0d7a52">ende</text>
+          <g stroke="#0d7a52" stroke-width="1.5" fill="none" marker-end="url(#spB)"><path d="M194 26 L194 44"/></g>
+          <text x="150" y="22" font-size="9" fill="#0d7a52">enqueue</text>
+          <g stroke="#b45309" stroke-width="1.5" fill="none" marker-end="url(#spA)"><path d="M20 44 L6 26"/></g>
+          <text x="6" y="20" font-size="9" fill="#b45309">dequeue</text>
+        </svg>
+        <figcaption>B</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 200 110">
+          <defs><marker id="spC" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b45309"/></marker></defs>
+          <g fill="#fef6e7" stroke="#b45309" stroke-width="1.5">
+            <rect x="12" y="52" width="34" height="24" rx="4"/><rect x="58" y="52" width="34" height="24" rx="4"/>
+            <rect x="104" y="52" width="34" height="24" rx="4"/><rect x="150" y="52" width="34" height="24" rx="4"/>
+          </g>
+          <g font-size="12" text-anchor="middle" fill="#111827"><text x="29" y="69">P</text><text x="75" y="69">Q</text><text x="121" y="69">R</text><text x="167" y="69">S</text></g>
+          <g stroke="#b45309" stroke-width="1.5" fill="none" marker-end="url(#spC)"><path d="M46 64 H55"/><path d="M92 64 H101"/><path d="M138 64 H147"/></g>
+          <line x1="29" y1="44" x2="29" y2="50" stroke="#b45309" stroke-width="1.5" marker-end="url(#spC)"/>
+          <text x="29" y="39" font-size="10" text-anchor="middle" fill="#b45309">anfang</text>
+          <g stroke="#6b7280" stroke-width="1.5" marker-end="url(#spC)"><line x1="75" y1="92" x2="75" y2="79"/></g>
+          <text x="70" y="103" font-size="9" text-anchor="middle" fill="#6b7280">vorgaenger</text>
+          <line x1="121" y1="44" x2="121" y2="50" stroke="#1d4ed8" stroke-width="1.5" marker-end="url(#spC)"/>
+          <text x="127" y="39" font-size="10" text-anchor="middle" fill="#1d4ed8">aktuell</text>
+          <text x="150" y="103" font-size="9" fill="#b45309">insert / remove</text>
+          <line x1="149" y1="96" x2="128" y2="80" stroke="#b45309" stroke-width="1.5" marker-end="url(#spC)"/>
+        </svg>
+        <figcaption>C</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 200 110">
+          <defs><marker id="spD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#b45309"/></marker></defs>
+          <g fill="#fef6e7" stroke="#b45309" stroke-width="1.5">
+            <rect x="24" y="52" width="38" height="24"/><rect x="62" y="52" width="38" height="24"/>
+            <rect x="100" y="52" width="38" height="24"/><rect x="138" y="52" width="38" height="24"/>
+          </g>
+          <g font-size="12" text-anchor="middle" fill="#111827"><text x="43" y="69">P</text><text x="81" y="69">Q</text><text x="119" y="69">R</text><text x="157" y="69">S</text></g>
+          <g font-size="10" text-anchor="middle" fill="#6b7280"><text x="43" y="90">0</text><text x="81" y="90">1</text><text x="119" y="90">2</text><text x="157" y="90">3</text></g>
+          <line x1="119" y1="34" x2="119" y2="50" stroke="#b45309" stroke-width="1.5" marker-end="url(#spD)"/>
+          <text x="119" y="28" font-size="10" text-anchor="middle" fill="#b45309">daten[2]</text>
+        </svg>
+        <figcaption>D</figcaption>
+      </figure>
+    </div>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="A"><span>Die Rückgängig-Funktion eines Editors nimmt stets den zuletzt ausgeführten Arbeitsschritt zuerst zurück.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="D"><span>Ein Bild wird als Raster gespeichert; das Programm greift ständig auf beliebige Bildpunkte zu, und die Größe steht von Anfang an fest.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="C"><span>Eine Kursliste, aus der laufend an beliebiger Stelle Einträge entfernt und eingefügt werden, während man sie ohnehin von vorn durchgeht; auf „Eintrag Nummer 12" wird nie zugegriffen.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="B"><span>Druckaufträge mehrerer Rechner werden in der Reihenfolge ihres Eingangs abgearbeitet.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-num="a7">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Ein Programm soll prüfen, ob die runden und eckigen Klammern eines Ausdrucks korrekt geschachtelt sind. Der übliche Algorithmus legt jede öffnende Klammer in einen Behälter und entnimmt bei jeder schließenden Klammer eine daraus, die zu ihr passen muss. Eine Mitschülerin schlägt vor, dafür statt eines Stapels eine Schlange zu verwenden — „das speichert schließlich genauso alle offenen Klammern". Nimm begründet Stellung. Gib dabei <strong>zwei</strong> Gegenbeispiele an: einen korrekt geschachtelten Ausdruck, den die Schlangenfassung fälschlich ablehnt, und einen fehlerhaften Ausdruck, den sie fälschlich annimmt.</div>
+    <textarea placeholder="Deine Stellungnahme…"></textarea>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Schreibe für einen kurzen Ausdruck Zeichen für Zeichen auf, was im Behälter liegt und was bei jeder schließenden Klammer entnommen wird. Nimm einen Ausdruck mit <strong>zwei verschiedenen</strong> Klammerarten — mit nur einer Sorte fällt der Unterschied gar nicht auf.</div>
+    <div class="hilfe-text" data-stufe="2">Frage dich, welche der offenen Klammern beim Lesen einer schließenden Klammer die „zuständige" ist: die zuletzt geöffnete oder die zuerst geöffnete? Vergleiche dann, welche der beiden Strukturen genau diese herausgibt. Für die Gegenbeispiele brauchst du je einen Ausdruck aus vier Zeichen mit zwei Klammerarten.</div>
+    <div class="hilfe-text" data-stufe="3">Prüfe <code>([])</code> und <code>([)]</code> von Hand einmal mit Stapel- und einmal mit Schlangenverhalten durch, jeweils in einer Tabelle mit den Spalten „gelesenes Zeichen", „Behälterinhalt", „entnommen", „passt?". Du wirst sehen, dass die beiden Strukturen bei beiden Ausdrücken zu <strong>entgegengesetzten</strong> Urteilen kommen. Formuliere daraus die Stellungnahme.</div>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a7">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Schachtelung heißt: Die zuletzt geöffnete Klammer muss als Erste wieder geschlossen werden. Genau diese Reihenfolge ist die LIFO-Disziplin des Stapels — die Struktur bildet die Eigenschaft ab, die geprüft werden soll. Eine Schlange gibt die Klammern in der Reihenfolge ihres Auftretens zurück (FIFO) und vergleicht damit systematisch die falschen Paare miteinander. Der Vorschlag scheitert also nicht an der Speicherung — die Schlange merkt sich dieselben Zeichen —, sondern an der Entnahmereihenfolge. Der Behälter ist hier kein Zwischenspeicher, sondern der eigentliche Prüfmechanismus.</p>
+      <p><strong>Erstes Gegenbeispiel — fälschlich abgelehnt: <code>([])</code>.</strong> Der Ausdruck ist korrekt geschachtelt. Die Schlange nimmt <code>(</code> und <code>[</code> auf. Beim ersten schließenden Zeichen <code>]</code> entnimmt sie vorn <code>(</code> — das passt nicht, und sie lehnt ab. Der Stapel entnimmt oben <code>[</code>, was passt, danach <code>(</code> zur <code>)</code>, und akzeptiert korrekt.</p>
+      <p><strong>Zweites Gegenbeispiel — fälschlich angenommen: <code>([)]</code>.</strong> Der Ausdruck ist falsch geschachtelt: <code>(</code> wird geschlossen, bevor die innere <code>[</code> geschlossen ist. Die Schlange nimmt <code>(</code> und <code>[</code> auf; zu <code>)</code> entnimmt sie vorn <code>(</code> — passt; zu <code>]</code> entnimmt sie <code>[</code> — passt ebenfalls; der Behälter ist leer, sie akzeptiert. Der Stapel entnimmt zu <code>)</code> oben <code>[</code>, stellt den Widerspruch fest und lehnt korrekt ab.</p>
+      <p>Die Schlangenfassung irrt also <strong>in beide Richtungen</strong>. Sie ist nicht bloß ungenauer, sondern prüft eine andere Eigenschaft: nicht die Schachtelung, sondern lediglich, ob die öffnenden und schließenden Klammern in gleicher Reihenfolge und Anzahl vorkommen.</p>
+      <p><strong>Bewertungskriterien.</strong> benennt LIFO als die Reihenfolge, die Schachtelung überhaupt ausmacht, und stellt sie FIFO gegenüber · erkennt, dass nicht die Speicherung, sondern die Entnahmereihenfolge das Problem ist · gibt ein korrektes Beispiel an, das die Schlange fälschlich ablehnt, und führt dessen Ablauf nachvollziehbar vor · gibt ein fehlerhaftes Beispiel an, das die Schlange fälschlich annimmt, und führt dessen Ablauf vor · hält fest, dass der Fehler in beide Richtungen auftritt und die Schlangenfassung damit unbrauchbar ist, nicht nur schlechter · die Begründung nennt die Struktureigenschaft (LIFO/FIFO), nicht nur das Ergebnis der Beispiele.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-num="a8">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Ein Rettungsroboter soll sich in einem eingestürzten Gebäude selbstständig vom Eingang zu einer georteten Person durcharbeiten. Das Gebäude ist als Gitter aus begehbaren und blockierten Feldern gespeichert. Der Suchalgorithmus ist der aus Abschnitt 4; offen ist nur, ob der Behälter eine Schlange oder ein Stapel sein soll. Team A schlägt den <strong>Stapel</strong> vor: „Die Tiefensuche merkt sich viel weniger Felder gleichzeitig, das spart Arbeitsspeicher auf dem Roboter." Team B schlägt die <strong>Schlange</strong> vor: „Wir brauchen den kürzesten Weg." Bewerte beide Vorschläge für diesen Einsatzzweck und entscheide dich begründet. Beziehe die Zahlen aus dem Beispielgitter dieses Moduls in deine Argumentation ein.</div>
+    <textarea placeholder="Deine Bewertung…"></textarea>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Eine Bewertung braucht ein Maß. Frage dich zuerst: Was ist bei einem Rettungseinsatz tatsächlich knapp — Arbeitsspeicher, Zeit oder Akkuladung?</div>
+    <div class="hilfe-text" data-stufe="2">Arbeite in drei Schritten: (1) Was leistet jede der beiden Suchen garantiert, was nicht? (2) Welche Ressource verbraucht jede davon stärker? (3) Welche dieser Ressourcen ist im geschilderten Fall die knappe? Erst danach entscheiden. Die Zahlen aus dem Beispielgitter in Abschnitt 4 gehören in Schritt 1.</div>
+    <div class="hilfe-text" data-stufe="3">Halte fest: Breitensuche = kürzester Weg garantiert, Speicher wächst mit der Fläche der Wellenfront. Tiefensuche = irgendein Weg, Speicher wächst nur mit der Pfadtiefe. Beispielgitter: 10 gegen 14 Schritte, also 4 Schritte oder 40 % Umweg. Ordne beides dem Einsatzzweck zu — bei einer Rettung sind Zeit und Akku knapp, Speicher nicht — und formuliere daraus eine Entscheidung mit ausdrücklicher Abwägung.</div>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a8">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Beide Vorschläge sind fachlich richtig — sie gewichten nur verschiedene Kosten.</p>
+      <p><strong>Zum Einwand von Team A.</strong> Er trifft zu: Die Breitensuche hält stets die gesamte „Wellenfront" gleichzeitig im Behälter, die Tiefensuche nur einen Pfad samt offener Abzweigungen. Im ungünstigen Fall wächst der Speicherbedarf der Breitensuche deshalb mit der Fläche des Suchbereichs, der der Tiefensuche nur mit dessen Tiefe. Für ein Gebäudegitter mit einigen tausend Feldern liegen beide Werte jedoch weit unterhalb dessen, was ein Robotersteuergerät bereitstellt — der Einwand beschreibt einen realen Unterschied, der in dieser Größenordnung aber keine Entscheidung trägt.</p>
+      <p><strong>Zum Einwand von Team B.</strong> Er wiegt hier schwerer, weil die Weglänge unmittelbar in die Zielgröße eingeht: Akkuladung und verstrichene Zeit sind bei einer Rettung die knappen Größen, nicht der Arbeitsspeicher. Die Breitensuche liefert garantiert einen kürzesten Weg, die Tiefensuche nur irgendeinen. Im Beispielgitter dieses Moduls braucht die Schlange 10 Schritte und der Stapel 14 — ein Umweg von 4 Schritten oder <strong>40 Prozent</strong> auf einem Gitter von nur 6 × 6 Feldern. In einem größeren Gebäude kann dieser Anteil deutlich ungünstiger ausfallen, denn die Tiefensuche kann einen ganzen Flügel durchlaufen, bevor sie zur richtigen Abzweigung zurückkehrt.</p>
+      <p><strong>Entscheidung.</strong> Die Schlange, also die Breitensuche. Begründung: Die von Team A eingesparte Ressource ist im Überfluss vorhanden, die von Team B gesicherte Eigenschaft — kürzester Weg — ist genau die, an der der Einsatz gemessen wird. Team A hätte recht, wenn der Speicher tatsächlich knapp wäre oder wenn <em>irgendein</em> Weg genügte; beides ist hier nicht der Fall.</p>
+      <p><em>Zulässige Alternativentscheidung:</em> Wer sich für den Stapel entscheidet, muss den knappen Speicher belegen oder plausibel machen (etwa bei einem sehr großen Gitter auf einem Kleinstrechner) und ausdrücklich in Kauf nehmen, dass der gefundene Weg nicht der kürzeste ist. Diese Bewertung ist ebenfalls vollwertig, wenn die Abwägung explizit gemacht wird.</p>
+      <p><strong>Bewertungskriterien.</strong> gibt beide Einwände korrekt wieder, statt einen von vornherein abzutun · benennt die Garantie der Breitensuche auf einen kürzesten Weg als deren entscheidende Eigenschaft · benennt den geringeren gleichzeitigen Speicherbedarf der Tiefensuche als deren entscheidende Eigenschaft · verwendet die Zahlen des Beispielgitters (10 gegen 14 Schritte, Umweg 4 Schritte beziehungsweise 40 %) belegend, nicht schmückend · stellt den Bezug zum Einsatzzweck her: Akku und Zeit sind knapp, Arbeitsspeicher nicht · trifft eine ausdrückliche Entscheidung und begründet sie mit dieser Abwägung, statt beide Möglichkeiten nebeneinander stehen zu lassen · eine Entscheidung für den Stapel wird voll gewertet, wenn die Speicherknappheit begründet und der Verzicht auf den kürzesten Weg ausdrücklich hingenommen wird.</p>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- =============== 7 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">7</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Das Wichtigste in vier Sätzen</h3>
+    <ul>
+      <li>Ein Knoten trägt seinen Inhalt und <em>genau eine</em> Referenz. Weil eine Klasse eine Referenz auf sich selbst führen darf, entstehen beliebig lange Ketten, ohne dass irgendwo eine Länge festgelegt wird; <span class="m" data-tex="\texttt{null}" data-plain="null"></span> am Ende ist die Abbruchbedingung jeder Schleife darüber.</li>
+      <li>Alle Operationen ändern ausschließlich Referenzen. Kein Inhalt wird verschoben oder kopiert. Die richtige Frage lautet nie „wohin muss der Inhalt?", sondern „welche Referenz muss sich ändern?".</li>
+      <li>Die Struktur ist die Zugriffsdisziplin, nicht der Speicher. Stapel, Schlange und Liste legen dieselben Daten in derselben Art von Kette ab und unterscheiden sich nur darin, welche Zeiger die verwaltende Klasse führt und welche Zugriffsstellen sie freigibt. Diese freiwillige Beschränkung ist der Gewinn.</li>
+      <li>Die Wahl des Behälters ist Teil des Algorithmus. Derselbe Suchalgorithmus liefert mit einer Schlange garantiert einen kürzesten Weg und mit einem Stapel irgendeinen – im Gitter dieses Moduls einen um vier Schritte längeren.</li>
+    </ul>
+  </div>
+
+  <div class="hinweis">
+    <strong>Blick aufs Zentralabitur.</strong> <span class="m" data-tex="\texttt{List}" data-plain="List"></span>, <span class="m" data-tex="\texttt{Queue}" data-plain="Queue"></span> und <span class="m" data-tex="\texttt{Stack}" data-plain="Stack"></span> gehören zu den Java-Klassen, die in der Prüfung als fertige Implementierung bereitgestellt werden. Du programmierst sie dort nicht nach, sondern <em>benutzt</em> sie – und musst dafür ihre Wirkung genau kennen, insbesondere die Randfälle bei <span class="m" data-tex="\texttt{insert}" data-plain="insert"></span>, <span class="m" data-tex="\texttt{remove}" data-plain="remove"></span> und <span class="m" data-tex="\texttt{hasAccess}" data-plain="hasAccess"></span>. Die häufigsten Aufgabentypen: eine Befehlsfolge Schritt für Schritt nachvollziehen und den Zustand angeben; eine Methode schreiben, die die Struktur mit <span class="m" data-tex="\texttt{toFirst()}" data-plain="toFirst()"></span> und <span class="m" data-tex="\texttt{next()}" data-plain="next()"></span> vollständig durchläuft; und eine Strukturwahl begründen. Anschlussthemen sind Bäume und die Sortierverfahren.
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Ich kann …</h3>
+    <div class="check">
+      <label><input type="checkbox"><span>… die Klasse <span class="m" data-tex="\texttt{Knoten}" data-plain="Knoten"></span> mit ihren beiden Attributen aus dem Kopf aufschreiben und erklären, warum ein Knoten eine Referenz auf einen Knoten enthalten darf.</span></label>
+      <label><input type="checkbox"><span>… die Schnittstellen von <span class="m" data-tex="\texttt{Stack}" data-plain="Stack"></span>, <span class="m" data-tex="\texttt{Queue}" data-plain="Queue"></span> und <span class="m" data-tex="\texttt{List}" data-plain="List"></span> benennen und zu jeder Methode ihre Wirkung angeben – einschließlich der Randfälle bei leerer Struktur.</span></label>
+      <label><input type="checkbox"><span>… <span class="m" data-tex="\texttt{push}" data-plain="push"></span>, <span class="m" data-tex="\texttt{enqueue}" data-plain="enqueue"></span>, <span class="m" data-tex="\texttt{insert}" data-plain="insert"></span> und <span class="m" data-tex="\texttt{remove}" data-plain="remove"></span> als Folge einzelner Referenzänderungen beschreiben und angeben, in welcher Reihenfolge sie ausgeführt werden müssen.</span></label>
+      <label><input type="checkbox"><span>… begründen, warum beim Löschen aus einer einfach verketteten Liste der Vorgänger umgebogen werden muss und warum die Liste dafür einen eigenen <span class="m" data-tex="\texttt{vorgaenger}" data-plain="vorgaenger"></span>-Zeiger mitführt.</span></label>
+      <label><input type="checkbox"><span>… die Laufzeit der wichtigsten Operationen als <span class="m" data-tex="\mathcal{O}(1)" data-plain="O(1)"></span> oder <span class="m" data-tex="\mathcal{O}(n)" data-plain="O(n)"></span> einordnen und meine Einordnung an der Stelle im Quelltext festmachen, an der die Schleife steht.</span></label>
+      <label><input type="checkbox"><span>… für einen geschilderten Anwendungsfall begründet entscheiden, ob Stapel, Schlange, Liste oder Array passt, und meine Entscheidung gegen einen Gegenvorschlag verteidigen.</span></label>
+    </div>
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnis als Text kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+
+  <details class="lehrer">
+    <summary>Didaktische Hinweise (Lehrkraft)</summary>
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Daten und ihre Strukturierung", Q1 LK. Vorausgesetzt wird die objektorientierte Modellierung – Klasse, Objekt, Attribut, Referenz, <span class="m" data-tex="\texttt{null}" data-plain="null"></span>. Nachfolgend schließen Bäume sowie die Sortier- und Suchverfahren an.</p>
+    <p><strong>Zeitbedarf.</strong> Ausgelegt auf drei Unterrichtsstunden, zusammen etwa 135 Minuten: Einstieg 10, Knoten und Referenzen 20, die drei Strukturen 30, Vertiefung zu Laufzeit und Speicher 20, Simulation mit Beobachtungsauftrag 25, Übungen 20, Abschluss 10. Die beiden Aufgaben im Anforderungsbereich III (a7, a8) sind darin nicht enthalten; sie sind als Hausaufgabe mit je etwa 20 Minuten und anschließender Besprechung gedacht. Der Details-Block zu <span class="m" data-tex="\texttt{concat}" data-plain="concat"></span> eignet sich ebenfalls als Hausaufgabe.</p>
+    <p><strong>Typische Hürden.</strong> Am hartnäckigsten ist die Vorstellung, <span class="m" data-tex="\texttt{k2 = k1}" data-plain="k2 = k1"></span> erzeuge ein zweites Objekt – hier lohnt die Tafelskizze mit zwei Zetteln, die auf <em>eine</em> Kiste zeigen. Zweitens wird das Löschen regelmäßig am falschen Knoten angesetzt: Der zu löschende kann sich nicht selbst aushängen, sein Vorgänger muss umgebogen werden. Drittens die Reihenfolge in <span class="m" data-tex="\texttt{push}" data-plain="push"></span>: Wer <span class="m" data-tex="\texttt{kopf = neu}" data-plain="kopf = neu"></span> zuerst schreibt, verliert den Rest des Stapels. Viertens wird <span class="m" data-tex="\texttt{aktuell}" data-plain="aktuell"></span> für einen Index gehalten. Und fünftens werden in der Simulation die beiden Zähler verwechselt – dort lohnt es sich anzuhalten, denn genau ihr Unterschied trägt den Beobachtungsauftrag.</p>
+    <p><strong>Differenzierung.</strong> Für schnelle Gruppen: den Details-Block zu <span class="m" data-tex="\texttt{concat}" data-plain="concat"></span> lesen; die Liste um einen Endzeiger erweitern und angeben, welche Methoden sich dadurch ändern; eine Methode <span class="m" data-tex="\texttt{int anzahl()}" data-plain="int anzahl()"></span> ohne Benutzung von <span class="m" data-tex="\texttt{aktuell}" data-plain="aktuell"></span> schreiben. Für Lernende mit Schwierigkeiten: den Schrittmodus der Simulation zur Pflicht machen und nach jedem Klick fragen, welche Referenz sich gerade geändert hat; ein Ausdruck mit sechs leeren Knotenkästen, in die von Hand Pfeile eingezeichnet werden.</p>
+    <p><strong>Handlungserfahrung statt Realexperiment.</strong> Bewährt hat sich das Menschenmodell: Sechs Lernende stellen sich als Knoten auf, jeder legt eine Hand auf die Schulter genau eines anderen, eine siebte Person ist der <span class="m" data-tex="\texttt{kopf}" data-plain="kopf"></span>-Zeiger. Beim Löschen aus der Mitte wird körperlich erfahrbar, dass die Person selbst nichts tun kann – ihr Vorgänger muss die Hand umlegen. Etwa 10 Minuten, am wirksamsten unmittelbar vor dem Java-Block zu <span class="m" data-tex="\texttt{remove}" data-plain="remove"></span>.</p>
+  </details>
+
+  <footer>
+    Informatik LK Q1 · Lineare Datenstrukturen · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/baustein-formelleiste.md
+var formelDaten = [
+  {abschnitt:"laufzeit", titel:"Vertiefung: Laufzeit, Speicher und die Wahl der Struktur", formeln:[
+    {id:"aufbau-summe", ziel:"f-aufbau-summe", tex:"0 + 1 + 2 + \\dots + (n-1) = \\dfrac{n\\,(n-1)}{2}", plain:"0 + 1 + 2 + … + (n−1) = n · (n−1) / 2",
+     zeichen:[
+       {tex:"n", plain:"n", text:"Anzahl der Elemente, die nacheinander mit append eingefügt werden"},
+       {tex:"0 + 1 + \\dots + (n-1)", plain:"0 + 1 + … + (n−1)", text:"Summe der Knotenbesuche aller append-Aufrufe: Das i-te append läuft an i vorhandenen Knoten vorbei"},
+       {tex:"\\dfrac{n\\,(n-1)}{2}", plain:"n · (n−1) / 2", text:"geschlossene Form der Summe; wächst quadratisch mit n"}],
+     gilt:"Für eine Liste ohne Endzeiger, bei der jedes append am Anfang startet und bis zum Ende läuft. Mit einem Endzeiger entfallen diese Besuche.",
+     fehler:"Für den Gesamtaufwand nur n Besuche annehmen, weil ein einzelnes append im Mittel „nur“ bis zur Hälfte läuft. Die Summe aller Läufe wächst mit n², nicht mit n."},
+    {id:"zugriff-index", ziel:"f-zugriff-index", tex:"k+1", plain:"k+1",
+     zeichen:[
+       {tex:"k", plain:"k", text:"Index des gesuchten Elements, gezählt ab 0"},
+       {tex:"k+1", plain:"k+1", text:"Anzahl der Knotenbesuche bis zum Element mit Index k: ein toFirst() und k-mal next()"}],
+     gilt:"Für die verkettete Liste mit toFirst() und next(). Ein Array erreicht jedes Element mit einem einzigen Schritt über den Index.",
+     fehler:"Die Anzahl der next()-Aufrufe mit der Zahl der Knotenbesuche gleichsetzen. Der erste Besuch entsteht schon durch toFirst()."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{r:1, fb:[
+    "Du behandelst die Zuweisung wie das Kopieren eines Wertes. Bei Objekttypen kopiert = aber nicht das Objekt, sondern nur die Referenz darauf. Ein zweites Objekt entsteht in Java ausschließlich durch new, und new kommt hier nur einmal vor.",
+    "Richtig. k1 und k2 sind zwei Namen für dieselbe Speicheradresse. Genau darauf beruht die ganze Einheit: Eine Kette entsteht nicht dadurch, dass Objekte kopiert werden, sondern dadurch, dass mehrere Referenzen auf dieselben Objekte zeigen.",
+    "Eine automatische Synchronisation zwischen getrennten Objekten gibt es in Java nicht; das müsste man von Hand programmieren. Der Effekt, den du beschreibst, entsteht hier aus einem viel einfacheren Grund: Es gibt gar keine zwei Objekte."
+  ]},
+  vw2:{r:2, fb:[
+    "Das ist das Verhalten dynamischer Listen (etwa ArrayList), nicht das eines Arrays. Ein Array bekommt seine Länge bei new und behält sie bis zum Schluss; ein Zugriff auf Index 5 endet in einer ArrayIndexOutOfBoundsException.",
+    "Überschreiben würde Daten vernichten, die noch gebraucht werden. Die Frage ist ja gerade, wie man Platz schafft, nicht wie man welchen freiräumt.",
+    "Richtig. Ein Array hat eine feste Länge: Für den sechsten Eintrag muss ein größeres Array angelegt und der gesamte Inhalt umkopiert werden. Genau dieser Umkopieraufwand ist der Grund, warum es verkettete Strukturen gibt: Dort kostet das Anhängen eines Elements nur ein einziges neues Objekt und keine Umkopieraktion."
+  ]},
+  vw3:{r:0, fb:[
+    "Richtig. null heißt: Die Variable verweist auf gar kein Objekt. Ein Methodenaufruf braucht aber ein Objekt, an dem er ausgeführt wird. Deshalb beginnt später jede unserer Methoden mit der Prüfung, ob die Struktur leer ist.",
+    "Du verwechselst „die Methode liefert null\" mit „die Methode kann gar nicht aufgerufen werden\". Damit ein Rückgabewert entstehen könnte, müsste der Methodenrumpf laufen — dazu fehlt aber das Objekt.",
+    "Der Übersetzer prüft nur den Typ von k, und der ist korrekt Knoten. Welchen Wert die Variable zur Laufzeit trägt, kann er nicht wissen. null-Fehler sind Laufzeitfehler, und genau das macht sie so lästig."
+  ]},
+  sim1:{r:1, fb:[
+    "Genau umgekehrt. push schiebt jeden neuen Knoten vor den bisherigen Kopf. A wurde zwar zuerst eingefügt, ist damit aber ans Kettenende gerutscht; der Kopfzeiger steht am Ende auf E. Stelle den Stapel ein und sieh dir an, wohin der braune Pfeil zeigt.",
+    "Richtig. enqueue und append hängen hinten an, der Kopf bleibt also unangetastet auf A stehen. push fügt vorn ein und verschiebt den Kopf bei jedem Aufruf.",
+    "Die Simulation widerlegt das unmittelbar: Beim Stapel zeigt kopf nach dem fünften push auf E, und die Kette liest sich E, D, C, B, A. Nur weil ein Element zuerst aufgenommen wurde, steht es nicht vorn — das entscheidet allein die Einfügeoperation."
+  ]},
+  sim2:{r:0, fb:[
+    "Richtig. append muss jedes Mal von anfang bis ans Ende laufen; bei Listenlängen von 0, 1, 2, 3 und 4 sind das 0 + 1 + 2 + 3 + 4 = 10 Besuche. enqueue und push arbeiten an einem Zeiger, den die Struktur bereits hält, und laufen deshalb nie ab.",
+    "Du zählst je Einfügung einen Besuch, also einen pro Aufruf. Der Zähler erfasst aber nicht das Anlegen eines Knotens, sondern nur das Ablaufen der Kette entlang der Nachfolgerzeiger. Beim ersten append in die leere Liste wird gar nichts abgelaufen — dort steht 0, nicht 1.",
+    "Du hast die beiden Zähler vertauscht. Die 10 gehört zu den Referenzänderungen von Schlange und Stapel (je 2 pro Einfügen). Bei den Knotenbesuchen stehen beide auf 0, und die Liste hat dort die 10 — sie ändert je append nur eine Referenz, läuft dafür aber jedes Mal die Kette ab."
+  ]},
+  a5:{r:1, fb:[
+    "front() liest kopf, nicht ende. Und kopf ist nach dem letzten dequeue() korrekt null, also liefert front() korrekt null. Der Fehler sitzt nicht im Lesen, sondern in einem Zeiger, den anschließend niemand mehr überprüft — genau das macht ihn so schwer zu finden.",
+    "Richtig. enqueue prüft den Leerfall über kopf == null und setzt in diesem Zweig kopf und ende neu. Das Verhalten nach außen bleibt deshalb korrekt. Der veraltete ende-Verweis hält den entfernten Knoten aber am Leben — der Garbage Collector kann ihn nicht abräumen, obwohl er logisch nicht mehr zur Schlange gehört.",
+    "Das Ergebnis stimmt hier nur zufällig, weil enqueue seinen Leerfall über kopf abfragt. Fragte enqueue stattdessen ende == null ab — eine völlig naheliegende Variante —, liefe die Methode in den Else-Zweig und hängte den neuen Knoten an einen längst entfernten. Eine Zeile, deren Entbehrlichkeit von der Implementierung einer anderen Methode abhängt, ist nicht überflüssig, sondern gefährlich."
+  ]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{wert:2, einheit:"Elemente", tol:0.5,
+      ok:"Richtig. Die Kette lautet von unten nach oben A, E — es bleiben 2 Elemente, und top() liefert E.",
+      falschEinheit:"Der Zahlenwert stimmt. Gefragt ist aber eine Stückzahl: Wie viele Knoten hängen noch in der Kette? Das ist weder eine Speichergröße noch ein Zähler für Besuche.",
+      nah:"Du bist um ein Element daneben. Zähle die Befehlsfolge noch einmal Schritt für Schritt ab und achte auf das dritte pop(): Es entfernt D, nicht A.",
+      weit:"Zähle nicht die Anzahl der Befehle, sondern führe sie nacheinander aus. Fünf push und drei pop ergeben 5 − 3 Elemente — vorausgesetzt, kein pop trifft auf einen leeren Stapel. Prüfe das mit dem Tipp."},
+  a2:{wert:3, einheit:"Referenzänderungen", tol:0.5,
+      ok:"Richtig. neu.setzeNachfolger(aktuell), vorgaenger.setzeNachfolger(neu) und vorgaenger = neu — genau drei. Die Liste lautet danach A, X, B, C, und das aktuelle Objekt ist weiterhin B.",
+      falschEinheit:"Die Zahl stimmt. Gefragt ist aber, wie oft eine Referenz umgebogen wird — nicht, wie viele Knoten dabei besucht oder angelegt werden. insert besucht übrigens null Knoten.",
+      nah:"Dir fehlt eine der drei Zuweisungen. Am häufigsten wird die letzte vergessen: Nach dem Einfügen muss auch der vorgaenger-Zeiger nachgeführt werden, sonst zeigt er auf einen Knoten, der nicht mehr direkt vor dem aktuellen Objekt steht.",
+      weit:"Zähle nicht die Knoten der Liste, sondern die Zuweisungen im Rumpf von insert(). Sieh dir den Java-Block in Abschnitt 3 an: Wie viele Zeilen darin ändern eine Referenz? Das Anlegen des Knotens mit new zählt nicht mit."},
+  a3:{wert:3603, einheit:"Knotenbesuche", tol:0.5,
+      ok:"Richtig. 1200 + 1201 + 1202 = 3603. Die Liste wächst zwischen den Aufrufen mit, deshalb wird jeder Aufruf ein Stück teurer.",
+      falschEinheit:"Die Zahl stimmt. Knotenbesuche sind aber eine Anzahl von Schritten, keine Speichergröße — mit Byte oder kB wäre die Frage nach dem Platzbedarf gemeint, nicht nach dem Aufwand.",
+      nah:"Du bist dicht dran, hast aber vermutlich mit einer konstanten Listenlänge gerechnet: 3 · 1200 = 3600. Die Liste ist beim zweiten Aufruf aber schon 1201 und beim dritten 1202 Knoten lang.",
+      weit:"Rechne nicht mit der Zahl der Aufrufe, sondern mit der Länge der Liste. Ein einziges append an eine Liste mit n Knoten kostet n Besuche — und n wächst nach jedem Aufruf um eins. Sieh dir Stufe 2 an."},
+  a4:{wert:4800, einheit:"B", tol:1, alt:{wert:4.8, einheit:"kB", tol:0.05},
+      ok:"Richtig. 9600 B − 4800 B = 4800 B = 4,8 kB. Die Verkettung kostet in diesem Modell genau das Doppelte — der Aufschlag ist die zweite Referenz je Knoten.",
+      falschEinheit:"Der Zahlenwert passt zu einer anderen Einheit als der gewählten. 4800 gehört zu Byte, 4,8 zu Kilobyte. Die Einheit Knoten scheidet aus: Gefragt ist Speicher, nicht Stückzahl.",
+      nah:"Vermutlich hast du den Gesamtbedarf der Kette statt des Mehrbedarfs angegeben — das wären 9600 B. Gefragt ist die Differenz zum Array.",
+      weit:"Rechne beide Größen getrennt aus: Die Kette braucht je Knoten zwei Referenzen, das Array je Element eine. Bilde erst danach die Differenz. Stufe 2 zeigt den Ansatz."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2.05) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.a6 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier richtig. Beachte den Unterschied zwischen Zeile 2 und Zeile 3: Beide verwalten viele gleichartige Daten, aber die eine braucht wahlfreien Zugriff bei fester Größe, die andere ständiges Einfügen und Löschen an wandernder Stelle. Genau daran — und nicht an der Datenmenge — entscheidet sich die Wahl.";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Noch nicht alles richtig. Geh nicht von der Anwendung aus, sondern von der Frage: An wie vielen Stellen wird zugegriffen — an einer, an zweien oder an beliebigen? Und muss dabei gerechnet werden können, an welcher Position ein Element liegt? Die Antwort auf diese zwei Fragen legt die Struktur schon fest.";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: lineare Strukturen ============ */
+(function(){
+  var cv = document.getElementById("cvSim");
+  if(!cv) return;
+  var ctx = cv.getContext("2d");
+
+  /* --- Maße der Zeichnung --- */
+  var CV_B = 1000, CV_H = 340;
+  var X0 = 55, RASTER = 145, K_B = 105, K_H = 60, K_Y = 150;
+  var F_INH = 70, P_X = 87, P_L = 58, MAX_KNOTEN = 6;
+  var C_RAND = "#b45309", C_FUELL = "#fef6e7", C_LINIE = "#f3ddb3",
+      C_TEXT = "#111827", C_GRAU = "#6b7280", C_ROT = "#dc2626";
+
+  /* Alle angezeigten Zahlen laufen über diese Funktion. In der Simulation
+     kommen ausschließlich abzählbare Größen vor, deshalb ohne Nachkommastellen. */
+  function fmt(z, n){ return z.toFixed(n).replace(".", ","); }
+  function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+  function wert(v){ return (typeof v === "function") ? v() : v; }
+
+  /* ---------- Zustandsmodell: echte Knotenobjekte, kein Array ----------
+     Die Reihenfolge im Bild entsteht ausschließlich dadurch, dass die
+     Zeichenroutine der Kette von kopf aus über die Nachfolger folgt. */
+  var idZaehler = 0;
+  function Knoten(inhalt){
+    this.inhalt = inhalt;
+    this.nachfolger = null;
+    this.id = ++idZaehler;
+  }
+  var S = {kopf:null, ende:null, aktuell:null, vorgaenger:null};
+
+  var struktur = "stapel";
+  var zRef = 0, zBes = 0, letzterWert = "—";
+  var neuerKnoten = null, entfernt = null, entferntX = X0, laufZeiger = null;
+  var schwebend = null, schwebendX = X0, luecke = -1, hervor = null;
+  var schritte = [], schrittIndex = 0, vorschau = null, letzteHebe = null;
+
+  function kette(){
+    var a = [], n = S.kopf, sicher = 0;
+    while(n && sicher++ < 60){ a.push(n); n = n.nachfolger; }
+    return a;
+  }
+  function drin(a, k){ for(var i=0;i<a.length;i++) if(a[i] === k) return true; return false; }
+
+  /* Layout: welcher Knoten wird wo gezeichnet. Einzige Quelle für alle Positionen. */
+  function layout(){
+    var a = kette(), m = [], i, s;
+    for(i=0;i<a.length;i++){
+      s = (luecke >= 0 && i >= luecke) ? i + 1 : i;
+      m.push({k:a[i], x:X0 + s*RASTER, y:K_Y, h:K_H, art:"kette", letzter:(i === a.length-1)});
+    }
+    if(schwebend && !drin(a, schwebend))
+      m.push({k:schwebend, x:schwebendX, y:K_Y, h:K_H, art:"schwebend", letzter:false});
+    if(neuerKnoten && !drin(a, neuerKnoten))
+      m.push({k:neuerKnoten, x:X0 + (a.length + (luecke>=0?1:0))*RASTER, y:20, h:K_H, art:"neu", letzter:false});
+    if(entfernt && !drin(a, entfernt))
+      m.push({k:entfernt, x:entferntX, y:285, h:45, art:"entfernt", letzter:false});
+    return m;
+  }
+  function eintrag(m, k){ for(var i=0;i<m.length;i++) if(m[i].k === k) return m[i]; return null; }
+
+  /* ---------- Zeichenwerkzeuge ---------- */
+  function rechteck(x, y, b, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x+r, y); ctx.lineTo(x+b-r, y); ctx.quadraticCurveTo(x+b, y, x+b, y+r);
+    ctx.lineTo(x+b, y+h-r); ctx.quadraticCurveTo(x+b, y+h, x+b-r, y+h);
+    ctx.lineTo(x+r, y+h); ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+    ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y);
+    ctx.closePath();
+  }
+  function spitze(x, y, winkel, farbe){
+    var L = 9, H = 5, c = Math.cos(winkel), s = Math.sin(winkel);
+    ctx.save(); ctx.setLineDash([]); ctx.fillStyle = farbe;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x - L*c + H*s, y - L*s - H*c);
+    ctx.lineTo(x - L*c - H*s, y - L*s + H*c);
+    ctx.closePath(); ctx.fill(); ctx.restore();
+  }
+  function linie(x1, y1, x2, y2, farbe, breite, strich){
+    ctx.save(); ctx.strokeStyle = farbe; ctx.lineWidth = breite;
+    if(strich) ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore();
+    spitze(x2, y2, Math.atan2(y2-y1, x2-x1), farbe);
+  }
+  function bogen(x1, y1, x2, y2, scheitel, farbe, breite, strich){
+    var cx = (x1+x2)/2, cy = 2*scheitel - (y1+y2)/2;
+    ctx.save(); ctx.strokeStyle = farbe; ctx.lineWidth = breite;
+    if(strich) ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.quadraticCurveTo(cx, cy, x2, y2); ctx.stroke(); ctx.restore();
+    spitze(x2, y2, Math.atan2(y2-cy, x2-cx), farbe);
+  }
+
+  function zeichneKasten(e){
+    var grau = (e.art === "entfernt");
+    ctx.save();
+    rechteck(e.x, e.y, K_B, e.h, 6);
+    ctx.fillStyle = grau ? "#f3f4f6" : C_FUELL; ctx.fill();
+    ctx.strokeStyle = grau ? "#9ca3af" : C_RAND;
+    ctx.lineWidth = (e.k === hervor) ? 4 : 2;
+    if(e.art === "neu") ctx.setLineDash([6,4]);
+    ctx.stroke(); ctx.setLineDash([]);
+    ctx.strokeStyle = grau ? "#d1d5db" : C_LINIE; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(e.x + F_INH, e.y); ctx.lineTo(e.x + F_INH, e.y + e.h); ctx.stroke();
+    ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = grau ? C_GRAU : C_TEXT;
+    ctx.font = "bold 24px system-ui, -apple-system, sans-serif";
+    ctx.fillText(e.k.inhalt, e.x + 35, e.y + (e.h === K_H ? 38 : 30));
+    if(e.k.nachfolger){
+      ctx.fillStyle = grau ? C_GRAU : C_RAND;
+      ctx.beginPath(); ctx.arc(e.x + P_X, e.y + 30, 5, 0, 6.2832); ctx.fill();
+    } else {
+      ctx.fillStyle = C_GRAU; ctx.font = "18px system-ui, sans-serif";
+      ctx.fillText("∅", e.x + P_X, e.y + (e.h === K_H ? 38 : 30));
+    }
+    ctx.restore();
+  }
+
+  var ZEIGER = {
+    kopf:      {dx:30, vy:126, by:148, ly:120, farbe:C_RAND},
+    ende:      {dx:75, vy:100, by:148, ly: 94, farbe:"#0d7a52"},
+    aktuell:   {dx:30, vy:240, by:214, ly:256, farbe:"#1d4ed8"},
+    vorgaenger:{dx:75, vy:272, by:214, ly:288, farbe:C_GRAU},
+    lauf:      {dx:52, vy:300, by:214, ly:315, farbe:C_RAND, strich:true}
+  };
+  function zeigerName(feld){
+    if(feld === "kopf") return (struktur === "liste") ? "anfang" : "kopf";
+    return feld;
+  }
+  function zeichneZeiger(feld, ziel, m, opt){
+    var d = ZEIGER[feld], e = ziel ? eintrag(m, ziel) : null;
+    var farbe = (opt && opt.farbe) || d.farbe;
+    var breite = (opt && opt.breite) || 2;
+    var strich = opt ? !!opt.strich : !!d.strich;
+    var txt = zeigerName(feld);
+    ctx.save();
+    ctx.font = "600 14px ui-monospace, SFMono-Regular, Menlo, monospace";
+    ctx.textBaseline = "alphabetic";
+    if(!e){
+      ctx.textAlign = "left";
+      ctx.fillStyle = (opt && opt.farbe) || C_GRAU;
+      ctx.fillText(txt + " = null", 10, d.ly);
+      ctx.restore(); return;
+    }
+    var x = e.x + d.dx, y1, y2, ly;
+    if(e.y === K_Y){ y1 = d.vy; y2 = d.by; ly = d.ly; }
+    else { y1 = e.y + e.h + 26; y2 = e.y + e.h + 4; ly = e.y + e.h + 42; }
+    linie(x, y1, x, y2, farbe, breite, strich);
+    ctx.textAlign = "center"; ctx.fillStyle = farbe;
+    ctx.fillText(txt, x, ly);
+    ctx.restore();
+  }
+
+  function zeichneHebe(h, m, gestrichelt){
+    if(!h) return;
+    var opt = {farbe:C_ROT, breite:3, strich:gestrichelt};
+    if(typeof h.von === "string"){
+      zeichneZeiger(h.von === "anfang" ? "kopf" : h.von, h.nach, m, opt);
+      return;
+    }
+    var q = eintrag(m, h.von);
+    if(!q) return;
+    var sx = q.x + P_X, sy = q.y + 30;
+    if(!h.nach){
+      ctx.save(); ctx.strokeStyle = C_ROT; ctx.lineWidth = 3;
+      if(gestrichelt) ctx.setLineDash([6,4]);
+      ctx.beginPath(); ctx.arc(sx, sy, 12, 0, 6.2832); ctx.stroke(); ctx.restore();
+      return;
+    }
+    var z = eintrag(m, h.nach);
+    if(!z) return;
+    var tx = z.x, ty = z.y + 30;
+    if(sy === ty && Math.abs(tx - (sx + P_L)) < 1) linie(sx, sy, tx, ty, C_ROT, 3, gestrichelt);
+    else if(sy === ty) bogen(sx, sy, tx, ty, 128, C_ROT, 3, gestrichelt);
+    else if(sy > ty) linie(sx, sy, tx, ty, C_ROT, 3, gestrichelt);
+    else bogen(sx, sy, tx, ty, 100, C_ROT, 3, gestrichelt);
+  }
+
+  function zeichne(){
+    var m = layout(), a = kette(), i, e;
+    ctx.clearRect(0, 0, CV_B, CV_H);
+
+    for(i=0;i<m.length;i++){
+      e = m[i];
+      zeichneKasten(e);
+      if(e.k.nachfolger){
+        var z = eintrag(m, e.k.nachfolger);
+        if(z && z.y === e.y && Math.abs(z.x - (e.x + RASTER)) < 1)
+          linie(e.x + P_X, e.y + 30, e.x + RASTER, e.y + 30, C_RAND, 2, false);
+        else if(z && e.art !== "entfernt")
+          bogen(e.x + P_X, e.y + 30, z.x, z.y + 30, 128, C_RAND, 2, false);
+      }
+      if(!e.k.nachfolger && e.art !== "entfernt"){
+        ctx.save(); ctx.fillStyle = C_GRAU; ctx.textAlign = "left";
+        ctx.font = "italic 15px system-ui, sans-serif";
+        ctx.fillText("null", e.x + 120, e.y + 35); ctx.restore();
+      }
+      if(e.art === "neu"){
+        ctx.save(); ctx.fillStyle = C_RAND; ctx.textAlign = "right";
+        ctx.font = "600 14px ui-monospace, SFMono-Regular, Menlo, monospace";
+        ctx.fillText("neu", e.x - 10, e.y + 36); ctx.restore();
+      }
+      if(e.art === "entfernt"){
+        ctx.save(); ctx.fillStyle = C_GRAU; ctx.textAlign = "center";
+        ctx.font = "12px system-ui, sans-serif";
+        ctx.fillText("entfernt — keine Referenz zeigt mehr hierher", e.x + 52, 332);
+        ctx.restore();
+      }
+    }
+
+    if(!a.length && !neuerKnoten){
+      ctx.save(); ctx.fillStyle = "#9ca3af"; ctx.textAlign = "center";
+      ctx.font = "italic 17px system-ui, sans-serif";
+      ctx.fillText("Die Kette ist leer.", 500, 188); ctx.restore();
+    }
+
+    /* Ein Zeiger, der gerade rot hervorgehoben wird, wird nicht zusätzlich
+       in seiner normalen Farbe gezeichnet — sonst stehen zwei Beschriftungen übereinander. */
+    var rot = {};
+    [letzteHebe, vorschau].forEach(function(h){
+      if(!h || typeof h.von !== "string") return;
+      var f = (h.von === "anfang") ? "kopf" : h.von;
+      var jetzt = (f === "lauf") ? laufZeiger : S[f];
+      if(!jetzt || jetzt === h.nach) rot[f] = true;
+    });
+    var sicht = (struktur === "stapel") ? ["kopf"]
+              : (struktur === "schlange") ? ["kopf","ende"]
+              : ["kopf","aktuell","vorgaenger"];
+    for(i=0;i<sicht.length;i++) if(!rot[sicht[i]]) zeichneZeiger(sicht[i], S[sicht[i]], m, null);
+    if(laufZeiger && !rot.lauf) zeichneZeiger("lauf", laufZeiger, m, null);
+
+    zeichneHebe(letzteHebe, m, false);
+    zeichneHebe(vorschau, m, true);
+
+    var txt = anzeigeName() + ", Kette ab " + zeigerName("kopf") + ": "
+            + (a.length ? a.map(function(k){ return k.inhalt; }).join(", ") : "leer");
+    if(struktur === "schlange") txt += "; ende: " + (S.ende ? S.ende.inhalt : "null");
+    if(struktur === "liste") txt += "; aktuell: " + (S.aktuell ? S.aktuell.inhalt : "null")
+                                  + "; vorgaenger: " + (S.vorgaenger ? S.vorgaenger.inhalt : "null");
+    cv.setAttribute("role", "img");
+    cv.setAttribute("aria-label", txt);
+  }
+
+  /* ---------- Anzeigen und Protokoll ---------- */
+  function anzeigeName(){
+    return struktur === "stapel" ? "Stapel" : struktur === "schlange" ? "Schlange" : "Liste";
+  }
+  function anzeige(){
+    document.getElementById("aStruktur").textContent = anzeigeName();
+    document.getElementById("aLaenge").textContent = fmt(kette().length, 0);
+    document.getElementById("aRef").textContent = fmt(zRef, 0);
+    document.getElementById("aBes").textContent = fmt(zBes, 0);
+    document.getElementById("aWert").textContent = letzterWert;
+  }
+  function protokoll(code, text, zusatz, rot){
+    var h = "";
+    if(code) h += '<code style="color:' + (rot ? C_ROT : C_TEXT) + ';font-weight:600">' + esc(code) + '</code><br>';
+    if(text) h += '<span style="font-size:15px">' + esc(text) + '</span>';
+    if(zusatz) h += '<br><span style="font-size:14px;color:#6b7280">' + esc(zusatz) + '</span>';
+    document.getElementById("pProtokoll").innerHTML = h;
+  }
+  function protokollListe(zeilen){
+    document.getElementById("pProtokoll").innerHTML = zeilen.join("<br>");
+  }
+
+  /* ---------- Eingabefeld ---------- */
+  function inhaltWert(){
+    var e = document.getElementById("eInhalt");
+    var v = (e.value || "").trim();
+    return v ? v.slice(0,3) : "?";
+  }
+  function naechsterBuchstabe(){
+    var e = document.getElementById("eInhalt"), v = (e.value || "").trim();
+    if(/^[A-Za-z]$/.test(v)){
+      var g = v.toUpperCase();
+      e.value = (g === "Z") ? "A" : String.fromCharCode(g.charCodeAt(0) + 1);
+    }
+  }
+
+  /* ---------- Schrittfolgen ---------- */
+  function sch(code, text, hebe, tu){ return {code:code, text:text, hebe:hebe, tu:tu}; }
+
+  var T_NEU = "Der Knoten entsteht im Speicher. Er hängt noch an keiner Kette — sein Nachfolger ist null. Das Anlegen ist weder eine Referenzänderung noch ein Knotenbesuch.";
+
+  function bauSchritte(op){
+    var x = inhaltWert(), a = kette(), n = a.length, L = [], i, rueckt = false;
+    var einfuegend = (op === "push" || op === "enqueue" || op === "append" || op === "insert");
+    if(einfuegend && n >= MAX_KNOTEN){
+      protokoll("", "Für die Zeichnung ist bei sechs Knoten Schluss. Nimm erst etwas heraus.");
+      return null;
+    }
+    function neuSchritt(){
+      return sch('Knoten neu = new Knoten("' + x + '");', T_NEU, null,
+                 function(){ neuerKnoten = new Knoten(x); });
+    }
+
+    if(op === "push"){
+      rueckt = true;
+      L.push(neuSchritt());
+      L.push(sch("neu.setzeNachfolger(kopf);",
+        "Der neue Knoten zeigt auf den bisherigen Kopf. Diese Reihenfolge ist zwingend — andersherum wäre die Adresse des alten Kopfes verloren.",
+        function(){ return {von:neuerKnoten, nach:S.kopf}; },
+        function(){ neuerKnoten.nachfolger = S.kopf; zRef++; }));
+      L.push(sch("kopf = neu;",
+        "Erst jetzt wandert der Kopfzeiger. Der neue Knoten steht vorn.",
+        function(){ return {von:"kopf", nach:neuerKnoten}; },
+        function(){ S.kopf = neuerKnoten; zRef++; }));
+
+    } else if(op === "pop"){
+      if(!S.kopf){
+        L.push(sch("if (kopf == null) { return; }",
+          "Der Stapel ist leer. pop() lässt ihn unverändert — das ist kein Fehler, sondern die vereinbarte Wirkung.", null, null));
+      } else {
+        L.push(sch("if (kopf == null) { return; }",
+          "Der Stapel ist nicht leer, die Prüfung geht durch.", null, null));
+        L.push(sch("kopf = kopf.gibNachfolger();",
+          "Der Kopfzeiger rückt auf den zweiten Knoten. Danach zeigt keine Referenz mehr auf den bisherigen obersten Knoten.",
+          function(){ return {von:"kopf", nach:S.kopf.nachfolger}; },
+          function(){ entfernt = S.kopf; entferntX = X0; S.kopf = S.kopf.nachfolger; zRef++; }));
+      }
+
+    } else if(op === "top" || op === "front"){
+      L.push(sch("return kopf.gibInhalt();",
+        S.kopf ? "Lesen ändert nichts. Der Knoten bleibt, wo er ist — deshalb bewegen sich beide Zähler nicht."
+               : "Die Struktur ist leer, es gibt keinen Kopfknoten. Der Rückgabewert ist null.",
+        null,
+        function(){ hervor = S.kopf; letzterWert = S.kopf ? S.kopf.inhalt : "null"; }));
+
+    } else if(op === "enqueue"){
+      rueckt = true;
+      L.push(neuSchritt());
+      if(n === 0){
+        L.push(sch("kopf = neu;",
+          "Die Schlange war leer, also muss der Kopfzeiger gesetzt werden.",
+          function(){ return {von:"kopf", nach:neuerKnoten}; },
+          function(){ S.kopf = neuerKnoten; zRef++; }));
+        L.push(sch("ende = neu;",
+          "Beim allerersten Element zeigen beide Zeiger auf denselben Knoten. Wer diesen Zweig vergisst, hängt später ins Leere.",
+          function(){ return {von:"ende", nach:neuerKnoten}; },
+          function(){ S.ende = neuerKnoten; zRef++; }));
+      } else {
+        L.push(sch("ende.setzeNachfolger(neu);",
+          "Der Endzeiger erspart die Suche: Der letzte Knoten ist bereits bekannt, es wird kein einziger Knoten abgelaufen.",
+          function(){ return {von:S.ende, nach:neuerKnoten}; },
+          function(){ S.ende.nachfolger = neuerKnoten; zRef++; }));
+        L.push(sch("ende = neu;",
+          "Jetzt rückt der Endzeiger nach. Er zeigt wieder auf den letzten Knoten der Kette.",
+          function(){ return {von:"ende", nach:neuerKnoten}; },
+          function(){ S.ende = neuerKnoten; zRef++; }));
+      }
+
+    } else if(op === "dequeue"){
+      if(!S.kopf){
+        L.push(sch("if (kopf == null) { return; }",
+          "Die Schlange ist leer. dequeue() lässt sie unverändert — das ist kein Fehler, sondern die vereinbarte Wirkung.", null, null));
+      } else {
+        L.push(sch("if (kopf == null) { return; }",
+          "Die Schlange ist nicht leer, die Prüfung geht durch.", null, null));
+        L.push(sch("kopf = kopf.gibNachfolger();",
+          "Der Kopfzeiger rückt auf den zweiten Knoten. Das vorderste Element verlässt die Schlange.",
+          function(){ return {von:"kopf", nach:S.kopf.nachfolger}; },
+          function(){ entfernt = S.kopf; entferntX = X0; S.kopf = S.kopf.nachfolger; zRef++; }));
+        L.push(sch("if (kopf == null) { ende = null; }",
+          function(){ return S.kopf
+            ? "Die Bedingung ist falsch, es bleibt alles, wie es ist."
+            : "Das war das letzte Element. Der Endzeiger muss mit zurückgesetzt werden, sonst zeigt er auf einen Knoten, den es nicht mehr gibt."; },
+          function(){ return S.kopf ? null : {von:"ende", nach:null}; },
+          function(){ if(!S.kopf){ S.ende = null; zRef++; } }));
+      }
+
+    } else if(op === "toFirst"){
+      L.push(sch("aktuell = anfang;",
+        "Das aktuelle Objekt wird auf den ersten Knoten gesetzt. Dieser Zugriff ist zugleich der erste Knotenbesuch.",
+        function(){ return {von:"aktuell", nach:S.kopf}; },
+        function(){ S.aktuell = S.kopf; zRef++; if(S.kopf) zBes++; }));
+      L.push(sch("vorgaenger = null;",
+        "Vor dem ersten Knoten gibt es keinen Vorgänger. Genau daran erkennt remove() später, dass anfang umgehängt werden muss.",
+        function(){ return {von:"vorgaenger", nach:null}; },
+        function(){ S.vorgaenger = null; zRef++; }));
+
+    } else if(op === "next"){
+      if(!S.aktuell){
+        L.push(sch("if (aktuell == null) { return; }",
+          "Es gibt kein aktuelles Objekt, next() läuft ins Leere. Setze erst toFirst().", null, null));
+      } else {
+        L.push(sch("if (aktuell == null) { return; }",
+          "Es gibt ein aktuelles Objekt, die Prüfung geht durch.", null, null));
+        L.push(sch("vorgaenger = aktuell;",
+          "Der Schatten rückt zuerst nach. Genau dadurch ist der Vorgänger später beim Löschen kostenlos verfügbar.",
+          function(){ return {von:"vorgaenger", nach:S.aktuell}; },
+          function(){ S.vorgaenger = S.aktuell; zRef++; }));
+        L.push(sch("aktuell = aktuell.gibNachfolger();",
+          "Jetzt erst wandert das aktuelle Objekt einen Knoten weiter. Landet es auf einem Knoten, zählt das als Knotenbesuch — genau diese Besuche summieren sich beim Weg zum Index k.",
+          function(){ return {von:"aktuell", nach:S.aktuell.nachfolger}; },
+          function(){ S.aktuell = S.aktuell.nachfolger; zRef++; if(S.aktuell) zBes++; }));
+      }
+
+    } else if(op === "append"){
+      rueckt = true;
+      L.push(neuSchritt());
+      if(n === 0){
+        L.push(sch("anfang = neu;",
+          "Die Liste war leer, deshalb wird der Anfangszeiger direkt gesetzt. Kein einziger Knoten musste abgelaufen werden.",
+          function(){ return {von:"kopf", nach:neuerKnoten}; },
+          function(){ S.kopf = neuerKnoten; zRef++; }));
+      } else {
+        L.push(sch("Knoten lauf = anfang;",
+          "Der Hilfszeiger startet am Anfang. Schon dieser Zugriff ist der erste Knotenbesuch.",
+          function(){ return {von:"lauf", nach:S.kopf}; },
+          function(){ laufZeiger = S.kopf; zBes++; }));
+        for(i=1;i<n;i++){
+          L.push(sch("lauf = lauf.gibNachfolger();",
+            "Der Hilfszeiger lauf wandert. Jeder dieser Klicks ist ein Knotenbesuch — und der Grund, warum append teuer ist.",
+            function(){ return {von:"lauf", nach:laufZeiger.nachfolger}; },
+            function(){ laufZeiger = laufZeiger.nachfolger; zBes++; }));
+        }
+        L.push(sch("lauf.setzeNachfolger(neu);",
+          "Am Ende der Kette wird genau eine Referenz geändert. Teuer war nicht das Umhängen, teuer war der Weg dorthin.",
+          function(){ return {von:laufZeiger, nach:neuerKnoten}; },
+          function(){ laufZeiger.nachfolger = neuerKnoten; zRef++; }));
+      }
+
+    } else if(op === "insert"){
+      if(!S.aktuell && S.kopf){
+        L.push(sch("if (aktuell == null && anfang != null) { return; }",
+          "Ohne aktuelles Objekt fügt insert in eine nicht leere Liste nichts ein. Setze erst toFirst().", null, null));
+      } else if(!S.aktuell && !S.kopf){
+        /* Randfall leere Liste: der abgedruckte Java-Code erledigt das in einer
+           einzigen Anweisung — ein Knoten entsteht, eine Referenz ändert sich. */
+        rueckt = true;
+        L.push(sch('anfang = new Knoten("' + x + '");',
+          "Die Liste war leer. Der Knoten entsteht und der Anfangszeiger wird in derselben Anweisung gesetzt — genau eine Referenzänderung. Das aktuelle Objekt bleibt null: insert() setzt es nicht, du brauchst danach toFirst().",
+          function(){ if(!neuerKnoten) neuerKnoten = new Knoten(x); return {von:"kopf", nach:neuerKnoten}; },
+          function(){ if(!neuerKnoten) neuerKnoten = new Knoten(x); S.kopf = neuerKnoten; zRef++; }));
+      } else {
+        rueckt = true;
+        L.push(neuSchritt());
+        L.push(sch("neu.setzeNachfolger(aktuell);",
+          "Der neue Knoten zeigt auf das aktuelle Objekt — er wird also davor eingehängt.",
+          function(){ return {von:neuerKnoten, nach:S.aktuell}; },
+          function(){ neuerKnoten.nachfolger = S.aktuell; zRef++; }));
+        L.push(sch(
+          function(){ return S.vorgaenger ? "vorgaenger.setzeNachfolger(neu);" : "anfang = neu;"; },
+          function(){ return S.vorgaenger
+            ? "Es gibt einen Vorgänger, also übernimmt dieser den neuen Knoten als Nachfolger."
+            : "Ohne Vorgänger steht der neue Knoten ganz vorn — dann muss der Anfangszeiger umgehängt werden."; },
+          function(){ return S.vorgaenger ? {von:S.vorgaenger, nach:neuerKnoten} : {von:"kopf", nach:neuerKnoten}; },
+          function(){
+            if(S.vorgaenger) S.vorgaenger.nachfolger = neuerKnoten;
+            else S.kopf = neuerKnoten;
+            zRef++;
+          }));
+        L.push(sch("vorgaenger = neu;",
+          "Das aktuelle Objekt bleibt dasselbe wie vorher — der neue Knoten wird sein Vorgänger. Das ist die Stelle, an der im Abitur die meisten Punkte verloren gehen.",
+          function(){ return {von:"vorgaenger", nach:neuerKnoten}; },
+          function(){ S.vorgaenger = neuerKnoten; zRef++; }));
+      }
+
+    } else if(op === "remove"){
+      if(!S.aktuell){
+        L.push(sch("if (aktuell == null) { return; }",
+          "Es gibt kein aktuelles Objekt, remove() lässt die Liste unverändert. Setze erst toFirst().", null, null));
+      } else {
+        L.push(sch("if (aktuell == null) { return; }",
+          "Es gibt ein aktuelles Objekt, die Prüfung geht durch.", null, null));
+        L.push(sch(
+          function(){ return S.vorgaenger
+            ? "vorgaenger.setzeNachfolger(aktuell.gibNachfolger());"
+            : "anfang = aktuell.gibNachfolger();"; },
+          "Der Vorgänger überspringt den aktuellen Knoten. Beachte, dass der aktuelle Knoten selbst weiterhin auf seinen alten Nachfolger zeigt — deshalb liefert aktuell.gibNachfolger() im nächsten Schritt noch den richtigen Knoten.",
+          function(){ return S.vorgaenger
+            ? {von:S.vorgaenger, nach:S.aktuell.nachfolger}
+            : {von:"kopf", nach:S.aktuell.nachfolger}; },
+          function(){
+            var m = layout(), e = eintrag(m, S.aktuell), a2 = kette(), j;
+            schwebendX = e ? e.x : X0;
+            for(j=0;j<a2.length;j++) if(a2[j] === S.aktuell) luecke = j;
+            schwebend = S.aktuell;
+            if(S.vorgaenger) S.vorgaenger.nachfolger = S.aktuell.nachfolger;
+            else S.kopf = S.aktuell.nachfolger;
+            zRef++;
+          }));
+        L.push(sch("aktuell = aktuell.gibNachfolger();",
+          "Der Nachfolger wird zum neuen aktuellen Objekt. War der entfernte Knoten der letzte, ist aktuell jetzt null und hasAccess() liefert false.",
+          function(){ return {von:"aktuell", nach:S.aktuell.nachfolger}; },
+          function(){
+            entfernt = S.aktuell; entferntX = schwebendX;
+            schwebend = null; luecke = -1;
+            S.aktuell = S.aktuell.nachfolger; zRef++;
+          }));
+      }
+
+    } else if(op === "getContent"){
+      L.push(sch("return aktuell.gibInhalt();",
+        S.aktuell ? "Lesen ändert nichts an der Kette. Beide Zähler bleiben stehen."
+                  : "Es gibt kein aktuelles Objekt, der Rückgabewert ist null.",
+        null,
+        function(){ hervor = S.aktuell; letzterWert = S.aktuell ? S.aktuell.inhalt : "null"; }));
+
+    } else if(op === "setContent"){
+      if(!S.aktuell){
+        L.push(sch("if (aktuell == null) { return; }",
+          "Ohne aktuelles Objekt gibt es nichts zu überschreiben. Setze erst toFirst().", null, null));
+      } else {
+        L.push(sch('aktuell.setzeInhalt("' + x + '");',
+          "Der Inhalt ändert sich, die Kette nicht. Beide Zähler bleiben stehen — Inhalt und Verkettung sind zwei getrennte Dinge.",
+          null,
+          function(){ hervor = S.aktuell; S.aktuell.inhalt = x; }));
+      }
+    }
+
+    /* Das Eingabefeld rückt erst weiter, wenn der Knoten wirklich hängt — im
+       Schrittmodus sonst schon, während Schritt 1 noch aussteht. */
+    if(rueckt && L.length){
+      var letzter = L[L.length - 1], vorherigesTu = letzter.tu;
+      letzter.tu = function(){
+        if(vorherigesTu) vorherigesTu();
+        naechsterBuchstabe();
+      };
+    }
+    return L;
+  }
+
+  /* ---------- Ablaufsteuerung ---------- */
+  function schrittModus(){ return document.getElementById("cSchritt").checked; }
+
+  function knoepfe(){
+    var laufend = schritte.length > 0;
+    document.querySelectorAll("[data-op]").forEach(function(b){
+      b.style.display = (b.getAttribute("data-fuer") === struktur) ? "" : "none";
+      b.disabled = laufend;
+    });
+    document.querySelectorAll("[data-struktur]").forEach(function(b){
+      if(b.getAttribute("data-struktur") === struktur) b.classList.add("primaer");
+      else b.classList.remove("primaer");
+      b.disabled = laufend;
+    });
+    document.getElementById("bSchritt").disabled = !laufend;
+  }
+
+  function starte(op){
+    if(schritte.length) return;
+    hervor = null; letzteHebe = null; vorschau = null;
+    neuerKnoten = null; entfernt = null; laufZeiger = null;
+    schwebend = null; luecke = -1;
+    var L = bauSchritte(op);
+    if(!L || !L.length){ knoepfe(); zeichne(); anzeige(); return; }
+    schritte = L; schrittIndex = 0;
+    if(schrittModus()){
+      vorschau = wert(schritte[0].hebe);
+      protokoll(wert(schritte[0].code), wert(schritte[0].text),
+                "Schritt 1 von " + schritte.length + " — steht an", true);
+      knoepfe(); zeichne(); anzeige();
+    } else {
+      restAusfuehren();
+    }
+  }
+
+  function restAusfuehren(){
+    var zeilen = [], s, code, text;
+    while(schrittIndex < schritte.length){
+      s = schritte[schrittIndex];
+      code = wert(s.code); text = wert(s.text);
+      zeilen.push('<code style="font-weight:600">' + esc(code) + '</code> <span style="font-size:15px">' + esc(text) + '</span>');
+      if(s.tu) s.tu();
+      schrittIndex++;
+    }
+    schritte = []; schrittIndex = 0;
+    neuerKnoten = null; laufZeiger = null; schwebend = null; luecke = -1;
+    vorschau = null; letzteHebe = null;
+    protokollListe(zeilen);
+    knoepfe(); zeichne(); anzeige();
+  }
+
+  function naechster(){
+    if(!schritte.length) return;
+    var s = schritte[schrittIndex];
+    var code = wert(s.code), text = wert(s.text), h = wert(s.hebe);
+    if(s.tu) s.tu();
+    letzteHebe = h;
+    schrittIndex++;
+    if(schrittIndex < schritte.length){
+      var t = schritte[schrittIndex];
+      vorschau = wert(t.hebe);
+      protokoll(wert(t.code), wert(t.text),
+                "Schritt " + (schrittIndex + 1) + " von " + schritte.length + " — steht an", true);
+    } else {
+      vorschau = null;
+      protokoll(code, text, "Schritt " + schrittIndex + " von " + schritte.length + " — ausgeführt", false);
+      neuerKnoten = null; laufZeiger = null;
+      schritte = []; schrittIndex = 0;
+    }
+    knoepfe(); zeichne(); anzeige();
+  }
+
+  function zuruecksetzen(){
+    S.kopf = null; S.ende = null; S.aktuell = null; S.vorgaenger = null;
+    zRef = 0; zBes = 0; letzterWert = "—";
+    neuerKnoten = null; entfernt = null; laufZeiger = null;
+    schwebend = null; luecke = -1; hervor = null;
+    schritte = []; schrittIndex = 0; vorschau = null; letzteHebe = null;
+    document.getElementById("eInhalt").value = "A";
+    protokoll("", "Zurückgesetzt. Wähle eine Operation — im Schrittmodus wird pro Klick genau eine Java-Zeile ausgeführt.");
+    knoepfe(); zeichne(); anzeige();
+  }
+
+  document.querySelectorAll("[data-struktur]").forEach(function(b){
+    b.addEventListener("click", function(){
+      struktur = b.getAttribute("data-struktur");
+      zuruecksetzen();
+    });
+  });
+  document.querySelectorAll("[data-op]").forEach(function(b){
+    b.addEventListener("click", function(){ starte(b.getAttribute("data-op")); });
+  });
+  document.getElementById("bSchritt").addEventListener("click", naechster);
+  document.getElementById("bReset").addEventListener("click", zuruecksetzen);
+  document.getElementById("cSchritt").addEventListener("change", function(){
+    if(!schrittModus() && schritte.length) restAusfuehren();
+    else knoepfe();
+  });
+
+  zuruecksetzen();
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1 – Referenzsemantik",
+    vw2:"Vorwissen 2 – Grenzen des Arrays",
+    vw3:"Vorwissen 3 – Bedeutung von null",
+    sim1:"Simulation 1 – Lage von A nach fünf Einfügungen",
+    sim2:"Simulation 2 – Zähler „besuchte Knoten“",
+    a1:"Aufgabe 1 – Stapel-Trace (AB I)",
+    a2:"Aufgabe 2 – Referenzänderungen bei insert (AB I)",
+    a3:"Aufgabe 3 – Knotenbesuche bei append (AB II)",
+    a4:"Aufgabe 4 – Speicher-Mehrbedarf (AB II)",
+    a5:"Aufgabe 5 – vergessener Endzeiger (AB II)",
+    a6:"Aufgabe 6 – Zuordnung Anwendung zu Struktur (AB II)",
+    a7:"Aufgabe 7 – Klammerprüfung: Stapel statt Schlange (AB III)",
+    a8:"Aufgabe 8 – Rettungsroboter: Breiten- oder Tiefensuche (AB III)"
+  };
+  var zeilen = ["Lineare Strukturen: Stapel, Schlange, Liste – Informatik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Offene Aufgabe " + (i + 1) + ":\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>

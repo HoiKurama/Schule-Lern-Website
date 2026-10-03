@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elektromagnetische Induktion – Physik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#1d4ed8;
+  --akzent-hell:#eff6ff;
+  --akzent-rand:#bfdbfe;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#1e3a8a,#1d4ed8);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#1a43b8;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Physik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Elektromagnetische Induktion</h1>
+    <div class="meta">
+      <span class="chip">Inhaltsfeld: Ladungen, Felder und Induktion</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+      <span class="chip">ca. 90 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Ein Fahrraddynamo hat keine Batterie. Trotzdem leuchtet die Lampe, sobald du losfährst – und je schneller du trittst, desto heller wird sie. Irgendwo zwischen Rad und Lampe entsteht also Spannung aus Bewegung.</p>
+
+  <p>In dieser Einheit klärst du, unter welcher Bedingung genau eine Spannung entsteht. Die Antwort ist überraschend eng: Es reicht nicht, dass ein Magnetfeld da ist. Es reicht auch nicht, dass sich der Leiter bewegt. Was zählt, ist etwas Drittes.</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Drei Fragen aus der EF und der Sekundarstufe I. Wenn du hier hängst, lohnt sich ein Blick zurück, bevor du weitermachst.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Wie ist die magnetische Flussdichte <span class="m" data-tex="B" data-plain="B"></span> über die Kraft auf einen stromdurchflossenen Leiter definiert?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span><span class="m" data-tex="B = F \cdot I \cdot l" data-plain="B = F · I · l"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span><span class="m" data-tex="B = \dfrac{F}{I \cdot l}" data-plain="B = F / (I · l)"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span><span class="m" data-tex="B = \dfrac{I \cdot l}{F}" data-plain="B = (I · l) / F"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Ein Elektron fliegt senkrecht zu den Feldlinien in ein ausgedehntes, homogenes Magnetfeld. Welche Bahn beschreibt es dort?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span>Eine Gerade, weil das Magnetfeld die Ladung nicht beschleunigt.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span>Eine Kreisbahn.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span>Eine Parabel.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Eine Leiterschleife liegt vollständig in einem zeitlich konstanten, homogenen Magnetfeld und bewegt sich nicht. Was misst ein empfindliches Voltmeter an ihren Enden?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span>Eine konstante Spannung, weil das Feld die Elektronen dauerhaft verschiebt.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span>Null.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span>Eine Wechselspannung.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 ERKLÄRTEIL =============== -->
+<section id="grundlagen">
+  <div class="stufe"><div class="nr">2</div><h2>Der magnetische Fluss</h2></div>
+
+  <p>Damit man die Bedingung sauber formulieren kann, braucht es eine Größe, die beschreibt, <em>wie viel Feld</em> durch eine Fläche hindurchgeht. Diese Größe ist der magnetische Fluss <span class="m" data-tex="\Phi" data-plain="Φ"></span>.</p>
+
+  <div class="m block" id="f-fluss" data-tex="\Phi = B \cdot A \qquad [\Phi] = 1\,\mathrm{T\cdot m^2} = 1\,\mathrm{Wb}" data-plain="Φ = B · A     [Φ] = 1 T·m² = 1 Wb (Weber)"></div>
+
+  <p>Das gilt so nur, wenn das Feld homogen ist und senkrecht durch die Fläche tritt. Steht die Flächennormale schräg zum Feld, zählt nur die senkrechte Komponente:</p>
+
+  <div class="m block" id="f-fluss-winkel" data-tex="\Phi = B \cdot A \cdot \cos\alpha" data-plain="Φ = B · A · cos α"></div>
+
+  <details>
+    <summary>Warum der Kosinus – und was im inhomogenen Feld passiert</summary>
+    <p>Der Fluss zählt anschaulich die Feldlinien, die die Fläche durchstoßen. Kippt man die Fläche um den Winkel <span class="m" data-tex="\alpha" data-plain="α"></span> gegen die Feldrichtung, so verkleinert sich die für die Feldlinien wirksame Fläche auf <span class="m" data-tex="A_\perp = A\cos\alpha" data-plain="A⊥ = A cos α"></span>. Bei <span class="m" data-tex="\alpha = 90^\circ" data-plain="α = 90°"></span> läuft das Feld parallel zur Fläche, keine Linie geht hindurch, der Fluss ist null.</p>
+    <p>Ist das Feld nicht homogen, zerlegt man die Fläche in so kleine Stücke, dass <span class="m" data-tex="\vec B" data-plain="B"></span> auf jedem als konstant gelten darf, und summiert auf. Im Grenzfall wird daraus das Flächenintegral <span class="m" id="f-fluss-integral" data-tex="\Phi = \int_A \vec B \cdot \mathrm{d}\vec A" data-plain="Φ = ∫ B · dA"></span>. Für den LK reicht es, diesen Zusammenhang zu kennen und zu erklären; rechnen wirst du mit der einfachen Form.</p>
+  </details>
+
+  <div class="merksatz">
+    <b>Kernaussage</b>
+    Der magnetische Fluss verbindet zwei Dinge, die sich beide ändern können: die Stärke des Feldes und die vom Feld durchsetzte Fläche. Genau daraus entstehen später die zwei Wege, Spannung zu erzeugen.
+  </div>
+</section>
+
+<section id="gesetz">
+  <div class="stufe"><div class="nr">3</div><h2>Das Induktionsgesetz</h2></div>
+
+  <p>Faradays Befund lässt sich in einem Satz sagen: Eine Spannung entsteht nicht durch den Fluss, sondern durch seine <strong>Änderung</strong>. Ein starkes, aber konstantes Feld liefert nichts.</p>
+
+  <div class="m block" id="f-induktion" data-tex="U_{\text{ind}} = -N \cdot \frac{\mathrm{d}\Phi}{\mathrm{d}t}" data-plain="U_ind = −N · dΦ/dt"></div>
+
+  <p><span class="m" data-tex="N" data-plain="N"></span> ist die Windungszahl der Spule: Jede Windung umschließt denselben Fluss, die Einzelspannungen addieren sich. Bei zeitlich linearer Änderung darf man den Differentialquotienten durch den Differenzenquotienten ersetzen:</p>
+
+  <div class="m block" id="f-induktion-mittel" data-tex="U_{\text{ind}} = -N \cdot \frac{\Delta\Phi}{\Delta t}" data-plain="U_ind = −N · ΔΦ/Δt"></div>
+
+  <h3>Zwei Wege zur Flussänderung</h3>
+  <div class="tabelle">
+  <table>
+    <tr><th>Weg</th><th>Was sich ändert</th><th>Formel</th><th>Beispiel</th></tr>
+    <tr>
+      <td>Bewegungsinduktion</td>
+      <td>die Fläche <span class="m" data-tex="A" data-plain="A"></span> im Feld</td>
+      <td><span class="m" id="f-bewegung" data-tex="U_{\text{ind}} = -N\,B\,l\,v" data-plain="U_ind = −N · B · l · v"></span></td>
+      <td>Leiterschaukel, Dynamo</td>
+    </tr>
+    <tr>
+      <td>Ruheinduktion</td>
+      <td>die Flussdichte <span class="m" data-tex="B" data-plain="B"></span></td>
+      <td><span class="m" id="f-ruhe" data-tex="U_{\text{ind}} = -N\,A\,\frac{\mathrm{d}B}{\mathrm{d}t}" data-plain="U_ind = −N · A · dB/dt"></span></td>
+      <td>Transformator, Induktionsherd</td>
+    </tr>
+  </table>
+  </div>
+
+  <details>
+    <summary>Herleitung von <span class="m" data-tex="U_{\text{ind}} = -B\,l\,v" data-plain="U_ind = −B·l·v"></span> über die Lorentzkraft</summary>
+    <p>Ein gerader Leiter der Länge <span class="m" data-tex="l" data-plain="l"></span> bewegt sich mit <span class="m" data-tex="v" data-plain="v"></span> senkrecht durch ein Feld <span class="m" data-tex="B" data-plain="B"></span>. Auf jedes Elektron im Leiter wirkt die Lorentzkraft <span class="m" data-tex="F_L = e\,v\,B" data-plain="F_L = e·v·B"></span> längs des Leiters. Ladungen sammeln sich an einem Ende, es baut sich ein elektrisches Feld <span class="m" data-tex="E" data-plain="E"></span> und damit eine Gegenkraft <span class="m" data-tex="F_{el} = e\,E" data-plain="F_el = e·E"></span> auf.</p>
+    <p>Im Gleichgewicht gilt <span class="m" data-tex="e\,E = e\,v\,B" data-plain="e·E = e·v·B"></span>, also <span class="m" data-tex="E = v\,B" data-plain="E = v·B"></span>. Mit <span class="m" data-tex="U = E\cdot l" data-plain="U = E · l"></span> folgt unmittelbar <span class="m" data-tex="U = B\,l\,v" data-plain="U = B · l · v"></span>.</p>
+    <p>Derselbe Ausdruck ergibt sich aus dem Induktionsgesetz: In der Zeit <span class="m" data-tex="\Delta t" data-plain="Δt"></span> überstreicht der Leiter die Zusatzfläche <span class="m" data-tex="\Delta A = l\cdot v\,\Delta t" data-plain="ΔA = l · v · Δt"></span>, also <span class="m" data-tex="\Delta\Phi = B\,l\,v\,\Delta t" data-plain="ΔΦ = B · l · v · Δt"></span> und damit <span class="m" data-tex="U_{\text{ind}} = -B\,l\,v" data-plain="U_ind = −B·l·v"></span>. Zwei Wege, ein Ergebnis – das ist ein starkes Argument dafür, dass beide Beschreibungen dieselbe Physik meinen.</p>
+  </details>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Das Feld ist stark, also wird viel induziert." Falsch. Entscheidend ist die Steigung von <span class="m" data-tex="\Phi(t)" data-plain="Φ(t)"></span>, nicht der Wert. Ein Fluss von 10 Wb, der konstant bleibt, induziert exakt null.
+  </div>
+</section>
+
+<!-- =============== 4 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">4</div><h2>Leiterschleife im Magnetfeld</h2></div>
+
+  <p>Eine rechteckige Leiterschleife wird durch ein räumlich begrenztes, homogenes Magnetfeld gezogen (Feldrichtung in die Bildebene hinein, dargestellt durch ⊗). Unten entstehen zeitgleich das <span class="m" data-tex="\Phi\text{-}t" data-plain="Φ-t"></span>- und das <span class="m" data-tex="U\text{-}t" data-plain="U-t"></span>-Diagramm.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    Lass die Schleife einmal komplett durchlaufen. Achte darauf, <em>wann</em> im U-t-Diagramm etwas passiert und wann nicht. Verändere danach die Geschwindigkeit und beobachte, wie sich Höhe <em>und</em> Breite der Ausschläge ändern. Formuliere für dich einen Satz, der beides erklärt.
+  </div>
+
+  <div class="sim">
+    <canvas id="cvSim" width="1000" height="330"></canvas>
+    <div class="trenner"></div>
+    <canvas id="cvPhi" width="1000" height="170"></canvas>
+    <div class="trenner"></div>
+    <canvas id="cvU" width="1000" height="170"></canvas>
+
+    <div class="anzeige">
+      <div>Geschwindigkeit<span id="aV">0,00 m/s</span></div>
+      <div>durchsetzte Fläche<span id="aA">0,0 cm²</span></div>
+      <div>Fluss Φ je Windung<span id="aPhi">0,00 mWb</span></div>
+      <div>Spannung U<span id="aU">0,0 mV</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label>Geschwindigkeit <b><span id="lV">0,20</span> m/s</b></label>
+          <input type="range" id="rV" min="5" max="60" value="20">
+        </div>
+        <div>
+          <label>Flussdichte B <b><span id="lB">0,50</span> T</b></label>
+          <input type="range" id="rB" min="10" max="100" value="50">
+        </div>
+        <div>
+          <label>Windungszahl N <b><span id="lN">1</span></b></label>
+          <input type="range" id="rN" min="1" max="10" value="1">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button class="primaer" id="bPlay">▶ Start</button>
+        <button id="bReset">Zurücksetzen</button>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px;margin-left:6px">
+          <input type="checkbox" id="cDrag" style="accent-color:var(--akzent);width:16px;height:16px">
+          Schleife selbst ziehen
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Während sich die Schleife vollständig innerhalb des Feldbereichs befindet, ist die induzierte Spannung null. Welche Begründung trifft zu?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>Das Feld hebt sich innerhalb der Schleife gegenseitig auf.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>Die durchsetzte Fläche bleibt konstant, also ändert sich der Fluss nicht.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>Die Schleife bewegt sich dort nicht mehr.</span></label>
+      <label class="opt" data-i="3"><input type="radio" name="sim1"><span>Die Lorentzkraft wirkt dort senkrecht zum Leiter.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Du verdoppelst die Geschwindigkeit. Was passiert mit der <em>Fläche</em> unter einem Spannungsausschlag im U-t-Diagramm?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>Sie verdoppelt sich, weil die Spannung doppelt so groß wird.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span>Sie bleibt gleich: doppelte Höhe bei halber Dauer.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>Sie halbiert sich, weil der Vorgang kürzer dauert.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+</section>
+
+<!-- =============== 5 LENZ =============== -->
+<section id="lenz">
+  <div class="stufe"><div class="nr">5</div><h2>Die Lenzsche Regel</h2></div>
+
+  <p>Das Minuszeichen im Induktionsgesetz ist kein Schönheitsfehler, sondern Energieerhaltung in Formelform.</p>
+
+  <div class="merksatz">
+    <b>Lenzsche Regel</b>
+    Der Induktionsstrom ist stets so gerichtet, dass er der Ursache seiner Entstehung entgegenwirkt.
+  </div>
+
+  <p>Probier die vier Fälle durch. Achte darauf, dass sich zwei Dinge ändern können – die Polung des Magneten und die Bewegungsrichtung – und dass sich die Wirkung nur umkehrt, wenn genau eines von beiden umgekehrt wird.</p>
+
+  <div class="sim">
+    <canvas id="cvLenz" width="1000" height="290"></canvas>
+    <div class="steuer">
+      <div class="knopfleiste">
+        <button data-lenz="N-ein">Nordpol nähert sich</button>
+        <button data-lenz="N-aus">Nordpol entfernt sich</button>
+        <button data-lenz="S-ein">Südpol nähert sich</button>
+        <button data-lenz="S-aus">Südpol entfernt sich</button>
+      </div>
+      <p id="lenzText" style="margin:12px 0 0;font-size:15px;color:var(--grau)">Wähle einen Fall aus.</p>
+    </div>
+  </div>
+
+  <details>
+    <summary>Was passieren würde, wenn die Regel andersherum gälte</summary>
+    <p>Angenommen, der Induktionsstrom würde die Bewegung <em>unterstützen</em> statt bremsen. Dann würde der einmal angestoßene Magnet immer weiter beschleunigt, im Leiter flösse gleichzeitig ein Strom, der Wärme freisetzt – Energie entstünde aus dem Nichts. Die Lenzsche Regel ist damit keine zusätzliche Annahme, sondern eine Folge des Energieerhaltungssatzes. Genau so solltest du sie im Abitur auch begründen.</p>
+    <p>Praktisch heißt das: Wer eine Leiterschleife durch ein Feld zieht, muss gegen die Bremskraft Arbeit verrichten. Diese Arbeit taucht als elektrische Energie in der Schleife wieder auf. Beim Fahrraddynamo spürst du das direkt in den Beinen.</p>
+  </details>
+</section>
+
+<!-- =============== 6 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">6</div><h2>Übungen</h2></div>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Eine Spule mit <span class="m" data-tex="N = 400" data-plain="N = 400"></span> Windungen und der Querschnittsfläche <span class="m" data-tex="A = 25\,\mathrm{cm^2}" data-plain="A = 25 cm²"></span> befindet sich in einem homogenen Feld mit <span class="m" data-tex="B = 0{,}80\,\mathrm{T}" data-plain="B = 0,80 T"></span> (Feld senkrecht zur Spulenfläche). Berechne den magnetischen Fluss durch <em>eine</em> Windung.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="Wb">Wb</option>
+        <option value="mWb">mWb</option>
+        <option value="T">T</option>
+        <option value="V">V</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Achte auf die Einheiten: Die Fläche ist in cm² gegeben, die Formel verlangt m².</div>
+    <div class="hilfe-text" data-stufe="2">Es ist <span class="m" data-tex="\Phi = B\cdot A" data-plain="Φ = B · A"></span>. Die Windungszahl gehört <em>nicht</em> in den Fluss durch eine Windung – sie taucht erst im Induktionsgesetz auf.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="A = 25\,\mathrm{cm^2} = 25\cdot 10^{-4}\,\mathrm{m^2}" data-plain="A = 25 cm² = 25·10⁻⁴ m²"></span>, also <span class="m" data-tex="\Phi = 0{,}80\,\mathrm{T}\cdot 25\cdot10^{-4}\,\mathrm{m^2} = 2{,}0\cdot10^{-3}\,\mathrm{Wb} = 2{,}0\,\mathrm{mWb}" data-plain="Φ = 0,80 T · 25·10⁻⁴ m² = 2,0·10⁻³ Wb = 2,0 mWb"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Dieselbe Spule (<span class="m" data-tex="N = 400" data-plain="N = 400"></span>, <span class="m" data-tex="A = 25\,\mathrm{cm^2}" data-plain="A = 25 cm²"></span>) wird in ein Feld gebracht, dessen Flussdichte innerhalb von <span class="m" data-tex="20\,\mathrm{ms}" data-plain="20 ms"></span> gleichmäßig von <span class="m" data-tex="0{,}80\,\mathrm{T}" data-plain="0,80 T"></span> auf <span class="m" data-tex="0" data-plain="0"></span> abfällt. Berechne den Betrag der induzierten Spannung.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="V">V</option>
+        <option value="mV">mV</option>
+        <option value="Wb">Wb</option>
+        <option value="T">T</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Hier ändert sich <span class="m" data-tex="B" data-plain="B"></span>, die Fläche bleibt konstant. Das ist Ruheinduktion.</div>
+    <div class="hilfe-text" data-stufe="2">Aus <span class="m" data-tex="U = -N\,A\,\frac{\Delta B}{\Delta t}" data-plain="U = −N · A · ΔB/Δt"></span> folgt für den Betrag <span class="m" data-tex="|U| = N\,A\,\frac{|\Delta B|}{\Delta t}" data-plain="|U| = N · A · |ΔB|/Δt"></span>. Setze <span class="m" data-tex="\Delta t = 0{,}020\,\mathrm{s}" data-plain="Δt = 0,020 s"></span> ein.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="|U| = 400 \cdot 25\cdot10^{-4}\,\mathrm{m^2} \cdot \dfrac{0{,}80\,\mathrm{T}}{0{,}020\,\mathrm{s}} = 400 \cdot 25\cdot10^{-4} \cdot 40 = 40\,\mathrm{V}" data-plain="|U| = 400 · 25·10⁻⁴ m² · (0,80 T / 0,020 s) = 40 V"></span>. Das ist bemerkenswert viel für ein Feld, das einfach nur abgeschaltet wird – genau darauf beruht die Zündspule im Auto.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Ordne jeder Situation den passenden Verlauf der induzierten Spannung zu.</div>
+
+    <div class="diagramme">
+      <figure>
+        <svg viewBox="0 0 160 90"><line x1="12" y1="45" x2="152" y2="45" stroke="#94a3b8"/><line x1="18" y1="8" x2="18" y2="82" stroke="#94a3b8"/><polyline points="18,45 45,45 45,20 70,20 70,45 95,45 95,70 120,70 120,45 150,45" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg>
+        <figcaption>A</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 160 90"><line x1="12" y1="45" x2="152" y2="45" stroke="#94a3b8"/><line x1="18" y1="8" x2="18" y2="82" stroke="#94a3b8"/><polyline points="18,45 150,45" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg>
+        <figcaption>B</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 160 90"><line x1="12" y1="45" x2="152" y2="45" stroke="#94a3b8"/><line x1="18" y1="8" x2="18" y2="82" stroke="#94a3b8"/><polyline points="18,45 40,45 40,28 105,28 105,45 150,45" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg>
+        <figcaption>C</figcaption>
+      </figure>
+      <figure>
+        <svg viewBox="0 0 160 90"><line x1="12" y1="45" x2="152" y2="45" stroke="#94a3b8"/><line x1="18" y1="8" x2="18" y2="82" stroke="#94a3b8"/><polyline points="18,45 45,45 45,12 58,12 58,45 78,45 78,78 91,78 91,45 150,45" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg>
+        <figcaption>D</figcaption>
+      </figure>
+    </div>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="A"><span>Die Schleife wird mit konstanter Geschwindigkeit vollständig durch den Feldbereich gezogen.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="D"><span>Dieselbe Bewegung, aber mit doppelter Geschwindigkeit.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="C"><span>Die ruhende Schleife liegt im Feld, dessen Flussdichte gleichmäßig ansteigt und dann konstant bleibt.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="B"><span>Die Schleife ruht vollständig innerhalb eines zeitlich konstanten Feldes.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Ein Schüler behauptet: „Wenn ich die Leiterschleife nur schnell genug durch das Feld ziehe, bekomme ich beliebig viel elektrische Energie heraus, ohne dass mich das etwas kostet." Nimm zu dieser Aussage physikalisch begründet Stellung.</div>
+    <textarea placeholder="Deine Stellungnahme…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a4">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Die Aussage ist falsch. Beim Durchziehen fließt in der Schleife ein Induktionsstrom. Auf die stromdurchflossenen Leiterstücke im Feld wirkt eine Lorentzkraft, die nach der Lenzschen Regel der Bewegung entgegengerichtet ist. Wer die Schleife bewegen will, muss also gegen diese Kraft Arbeit verrichten.</p>
+      <p>Quantitativ: Die aufgewendete mechanische Arbeit entspricht der in der Schleife umgesetzten elektrischen Energie. Eine höhere Geschwindigkeit erhöht zwar die induzierte Spannung (<span class="m" data-tex="U \sim v" data-plain="U ~ v"></span>) und damit die Leistung sogar quadratisch (<span class="m" data-tex="P = U^2/R \sim v^2" data-plain="P = U²/R ~ v²"></span>), aber im selben Maß wächst die nötige Zugkraft. Der Energieerhaltungssatz bleibt gewahrt – es findet lediglich eine Umwandlung von mechanischer in elektrische Energie statt.</p>
+      <p><strong>Bewertungskriterien.</strong> Bezug auf die Lenzsche Regel · Nennung der bremsenden Lorentzkraft auf den Induktionsstrom · Argument über den Energieerhaltungssatz · Fehlschluss des Schülers klar benannt.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Ein Aluminiumring hängt an einem Faden. Nähert man ihm einen Stabmagneten, weicht der Ring aus. Ist der Ring an einer Stelle aufgeschnitten, bleibt er nahezu in Ruhe. Erkläre den Unterschied und begründe, warum das Induktionsgesetz beide Fälle beschreibt.</div>
+    <textarea placeholder="Deine Erklärung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a5">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> In beiden Fällen ändert sich der magnetische Fluss durch die vom Ring umschlossene Fläche, in beiden Fällen wird deshalb eine Spannung induziert – das Induktionsgesetz gilt unverändert.</p>
+      <p>Der Unterschied liegt im Stromkreis. Beim geschlossenen Ring treibt die induzierte Spannung einen Strom, dessen Magnetfeld nach der Lenzschen Regel dem Magneten entgegenwirkt; es entsteht eine abstoßende Kraft, der Ring weicht aus. Beim aufgeschnittenen Ring ist der Kreis unterbrochen, es fließt kein nennenswerter Strom, also entsteht kein Gegenfeld und keine Kraft. Zwischen den Schnittenden ließe sich die induzierte Spannung dennoch messen.</p>
+      <p><strong>Bewertungskriterien.</strong> Induktionsgesetz gilt in beiden Fällen · Unterscheidung zwischen induzierter Spannung und fließendem Strom · Lenzsche Regel als Ursache der Kraft · Hinweis auf messbare Spannung am offenen Ring.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 7 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">7</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Das Wichtigste in vier Sätzen</h3>
+    <ul>
+      <li>Der magnetische Fluss <span class="m" data-tex="\Phi = B\cdot A\cdot\cos\alpha" data-plain="Φ = B · A · cos α"></span> beschreibt, wie viel Feld eine Fläche durchsetzt.</li>
+      <li>Eine Spannung entsteht nur bei <em>Änderung</em> des Flusses: <span class="m" data-tex="U_{\text{ind}} = -N\,\dot\Phi" data-plain="U_ind = −N · dΦ/dt"></span>.</li>
+      <li>Ändern kann sich die Fläche (Bewegungsinduktion, <span class="m" data-tex="U = -N B l v" data-plain="U = −N·B·l·v"></span>) oder die Flussdichte (Ruheinduktion, <span class="m" data-tex="U = -N A \dot B" data-plain="U = −N·A·dB/dt"></span>).</li>
+      <li>Das Minuszeichen ist die Lenzsche Regel und damit der Energieerhaltungssatz.</li>
+    </ul>
+  </div>
+
+  <div class="hinweis">
+    <strong>Blick aufs Zentralabitur.</strong> Induktionsaufgaben kommen im LK regelmäßig in zwei Formen vor: als Auswertung eines gegebenen <span class="m" data-tex="\Phi\text{-}t" data-plain="Φ-t"></span>- oder <span class="m" data-tex="U\text{-}t" data-plain="U-t"></span>-Diagramms (Steigung ablesen, Fläche interpretieren) und als Bewertungsaufgabe zu einer Schüleraussage. Beides hast du hier geübt. Anschlussthemen sind Selbstinduktion und der elektromagnetische Schwingkreis.
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Ich kann …</h3>
+    <div class="check">
+      <label><input type="checkbox"><span>… den magnetischen Fluss berechnen und erklären, was er anschaulich bedeutet.</span></label>
+      <label><input type="checkbox"><span>… begründen, warum ein konstantes Feld keine Spannung induziert.</span></label>
+      <label><input type="checkbox"><span>… Bewegungs- und Ruheinduktion unterscheiden und die passende Formel wählen.</span></label>
+      <label><input type="checkbox"><span>… aus einem <span class="m" data-tex="\Phi\text{-}t" data-plain="Φ-t"></span>-Diagramm den Verlauf von <span class="m" data-tex="U(t)" data-plain="U(t)"></span> bestimmen.</span></label>
+      <label><input type="checkbox"><span>… die Lenzsche Regel anwenden und sie über den Energieerhaltungssatz begründen.</span></label>
+      <label><input type="checkbox"><span>… <span class="m" data-tex="U = B l v" data-plain="U = B·l·v"></span> aus der Lorentzkraft herleiten.</span></label>
+    </div>
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnis als Text kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+
+  <details class="lehrer">
+    <summary>Didaktische Hinweise (Lehrkraft)</summary>
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Ladungen, Felder und Induktion", Q1 LK. Vorausgesetzt werden Lorentzkraft und magnetische Flussdichte; nachfolgend schließen Selbstinduktion, Schwingkreis und Transformator an.</p>
+    <p><strong>Zeitbedarf.</strong> Abschnitte 1–3 etwa 30 Minuten, Simulation mit Beobachtungsauftrag 25 Minuten, Übungen 35 Minuten. Für eine Einzelstunde eignen sich Abschnitte 1–4, die Lenzsche Regel und die Aufgaben AB III lassen sich als Hausaufgabe abtrennen.</p>
+    <p><strong>Typische Hürden.</strong> Erfahrungsgemäß hält sich hartnäckig die Vorstellung, ein starkes Feld allein erzeuge Spannung. Die Simulation greift genau das an: Der Bereich mit <span class="m" data-tex="U = 0" data-plain="U = 0"></span> bei maximalem Fluss ist der didaktische Kern der Seite – dort lohnt es sich, im Unterrichtsgespräch anzuhalten. Zweite Hürde ist die Verwechslung von induzierter Spannung und fließendem Strom, aufgegriffen in Aufgabe a5.</p>
+    <p><strong>Differenzierung.</strong> Das dreistufige Hilfesystem trägt die Binnendifferenzierung. Schnelle Gruppen können zusätzlich untersuchen, was passiert, wenn die Schleife schmaler als der Feldbereich ist bzw. breiter – dazu die Windungszahl auf 10 stellen und die Amplituden vergleichen.</p>
+    <p><strong>Experimentbezug.</strong> Die Simulation ersetzt den Realversuch nicht. Sinnvoll ist die Kombination mit Leiterschaukel und Waltenhofen-Pendel; die Seite eignet sich zur Auswertung und Sicherung im Anschluss.</p>
+  </details>
+
+  <footer>
+    Physik LK Q1 · Elektromagnetische Induktion · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+<!-- Formelsammlung: nur im Druck sichtbar, wird aus formelDaten erzeugt -->
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+
+<!-- =============== FORMELLEISTE =============== -->
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/bausteine.md, Abschnitt 10. abschnitt = id der <section>, ziel = id der
+// Formel im Text. tex setzt KaTeX, plain ist der Klartext ohne Netz. Alle Texte ohne HTML.
+var formelDaten = [
+  {abschnitt:"grundlagen", titel:"Der magnetische Fluss", formeln:[
+    {id:"fluss", ziel:"f-fluss", tex:"\\Phi = B \\cdot A", plain:"Φ = B · A",
+     zeichen:[
+       {tex:"\\Phi", plain:"Φ", text:"magnetischer Fluss durch die Fläche", einheit:"Wb = T·m²"},
+       {tex:"B", plain:"B", text:"magnetische Flussdichte", einheit:"T"},
+       {tex:"A", plain:"A", text:"Fläche, die vom Feld durchsetzt wird", einheit:"m²"}],
+     gilt:"Das Feld ist über der Fläche homogen und steht senkrecht auf ihr.",
+     fehler:"Die ganze Leiterfläche einsetzen, obwohl nur ein Teil davon im Feld liegt. Für A zählt nur der Teil der Fläche, den das Feld durchsetzt."},
+    {id:"fluss-winkel", ziel:"f-fluss-winkel", tex:"\\Phi = B \\cdot A \\cdot \\cos\\alpha", plain:"Φ = B · A · cos α",
+     zeichen:[
+       {tex:"\\Phi", plain:"Φ", text:"magnetischer Fluss durch die Fläche", einheit:"Wb = T·m²"},
+       {tex:"B", plain:"B", text:"magnetische Flussdichte", einheit:"T"},
+       {tex:"A", plain:"A", text:"vom Feld durchsetzter Teil der ebenen Leiterfläche", einheit:"m²"},
+       {tex:"\\alpha", plain:"α", text:"Winkel zwischen Feldrichtung und Flächennormale", einheit:"rad, oft in ° angegeben"}],
+     gilt:"Homogenes Feld und ebene Fläche. Für α = 0° steht das Feld senkrecht auf der Fläche, dann gilt wieder Φ = B · A.",
+     fehler:"α zwischen Feld und Fläche statt zwischen Feld und Flächennormale ablesen. Dann liefert die Formel für ein Feld, das parallel zur Fläche läuft, den größten Fluss statt null."},
+    {id:"fluss-integral", ziel:"f-fluss-integral", tex:"\\Phi = \\int_A \\vec B \\cdot \\mathrm{d}\\vec A", plain:"Φ = ∫ B · dA",
+     zeichen:[
+       {tex:"\\Phi", plain:"Φ", text:"magnetischer Fluss durch die Fläche A", einheit:"Wb = T·m²"},
+       {tex:"\\vec B", plain:"B (Vektor)", text:"Flussdichte am Ort des Flächenstücks; sie darf sich über die Fläche ändern", einheit:"T"},
+       {tex:"\\mathrm{d}\\vec A", plain:"dA (Vektor)", text:"kleines Flächenstück: Betrag ist sein Flächeninhalt, Richtung seine Normale; das Integral summiert über alle Stücke von A", einheit:"m²"}],
+     gilt:"Immer, auch im inhomogenen Feld und für gekrümmte Flächen. Im homogenen Feld und für eine ebene Fläche wird daraus Φ = B · A · cos α.",
+     fehler:"Das Skalarprodukt übersehen und einfach den Betrag von B mal die Fläche rechnen. Es zählt nur die Komponente von B längs der Flächennormale."}
+  ]},
+  {abschnitt:"gesetz", titel:"Das Induktionsgesetz", formeln:[
+    {id:"induktion", ziel:"f-induktion", tex:"U_{\\text{ind}} = -N \\cdot \\dfrac{\\mathrm{d}\\Phi}{\\mathrm{d}t}", plain:"U_ind = −N · dΦ/dt",
+     zeichen:[
+       {tex:"U_{\\text{ind}}", plain:"U_ind", text:"induzierte Spannung", einheit:"V"},
+       {tex:"N", plain:"N", text:"Windungszahl der Spule", einheit:"dimensionslos"},
+       {tex:"\\Phi", plain:"Φ", text:"magnetischer Fluss durch eine Windung", einheit:"Wb = T·m²"},
+       {tex:"\\dfrac{\\mathrm{d}\\Phi}{\\mathrm{d}t}", plain:"dΦ/dt", text:"Änderungsrate des Flusses: Ableitung nach der Zeit t (in s), also die Steigung im Φ-t-Diagramm", einheit:"Wb/s = V"}],
+     gilt:"Für jede Art der Flussänderung, gleich ob sich B, A oder der Winkel ändert. Der Faktor N setzt voraus, dass jede Windung denselben Fluss umschließt.",
+     fehler:"Den Wert von Φ statt seiner Änderungsrate einsetzen, also Größe und Steigung von Φ(t) verwechseln wie Ort und Geschwindigkeit. U_ind hängt davon ab, wie schnell sich Φ ändert."},
+    {id:"induktion-mittel", ziel:"f-induktion-mittel", tex:"U_{\\text{ind}} = -N \\cdot \\dfrac{\\Delta\\Phi}{\\Delta t}", plain:"U_ind = −N · ΔΦ/Δt",
+     zeichen:[
+       {tex:"U_{\\text{ind}}", plain:"U_ind", text:"induzierte Spannung", einheit:"V"},
+       {tex:"N", plain:"N", text:"Windungszahl der Spule", einheit:"dimensionslos"},
+       {tex:"\\Delta\\Phi", plain:"ΔΦ", text:"Flussänderung pro Windung, Endwert minus Anfangswert", einheit:"Wb"},
+       {tex:"\\Delta t", plain:"Δt", text:"Dauer der Änderung", einheit:"s"}],
+     gilt:"Der Fluss ändert sich gleichmäßig, also linear mit der Zeit. Sonst liefert die Formel nur den Mittelwert der induzierten Spannung im Zeitintervall Δt.",
+     fehler:"ΔΦ als Anfangswert minus Endwert bilden. Nimmt der Fluss ab, ist ΔΦ negativ und U_ind positiv; mit vertauschter Differenz kippt das Vorzeichen."},
+    {id:"bewegung", ziel:"f-bewegung", tex:"U_{\\text{ind}} = -N\\,B\\,l\\,v", plain:"U_ind = −N · B · l · v",
+     zeichen:[
+       {tex:"U_{\\text{ind}}", plain:"U_ind", text:"induzierte Spannung", einheit:"V"},
+       {tex:"N", plain:"N", text:"Windungszahl", einheit:"dimensionslos"},
+       {tex:"B", plain:"B", text:"magnetische Flussdichte", einheit:"T"},
+       {tex:"l", plain:"l", text:"Länge des Leiterstücks, das sich quer durch das Feld bewegt", einheit:"m"},
+       {tex:"v", plain:"v", text:"Geschwindigkeit dieses Leiterstücks", einheit:"m/s"}],
+     gilt:"Ein gerades Leiterstück der Länge l bewegt sich im homogenen, zeitlich konstanten Feld; Leiter, Geschwindigkeit und Feld stehen paarweise senkrecht, sonst zählen nur die senkrechten Komponenten. Bei einer Schleife gilt die Formel nur, solange sich die vom Feld durchsetzte Fläche dabei um l · v pro Sekunde ändert. Das Minuszeichen gilt, wenn diese Fläche wächst; schrumpft sie, kehrt sich das Vorzeichen um.",
+     fehler:"Für l den Umfang der Schleife oder die ganze Drahtlänge einsetzen. Es zählt nur das Leiterstück, das sich quer zum Feld bewegt und dabei Fläche überstreicht."},
+    {id:"ruhe", ziel:"f-ruhe", tex:"U_{\\text{ind}} = -N\\,A\\,\\dfrac{\\mathrm{d}B}{\\mathrm{d}t}", plain:"U_ind = −N · A · dB/dt",
+     zeichen:[
+       {tex:"U_{\\text{ind}}", plain:"U_ind", text:"induzierte Spannung", einheit:"V"},
+       {tex:"N", plain:"N", text:"Windungszahl", einheit:"dimensionslos"},
+       {tex:"A", plain:"A", text:"vom Feld durchsetzte Fläche einer Windung", einheit:"m²"},
+       {tex:"\\dfrac{\\mathrm{d}B}{\\mathrm{d}t}", plain:"dB/dt", text:"Änderungsrate der Flussdichte", einheit:"T/s"}],
+     gilt:"Spule und Fläche ruhen, nur die Flussdichte ändert sich. Das Feld ist über der Fläche homogen und durchsetzt sie senkrecht. Steht es schräg, kommt der Faktor cos α hinzu; im inhomogenen Feld hilft nur die allgemeine Form Φ = ∫ B · dA.",
+     fehler:"Die Querschnittsfläche der Induktionsspule einsetzen, obwohl das Feld nur einen kleineren Querschnitt durchsetzt, etwa bei einer schmalen Feldspule im Inneren. Für A zählt nur die Fläche, durch die das Feld tatsächlich tritt."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{r:1, fb:[
+    "Nicht ganz. Aus F = B·I·l folgt B durch Umstellen nach B – dabei wandern I und l in den Nenner.",
+    "Richtig. Aus F = B·I·l folgt B = F/(I·l). Die Einheit 1 N/(A·m) = 1 T ergibt sich direkt daraus.",
+    "Da sind Zähler und Nenner vertauscht. Prüfe über die Einheiten: T = N/(A·m)."
+  ]},
+  vw2:{r:1, fb:[
+    "Doch, das Feld beschleunigt die Ladung. Die Lorentzkraft steht senkrecht auf der Geschwindigkeit, ändert also ständig die Richtung, nicht den Betrag von v.",
+    "Richtig. Die Lorentzkraft wirkt stets senkrecht zur Geschwindigkeit und ist damit Zentripetalkraft. Aus e·v·B = m·v²/r folgt r = m·v/(e·B). Dieselbe Kraft auf die Elektronen im Leiter steckt in der Herleitung weiter unten.",
+    "Die Parabel entsteht bei einer Kraft mit fester Richtung, etwa im elektrischen Feld eines Kondensators. Die Lorentzkraft dreht sich mit der Geschwindigkeit mit."
+  ]},
+  vw3:{r:1, fb:[
+    "Nein. Ohne Bewegung und ohne Feldänderung wirkt keine resultierende Kraft längs des Leiters.",
+    "Richtig. Der Fluss durch die ruhende Schleife ist konstant, also ist dΦ/dt = 0 und damit auch U_ind = 0. Feld allein genügt nicht, es muss sich etwas ändern.",
+    "Eine Wechselspannung entstünde nur bei periodischer Flussänderung, etwa bei einer rotierenden Schleife."
+  ]},
+  sim1:{r:1, fb:[
+    "Das Feld hebt sich nicht auf – innerhalb des Bereichs ist es überall gleich stark.",
+    "Richtig. Beide Leiterstücke liegen im Feld, die durchsetzte Fläche ändert sich nicht mehr, also ist dΦ/dt = 0.",
+    "Doch, die Schleife bewegt sich weiter – schau auf die Geschwindigkeitsanzeige.",
+    "Die Lorentzkraft wirkt weiterhin, aber an vorderem und hinterem Leiterstück gegengleich, sodass sich die Wirkungen aufheben."
+  ]},
+  sim2:{r:1, fb:[
+    "Die Spannung verdoppelt sich zwar, aber der Vorgang dauert nur halb so lang.",
+    "Richtig. Die Fläche unter der U-t-Kurve entspricht der Flussänderung ΔΦ, und die hängt nicht von der Geschwindigkeit ab.",
+    "Die kürzere Dauer wird durch die größere Spannung genau ausgeglichen."
+  ]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{wert:2.0, einheit:"mWb", tol:0.05, alt:{wert:0.002, einheit:"Wb"},
+      ok:"Richtig. Φ = 0,80 T · 25·10⁻⁴ m² = 2,0 mWb pro Windung.",
+      falschEinheit:"Der Zahlenwert passt zur falschen Einheit. Der Fluss wird in Weber gemessen, nicht in Tesla oder Volt.",
+      nah:"Knapp daneben – hast du cm² in m² umgerechnet? 1 cm² = 10⁻⁴ m².",
+      weit:"Das passt noch nicht. Nutze die Hilfen unten: Φ = B·A, und die Windungszahl gehört hier nicht hinein."},
+  a2:{wert:40, einheit:"V", tol:0.5, alt:{wert:40000, einheit:"mV"},
+      ok:"Richtig. |U| = 400 · 25·10⁻⁴ m² · 40 T/s = 40 V.",
+      falschEinheit:"Der Zahlenwert stimmt, aber eine induzierte Spannung wird in Volt angegeben.",
+      nah:"Fast. Prüfe Δt = 20 ms = 0,020 s.",
+      weit:"Noch nicht. Denk an die Windungszahl N = 400 – bei Ruheinduktion steht sie im Induktionsgesetz."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.a3 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier richtig. Entscheidend war jeweils die Steigung von Φ(t): zwei gegenläufige Pulse beim Durchqueren, ein einzelner Puls bei ansteigendem B, und null, solange sich nichts ändert.";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Frage dich bei jeder Situation zuerst: Ändert sich der Fluss – und wenn ja, in welche Richtung? Beim Durchqueren wächst er erst und fällt dann wieder, das ergibt zwei Ausschläge mit unterschiedlichem Vorzeichen.";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: Leiterschleife ============ */
+(function(){
+  var cvS = document.getElementById("cvSim"), ctxS = cvS.getContext("2d");
+  var cvP = document.getElementById("cvPhi"), ctxP = cvP.getContext("2d");
+  var cvU = document.getElementById("cvU"),  ctxU = cvU.getContext("2d");
+
+  var PX = 1000;              // 1000 px entsprechen 1,00 m
+  var bLoop = 0.15, hLoop = 0.10;    // Schleifenmaße in m
+  var f1 = 0.34, f2 = 0.66;          // Feldbereich in m
+  var xStart = 0.015, xEnde = 1.0 - bLoop - 0.015;
+
+  var x = xStart, t = 0, vSoll = 0.20, B = 0.50, N = 1;
+  var laeuft = false, ziehen = false, greift = false;
+  var vGlatt = 0, letzteZeit = null;
+  var daten = [];
+
+  var rV = document.getElementById("rV"), rB = document.getElementById("rB"), rN = document.getElementById("rN");
+  var lV = document.getElementById("lV"), lB = document.getElementById("lB"), lN = document.getElementById("lN");
+  var bPlay = document.getElementById("bPlay"), bReset = document.getElementById("bReset");
+  var cDrag = document.getElementById("cDrag");
+
+  function fmt(z, n){ return z.toFixed(n).replace(".", ","); }
+  function imFeld(p){ return p > f1 && p < f2; }
+  function ueberlapp(){ return Math.max(0, Math.min(x + bLoop, f2) - Math.max(x, f1)); }
+
+  rV.addEventListener("input", function(){ vSoll = rV.value / 100; lV.textContent = fmt(vSoll, 2); });
+  rB.addEventListener("input", function(){ B = rB.value / 100; lB.textContent = fmt(B, 2); });
+  rN.addEventListener("input", function(){ N = parseInt(rN.value, 10); lN.textContent = N; });
+
+  bPlay.addEventListener("click", function(){
+    if(x >= xEnde - 1e-6){ reset(); }
+    laeuft = !laeuft;
+    bPlay.textContent = laeuft ? "❚❚ Pause" : "▶ Start";
+  });
+  bReset.addEventListener("click", reset);
+  cDrag.addEventListener("change", function(){
+    ziehen = cDrag.checked;
+    if(ziehen){ laeuft = false; bPlay.textContent = "▶ Start"; }
+  });
+
+  function reset(){
+    x = xStart; t = 0; daten = []; vGlatt = 0; laeuft = false;
+    bPlay.textContent = "▶ Start";
+  }
+
+  // Ziehen mit Maus oder Finger
+  function posAusEvent(ev){
+    var r = cvS.getBoundingClientRect();
+    var cx = (ev.touches ? ev.touches[0].clientX : ev.clientX) - r.left;
+    return (cx / r.width) * PX / PX; // Anteil der Breite = Meter, da 1000 px = 1 m
+  }
+  cvS.addEventListener("pointerdown", function(ev){
+    if(!ziehen) return;
+    var p = posAusEvent(ev);
+    if(p > x - 0.04 && p < x + bLoop + 0.04){ greift = true; cvS.setPointerCapture(ev.pointerId); }
+  });
+  cvS.addEventListener("pointermove", function(ev){
+    if(!greift) return;
+    var p = posAusEvent(ev);
+    x = Math.max(xStart, Math.min(xEnde, p - bLoop / 2));
+    ev.preventDefault();
+  });
+  window.addEventListener("pointerup", function(){ greift = false; });
+
+  function schritt(zeit){
+    if(letzteZeit === null) letzteZeit = zeit;
+    var dt = Math.min(0.05, (zeit - letzteZeit) / 1000);
+    letzteZeit = zeit;
+
+    var xAlt = x;
+    if(laeuft && !ziehen){
+      x += vSoll * dt;
+      if(x >= xEnde){ x = xEnde; laeuft = false; bPlay.textContent = "▶ Start"; }
+    }
+    var aktiv = laeuft || greift;
+    if(aktiv && dt > 0) t += dt;
+
+    var vMomentan = dt > 0 ? (x - xAlt) / dt : 0;
+    vGlatt = vGlatt * 0.7 + vMomentan * 0.3;
+
+    var rate = vGlatt * ((imFeld(x + bLoop) ? 1 : 0) - (imFeld(x) ? 1 : 0));
+    var A = ueberlapp() * hLoop;
+    var phi = B * A;   // Fluss durch eine Windung; N geht nur in U ein
+    var U = -N * B * hLoop * rate;
+
+    if(aktiv) daten.push({t: t, phi: phi, u: U});
+    if(daten.length > 6000) daten.shift();
+
+    document.getElementById("aV").textContent = fmt(Math.abs(vGlatt), 2) + " m/s";
+    document.getElementById("aA").textContent = fmt(A * 10000, 1) + " cm²";
+    document.getElementById("aPhi").textContent = fmt(phi * 1000, 2) + " mWb";
+    document.getElementById("aU").textContent = fmt(U * 1000, 1) + " mV";
+
+    zeichneSim();
+    zeichneGraph(ctxP, cvP, "phi", "Φ in mWb", "#1d4ed8", false);
+    zeichneGraph(ctxU, cvU, "u", "U in mV", "#b42318", true);
+    requestAnimationFrame(schritt);
+  }
+
+  function zeichneSim(){
+    var W = cvS.width, H = cvS.height, mitte = H / 2 + 10;
+    ctxS.clearRect(0, 0, W, H);
+
+    // Feldbereich
+    ctxS.fillStyle = "#eef4ff";
+    ctxS.fillRect(f1 * PX, 28, (f2 - f1) * PX, H - 56);
+    ctxS.strokeStyle = "#bfdbfe"; ctxS.lineWidth = 1.5;
+    ctxS.strokeRect(f1 * PX, 28, (f2 - f1) * PX, H - 56);
+    ctxS.fillStyle = "#7c9cd4"; ctxS.font = "17px sans-serif";
+    ctxS.textAlign = "center"; ctxS.textBaseline = "middle";
+    for(var gx = f1 * PX + 30; gx < f2 * PX - 10; gx += 42){
+      for(var gy = 55; gy < H - 40; gy += 42){ ctxS.fillText("⊗", gx, gy); }
+    }
+    ctxS.fillStyle = "#5b7fbd"; ctxS.font = "600 13px sans-serif";
+    ctxS.fillText("B senkrecht in die Bildebene", (f1 + (f2 - f1) / 2) * PX, 15);
+
+    // Leiterschleife
+    var lx = x * PX, ly = mitte - hLoop * PX / 2, lw = bLoop * PX, lh = hLoop * PX;
+    ctxS.strokeStyle = "#0f2135"; ctxS.lineWidth = 5; ctxS.lineJoin = "round";
+    ctxS.strokeRect(lx, ly, lw, lh);
+
+    // Leiterstücke im Feld hervorheben
+    ctxS.lineWidth = 6;
+    if(imFeld(x)){ ctxS.strokeStyle = "#b42318"; ctxS.beginPath(); ctxS.moveTo(lx, ly); ctxS.lineTo(lx, ly + lh); ctxS.stroke(); }
+    if(imFeld(x + bLoop)){ ctxS.strokeStyle = "#0d7a52"; ctxS.beginPath(); ctxS.moveTo(lx + lw, ly); ctxS.lineTo(lx + lw, ly + lh); ctxS.stroke(); }
+
+    // durchsetzte Fläche
+    var u1 = Math.max(x, f1), u2 = Math.min(x + bLoop, f2);
+    if(u2 > u1){ ctxS.fillStyle = "rgba(29,78,216,.16)"; ctxS.fillRect(u1 * PX, ly, (u2 - u1) * PX, lh); }
+
+    // Bewegungspfeil
+    if(Math.abs(vGlatt) > 0.005){
+      var px0 = lx + lw / 2, py = ly - 22, dir = vGlatt > 0 ? 1 : -1;
+      ctxS.strokeStyle = "#5b6b7f"; ctxS.lineWidth = 2.5; ctxS.beginPath();
+      ctxS.moveTo(px0 - 26 * dir, py); ctxS.lineTo(px0 + 26 * dir, py); ctxS.stroke();
+      ctxS.beginPath(); ctxS.moveTo(px0 + 26 * dir, py);
+      ctxS.lineTo(px0 + 15 * dir, py - 6); ctxS.lineTo(px0 + 15 * dir, py + 6); ctxS.closePath();
+      ctxS.fillStyle = "#5b6b7f"; ctxS.fill();
+      ctxS.fillStyle = "#5b6b7f"; ctxS.font = "600 13px sans-serif";
+      ctxS.fillText("v", px0, py - 16);
+    }
+
+    if(ziehen){
+      ctxS.fillStyle = "#8a6100"; ctxS.font = "600 13px sans-serif"; ctxS.textAlign = "left";
+      ctxS.fillText("Ziehmodus: Schleife mit der Maus greifen", 14, H - 14);
+    }
+  }
+
+  function zeichneGraph(ctx, cv, feld, titel, farbe, mitNull){
+    var W = cv.width, H = cv.height, l = 62, r = 52, o = 30, u = 26;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+
+    var tMax = Math.max(2, t * 1.08);
+    var werte = daten.map(function(d){ return feld === "phi" ? d.phi * 1000 : d.u * 1000; });
+    var maxAbs = 0.001;
+    werte.forEach(function(w){ maxAbs = Math.max(maxAbs, Math.abs(w)); });
+    var theo = feld === "phi" ? B * bLoop * hLoop * 1000 : N * B * hLoop * vSoll * 1000;
+    maxAbs = Math.max(maxAbs, theo) * 1.25;
+
+    var yNull = mitNull ? o + (H - o - u) / 2 : H - u;
+    var yScale = mitNull ? ((H - o - u) / 2) / maxAbs : (H - o - u) / maxAbs;
+
+    // Achsen
+    ctx.strokeStyle = "#dbe3ec"; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(l, o - 6); ctx.lineTo(l, H - u); ctx.stroke();
+    ctx.strokeStyle = "#94a3b8";
+    ctx.beginPath(); ctx.moveTo(l, yNull); ctx.lineTo(W - r, yNull); ctx.stroke();
+
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "12px sans-serif";
+    ctx.textAlign = "left"; ctx.textBaseline = "middle";
+    ctx.fillText(titel, 8, 13);
+    ctx.textAlign = "right";
+    ctx.fillText(fmt(maxAbs, 1), l - 6, mitNull ? o : o + 4);
+    ctx.fillText("0", l - 6, yNull);
+    if(mitNull) ctx.fillText("−" + fmt(maxAbs, 1), l - 6, H - u);
+    ctx.textAlign = "left"; ctx.textBaseline = "middle";
+    ctx.fillText("t in s", W - r + 8, yNull);
+
+    // Zeitmarken
+    ctx.textAlign = "center"; ctx.textBaseline = "top";
+    var schritt2 = tMax <= 3 ? 0.5 : (tMax <= 8 ? 1 : 2);
+    for(var tt = 0; tt <= tMax + 1e-9; tt += schritt2){
+      var xp = l + (tt / tMax) * (W - l - r);
+      ctx.strokeStyle = "#eef1f6"; ctx.beginPath(); ctx.moveTo(xp, o - 6); ctx.lineTo(xp, H - u); ctx.stroke();
+      ctx.fillStyle = "#94a3b8"; ctx.fillText(fmt(tt, 1), xp, H - u + 5);
+    }
+
+    // Kurve
+    if(daten.length > 1){
+      ctx.strokeStyle = farbe; ctx.lineWidth = 2.5; ctx.lineJoin = "round"; ctx.beginPath();
+      daten.forEach(function(d, i){
+        var w = feld === "phi" ? d.phi * 1000 : d.u * 1000;
+        var xp = l + (d.t / tMax) * (W - l - r);
+        var yp = yNull - w * yScale;
+        if(i === 0) ctx.moveTo(xp, yp); else ctx.lineTo(xp, yp);
+      });
+      ctx.stroke();
+    }
+  }
+
+  reset();
+  requestAnimationFrame(schritt);
+})();
+
+/* ============ Lenzsche Regel ============ */
+(function(){
+  var cv = document.getElementById("cvLenz"), ctx = cv.getContext("2d");
+  var txt = document.getElementById("lenzText");
+  var fall = null;
+
+  var texte = {
+    "N-ein":{
+      pol:"N", rein:true,
+      info:"Der Fluss durch die Spule nimmt zu. Der Induktionsstrom baut ein Feld auf, das dem Magneten einen <strong>Nordpol</strong> entgegenstellt – der Magnet wird <strong>abgestoßen</strong>. Von vorn betrachtet fließt der Strom <strong>gegen den Uhrzeigersinn</strong>."
+    },
+    "N-aus":{
+      pol:"N", rein:false,
+      info:"Der Fluss nimmt ab. Der Induktionsstrom wirkt der Abnahme entgegen und erzeugt einen <strong>Südpol</strong> zur Magnetseite hin – der Magnet wird <strong>angezogen</strong>. Die Stromrichtung kehrt sich gegenüber dem Annähern um: <strong>im Uhrzeigersinn</strong>."
+    },
+    "S-ein":{
+      pol:"S", rein:true,
+      info:"Wieder nimmt der Fluss zu, aber mit umgekehrtem Vorzeichen. Die Spule stellt einen <strong>Südpol</strong> entgegen, der Magnet wird <strong>abgestoßen</strong>. Der Strom fließt <strong>im Uhrzeigersinn</strong>."
+    },
+    "S-aus":{
+      pol:"S", rein:false,
+      info:"Der Fluss nimmt ab, die Spule hält dagegen und bildet zur Magnetseite hin einen <strong>Nordpol</strong> – der Magnet wird <strong>angezogen</strong>. Der Strom fließt <strong>gegen den Uhrzeigersinn</strong>."
+    }
+  };
+
+  document.querySelectorAll("[data-lenz]").forEach(function(b){
+    b.addEventListener("click", function(){
+      fall = texte[b.getAttribute("data-lenz")];
+      txt.innerHTML = fall.info + " In allen Fällen gilt: Die Kraft bremst die Bewegung, die man ausführt.";
+      zeichne();
+      ergebnisse.lenz = true;
+    });
+  });
+
+  function pfeil(x1, y1, x2, y2, farbe){
+    ctx.strokeStyle = farbe; ctx.fillStyle = farbe; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    var a = Math.atan2(y2 - y1, x2 - x1);
+    ctx.beginPath(); ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 13 * Math.cos(a - 0.4), y2 - 13 * Math.sin(a - 0.4));
+    ctx.lineTo(x2 - 13 * Math.cos(a + 0.4), y2 - 13 * Math.sin(a + 0.4));
+    ctx.closePath(); ctx.fill();
+  }
+
+  function zeichne(){
+    var W = cv.width, H = cv.height, my = H / 2;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+
+    // Spule
+    var sx = 600, sw = 210, sh = 130;
+    ctx.strokeStyle = "#b8770f"; ctx.lineWidth = 7; ctx.lineCap = "round";
+    for(var i = 0; i < 6; i++){
+      var wx = sx + 18 + i * 34;
+      ctx.beginPath(); ctx.ellipse(wx, my, 13, sh / 2, 0, 0, Math.PI * 2); ctx.stroke();
+    }
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "600 14px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("Spule", sx + sw / 2, my + sh / 2 + 34);
+
+    // Messgerät
+    ctx.strokeStyle = "#0f2135"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(sx + 18, my + sh / 2); ctx.lineTo(sx + 18, my + sh / 2 + 58);
+    ctx.lineTo(sx + 190, my + sh / 2 + 58); ctx.lineTo(sx + 190, my + sh / 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(sx + 104, my + sh / 2 + 58, 21, 0, Math.PI * 2);
+    ctx.fillStyle = "#fff"; ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "#0f2135"; ctx.font = "600 15px sans-serif";
+    ctx.fillText("A", sx + 104, my + sh / 2 + 63);
+
+    if(!fall){
+      ctx.fillStyle = "#94a3b8"; ctx.font = "15px sans-serif";
+      ctx.fillText("Wähle unten einen der vier Fälle.", 300, my);
+      return;
+    }
+
+    // Stabmagnet
+    var mx = fall.rein ? 250 : 170, mw = 190, mh = 62;
+    var linkerPol = fall.pol === "N" ? "S" : "N";
+    var rechterPol = fall.pol;
+    ctx.fillStyle = linkerPol === "N" ? "#b42318" : "#1d4ed8";
+    ctx.fillRect(mx, my - mh / 2, mw / 2, mh);
+    ctx.fillStyle = rechterPol === "N" ? "#b42318" : "#1d4ed8";
+    ctx.fillRect(mx + mw / 2, my - mh / 2, mw / 2, mh);
+    ctx.fillStyle = "#fff"; ctx.font = "700 22px sans-serif"; ctx.textBaseline = "middle";
+    ctx.fillText(linkerPol, mx + mw / 4, my);
+    ctx.fillText(rechterPol, mx + 3 * mw / 4, my);
+
+    // Bewegungspfeil
+    if(fall.rein) pfeil(mx + mw + 16, my, mx + mw + 96, my, "#0f2135");
+    else pfeil(mx - 16, my, mx - 96, my, "#0f2135");
+    ctx.fillStyle = "#0f2135"; ctx.font = "600 14px sans-serif";
+    ctx.fillText("Bewegung", fall.rein ? mx + mw + 56 : mx - 56, my - 24);
+
+    // Induzierter Pol an der Spulenseite
+    var indPol = fall.rein ? fall.pol : (fall.pol === "N" ? "S" : "N");
+    ctx.fillStyle = indPol === "N" ? "#b42318" : "#1d4ed8";
+    ctx.font = "700 26px sans-serif";
+    ctx.fillText(indPol, sx + 2, my - 82);
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "13px sans-serif";
+    ctx.fillText("induzierter Pol", sx + 2, my - 58);
+
+    // Kraftpfeil auf den Magneten
+    var abstossend = fall.rein;
+    var kx = mx + mw + 10;
+    if(abstossend) pfeil(kx + 40, my + 46, kx - 40, my + 46, "#0d7a52");
+    else pfeil(kx - 40, my + 46, kx + 40, my + 46, "#0d7a52");
+    ctx.fillStyle = "#0d7a52"; ctx.font = "600 14px sans-serif";
+    ctx.fillText(abstossend ? "Kraft: abstoßend" : "Kraft: anziehend", kx, my + 76);
+  }
+
+  zeichne();
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1", vw2:"Vorwissen 2", vw3:"Vorwissen 3",
+    sim1:"Simulation 1", sim2:"Simulation 2",
+    a1:"Aufgabe 1 (Fluss)", a2:"Aufgabe 2 (Ruheinduktion)", a3:"Aufgabe 3 (Zuordnung)"
+  };
+  var zeilen = ["Elektromagnetische Induktion – Physik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Offene Aufgabe " + (i + 1) + ":\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>

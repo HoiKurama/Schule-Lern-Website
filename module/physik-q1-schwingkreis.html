@@ -1,0 +1,1929 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elektromagnetischer Schwingkreis – Physik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#1d4ed8;
+  --akzent-hell:#eff6ff;
+  --akzent-rand:#bfdbfe;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#1e3a8a,#1d4ed8);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#1a43b8;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+.sim .knopfleiste button[aria-pressed="true"]{background:var(--akzent);color:#fff;border-color:var(--akzent)}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Physik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Elektromagnetischer Schwingkreis</h1>
+    <p style="margin:0 0 14px;opacity:.9">Wie Kondensator und Spule Energie hin und her schieben – dieselbe Gleichung wie beim Federpendel</p>
+    <div class="meta">
+      <span class="chip">Physik LK · Q1</span>
+      <span class="chip">Inhaltsfeld: Schwingende Systeme und Wellen</span>
+      <span class="chip">ca. 120 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Am Ausgang eines Kaufhauses stehen zwei schlanke Säulen. Sie senden ständig ein Hochfrequenzfeld aus, dessen Frequenz um etwa 8 MHz hin und her wandert. Geht jemand mit einem nicht entschärften Etikett hindurch, schlägt die Anlage Alarm. Im Etikett steckt keine Batterie und kein Chip, nur eine flache Spule aus Aluminiumfolie und ein winziger Kondensator. Genau bei einer einzigen Frequenz beginnt dieses Paar mitzuschwingen, entzieht dem Feld Energie – und die Säulen merken das. An der Kasse zerstört ein kräftiger Impuls den Kondensator; das Etikett schwingt dann bei keiner Frequenz mehr, und die Schranke bleibt still.</p>
+
+  <details>
+    <summary>Woher die 8 MHz?</summary>
+    <p>Die Formel dazu leitest du in Abschnitt 2 her: <span class="m" data-tex="f_0 = 1/(2\pi\sqrt{LC})" data-plain="f₀ = 1/(2π·√(L·C))"></span>. Mit den Beispielwerten <span class="m" data-tex="L = 5{,}5\,\mu\mathrm{H}" data-plain="L = 5,5 µH"></span> und <span class="m" data-tex="C = 68\,\mathrm{pF}" data-plain="C = 68 pF"></span> ergibt sich <span class="m" data-tex="f_0 = 8{,}2\,\mathrm{MHz}" data-plain="f₀ = 8,2 MHz"></span>. Das sind Rechenbeispiele, keine Herstellerangaben; in Warensicherungen dieser Art ist 8,2 MHz eine häufig genutzte Frequenz.</p>
+  </details>
+
+  <p>Dasselbe Prinzip steckt im Radio. Beim Drehen am Abstimmknopf änderst du die Kapazität eines Kondensators und damit die eine Frequenz, bei der der Empfänger auf Durchzug schaltet; alle anderen Sender, die gleichzeitig an der Antenne ankommen, werden dagegen kaum beachtet. Auf dieser Seite klärst du drei Fragen: Wie kann ein Kreis aus Kondensator und Spule schwingen, obwohl nichts Mechanisches darin steckt? Was legt die Frequenz fest, und warum klingt die Schwingung von selbst ab? Und warum genügt ein schwacher Antrieb, um bei einer bestimmten Frequenz einen großen Strom zu erzeugen? Wenn du das Federpendel aus dem Modul „Mechanische Schwingungen“ kennst, kennst du die Antworten schon – bis auf die Namen.</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Drei Fragen zu Selbstinduktion, Kondensator und Schwingungen. Wenn du hier hängst, lohnt sich ein Blick in die Module davor, bevor du weitermachst.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Durch eine Spule fließt ein konstanter Strom. Die Quelle wird abgetrennt, und die Spule wird im selben Augenblick über einen Widerstand geschlossen. Was geschieht mit dem Strom?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span>Er bricht sofort auf null zusammen, weil ohne Quelle keine Spannung mehr da ist.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span>Er fließt zunächst in derselben Richtung weiter und klingt dann ab, weil die Spule seiner Änderung entgegenwirkt.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span>Er kehrt sofort seine Richtung um, weil die Spule jetzt selbst zur Quelle wird.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Ein Kondensator wird aufgeladen und danach von der Quelle getrennt. Wo steckt die Energie, die er beim Entladen abgeben kann?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span>In den Ladungen auf den Platten, die ähnlich wie in einer Batterie chemisch gebunden sind.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span>Im elektrischen Feld zwischen den Platten.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span>Als Wärme in den Platten, die beim Aufladen entstanden ist und beim Entladen wieder frei wird.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Eine Schwingung hat die Frequenz <span class="m" data-tex="f = 50\,\mathrm{Hz}" data-plain="f = 50 Hz"></span>. Wie groß ist ihre Kreisfrequenz?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span><span class="m" data-tex="50\,\mathrm{s^{-1}}" data-plain="50 s⁻¹"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span><span class="m" data-tex="314\,\mathrm{s^{-1}}" data-plain="314 s⁻¹"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span><span class="m" data-tex="7{,}96\,\mathrm{s^{-1}}" data-plain="7,96 s⁻¹"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 ERKLÄRTEIL =============== -->
+<section id="grundlagen">
+  <div class="stufe"><div class="nr">2</div><h2>Kondensator und Spule schwingen zusammen</h2></div>
+
+  <h3>Der Ablauf in vier Schritten</h3>
+  <p>Wir bauen den einfachsten Fall: Ein Kondensator der Kapazität <span class="m" data-tex="C" data-plain="C"></span>, aufgeladen mit der Ladung <span class="m" data-tex="Q_0" data-plain="Q₀"></span> und der Spannung <span class="m" data-tex="U_0 = Q_0/C" data-plain="U₀ = Q₀/C"></span>, wird mit einer Spule der Induktivität <span class="m" data-tex="L" data-plain="L"></span> zu einem geschlossenen Kreis verbunden. Der ohmsche Widerstand der Leitungen und der Spule wird zunächst vernachlässigt, es gibt keine Quelle. Was passiert?</p>
+
+  <p>Die Platte, auf der anfangs die positive Ladung sitzt, nennen wir die obere. Ihre Ladung heißt <span class="m" data-tex="Q" data-plain="Q"></span>. Die Stromstärke <span class="m" data-tex="I" data-plain="I"></span> zählt positiv, wenn der Strom diese Platte auflädt; dann ist <span class="m" data-tex="I = \dot{Q}" data-plain="I = Q'"></span>. (In vielen Büchern zählt der Entladestrom positiv, dann steht <span class="m" data-tex="I = -\dot{Q}" data-plain="I = −Q'"></span> da. Die Schwingungsgleichung ändert das nicht, nur das Vorzeichen von <span class="m" data-tex="I" data-plain="I"></span> in den Diagrammen.)</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Zeitpunkt</th><th>Ladung <span class="m" data-tex="Q" data-plain="Q"></span></th><th>Spannung <span class="m" data-tex="U_C" data-plain="U_C"></span></th><th>Strom <span class="m" data-tex="I" data-plain="I"></span></th><th>Wo die Energie steckt</th></tr>
+    <tr><td><span class="m" data-tex="t = 0" data-plain="t = 0"></span></td><td><span class="m" data-tex="+Q_0" data-plain="+Q₀"></span></td><td><span class="m" data-tex="+U_0" data-plain="+U₀"></span></td><td>0</td><td>ganz im Kondensator</td></tr>
+    <tr><td><span class="m" data-tex="t = T/4" data-plain="t = T/4"></span></td><td>0</td><td>0</td><td><span class="m" data-tex="-I_{\max}" data-plain="−I_max"></span>, größter Betrag</td><td>ganz in der Spule</td></tr>
+    <tr><td><span class="m" data-tex="t = T/2" data-plain="t = T/2"></span></td><td><span class="m" data-tex="-Q_0" data-plain="−Q₀"></span></td><td><span class="m" data-tex="-U_0" data-plain="−U₀"></span></td><td>0</td><td>ganz im Kondensator, umgekehrt gepolt</td></tr>
+    <tr><td><span class="m" data-tex="t = 3T/4" data-plain="t = 3T/4"></span></td><td>0</td><td>0</td><td><span class="m" data-tex="+I_{\max}" data-plain="+I_max"></span>, größter Betrag</td><td>ganz in der Spule</td></tr>
+  </table>
+  </div>
+
+  <p><strong>Erst entlädt sich der Kondensator.</strong> Seine Spannung treibt einen Strom durch die Spule. Der Strom wächst aber nicht schlagartig an: Die Spule wehrt sich gegen jede Stromänderung mit einer Induktionsspannung, wie du es aus dem Modul „Selbstinduktion“ kennst. <strong>Dann läuft der Strom weiter, obwohl der Kondensator leer ist.</strong> Bei <span class="m" data-tex="U_C = 0" data-plain="U_C = 0"></span> gibt es nichts mehr, was den Strom antreibt; die Induktionsspannung der Spule hält ihn aber in Gang, weil er sich ändern müsste, um zu verschwinden. Dieser Strom lädt den Kondensator mit umgekehrter Polung wieder auf. <strong>Am Ende steht der Kondensator mit umgekehrter Polung voll geladen da, der Strom ist null, und alles läuft rückwärts.</strong></p>
+
+  <p>Das Muster kennst du: Im Federpendel läuft die Masse durch die Ruhelage, weil sie träge ist, und die Feder bringt sie zurück. Hier übernimmt die Spule die Rolle der Trägheit und der Kondensator die der Feder.</p>
+
+  <div class="merksatz">
+    <b>Zwei Speicher, ein Austausch</b>
+    Der Kondensator speichert Energie im <strong>elektrischen</strong> Feld, die Spule im <strong>magnetischen</strong> Feld. Der Strom schiebt die Energie zwischen beiden hin und her. Die Spannung am Kondensator spielt die Rolle der Rückstellkraft, die Selbstinduktion der Spule die Rolle der Trägheit. Spannung und Strom sind dabei um eine Viertelperiode gegeneinander verschoben.
+  </div>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Wenn die Spannung am Kondensator null ist, ist nichts mehr los." Im Gegenteil: In diesem Augenblick ist der Strom am größten, und die ganze Energie steckt in der Spule. Verwechsle das nicht mit einem Widerstand, an dem Strom und Spannung zugleich null werden. Hier arbeiten zwei Speicher im Wechsel, und dazwischen liegt immer eine Viertelperiode.
+  </div>
+
+  <h3>Die Schwingungsgleichung</h3>
+  <p>Wie bei jeder Schaltung gilt die Maschenregel: Die Spannungen im Kreis müssen sich ausgleichen. Die Spule liefert die Induktionsspannung <span class="m" data-tex="U_{\text{ind}} = -L\,\dot{I}" data-plain="U_ind = −L·I'"></span>, der Kondensator hat die Spannung <span class="m" data-tex="U_C = Q/C" data-plain="U_C = Q/C"></span>. Weil sonst nichts im Kreis ist, trägt die Induktionsspannung genau die Kondensatorspannung:</p>
+
+  <div class="m block" id="f-masche" data-tex="-L\,\dfrac{\mathrm{d}I}{\mathrm{d}t} = \dfrac{Q}{C}" data-plain="−L·dI/dt = Q/C"></div>
+
+  <p>Mit <span class="m" data-tex="I = \dot{Q}" data-plain="I = Q'"></span> wird daraus die <strong>Bewegungsgleichung des Schwingkreises</strong>:</p>
+
+  <div class="m block" id="f-bew-lc" data-tex="L\,\ddot{Q} + \dfrac{Q}{C} = 0 \quad\Longleftrightarrow\quad \ddot{Q} + \dfrac{1}{LC}\,Q = 0" data-plain="L·Q'' + Q/C = 0   ⟺   Q'' + Q/(L·C) = 0"></div>
+
+  <p>Vergleiche mit dem Federpendel: <span class="m" data-tex="\ddot{x} + (D/m)\,x = 0" data-plain="x'' + (D/m)·x = 0"></span>. Es ist <em>dieselbe Gleichung</em>, nur mit anderen Buchstaben: <span class="m" data-tex="x \to Q" data-plain="x → Q"></span>, <span class="m" data-tex="m \to L" data-plain="m → L"></span> und <span class="m" data-tex="D \to 1/C" data-plain="D → 1/C"></span>. Damit kennst du ihre Lösung bereits, und die Frequenz folgt durch Umbenennen. Das Ergebnis vorweg:</p>
+
+  <div class="m block" id="f-thomson" data-tex="\omega_0 = \dfrac{1}{\sqrt{LC}} \qquad T_0 = 2\pi\sqrt{LC}" data-plain="ω₀ = 1/√(L·C)     T₀ = 2π·√(L·C)"></div>
+
+  <details>
+    <summary>Herleitung: Lösung der Schwingungsgleichung und Einheitenprobe</summary>
+    <p><strong>Schritt 1 – Ansatz.</strong> Wir probieren <span class="m" data-tex="Q(t) = Q_0\cos(\omega_0 t)" data-plain="Q(t) = Q₀·cos(ω₀t)"></span>. Er beschreibt die Anfangsbedingungen: Zur Zeit null ist der Kondensator voll geladen, und der Strom ist null.</p>
+    <p><strong>Schritt 2 – Ableiten.</strong></p>
+    <div class="m block" data-tex="\dot{Q} = -\omega_0 Q_0\sin(\omega_0 t), \qquad \ddot{Q} = -\omega_0^2 Q_0\cos(\omega_0 t) = -\omega_0^2\,Q" data-plain="Q' = −ω₀·Q₀·sin(ω₀t),   Q'' = −ω₀²·Q₀·cos(ω₀t) = −ω₀²·Q"></div>
+    <p><strong>Schritt 3 – Einsetzen.</strong> In <span class="m" data-tex="\ddot{Q} + Q/(LC) = 0" data-plain="Q'' + Q/(L·C) = 0"></span> eingesetzt:</p>
+    <div class="m block" data-tex="-\omega_0^2\,Q + \dfrac{1}{LC}\,Q = \left(\dfrac{1}{LC} - \omega_0^2\right)Q = 0" data-plain="−ω₀²·Q + Q/(L·C) = (1/(L·C) − ω₀²)·Q = 0"></div>
+    <p>Das gilt zu jeder Zeit genau dann, wenn die Klammer null ist: <span class="m" data-tex="\omega_0 = 1/\sqrt{LC}" data-plain="ω₀ = 1/√(L·C)"></span>. Aus <span class="m" data-tex="\omega_0 = 2\pi/T_0" data-plain="ω₀ = 2π/T₀"></span> folgt <span class="m" data-tex="T_0 = 2\pi\sqrt{LC}" data-plain="T₀ = 2π·√(L·C)"></span>.</p>
+    <p><strong>Schritt 4 – Einheitenprobe.</strong> <span class="m" data-tex="[LC] = \mathrm{H}\cdot\mathrm{F} = \dfrac{\mathrm{V\,s}}{\mathrm{A}}\cdot\dfrac{\mathrm{A\,s}}{\mathrm{V}} = \mathrm{s}^2" data-plain="[L·C] = H·F = (V·s/A)·(A·s/V) = s²"></span>, die Wurzel liefert Sekunden. ✓</p>
+    <p><strong>Was daran auffällt.</strong> Die Anfangsladung <span class="m" data-tex="Q_0" data-plain="Q₀"></span> kommt in der Frequenz nicht vor. Ein stärker geladener Kondensator schwingt mit größerem Strom, aber im selben Takt. Auch das kennst du vom Federpendel: Die Amplitude hat auf die Periode keinen Einfluss.</p>
+  </details>
+
+  <p>Die Formel heißt <strong>Thomsonsche Schwingungsformel</strong>; William Thomson, der spätere Lord Kelvin, leitete sie 1853 her. Ein Zahlenbeispiel mit den Werten der Simulation: <span class="m" data-tex="L = 0{,}100\,\mathrm{H}" data-plain="L = 0,100 H"></span> und <span class="m" data-tex="C = 10\,\mu\mathrm{F}" data-plain="C = 10 µF"></span> ergeben <span class="m" data-tex="L\,C = 1{,}0\cdot 10^{-6}\,\mathrm{s^2}" data-plain="L·C = 1,0·10⁻⁶ s²"></span>, also <span class="m" data-tex="\omega_0 = 1000\,\mathrm{s^{-1}}" data-plain="ω₀ = 1000 s⁻¹"></span>, <span class="m" data-tex="T_0 = 6{,}283\,\mathrm{ms}" data-plain="T₀ = 6,283 ms"></span> und <span class="m" data-tex="f_0 = 159{,}2\,\mathrm{Hz}" data-plain="f₀ = 159,2 Hz"></span>.</p>
+
+  <div class="merksatz">
+    <b>Was die Frequenz bestimmt</b>
+    Allein <span class="m" data-tex="L" data-plain="L"></span> und <span class="m" data-tex="C" data-plain="C"></span> legen die Frequenz fest, nicht die Anfangsspannung. Ein größeres <span class="m" data-tex="L" data-plain="L"></span> oder <span class="m" data-tex="C" data-plain="C"></span> macht den Kreis <strong>langsamer</strong>: <span class="m" data-tex="T_0 \sim \sqrt{L}" data-plain="T₀ ~ √L"></span> und <span class="m" data-tex="T_0 \sim \sqrt{C}" data-plain="T₀ ~ √C"></span>. Wer die Periode verdoppeln will, muss <span class="m" data-tex="L" data-plain="L"></span> oder <span class="m" data-tex="C" data-plain="C"></span> <strong>vervierfachen</strong>.
+  </div>
+
+  <h3>Ladung, Spannung und Strom über der Zeit</h3>
+  <p>Mit der Lösung aus der Herleitung und der Anfangsbedingung <span class="m" data-tex="Q(0) = Q_0 = C\,U_0" data-plain="Q(0) = Q₀ = C·U₀"></span> ergeben sich für alle drei Größen Kosinus- und Sinuskurven:</p>
+
+  <div class="m block" id="f-schwingung-q" data-tex="Q = Q_0\cos(\omega_0 t), \quad U_C = U_0\cos(\omega_0 t), \quad I = -\omega_0 Q_0\sin(\omega_0 t)" data-plain="Q = Q₀·cos(ω₀t),   U_C = U₀·cos(ω₀t),   I = −ω₀·Q₀·sin(ω₀t)"></div>
+
+  <p>Der Strom hat also die Amplitude <span class="m" data-tex="I_{\max} = \omega_0\,Q_0" data-plain="I_max = ω₀·Q₀"></span>. Im Beispiel (<span class="m" data-tex="U_0 = 10\,\mathrm{V}" data-plain="U₀ = 10 V"></span>) ist <span class="m" data-tex="Q_0 = C\,U_0 = 100\,\mu\mathrm{C}" data-plain="Q₀ = C·U₀ = 100 µC"></span> und <span class="m" data-tex="I_{\max} = 1000\,\mathrm{s^{-1}}\cdot 100\,\mu\mathrm{C} = 0{,}100\,\mathrm{A}" data-plain="I_max = 1000 s⁻¹ · 100 µC = 0,100 A"></span>. Die Kurve des Stroms ist gegenüber der Spannungskurve um eine Viertelperiode versetzt:</p>
+
+  <div class="diagramme" style="grid-template-columns:minmax(0,520px);justify-content:center">
+    <figure><svg viewBox="0 0 520 230" role="img" aria-label="Spannung am Kondensator und Strom über einer Periode, normiert">
+    <line x1="160.0" y1="18" x2="160.0" y2="190" stroke="#cbd5e1" stroke-dasharray="3 4"/>
+    <text x="160.0" y="208" font-size="13" fill="#64748b" text-anchor="middle">T/4</text>
+    <line x1="270.0" y1="18" x2="270.0" y2="190" stroke="#cbd5e1" stroke-dasharray="3 4"/>
+    <text x="270.0" y="208" font-size="13" fill="#64748b" text-anchor="middle">T/2</text>
+    <line x1="380.0" y1="18" x2="380.0" y2="190" stroke="#cbd5e1" stroke-dasharray="3 4"/>
+    <text x="380.0" y="208" font-size="13" fill="#64748b" text-anchor="middle">3T/4</text>
+    <line x1="490.0" y1="18" x2="490.0" y2="190" stroke="#cbd5e1" stroke-dasharray="3 4"/>
+    <text x="490.0" y="208" font-size="13" fill="#64748b" text-anchor="middle">T</text>
+    <line x1="44" y1="110" x2="505" y2="110" stroke="#94a3b8"/><line x1="50" y1="14" x2="50" y2="194" stroke="#94a3b8"/>
+    <text x="506" y="128" font-size="13" fill="#64748b">t</text>
+    <text x="42" y="36" font-size="13" fill="#64748b" text-anchor="end">1</text><text x="42" y="114" font-size="13" fill="#64748b" text-anchor="end">0</text>
+    <polyline points="50.0,110.0 52.2,112.5 54.4,114.9 56.6,117.3 58.8,119.8 61.0,122.2 63.2,124.6 65.4,127.0 67.6,129.4 69.8,131.8 72.0,134.1 74.2,136.4 76.4,138.7 78.6,141.0 80.8,143.2 83.0,145.4 85.2,147.6 87.4,149.7 89.6,151.8 91.8,153.8 94.0,155.8 96.2,157.8 98.4,159.7 100.6,161.6 102.8,163.4 105.0,165.2 107.2,166.9 109.4,168.5 111.6,170.1 113.8,171.6 116.0,173.1 118.2,174.5 120.4,175.9 122.6,177.1 124.8,178.4 127.0,179.5 129.2,180.6 131.4,181.6 133.6,182.5 135.8,183.4 138.0,184.2 140.2,184.9 142.4,185.5 144.6,186.1 146.8,186.6 149.0,187.0 151.2,187.4 153.4,187.7 155.6,187.8 157.8,188.0 160.0,188.0 162.2,188.0 164.4,187.8 166.6,187.7 168.8,187.4 171.0,187.0 173.2,186.6 175.4,186.1 177.6,185.5 179.8,184.9 182.0,184.2 184.2,183.4 186.4,182.5 188.6,181.6 190.8,180.6 193.0,179.5 195.2,178.4 197.4,177.1 199.6,175.9 201.8,174.5 204.0,173.1 206.2,171.6 208.4,170.1 210.6,168.5 212.8,166.9 215.0,165.2 217.2,163.4 219.4,161.6 221.6,159.7 223.8,157.8 226.0,155.8 228.2,153.8 230.4,151.8 232.6,149.7 234.8,147.6 237.0,145.4 239.2,143.2 241.4,141.0 243.6,138.7 245.8,136.4 248.0,134.1 250.2,131.8 252.4,129.4 254.6,127.0 256.8,124.6 259.0,122.2 261.2,119.8 263.4,117.3 265.6,114.9 267.8,112.5 270.0,110.0 272.2,107.5 274.4,105.1 276.6,102.7 278.8,100.2 281.0,97.8 283.2,95.4 285.4,93.0 287.6,90.6 289.8,88.2 292.0,85.9 294.2,83.6 296.4,81.3 298.6,79.0 300.8,76.8 303.0,74.6 305.2,72.4 307.4,70.3 309.6,68.2 311.8,66.2 314.0,64.2 316.2,62.2 318.4,60.3 320.6,58.4 322.8,56.6 325.0,54.8 327.2,53.1 329.4,51.5 331.6,49.9 333.8,48.4 336.0,46.9 338.2,45.5 340.4,44.1 342.6,42.9 344.8,41.6 347.0,40.5 349.2,39.4 351.4,38.4 353.6,37.5 355.8,36.6 358.0,35.8 360.2,35.1 362.4,34.5 364.6,33.9 366.8,33.4 369.0,33.0 371.2,32.6 373.4,32.3 375.6,32.2 377.8,32.0 380.0,32.0 382.2,32.0 384.4,32.2 386.6,32.3 388.8,32.6 391.0,33.0 393.2,33.4 395.4,33.9 397.6,34.5 399.8,35.1 402.0,35.8 404.2,36.6 406.4,37.5 408.6,38.4 410.8,39.4 413.0,40.5 415.2,41.6 417.4,42.9 419.6,44.1 421.8,45.5 424.0,46.9 426.2,48.4 428.4,49.9 430.6,51.5 432.8,53.1 435.0,54.8 437.2,56.6 439.4,58.4 441.6,60.3 443.8,62.2 446.0,64.2 448.2,66.2 450.4,68.2 452.6,70.3 454.8,72.4 457.0,74.6 459.2,76.8 461.4,79.0 463.6,81.3 465.8,83.6 468.0,85.9 470.2,88.2 472.4,90.6 474.6,93.0 476.8,95.4 479.0,97.8 481.2,100.2 483.4,102.7 485.6,105.1 487.8,107.5 490.0,110.0" fill="none" stroke="#0d7a52" stroke-width="3"/>
+    <polyline points="50.0,32.0 52.2,32.0 54.4,32.2 56.6,32.3 58.8,32.6 61.0,33.0 63.2,33.4 65.4,33.9 67.6,34.5 69.8,35.1 72.0,35.8 74.2,36.6 76.4,37.5 78.6,38.4 80.8,39.4 83.0,40.5 85.2,41.6 87.4,42.9 89.6,44.1 91.8,45.5 94.0,46.9 96.2,48.4 98.4,49.9 100.6,51.5 102.8,53.1 105.0,54.8 107.2,56.6 109.4,58.4 111.6,60.3 113.8,62.2 116.0,64.2 118.2,66.2 120.4,68.2 122.6,70.3 124.8,72.4 127.0,74.6 129.2,76.8 131.4,79.0 133.6,81.3 135.8,83.6 138.0,85.9 140.2,88.2 142.4,90.6 144.6,93.0 146.8,95.4 149.0,97.8 151.2,100.2 153.4,102.7 155.6,105.1 157.8,107.5 160.0,110.0 162.2,112.5 164.4,114.9 166.6,117.3 168.8,119.8 171.0,122.2 173.2,124.6 175.4,127.0 177.6,129.4 179.8,131.8 182.0,134.1 184.2,136.4 186.4,138.7 188.6,141.0 190.8,143.2 193.0,145.4 195.2,147.6 197.4,149.7 199.6,151.8 201.8,153.8 204.0,155.8 206.2,157.8 208.4,159.7 210.6,161.6 212.8,163.4 215.0,165.2 217.2,166.9 219.4,168.5 221.6,170.1 223.8,171.6 226.0,173.1 228.2,174.5 230.4,175.9 232.6,177.1 234.8,178.4 237.0,179.5 239.2,180.6 241.4,181.6 243.6,182.5 245.8,183.4 248.0,184.2 250.2,184.9 252.4,185.5 254.6,186.1 256.8,186.6 259.0,187.0 261.2,187.4 263.4,187.7 265.6,187.8 267.8,188.0 270.0,188.0 272.2,188.0 274.4,187.8 276.6,187.7 278.8,187.4 281.0,187.0 283.2,186.6 285.4,186.1 287.6,185.5 289.8,184.9 292.0,184.2 294.2,183.4 296.4,182.5 298.6,181.6 300.8,180.6 303.0,179.5 305.2,178.4 307.4,177.1 309.6,175.9 311.8,174.5 314.0,173.1 316.2,171.6 318.4,170.1 320.6,168.5 322.8,166.9 325.0,165.2 327.2,163.4 329.4,161.6 331.6,159.7 333.8,157.8 336.0,155.8 338.2,153.8 340.4,151.8 342.6,149.7 344.8,147.6 347.0,145.4 349.2,143.2 351.4,141.0 353.6,138.7 355.8,136.4 358.0,134.1 360.2,131.8 362.4,129.4 364.6,127.0 366.8,124.6 369.0,122.2 371.2,119.8 373.4,117.3 375.6,114.9 377.8,112.5 380.0,110.0 382.2,107.5 384.4,105.1 386.6,102.7 388.8,100.2 391.0,97.8 393.2,95.4 395.4,93.0 397.6,90.6 399.8,88.2 402.0,85.9 404.2,83.6 406.4,81.3 408.6,79.0 410.8,76.8 413.0,74.6 415.2,72.4 417.4,70.3 419.6,68.2 421.8,66.2 424.0,64.2 426.2,62.2 428.4,60.3 430.6,58.4 432.8,56.6 435.0,54.8 437.2,53.1 439.4,51.5 441.6,49.9 443.8,48.4 446.0,46.9 448.2,45.5 450.4,44.1 452.6,42.9 454.8,41.6 457.0,40.5 459.2,39.4 461.4,38.4 463.6,37.5 465.8,36.6 468.0,35.8 470.2,35.1 472.4,34.5 474.6,33.9 476.8,33.4 479.0,33.0 481.2,32.6 483.4,32.3 485.6,32.2 487.8,32.0 490.0,32.0" fill="none" stroke="#1d4ed8" stroke-width="3"/>
+    <text x="322" y="14" font-size="14" fill="#1d4ed8" font-weight="600">U_C/U₀</text>
+    <text x="410" y="14" font-size="14" fill="#0d7a52" font-weight="600">I/I_max</text>
+    </svg><figcaption>Eine Periode des ungedämpften Kreises, beide Größen auf ihren Höchstwert bezogen. Bei T/4 und 3T/4 ist U_C = 0 und der Betrag des Stroms am größten; bei 0 und T/2 ist es umgekehrt.</figcaption></figure>
+  </div>
+
+  <h3>Die Energie pendelt</h3>
+  <p>Die Gesamtenergie des Kreises besteht aus der Energie des Kondensators und der Energie der Spule, die du aus den Modulen „Das elektrische Feld“ und „Selbstinduktion“ kennst:</p>
+
+  <div class="m block" id="f-energie" data-tex="W = \dfrac{Q^2}{2C} + \tfrac{1}{2}\,L\,I^2" data-plain="W = Q²/(2C) + ½·L·I²"></div>
+
+  <p>Im Beispiel steckt zur Zeit null die ganze Energie im Kondensator: <span class="m" data-tex="W_0 = Q_0^2/(2C) = \tfrac{1}{2}\,C\,U_0^2 = 0{,}50\,\mathrm{mJ}" data-plain="W₀ = Q₀²/(2C) = ½·C·U₀² = 0,50 mJ"></span>. Eine Viertelperiode später ist der Kondensator leer, und die Spule trägt denselben Betrag: <span class="m" data-tex="\tfrac{1}{2}\,L\,I_{\max}^2 = \tfrac{1}{2}\cdot 0{,}100\,\mathrm{H}\cdot(0{,}100\,\mathrm{A})^2 = 0{,}50\,\mathrm{mJ}" data-plain="½·L·I_max² = ½ · 0,100 H · (0,100 A)² = 0,50 mJ"></span>. Beide Rechnungen passen zusammen, und das ist kein Zufall: Setzt du <span class="m" data-tex="Q" data-plain="Q"></span> und <span class="m" data-tex="I" data-plain="I"></span> aus dem Abschnitt davor ein, ergibt sich für jede Zeit</p>
+
+  <div class="m block" data-tex="W_C = W_0\cos^2(\omega_0 t), \quad W_L = W_0\sin^2(\omega_0 t), \quad W = W_C + W_L = W_0" data-plain="W_C = W₀·cos²(ω₀t),   W_L = W₀·sin²(ω₀t),   W = W_C + W_L = W₀"></div>
+
+  <p>Dabei wurde <span class="m" data-tex="\omega_0^2 = 1/(LC)" data-plain="ω₀² = 1/(L·C)"></span> benutzt: <span class="m" data-tex="\tfrac{1}{2}L\,\omega_0^2 Q_0^2 = Q_0^2/(2C)" data-plain="½·L·ω₀²·Q₀² = Q₀²/(2C)"></span>. Die Energie des Kreises bleibt konstant; was der Kondensator abgibt, nimmt die Spule auf, und umgekehrt. Weil <span class="m" data-tex="\cos^2" data-plain="cos²"></span> und <span class="m" data-tex="\sin^2" data-plain="sin²"></span> je Periode zweimal ihr Maximum erreichen, pendelt die Energie mit der <strong>halben Periode</strong>: In einer Schwingung des Stroms wird die Energie viermal umgeladen, Kondensator zu Spule zu Kondensator zu Spule zu Kondensator.</p>
+
+  <div class="merksatz">
+    <b>Energie im Schwingkreis</b>
+    Ohne Widerstand ist die Gesamtenergie konstant. Aus der Energiebilanz folgt der größte Strom ohne Ableiten: <span class="m" data-tex="\tfrac{1}{2}L\,I_{\max}^2 = Q_0^2/(2C)" data-plain="½·L·I_max² = Q₀²/(2C)"></span>, also <span class="m" data-tex="I_{\max} = Q_0/\sqrt{LC} = U_0\sqrt{C/L}" data-plain="I_max = Q₀/√(L·C) = U₀·√(C/L)"></span>. Bei gleicher Anfangsspannung fließt in einer größeren Spule ein kleinerer Strom, weil dieselbe Energie auf eine größere „Trägheit“ trifft.
+  </div>
+
+  <h3>Die Analogie zur Mechanik</h3>
+  <p>Weil beide Systeme dieselbe Gleichung haben, lässt sich jedes Ergebnis aus dem Federpendel in den Schwingkreis übersetzen und umgekehrt. Die Tabelle ist ein Wörterbuch, das du in der Vertiefung gleich noch zweimal benutzt:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Federpendel</th><th>Schwingkreis</th></tr>
+    <tr><td>Auslenkung <span class="m" data-tex="x" data-plain="x"></span></td><td>Ladung <span class="m" data-tex="Q" data-plain="Q"></span> des Kondensators</td></tr>
+    <tr><td>Geschwindigkeit <span class="m" data-tex="v = \dot{x}" data-plain="v = x'"></span></td><td>Stromstärke <span class="m" data-tex="I = \dot{Q}" data-plain="I = Q'"></span></td></tr>
+    <tr><td>Masse <span class="m" data-tex="m" data-plain="m"></span> (Trägheit)</td><td>Induktivität <span class="m" data-tex="L" data-plain="L"></span> (Trägheit des Stroms)</td></tr>
+    <tr><td>Federkonstante <span class="m" data-tex="D" data-plain="D"></span> (Härte der Feder)</td><td>Kehrwert der Kapazität <span class="m" data-tex="1/C" data-plain="1/C"></span></td></tr>
+    <tr><td>Spannenergie <span class="m" data-tex="\tfrac{1}{2}D\,x^2" data-plain="½·D·x²"></span></td><td>Energie im Kondensator <span class="m" data-tex="Q^2/(2C)" data-plain="Q²/(2C)"></span></td></tr>
+    <tr><td>Bewegungsenergie <span class="m" data-tex="\tfrac{1}{2}m\,v^2" data-plain="½·m·v²"></span></td><td>Energie in der Spule <span class="m" data-tex="\tfrac{1}{2}L\,I^2" data-plain="½·L·I²"></span></td></tr>
+    <tr><td>Reibungskoeffizient <span class="m" data-tex="b" data-plain="b"></span></td><td>ohmscher Widerstand <span class="m" data-tex="R" data-plain="R"></span></td></tr>
+    <tr><td>Erregerkraft <span class="m" data-tex="F(t)" data-plain="F(t)"></span></td><td>Erregerspannung <span class="m" data-tex="U_e(t)" data-plain="U_e(t)"></span></td></tr>
+    <tr><td><span class="m" data-tex="\omega_0 = \sqrt{D/m}" data-plain="ω₀ = √(D/m)"></span></td><td><span class="m" data-tex="\omega_0 = 1/\sqrt{LC}" data-plain="ω₀ = 1/√(L·C)"></span></td></tr>
+  </table>
+  </div>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Der Kondensator ist die Feder, also entspricht <span class="m" data-tex="C" data-plain="C"></span> der Federkonstante <span class="m" data-tex="D" data-plain="D"></span>." Die Rollen stimmen, aber nicht die Größen: Es entspricht der <em>Kehrwert</em> <span class="m" data-tex="1/C" data-plain="1/C"></span> der Federkonstante. Ein großer Kondensator nimmt viel Ladung bei wenig Spannung auf, er ist also „weich“, wie eine schwache Feder mit kleinem <span class="m" data-tex="D" data-plain="D"></span>. Die Probe liefert die Schwingungsdauer: Ein größeres <span class="m" data-tex="C" data-plain="C"></span> macht den Kreis langsamer, eine größere Federkonstante macht das Pendel schneller, das passt nur mit dem Kehrwert zusammen.
+  </div>
+</section>
+
+<!-- =============== 3 VERTIEFUNG =============== -->
+<section id="vertiefung">
+  <div class="stufe"><div class="nr">3</div><h2>Dämpfung, Rückkopplung und Resonanz</h2></div>
+
+  <h3>Der gedämpfte Schwingkreis</h3>
+  <p>Ein echter Schwingkreis schwingt nicht ewig. Der Draht der Spule hat einen Widerstand, auch die Zuleitungen haben einen, im Eisenkern einer Spule entstehen Verluste, und ein Kreis mit Antenne strahlt Energie ab. Das einfachste Modell fasst alles in einem ohmschen Widerstand <span class="m" data-tex="R" data-plain="R"></span> zusammen, der mit der Spule in Reihe liegt. An ihm fällt die Spannung <span class="m" data-tex="R\,I" data-plain="R·I"></span> ab, und die Maschenregel lautet nun <span class="m" data-tex="-L\,\dot{I} = Q/C + R\,I" data-plain="−L·I' = Q/C + R·I"></span>. Mit <span class="m" data-tex="I = \dot{Q}" data-plain="I = Q'"></span> ergibt das</p>
+
+  <div class="m block" id="f-bew-rlc" data-tex="L\,\ddot{Q} + R\,\dot{Q} + \dfrac{Q}{C} = 0 \quad\Longleftrightarrow\quad \ddot{Q} + 2\delta\,\dot{Q} + \omega_0^2\,Q = 0" data-plain="L·Q'' + R·Q' + Q/C = 0   ⟺   Q'' + 2δ·Q' + ω₀²·Q = 0"></div>
+
+  <p>Das ist die Gleichung des gedämpften Federpendels, <span class="m" data-tex="m\ddot{x} + b\dot{x} + Dx = 0" data-plain="m·x'' + b·x' + D·x = 0"></span>, mit der Ersetzung <span class="m" data-tex="b \to R" data-plain="b → R"></span>. Die Abklingkonstante übersetzt sich entsprechend:</p>
+
+  <div class="m block" id="f-delta" data-tex="\delta = \dfrac{R}{2L} \qquad [\delta] = 1\,\dfrac{\Omega}{\mathrm{H}} = 1\,\dfrac{1}{\mathrm{s}}" data-plain="δ = R/(2L)     [δ] = 1 Ω/H = 1 1/s"></div>
+
+  <p>Die Lösungen sind dieselben drei Fälle wie in der Mechanik, und die Herleitung dort gilt Zeile für Zeile weiter. Im <strong>Schwingfall</strong> <span class="m" data-tex="\delta &lt; \omega_0" data-plain="δ &lt; ω₀"></span> klingt die Schwingung ab:</p>
+
+  <div class="m block" data-tex="Q(t) = Q_0\,e^{-\delta t}\cos(\omega_d t + \varphi_0), \qquad \omega_d = \sqrt{\omega_0^2 - \delta^2}" data-plain="Q(t) = Q₀·e^(−δt)·cos(ω_d·t + φ₀),   ω_d = √(ω₀² − δ²)"></div>
+
+  <p>Für <span class="m" data-tex="\delta = \omega_0" data-plain="δ = ω₀"></span> liegt der <strong>aperiodische Grenzfall</strong> vor, für <span class="m" data-tex="\delta &gt; \omega_0" data-plain="δ &gt; ω₀"></span> der <strong>Kriechfall</strong>. Die Grenze liegt bei einem bestimmten Widerstand; er folgt aus <span class="m" data-tex="R/(2L) = 1/\sqrt{LC}" data-plain="R/(2L) = 1/√(L·C)"></span>:</p>
+
+  <div class="m block" id="f-grenz" data-tex="R_{\text{ap}} = 2\sqrt{\dfrac{L}{C}}" data-plain="R_ap = 2·√(L/C)"></div>
+
+  <p>Wir bleiben beim Beispielkreis <span class="m" data-tex="L = 0{,}100\,\mathrm{H}" data-plain="L = 0,100 H"></span>, <span class="m" data-tex="C = 10\,\mu\mathrm{F}" data-plain="C = 10 µF"></span> mit <span class="m" data-tex="\omega_0 = 1000\,\mathrm{s^{-1}}" data-plain="ω₀ = 1000 s⁻¹"></span>. Bei <span class="m" data-tex="R = 20\,\Omega" data-plain="R = 20 Ω"></span> ist <span class="m" data-tex="\delta = 20/(2\cdot 0{,}100)\,\mathrm{s^{-1}} = 100\,\mathrm{s^{-1}}" data-plain="δ = 20/(2·0,100) s⁻¹ = 100 s⁻¹"></span>, klein gegen <span class="m" data-tex="\omega_0" data-plain="ω₀"></span>, also Schwingfall. Dann ist <span class="m" data-tex="\omega_d = \sqrt{1000^2 - 100^2}\,\mathrm{s^{-1}} = 994{,}99\,\mathrm{s^{-1}}" data-plain="ω_d = √(1000² − 100²) s⁻¹ = 994,99 s⁻¹"></span> und <span class="m" data-tex="T_d = 2\pi/\omega_d = 6{,}315\,\mathrm{ms}" data-plain="T_d = 2π/ω_d = 6,315 ms"></span> gegenüber <span class="m" data-tex="T_0 = 6{,}283\,\mathrm{ms}" data-plain="T₀ = 6,283 ms"></span>. Die Amplitude sinkt je Periode auf den Faktor <span class="m" data-tex="e^{-\delta T_d} = e^{-0{,}631} = 53{,}2\,\%" data-plain="e^(−δ·T_d) = e^(−0,631) = 53,2 %"></span>, nach etwa <span class="m" data-tex="5/\delta = 50\,\mathrm{ms}" data-plain="5/δ = 50 ms"></span> ist sie auf unter ein Prozent gefallen.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Fall</th><th>Bedingung</th><th>Widerstand im Beispiel</th><th>Verhalten</th></tr>
+    <tr><td>Schwingfall</td><td><span class="m" data-tex="\delta &lt; \omega_0" data-plain="δ &lt; ω₀"></span>, d. h. <span class="m" data-tex="R &lt; R_{\text{ap}}" data-plain="R &lt; R_ap"></span></td><td>z. B. <span class="m" data-tex="R = 20\,\Omega" data-plain="R = 20 Ω"></span> (<span class="m" data-tex="\delta = 100\,\mathrm{s^{-1}}" data-plain="δ = 100 s⁻¹"></span>)</td><td>schwingt mit abklingender Amplitude</td></tr>
+    <tr><td>aperiodischer Grenzfall</td><td><span class="m" data-tex="\delta = \omega_0" data-plain="δ = ω₀"></span>, d. h. <span class="m" data-tex="R = R_{\text{ap}}" data-plain="R = R_ap"></span></td><td><span class="m" data-tex="R = 200\,\Omega" data-plain="R = 200 Ω"></span> (<span class="m" data-tex="\delta = 1000\,\mathrm{s^{-1}}" data-plain="δ = 1000 s⁻¹"></span>)</td><td>keine Schwingung, schnellste Rückkehr</td></tr>
+    <tr><td>Kriechfall</td><td><span class="m" data-tex="\delta &gt; \omega_0" data-plain="δ &gt; ω₀"></span>, d. h. <span class="m" data-tex="R &gt; R_{\text{ap}}" data-plain="R &gt; R_ap"></span></td><td>z. B. <span class="m" data-tex="R = 400\,\Omega" data-plain="R = 400 Ω"></span> (<span class="m" data-tex="\delta = 2000\,\mathrm{s^{-1}}" data-plain="δ = 2000 s⁻¹"></span>)</td><td>keine Schwingung, langsame Rückkehr</td></tr>
+  </table>
+  </div>
+
+  <p>Wohin geht die Energie? Ableiten der Gesamtenergie nach der Zeit liefert <span class="m" data-tex="\dot{W} = \dfrac{Q\dot{Q}}{C} + L\,I\dot{I} = I\left(\dfrac{Q}{C} + L\dot{I}\right)" data-plain="W' = Q·Q'/C + L·I·I' = I·(Q/C + L·I')"></span>. Nach der Maschenregel steht in der Klammer <span class="m" data-tex="-R\,I" data-plain="−R·I"></span>, also</p>
+
+  <div class="m block" data-tex="\dot{W} = -R\,I^2" data-plain="W' = −R·I²"></div>
+
+  <p>Die Energie nimmt mit genau der Leistung <span class="m" data-tex="R\,I^2" data-plain="R·I²"></span> ab, die im Widerstand als Wärme frei wird. Weil sie dem Quadrat der Amplitude proportional ist, schrumpft sie doppelt so schnell wie die Amplitude:</p>
+
+  <div class="m block" id="f-energie-ab" data-tex="W(t) = W_0\,e^{-2\delta t}" data-plain="W(t) = W₀·e^(−2δt)"></div>
+
+  <p>Im Beispiel bleiben je Periode nur <span class="m" data-tex="e^{-2\cdot 0{,}631} = 28{,}3\,\%" data-plain="e^(−2·0,631) = 28,3 %"></span> der Energie übrig.</p>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Je größer die Induktivität, desto stärker die Dämpfung, weil die Spule den Strom bremst." Die Spule bremst Stromänderungen, sie verbraucht aber keine Energie. Die Abklingkonstante <span class="m" data-tex="\delta = R/(2L)" data-plain="δ = R/(2L)"></span> wird bei gleichem Widerstand mit größerem <span class="m" data-tex="L" data-plain="L"></span> sogar <em>kleiner</em>: Eine träge Spule hält die Schwingung länger am Leben, genau wie eine große Masse ein Pendel. Gedämpft wird der Kreis durch den Widerstand.
+  </div>
+
+  <div class="merksatz">
+    <b>Dämpfung im Schwingkreis</b>
+    Der Widerstand wandelt Energie in Wärme um. Amplitude und Energie klingen exponentiell ab, die Energie mit dem Faktor <span class="m" data-tex="e^{-2\delta t}" data-plain="e^(−2δt)"></span>. Ob der Kreis noch schwingt, entscheidet allein der Vergleich <span class="m" data-tex="R" data-plain="R"></span> gegen <span class="m" data-tex="R_{\text{ap}} = 2\sqrt{L/C}" data-plain="R_ap = 2·√(L/C)"></span>.
+  </div>
+
+  <h3>Schwingungen am Leben halten: Rückkopplung</h3>
+  <p>Ein Sender braucht eine <em>ungedämpfte</em> Schwingung, denn eine abklingende ließe sich nicht als Träger für Sprache oder Musik benutzen. Es genügt also nicht, den Kreis einmal anzustoßen. Die Verluste müssen ersetzt werden, und zwar im richtigen Takt: Wie beim Anstoßen einer Schaukel nimmt der Kreis nur dann Energie auf, wenn die Zufuhr in Phase mit dem Strom erfolgt. Das leistet die <strong>Rückkopplung</strong>. Ein Verstärker, früher eine Elektronenröhre, heute ein Transistor, nimmt ein kleines Signal vom Schwingkreis ab, verstärkt es und gibt es über eine zweite Spule (die Rückkopplungsspule) in der richtigen Phase wieder an den Kreis. 1913 meldete Alexander Meißner diese Schaltung zum Patent.</p>
+
+  <p>Die Amplitude wächst nicht unbegrenzt. Je größer sie wird, desto mehr Leistung geht im Widerstand verloren (<span class="m" data-tex="R\,I^2" data-plain="R·I²"></span> wächst mit dem Quadrat des Stroms), die Zufuhr wächst dagegen höchstens linear. Dort, wo beide gleich sind, bleibt die Amplitude stehen. Beim Anlaufen reicht das Rauschen als Anstoß.</p>
+
+  <h3>Der angetriebene Schwingkreis: Resonanz</h3>
+  <p>Wird der Kreis nicht sich selbst überlassen, sondern von außen angetrieben, haben wir eine <strong>erzwungene Schwingung</strong>. In einem Radioempfänger liefert die Antenne die Spannung, im Etikett die Säule im Ausgang. Wir nehmen eine Erregerspannung <span class="m" data-tex="U_e(t) = U_0\sin(\omega_e t)" data-plain="U_e(t) = U₀·sin(ω_e·t)"></span> in Reihe zu <span class="m" data-tex="R" data-plain="R"></span>, <span class="m" data-tex="L" data-plain="L"></span> und <span class="m" data-tex="C" data-plain="C"></span>. Dann gilt <span class="m" data-tex="L\,\ddot{Q} + R\,\dot{Q} + Q/C = U_e(t)" data-plain="L·Q'' + R·Q' + Q/C = U_e(t)"></span>. Auch das ist die Gleichung des Federpendels mit Erreger, und nach dem Einschwingen (nach etwa <span class="m" data-tex="5/\delta" data-plain="5/δ"></span>) schwingt der Kreis mit der Erregerfrequenz. Aus der Amplitude des Federpendels <span class="m" data-tex="\hat{x} = F_0/\sqrt{(D - m\omega_e^2)^2 + (b\omega_e)^2}" data-plain="x̂ = F₀/√((D − m·ω_e²)² + (b·ω_e)²)"></span> wird mit dem Wörterbuch aus Abschnitt 2 die Amplitude der Ladung. Interessanter ist die des Stroms, <span class="m" data-tex="\hat{I} = \omega_e\,\hat{Q}" data-plain="Î = ω_e·Q̂"></span> (wie <span class="m" data-tex="v_{\max} = \omega\,x_{\max}" data-plain="v_max = ω·x_max"></span>):</p>
+
+  <div class="m block" id="f-istrom" data-tex="\small\hat{I} = U_0\,/\sqrt{R^2 + (\omega_e L - 1/(\omega_e C))^2}" data-plain="Î = U₀ / √(R² + (ω_e·L − 1/(ω_e·C))²)"></div>
+
+  <details>
+    <summary>Herleitung: Vom Federpendel zur Stromamplitude</summary>
+    <p><strong>Schritt 1 – Übersetzen.</strong> In <span class="m" data-tex="\hat{x} = F_0/\sqrt{(D - m\omega_e^2)^2 + (b\omega_e)^2}" data-plain="x̂ = F₀/√((D − m·ω_e²)² + (b·ω_e)²)"></span> ersetzen wir <span class="m" data-tex="F_0 \to U_0" data-plain="F₀ → U₀"></span>, <span class="m" data-tex="D \to 1/C" data-plain="D → 1/C"></span>, <span class="m" data-tex="m \to L" data-plain="m → L"></span>, <span class="m" data-tex="b \to R" data-plain="b → R"></span> und erhalten die Amplitude der Ladung:</p>
+    <div class="m block" data-tex="\hat{Q} = \dfrac{U_0}{\sqrt{(1/C - L\omega_e^2)^2 + (R\omega_e)^2}}" data-plain="Q̂ = U₀ / √((1/C − L·ω_e²)² + (R·ω_e)²)"></div>
+    <p><strong>Schritt 2 – Zum Strom.</strong> Mit <span class="m" data-tex="\hat{I} = \omega_e\hat{Q}" data-plain="Î = ω_e·Q̂"></span> und <span class="m" data-tex="\omega_e = \sqrt{\omega_e^2}" data-plain="ω_e = √(ω_e²)"></span> im Nenner wird gekürzt:</p>
+    <div class="m block" data-tex="\hat{I} = \dfrac{U_0}{\sqrt{(1/(\omega_e C) - L\omega_e)^2 + R^2}}" data-plain="Î = U₀ / √((1/(ω_e·C) − L·ω_e)² + R²)"></div>
+    <p>Das Quadrat löscht das Vorzeichen in der Klammer, es darf also <span class="m" data-tex="\omega_e L - 1/(\omega_e C)" data-plain="ω_e·L − 1/(ω_e·C)"></span> stehen. ✓</p>
+    <p><strong>Schritt 3 – Einheitenprobe.</strong> <span class="m" data-tex="[\omega L] = \mathrm{s^{-1}}\cdot\mathrm{H} = \Omega" data-plain="[ω·L] = s⁻¹·H = Ω"></span> und <span class="m" data-tex="[1/(\omega C)] = \mathrm{s}/\mathrm{F} = \Omega" data-plain="[1/(ω·C)] = s/F = Ω"></span>, die Wurzel hat die Einheit Ω, und <span class="m" data-tex="\mathrm{V}/\Omega = \mathrm{A}" data-plain="V/Ω = A"></span>. ✓</p>
+  </details>
+
+  <p>Der Nenner ist am kleinsten, wenn die Klammer null wird, also bei <span class="m" data-tex="\omega_e L = 1/(\omega_e C)" data-plain="ω_e·L = 1/(ω_e·C)"></span>. Das ist genau <span class="m" data-tex="\omega_e = 1/\sqrt{LC} = \omega_0" data-plain="ω_e = 1/√(L·C) = ω₀"></span>. Dort heben sich die beiden Terme auf, und der Kreis verhält sich so, als gäbe es nur den Widerstand:</p>
+
+  <div class="m block" data-tex="\hat{I}_{\text{res}} = \dfrac{U_0}{R}" data-plain="Î_res = U₀/R"></div>
+
+  <p>Mit <span class="m" data-tex="U_0 = 5{,}0\,\mathrm{V}" data-plain="U₀ = 5,0 V"></span> und <span class="m" data-tex="R = 20\,\Omega" data-plain="R = 20 Ω"></span> sind das <span class="m" data-tex="0{,}25\,\mathrm{A}" data-plain="0,25 A"></span>. Zum Vergleich: Bei <span class="m" data-tex="f_e = 120\,\mathrm{Hz}" data-plain="f_e = 120 Hz"></span> ist der Strom nur noch <span class="m" data-tex="82\,\mathrm{mA}" data-plain="82 mA"></span>, bei <span class="m" data-tex="f_e = 200\,\mathrm{Hz}" data-plain="f_e = 200 Hz"></span> sind es <span class="m" data-tex="100\,\mathrm{mA}" data-plain="100 mA"></span> (<span class="m" data-tex="f_0 = 159{,}2\,\mathrm{Hz}" data-plain="f₀ = 159,2 Hz"></span>). Die Resonanzkurve fällt zu beiden Seiten ab. Die Spitze ist um so höher und schmaler, je kleiner <span class="m" data-tex="R" data-plain="R"></span> ist.</p>
+
+  <details>
+    <summary>Herleitung: Wie breit ist die Resonanzspitze?</summary>
+    <p><strong>Definition.</strong> Als Breite nehmen wir den Abstand der beiden Kreisfrequenzen, bei denen der Strom auf <span class="m" data-tex="1/\sqrt{2}" data-plain="1/√2"></span> seines Höchstwerts gefallen ist. Dort muss die Wurzel im Nenner von <span class="m" data-tex="\hat{I}" data-plain="Î"></span> auf <span class="m" data-tex="\sqrt{2}\,R" data-plain="√2·R"></span> gewachsen sein, also <span class="m" data-tex="(\omega L - 1/(\omega C))^2 = R^2" data-plain="(ω·L − 1/(ω·C))² = R²"></span>.</p>
+    <p><strong>Auflösen.</strong> Das heißt <span class="m" data-tex="\omega L - 1/(\omega C) = \pm R" data-plain="ω·L − 1/(ω·C) = ±R"></span>, mit <span class="m" data-tex="\omega C" data-plain="ω·C"></span> multipliziert <span class="m" data-tex="L C\,\omega^2 \mp R C\,\omega - 1 = 0" data-plain="L·C·ω² ∓ R·C·ω − 1 = 0"></span>. Die jeweils positive Lösung ist</p>
+    <div class="m block" data-tex="\omega_{\pm} = \dfrac{\pm R C + \sqrt{R^2C^2 + 4LC}}{2LC}" data-plain="ω_± = (±R·C + √(R²·C² + 4·L·C)) / (2·L·C)"></div>
+    <p>Die Differenz beider Werte ist <span class="m" data-tex="\Delta\omega = \omega_+ - \omega_- = \dfrac{2RC}{2LC} = \dfrac{R}{L}" data-plain="Δω = ω₊ − ω₋ = 2·R·C/(2·L·C) = R/L"></span>. Im Beispiel (<span class="m" data-tex="R = 20\,\Omega" data-plain="R = 20 Ω"></span>, <span class="m" data-tex="L = 0{,}100\,\mathrm{H}" data-plain="L = 0,100 H"></span>) ist das <span class="m" data-tex="200\,\mathrm{s^{-1}}" data-plain="200 s⁻¹"></span>, in Hertz <span class="m" data-tex="\Delta f = 31{,}8\,\mathrm{Hz}" data-plain="Δf = 31,8 Hz"></span>. Halbierst du <span class="m" data-tex="R" data-plain="R"></span>, halbiert sich auch die Breite.</p>
+  </details>
+
+  <p>Das nutzt jeder Radioempfänger. Die Antenne liefert viele Spannungen mit verschiedenen Frequenzen gleichzeitig; der Schwingkreis lässt durch, was nahe an <span class="m" data-tex="f_0" data-plain="f₀"></span> liegt, und unterdrückt den Rest. Zum <strong>Abstimmen</strong> verändert man <span class="m" data-tex="C" data-plain="C"></span> mit einem Drehkondensator, denn <span class="m" data-tex="f_0 \sim 1/\sqrt{C}" data-plain="f₀ ~ 1/√C"></span>. Für den UKW-Bereich von 88 MHz bis 108 MHz muss sich die Kapazität um den Faktor <span class="m" data-tex="(108/88)^2 = 1{,}51" data-plain="(108/88)² = 1,51"></span> ändern, für die Mittelwelle von etwa 530 kHz bis 1600 kHz um den Faktor 9. Eine kleine Dämpfung macht die Spitze schmal, die <strong>Trennschärfe</strong> hoch. Der Preis: Die Schwingung braucht länger zum Einschwingen, <span class="m" data-tex="5/\delta" data-plain="5/δ"></span> wächst mit kleinerem <span class="m" data-tex="R" data-plain="R"></span>.</p>
+
+  <div class="merksatz">
+    <b>Resonanz im Schwingkreis</b>
+    Der Strom ist am größten, wenn die Erregerfrequenz die Eigenfrequenz <span class="m" data-tex="f_0 = 1/(2\pi\sqrt{LC})" data-plain="f₀ = 1/(2π·√(L·C))"></span> trifft. Dort ist <span class="m" data-tex="\hat{I} = U_0/R" data-plain="Î = U₀/R"></span>: Nur der Widerstand begrenzt den Strom. Die Spitze ist um so schmaler und höher, je kleiner <span class="m" data-tex="R" data-plain="R"></span> ist.
+  </div>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „In der Resonanz ist der Strom am größten, also muss dort auch die Spannung am Kondensator am größten sein, und zwar genau bei <span class="m" data-tex="f_0" data-plain="f₀"></span>." Für den <em>Strom</em> stimmt es exakt. Die Amplitude der Ladung, und damit der Kondensatorspannung, hat ihr Maximum bei einer etwas kleineren Frequenz, wie du es von <span class="m" data-tex="\omega_{\text{res}} = \sqrt{\omega_0^2 - 2\delta^2}" data-plain="ω_res = √(ω₀² − 2δ²)"></span> aus der Mechanik kennst. Bei kleiner Dämpfung ist der Unterschied winzig; die Frage, welche Größe man misst, bleibt trotzdem wichtig.
+  </div>
+</section>
+
+<!-- =============== 4 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">4</div><h2>Den Schwingkreis in der Simulation</h2></div>
+
+  <p>Die Simulation zeigt einen Reihenschwingkreis aus Kondensator, Spule und einem Widerstand, den du auf null stellen kannst. Im Schaltbild siehst du die Ladung auf den Platten, das elektrische Feld im Kondensator, den Strom (Pfeil) und das Magnetfeld der Spule (grünes Leuchten). Darunter entsteht das Diagramm von <span class="m" data-tex="U_C(t)" data-plain="U_C(t)"></span> und <span class="m" data-tex="I(t)" data-plain="I(t)"></span> der letzten 50 Millisekunden. Im unteren Diagramm wählst du zwischen den <strong>Energien</strong> von Kondensator und Spule, gestapelt, und der <strong>Resonanzkurve</strong> des eingestellten Kreises. Die Bewegung wird aus der Gleichung <span class="m" data-tex="L\ddot{Q} + R\dot{Q} + Q/C = U_e(t)" data-plain="L·Q'' + R·Q' + Q/C = U_e(t)"></span> schrittweise berechnet (Runge-Kutta-Verfahren). Die Resonanzkurve kommt dagegen aus der Formel aus Abschnitt 3.</p>
+
+  <p>Ein Kreis dieser Größe schwingt mit einigen hundert Hertz, viel zu schnell zum Zuschauen. Die Simulation läuft deshalb in <strong>Zeitlupe</strong>: Eine Sekunde Wartezeit entspricht 5 Millisekunden im Kreis, das Zeitraster unten ist in Millisekunden Kreiszeit beschriftet. Mit „Zeitraffer“ läuft der Vorgang fünfmal schneller. „Kondensator laden und loslassen“ stellt die Spannung <span class="m" data-tex="U_0" data-plain="U₀"></span> ein und setzt den Strom auf null. Das Verändern von <span class="m" data-tex="L" data-plain="L"></span>, <span class="m" data-tex="C" data-plain="C"></span> oder <span class="m" data-tex="R" data-plain="R"></span> mitten in der Schwingung ändert das System während des Laufs.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    1. Stelle <span class="m" data-tex="R = 0" data-plain="R = 0"></span> ein und schalte den Erreger aus. Lade den Kondensator und lies die Periode im Diagramm ab; vergleiche mit der angezeigten Periode. Achte im Energiediagramm darauf, wann <span class="m" data-tex="W_C" data-plain="W_C"></span> null ist und wie sich die Summe verhält. Verkleinere dann <span class="m" data-tex="L" data-plain="L"></span> auf 0,05 H, danach vergrößere es auf 0,20 H, jeweils mit „Kondensator laden und loslassen“. Beschreibe, was mit der Periode und mit dem größten Strom passiert.<br>
+    2. Stelle <span class="m" data-tex="R = 20\,\Omega" data-plain="R = 20 Ω"></span> ein, lade den Kondensator und lies zwei benachbarte Maxima von <span class="m" data-tex="U_C" data-plain="U_C"></span> ab. Bilde ihr Verhältnis und vergleiche mit <span class="m" data-tex="e^{-\Lambda}" data-plain="e^(−Λ)"></span> aus Abschnitt 3. Erhöhe <span class="m" data-tex="R" data-plain="R"></span> langsam, bis der Kreis nicht mehr überschwingt, und prüfe den Wert mit „Grenzfall einstellen“.<br>
+    3. Schalte den Erreger ein (<span class="m" data-tex="U_e = 5{,}0\,\mathrm{V}" data-plain="U_e = 5,0 V"></span>, <span class="m" data-tex="R = 20\,\Omega" data-plain="R = 20 Ω"></span>, <span class="m" data-tex="f_e = 100\,\mathrm{Hz}" data-plain="f_e = 100 Hz"></span>), warte das Einschwingen ab (Zeitraffer) und lies die Periode des Stroms ab. Suche dann mit <span class="m" data-tex="f_e" data-plain="f_e"></span> den größten Strom, schalte das untere Diagramm auf die Resonanzkurve und vergleiche Ring und Kurve. Wiederhole die Suche mit doppeltem <span class="m" data-tex="R" data-plain="R"></span> und formuliere, wie Höhe und Breite der Spitze von <span class="m" data-tex="R" data-plain="R"></span> abhängen.
+  </div>
+
+  <div class="sim">
+    <canvas id="cvK" width="1000" height="260" role="img" aria-label="Schaltbild: Kondensator, Spule, Widerstand und Erreger mit Ladung, Feld und Strom"></canvas>
+    <div class="trenner"></div>
+    <canvas id="cvU" width="1000" height="230" role="img" aria-label="Diagramm von Kondensatorspannung und Strom über der Zeit"></canvas>
+    <div class="trenner"></div>
+    <canvas id="cvW" width="1000" height="230" role="img" aria-label="Energien von Kondensator und Spule oder Resonanzkurve"></canvas>
+    <div class="knopfleiste" style="padding:10px 14px 0">
+      <span style="font-size:14px;color:var(--grau)">Unteres Diagramm:</span>
+      <button type="button" id="bEn" aria-pressed="true">Energien</button>
+      <button type="button" id="bRes" aria-pressed="false">Resonanzkurve</button>
+    </div>
+
+    <div class="anzeige">
+      <div>Zeit im Kreis<span id="aZeit">0,0 ms</span></div>
+      <div>Kondensatorspannung U_C<span id="aU">10,00 V</span></div>
+      <div>Strom I<span id="aI">0,0 mA</span></div>
+      <div>Energie Kondensator W_C<span id="aWC">500 µJ</span></div>
+      <div>Energie Spule W_L<span id="aWL">0 µJ</span></div>
+      <div>Gesamtenergie W<span id="aWg">500 µJ</span></div>
+      <div>Periode <span id="aTName">T₀</span><span id="aT">6,28 ms</span></div>
+      <div>Eigenfrequenz f₀<span id="aF0">159,2 Hz</span></div>
+      <div>Abklingkonstante δ<span id="aD">0 1/s</span></div>
+      <div>Dämpfungsfall<span id="aFall">ungedämpft</span></div>
+      <div>Grenzwiderstand R_ap<span id="aRap">200 Ω</span></div>
+      <div>Î, gemessen<span id="aIm">0,0 mA</span></div>
+      <div>Î, Formel<span id="aIf">–</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label>Induktivität L <b><span id="lL">0,10</span> H</b></label>
+          <input type="range" id="rL" min="0.05" max="0.20" step="0.01" value="0.10">
+        </div>
+        <div>
+          <label>Kapazität C <b><span id="lC">10</span> µF</b></label>
+          <input type="range" id="rC" min="5" max="47" step="1" value="10">
+        </div>
+        <div>
+          <label>Widerstand R <b><span id="lR">0</span> Ω</b></label>
+          <input type="range" id="rR" min="0" max="400" step="1" value="0">
+        </div>
+        <div>
+          <label>Anfangsspannung U₀ <b><span id="lU0">10</span> V</b></label>
+          <input type="range" id="rU0" min="2" max="12" step="1" value="10">
+        </div>
+        <div>
+          <label>Erregerspannung U_e <b><span id="lUe">5,0</span> V</b></label>
+          <input type="range" id="rUe" min="1" max="10" step="0.5" value="5">
+        </div>
+        <div>
+          <label>Erregerfrequenz f_e <b><span id="lFe">100</span> Hz</b></label>
+          <input type="range" id="rFe" min="20" max="400" step="1" value="100">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button class="primaer" id="bAus">Kondensator laden und loslassen</button>
+        <button id="bPause">Pause</button>
+        <button id="bKrit">Grenzfall einstellen</button>
+        <button id="bReset">Zurücksetzen</button>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px;margin-left:6px">
+          <input type="checkbox" id="cErr" style="accent-color:var(--akzent);width:16px;height:16px">
+          Erreger einschalten
+        </label>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px">
+          <input type="checkbox" id="cRaf" style="accent-color:var(--akzent);width:16px;height:16px">
+          Zeitraffer
+        </label>
+      </div>
+      <p id="simHinweis" aria-live="polite" style="margin:10px 0 0;font-size:14px;color:var(--grau)"></p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Du stellst <span class="m" data-tex="R = 0" data-plain="R = 0"></span>, <span class="m" data-tex="L = 0{,}10\,\mathrm{H}" data-plain="L = 0,10 H"></span> und <span class="m" data-tex="U_0 = 10\,\mathrm{V}" data-plain="U₀ = 10 V"></span> ein und vergleichst zwei Kondensatoren: <span class="m" data-tex="C = 5\,\mu\mathrm{F}" data-plain="C = 5 µF"></span> und danach <span class="m" data-tex="C = 20\,\mu\mathrm{F}" data-plain="C = 20 µF"></span>. Du lädst jeweils auf <span class="m" data-tex="U_0" data-plain="U₀"></span> und lässt los. Was beobachtest du beim größeren Kondensator?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>Die Periode ist doppelt so lang, und der größte Strom ist doppelt so groß.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>Die Periode ist doppelt so lang, aber der größte Strom bleibt gleich, weil dieselbe Anfangsspannung dieselbe Energie bedeutet.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>Die Periode ist viermal so lang, und der größte Strom ist nur halb so groß.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Der Erreger läuft mit <span class="m" data-tex="U_e = 5{,}0\,\mathrm{V}" data-plain="U_e = 5,0 V"></span> und <span class="m" data-tex="f_e" data-plain="f_e"></span> bei der angezeigten Eigenfrequenz (<span class="m" data-tex="L = 0{,}10\,\mathrm{H}" data-plain="L = 0,10 H"></span>, <span class="m" data-tex="C = 10\,\mu\mathrm{F}" data-plain="C = 10 µF"></span>); der Strom ist eingeschwungen. Du verdoppelst den Widerstand von <span class="m" data-tex="20\,\Omega" data-plain="20 Ω"></span> auf <span class="m" data-tex="40\,\Omega" data-plain="40 Ω"></span> und wartest wieder das Einschwingen ab. Was passiert mit der Stromamplitude?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>Sie wird etwa halb so groß.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span>Sie bleibt etwa gleich, weil in der Resonanz Spule und Kondensator den Strom bestimmen und nicht der Widerstand.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>Sie wird etwa doppelt so groß, weil ein größerer Widerstand mehr Spannung aufnehmen kann.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+</section>
+
+<!-- =============== 5 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">5</div><h2>Übungen</h2></div>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Ein ungedämpfter Schwingkreis besteht aus einer Spule mit <span class="m" data-tex="L = 0{,}25\,\mathrm{H}" data-plain="L = 0,25 H"></span> und einem Kondensator mit <span class="m" data-tex="C = 4{,}7\,\mu\mathrm{F}" data-plain="C = 4,7 µF"></span>. Berechne die Schwingungsdauer.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ms">ms</option>
+        <option value="s">s</option>
+        <option value="Hz">Hz</option>
+        <option value="V">V</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die Anfangsspannung ist nicht angegeben und wird nicht gebraucht. Rechne Mikrofarad vor dem Einsetzen in Farad um.</div>
+    <div class="hilfe-text" data-stufe="2">Für den Schwingkreis gilt <span class="m" data-tex="T_0 = 2\pi\sqrt{LC}" data-plain="T₀ = 2π·√(L·C)"></span>. Setze Induktivität in Henry und Kapazität in Farad ein.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="L\,C = 0{,}25\,\mathrm{H}\cdot 4{,}7\cdot 10^{-6}\,\mathrm{F} = 1{,}175\cdot 10^{-6}\,\mathrm{s^2}" data-plain="L·C = 0,25 H · 4,7·10⁻⁶ F = 1,175·10⁻⁶ s²"></span>, <span class="m" data-tex="\sqrt{LC} = 1{,}084\cdot 10^{-3}\,\mathrm{s}" data-plain="√(L·C) = 1,084·10⁻³ s"></span> und damit <span class="m" data-tex="T_0 = 2\pi\cdot 1{,}084\,\mathrm{ms} = 6{,}81\,\mathrm{ms}" data-plain="T₀ = 2π · 1,084 ms = 6,81 ms"></span>. Die Frequenz wäre <span class="m" data-tex="f_0 = 147\,\mathrm{Hz}" data-plain="f₀ = 147 Hz"></span> – danach war nicht gefragt.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Ein UKW-Empfänger soll auf den Sender bei <span class="m" data-tex="f = 100\,\mathrm{MHz}" data-plain="f = 100 MHz"></span> abgestimmt werden. Der Kondensator des Schwingkreises hat <span class="m" data-tex="C = 12\,\mathrm{pF}" data-plain="C = 12 pF"></span>. Berechne die nötige Induktivität der Spule.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="µH">µH</option>
+        <option value="nH">nH</option>
+        <option value="mH">mH</option>
+        <option value="pF">pF</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Gegeben ist die Frequenz, nicht die Kreisfrequenz. Stelle die Schwingungsformel nach der gesuchten Größe um und rechne MHz und pF in Hz und F um.</div>
+    <div class="hilfe-text" data-stufe="2">Aus <span class="m" data-tex="\omega_0 = 1/\sqrt{LC}" data-plain="ω₀ = 1/√(L·C)"></span> und <span class="m" data-tex="\omega_0 = 2\pi f" data-plain="ω₀ = 2π·f"></span> folgt durch Quadrieren und Umstellen <span class="m" data-tex="L = 1/(4\pi^2 f^2 C)" data-plain="L = 1/(4π²·f²·C)"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="L = \dfrac{1}{4\pi^2\cdot(1{,}0\cdot 10^{8}\,\mathrm{s^{-1}})^2\cdot 12\cdot 10^{-12}\,\mathrm{F}} = \dfrac{1}{4{,}74\cdot 10^{6}}\,\mathrm{H} = 2{,}11\cdot 10^{-7}\,\mathrm{H} = 0{,}211\,\mu\mathrm{H}" data-plain="L = 1 / (4π² · (1,0·10⁸ s⁻¹)² · 12·10⁻¹² F) = 1/(4,74·10⁶) H = 2,11·10⁻⁷ H = 0,211 µH"></span>. Das ist eine Spule von nur wenigen Windungen.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die vier Diagramme zeigen den Strom <span class="m" data-tex="I(t)" data-plain="I(t)"></span> eines ungedämpften Schwingkreises nach dem Loslassen. Die gestrichelte Kurve gehört jeweils zum ursprünglichen Kreis, die durchgezogene zum veränderten. In allen Fällen wurde der Kondensator vor dem Loslassen auf dieselbe Spannung <span class="m" data-tex="U_0" data-plain="U₀"></span> geladen; alle Diagramme haben dieselben Achsen. Ordne jeder Veränderung das passende Diagramm zu.</div>
+
+    <div class="diagramme">
+      <figure><svg viewBox="0 0 160 100"><line x1="12" y1="50" x2="152" y2="50" stroke="#94a3b8"/><line x1="18" y1="4" x2="18" y2="96" stroke="#94a3b8"/><line x1="79.9" y1="46" x2="79.9" y2="54" stroke="#94a3b8"/><text x="79.9" y="63" font-size="8" fill="#64748b" text-anchor="middle">T₀</text><line x1="141.8" y1="46" x2="141.8" y2="54" stroke="#94a3b8"/><text x="141.8" y="63" font-size="8" fill="#64748b" text-anchor="middle">2T₀</text><text x="141" y="43" font-size="9" fill="#64748b">t</text><text x="22" y="10" font-size="9" fill="#64748b">I</text><polyline points="18.0,50.0 18.8,51.6 19.6,53.3 20.4,54.9 21.2,56.5 22.1,58.0 22.9,59.5 23.7,60.9 24.5,62.3 25.3,63.5 26.1,64.7 26.9,65.8 27.8,66.7 28.6,67.6 29.4,68.3 30.2,68.9 31.0,69.4 31.8,69.7 32.6,69.9 33.4,70.0 34.2,69.9 35.1,69.7 35.9,69.4 36.7,68.9 37.5,68.4 38.3,67.6 39.1,66.8 39.9,65.9 40.8,64.8 41.6,63.6 42.4,62.4 43.2,61.0 44.0,59.6 44.8,58.2 45.6,56.6 46.4,55.0 47.2,53.4 48.1,51.8 48.9,50.2 49.7,48.5 50.5,46.9 51.3,45.3 52.1,43.7 52.9,42.1 53.8,40.6 54.6,39.2 55.4,37.9 56.2,36.6 57.0,35.4 57.8,34.3 58.6,33.4 59.4,32.5 60.2,31.8 61.1,31.2 61.9,30.7 62.7,30.3 63.5,30.1 64.3,30.0 65.1,30.0 65.9,30.2 66.8,30.6 67.6,31.0 68.4,31.6 69.2,32.3 70.0,33.1 70.8,34.1 71.6,35.1 72.4,36.3 73.2,37.5 74.1,38.8 74.9,40.2 75.7,41.7 76.5,43.2 77.3,44.8 78.1,46.4 78.9,48.0 79.7,49.7 80.6,51.3 81.4,53.0 82.2,54.6 83.0,56.2 83.8,57.7 84.6,59.2 85.4,60.7 86.2,62.0 87.1,63.3 87.9,64.5 88.7,65.6 89.5,66.5 90.3,67.4 91.1,68.2 91.9,68.8 92.8,69.3 93.6,69.7 94.4,69.9 95.2,70.0 96.0,70.0 96.8,69.8 97.6,69.5 98.4,69.0 99.2,68.5 100.1,67.8 100.9,67.0 101.7,66.0 102.5,65.0 103.3,63.9 104.1,62.6 104.9,61.3 105.8,59.9 106.6,58.4 107.4,56.9 108.2,55.4 109.0,53.7 109.8,52.1 110.6,50.5 111.4,48.8 112.2,47.2 113.1,45.6 113.9,44.0 114.7,42.4 115.5,40.9 116.3,39.5 117.1,38.1 117.9,36.8 118.8,35.6 119.6,34.5 120.4,33.5 121.2,32.7 122.0,31.9 122.8,31.3 123.6,30.8 124.4,30.4 125.2,30.1 126.1,30.0 126.9,30.0 127.7,30.2 128.5,30.5 129.3,30.9 130.1,31.5 130.9,32.1 131.8,32.9 132.6,33.9 133.4,34.9 134.2,36.0 135.0,37.3 135.8,38.6 136.6,40.0 137.4,41.4 138.2,42.9 139.1,44.5 139.9,46.1 140.7,47.7 141.5,49.4 142.3,51.0 143.1,52.7 143.9,54.3 144.8,55.9 145.6,57.4 146.4,58.9 147.2,60.4 148.0,61.8" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="4 3"/><polyline points="18.0,50.0 18.8,51.6 19.6,53.3 20.4,54.9 21.2,56.6 22.1,58.2 22.9,59.8 23.7,61.4 24.5,63.0 25.3,64.5 26.1,66.0 26.9,67.5 27.8,69.0 28.6,70.4 29.4,71.8 30.2,73.2 31.0,74.5 31.8,75.8 32.6,77.0 33.4,78.2 34.2,79.4 35.1,80.5 35.9,81.5 36.7,82.5 37.5,83.4 38.3,84.3 39.1,85.1 39.9,85.9 40.8,86.6 41.6,87.2 42.4,87.8 43.2,88.3 44.0,88.7 44.8,89.1 45.6,89.4 46.4,89.7 47.2,89.9 48.1,90.0 48.9,90.0 49.7,90.0 50.5,89.9 51.3,89.7 52.1,89.5 52.9,89.2 53.8,88.8 54.6,88.4 55.4,87.9 56.2,87.3 57.0,86.7 57.8,86.0 58.6,85.3 59.4,84.5 60.2,83.6 61.1,82.7 61.9,81.7 62.7,80.7 63.5,79.6 64.3,78.5 65.1,77.3 65.9,76.0 66.8,74.8 67.6,73.4 68.4,72.1 69.2,70.7 70.0,69.3 70.8,67.8 71.6,66.3 72.4,64.8 73.2,63.3 74.1,61.7 74.9,60.1 75.7,58.5 76.5,56.9 77.3,55.2 78.1,53.6 78.9,52.0 79.7,50.3 80.6,48.7 81.4,47.0 82.2,45.4 83.0,43.7 83.8,42.1 84.6,40.5 85.4,38.9 86.2,37.3 87.1,35.8 87.9,34.3 88.7,32.8 89.5,31.3 90.3,29.8 91.1,28.4 91.9,27.1 92.8,25.7 93.6,24.4 94.4,23.2 95.2,22.0 96.0,20.8 96.8,19.7 97.6,18.7 98.4,17.7 99.2,16.7 100.1,15.9 100.9,15.0 101.7,14.3 102.5,13.5 103.3,12.9 104.1,12.3 104.9,11.8 105.8,11.3 106.6,10.9 107.4,10.6 108.2,10.4 109.0,10.2 109.8,10.1 110.6,10.0 111.4,10.0 112.2,10.1 113.1,10.3 113.9,10.5 114.7,10.8 115.5,11.1 116.3,11.5 117.1,12.0 117.9,12.6 118.8,13.2 119.6,13.8 120.4,14.6 121.2,15.4 122.0,16.2 122.8,17.1 123.6,18.1 124.4,19.1 125.2,20.2 126.1,21.3 126.9,22.5 127.7,23.7 128.5,25.0 129.3,26.3 130.1,27.6 130.9,29.0 131.8,30.5 132.6,31.9 133.4,33.4 134.2,34.9 135.0,36.5 135.8,38.0 136.6,39.6 137.4,41.2 138.2,42.8 139.1,44.4 139.9,46.1 140.7,47.7 141.5,49.4 142.3,51.0 143.1,52.7 143.9,54.3 144.8,55.9 145.6,57.6 146.4,59.2 147.2,60.8 148.0,62.4" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>A</figcaption></figure>
+      <figure><svg viewBox="0 0 160 100"><line x1="12" y1="50" x2="152" y2="50" stroke="#94a3b8"/><line x1="18" y1="4" x2="18" y2="96" stroke="#94a3b8"/><line x1="79.9" y1="46" x2="79.9" y2="54" stroke="#94a3b8"/><text x="79.9" y="63" font-size="8" fill="#64748b" text-anchor="middle">T₀</text><line x1="141.8" y1="46" x2="141.8" y2="54" stroke="#94a3b8"/><text x="141.8" y="63" font-size="8" fill="#64748b" text-anchor="middle">2T₀</text><text x="141" y="43" font-size="9" fill="#64748b">t</text><text x="22" y="10" font-size="9" fill="#64748b">I</text><polyline points="18.0,50.0 18.8,51.6 19.6,53.3 20.4,54.9 21.2,56.5 22.1,58.0 22.9,59.5 23.7,60.9 24.5,62.3 25.3,63.5 26.1,64.7 26.9,65.8 27.8,66.7 28.6,67.6 29.4,68.3 30.2,68.9 31.0,69.4 31.8,69.7 32.6,69.9 33.4,70.0 34.2,69.9 35.1,69.7 35.9,69.4 36.7,68.9 37.5,68.4 38.3,67.6 39.1,66.8 39.9,65.9 40.8,64.8 41.6,63.6 42.4,62.4 43.2,61.0 44.0,59.6 44.8,58.2 45.6,56.6 46.4,55.0 47.2,53.4 48.1,51.8 48.9,50.2 49.7,48.5 50.5,46.9 51.3,45.3 52.1,43.7 52.9,42.1 53.8,40.6 54.6,39.2 55.4,37.9 56.2,36.6 57.0,35.4 57.8,34.3 58.6,33.4 59.4,32.5 60.2,31.8 61.1,31.2 61.9,30.7 62.7,30.3 63.5,30.1 64.3,30.0 65.1,30.0 65.9,30.2 66.8,30.6 67.6,31.0 68.4,31.6 69.2,32.3 70.0,33.1 70.8,34.1 71.6,35.1 72.4,36.3 73.2,37.5 74.1,38.8 74.9,40.2 75.7,41.7 76.5,43.2 77.3,44.8 78.1,46.4 78.9,48.0 79.7,49.7 80.6,51.3 81.4,53.0 82.2,54.6 83.0,56.2 83.8,57.7 84.6,59.2 85.4,60.7 86.2,62.0 87.1,63.3 87.9,64.5 88.7,65.6 89.5,66.5 90.3,67.4 91.1,68.2 91.9,68.8 92.8,69.3 93.6,69.7 94.4,69.9 95.2,70.0 96.0,70.0 96.8,69.8 97.6,69.5 98.4,69.0 99.2,68.5 100.1,67.8 100.9,67.0 101.7,66.0 102.5,65.0 103.3,63.9 104.1,62.6 104.9,61.3 105.8,59.9 106.6,58.4 107.4,56.9 108.2,55.4 109.0,53.7 109.8,52.1 110.6,50.5 111.4,48.8 112.2,47.2 113.1,45.6 113.9,44.0 114.7,42.4 115.5,40.9 116.3,39.5 117.1,38.1 117.9,36.8 118.8,35.6 119.6,34.5 120.4,33.5 121.2,32.7 122.0,31.9 122.8,31.3 123.6,30.8 124.4,30.4 125.2,30.1 126.1,30.0 126.9,30.0 127.7,30.2 128.5,30.5 129.3,30.9 130.1,31.5 130.9,32.1 131.8,32.9 132.6,33.9 133.4,34.9 134.2,36.0 135.0,37.3 135.8,38.6 136.6,40.0 137.4,41.4 138.2,42.9 139.1,44.5 139.9,46.1 140.7,47.7 141.5,49.4 142.3,51.0 143.1,52.7 143.9,54.3 144.8,55.9 145.6,57.4 146.4,58.9 147.2,60.4 148.0,61.8" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="4 3"/><polyline points="18.0,50.0 18.8,51.6 19.6,53.2 20.4,54.7 21.2,56.1 22.1,57.3 22.9,58.4 23.7,59.1 24.5,59.7 25.3,60.0 26.1,60.0 26.9,59.7 27.8,59.2 28.6,58.4 29.4,57.4 30.2,56.2 31.0,54.8 31.8,53.3 32.6,51.7 33.4,50.1 34.2,48.4 35.1,46.8 35.9,45.3 36.7,43.9 37.5,42.7 38.3,41.7 39.1,40.9 39.9,40.3 40.8,40.0 41.6,40.0 42.4,40.3 43.2,40.8 44.0,41.6 44.8,42.6 45.6,43.7 46.4,45.1 47.2,46.6 48.1,48.2 48.9,49.8 49.7,51.5 50.5,53.1 51.3,54.6 52.1,56.0 52.9,57.2 53.8,58.3 54.6,59.1 55.4,59.6 56.2,59.9 57.0,60.0 57.8,59.7 58.6,59.2 59.4,58.5 60.2,57.5 61.1,56.3 61.9,55.0 62.7,53.5 63.5,51.9 64.3,50.2 65.1,48.6 65.9,47.0 66.8,45.5 67.6,44.1 68.4,42.8 69.2,41.8 70.0,41.0 70.8,40.4 71.6,40.1 72.4,40.0 73.2,40.2 74.1,40.7 74.9,41.5 75.7,42.4 76.5,43.6 77.3,45.0 78.1,46.5 78.9,48.0 79.7,49.7 80.6,51.3 81.4,52.9 82.2,54.5 83.0,55.9 83.8,57.1 84.6,58.2 85.4,59.0 86.2,59.6 87.1,59.9 87.9,60.0 88.7,59.8 89.5,59.3 90.3,58.6 91.1,57.6 91.9,56.4 92.8,55.1 93.6,53.6 94.4,52.0 95.2,50.4 96.0,48.7 96.8,47.1 97.6,45.6 98.4,44.2 99.2,42.9 100.1,41.9 100.9,41.0 101.7,40.4 102.5,40.1 103.3,40.0 104.1,40.2 104.9,40.7 105.8,41.4 106.6,42.3 107.4,43.5 108.2,44.8 109.0,46.3 109.8,47.9 110.6,49.5 111.4,51.2 112.2,52.8 113.1,54.3 113.9,55.8 114.7,57.0 115.5,58.1 116.3,58.9 117.1,59.6 117.9,59.9 118.8,60.0 119.6,59.8 120.4,59.4 121.2,58.6 122.0,57.7 122.8,56.6 123.6,55.2 124.4,53.8 125.2,52.2 126.1,50.5 126.9,48.9 127.7,47.3 128.5,45.7 129.3,44.3 130.1,43.0 130.9,42.0 131.8,41.1 132.6,40.5 133.4,40.1 134.2,40.0 135.0,40.2 135.8,40.6 136.6,41.3 137.4,42.2 138.2,43.4 139.1,44.7 139.9,46.2 140.7,47.7 141.5,49.4 142.3,51.0 143.1,52.6 143.9,54.2 144.8,55.6 145.6,56.9 146.4,58.0 147.2,58.9 148.0,59.5" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>B</figcaption></figure>
+      <figure><svg viewBox="0 0 160 100"><line x1="12" y1="50" x2="152" y2="50" stroke="#94a3b8"/><line x1="18" y1="4" x2="18" y2="96" stroke="#94a3b8"/><line x1="79.9" y1="46" x2="79.9" y2="54" stroke="#94a3b8"/><text x="79.9" y="63" font-size="8" fill="#64748b" text-anchor="middle">T₀</text><line x1="141.8" y1="46" x2="141.8" y2="54" stroke="#94a3b8"/><text x="141.8" y="63" font-size="8" fill="#64748b" text-anchor="middle">2T₀</text><text x="141" y="43" font-size="9" fill="#64748b">t</text><text x="22" y="10" font-size="9" fill="#64748b">I</text><polyline points="18.0,50.0 18.8,51.6 19.6,53.3 20.4,54.9 21.2,56.5 22.1,58.0 22.9,59.5 23.7,60.9 24.5,62.3 25.3,63.5 26.1,64.7 26.9,65.8 27.8,66.7 28.6,67.6 29.4,68.3 30.2,68.9 31.0,69.4 31.8,69.7 32.6,69.9 33.4,70.0 34.2,69.9 35.1,69.7 35.9,69.4 36.7,68.9 37.5,68.4 38.3,67.6 39.1,66.8 39.9,65.9 40.8,64.8 41.6,63.6 42.4,62.4 43.2,61.0 44.0,59.6 44.8,58.2 45.6,56.6 46.4,55.0 47.2,53.4 48.1,51.8 48.9,50.2 49.7,48.5 50.5,46.9 51.3,45.3 52.1,43.7 52.9,42.1 53.8,40.6 54.6,39.2 55.4,37.9 56.2,36.6 57.0,35.4 57.8,34.3 58.6,33.4 59.4,32.5 60.2,31.8 61.1,31.2 61.9,30.7 62.7,30.3 63.5,30.1 64.3,30.0 65.1,30.0 65.9,30.2 66.8,30.6 67.6,31.0 68.4,31.6 69.2,32.3 70.0,33.1 70.8,34.1 71.6,35.1 72.4,36.3 73.2,37.5 74.1,38.8 74.9,40.2 75.7,41.7 76.5,43.2 77.3,44.8 78.1,46.4 78.9,48.0 79.7,49.7 80.6,51.3 81.4,53.0 82.2,54.6 83.0,56.2 83.8,57.7 84.6,59.2 85.4,60.7 86.2,62.0 87.1,63.3 87.9,64.5 88.7,65.6 89.5,66.5 90.3,67.4 91.1,68.2 91.9,68.8 92.8,69.3 93.6,69.7 94.4,69.9 95.2,70.0 96.0,70.0 96.8,69.8 97.6,69.5 98.4,69.0 99.2,68.5 100.1,67.8 100.9,67.0 101.7,66.0 102.5,65.0 103.3,63.9 104.1,62.6 104.9,61.3 105.8,59.9 106.6,58.4 107.4,56.9 108.2,55.4 109.0,53.7 109.8,52.1 110.6,50.5 111.4,48.8 112.2,47.2 113.1,45.6 113.9,44.0 114.7,42.4 115.5,40.9 116.3,39.5 117.1,38.1 117.9,36.8 118.8,35.6 119.6,34.5 120.4,33.5 121.2,32.7 122.0,31.9 122.8,31.3 123.6,30.8 124.4,30.4 125.2,30.1 126.1,30.0 126.9,30.0 127.7,30.2 128.5,30.5 129.3,30.9 130.1,31.5 130.9,32.1 131.8,32.9 132.6,33.9 133.4,34.9 134.2,36.0 135.0,37.3 135.8,38.6 136.6,40.0 137.4,41.4 138.2,42.9 139.1,44.5 139.9,46.1 140.7,47.7 141.5,49.4 142.3,51.0 143.1,52.7 143.9,54.3 144.8,55.9 145.6,57.4 146.4,58.9 147.2,60.4 148.0,61.8" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="4 3"/><polyline points="18.0,50.0 18.8,50.4 19.6,50.8 20.4,51.2 21.2,51.6 22.1,52.0 22.9,52.4 23.7,52.8 24.5,53.2 25.3,53.6 26.1,54.0 26.9,54.4 27.8,54.7 28.6,55.1 29.4,55.5 30.2,55.8 31.0,56.1 31.8,56.4 32.6,56.8 33.4,57.1 34.2,57.3 35.1,57.6 35.9,57.9 36.7,58.1 37.5,58.4 38.3,58.6 39.1,58.8 39.9,59.0 40.8,59.1 41.6,59.3 42.4,59.4 43.2,59.6 44.0,59.7 44.8,59.8 45.6,59.9 46.4,59.9 47.2,60.0 48.1,60.0 48.9,60.0 49.7,60.0 50.5,60.0 51.3,59.9 52.1,59.9 52.9,59.8 53.8,59.7 54.6,59.6 55.4,59.5 56.2,59.3 57.0,59.2 57.8,59.0 58.6,58.8 59.4,58.6 60.2,58.4 61.1,58.2 61.9,57.9 62.7,57.7 63.5,57.4 64.3,57.1 65.1,56.8 65.9,56.5 66.8,56.2 67.6,55.9 68.4,55.5 69.2,55.2 70.0,54.8 70.8,54.5 71.6,54.1 72.4,53.7 73.2,53.3 74.1,52.9 74.9,52.5 75.7,52.1 76.5,51.7 77.3,51.3 78.1,50.9 78.9,50.5 79.7,50.1 80.6,49.7 81.4,49.3 82.2,48.8 83.0,48.4 83.8,48.0 84.6,47.6 85.4,47.2 86.2,46.8 87.1,46.4 87.9,46.1 88.7,45.7 89.5,45.3 90.3,45.0 91.1,44.6 91.9,44.3 92.8,43.9 93.6,43.6 94.4,43.3 95.2,43.0 96.0,42.7 96.8,42.4 97.6,42.2 98.4,41.9 99.2,41.7 100.1,41.5 100.9,41.3 101.7,41.1 102.5,40.9 103.3,40.7 104.1,40.6 104.9,40.4 105.8,40.3 106.6,40.2 107.4,40.2 108.2,40.1 109.0,40.0 109.8,40.0 110.6,40.0 111.4,40.0 112.2,40.0 113.1,40.1 113.9,40.1 114.7,40.2 115.5,40.3 116.3,40.4 117.1,40.5 117.9,40.6 118.8,40.8 119.6,41.0 120.4,41.1 121.2,41.3 122.0,41.6 122.8,41.8 123.6,42.0 124.4,42.3 125.2,42.6 126.1,42.8 126.9,43.1 127.7,43.4 128.5,43.7 129.3,44.1 130.1,44.4 130.9,44.8 131.8,45.1 132.6,45.5 133.4,45.8 134.2,46.2 135.0,46.6 135.8,47.0 136.6,47.4 137.4,47.8 138.2,48.2 139.1,48.6 139.9,49.0 140.7,49.4 141.5,49.8 142.3,50.3 143.1,50.7 143.9,51.1 144.8,51.5 145.6,51.9 146.4,52.3 147.2,52.7 148.0,53.1" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>C</figcaption></figure>
+      <figure><svg viewBox="0 0 160 100"><line x1="12" y1="50" x2="152" y2="50" stroke="#94a3b8"/><line x1="18" y1="4" x2="18" y2="96" stroke="#94a3b8"/><line x1="79.9" y1="46" x2="79.9" y2="54" stroke="#94a3b8"/><text x="79.9" y="63" font-size="8" fill="#64748b" text-anchor="middle">T₀</text><line x1="141.8" y1="46" x2="141.8" y2="54" stroke="#94a3b8"/><text x="141.8" y="63" font-size="8" fill="#64748b" text-anchor="middle">2T₀</text><text x="141" y="43" font-size="9" fill="#64748b">t</text><text x="22" y="10" font-size="9" fill="#64748b">I</text><polyline points="18.0,50.0 18.8,51.6 19.6,53.3 20.4,54.9 21.2,56.5 22.1,58.0 22.9,59.5 23.7,60.9 24.5,62.3 25.3,63.5 26.1,64.7 26.9,65.8 27.8,66.7 28.6,67.6 29.4,68.3 30.2,68.9 31.0,69.4 31.8,69.7 32.6,69.9 33.4,70.0 34.2,69.9 35.1,69.7 35.9,69.4 36.7,68.9 37.5,68.4 38.3,67.6 39.1,66.8 39.9,65.9 40.8,64.8 41.6,63.6 42.4,62.4 43.2,61.0 44.0,59.6 44.8,58.2 45.6,56.6 46.4,55.0 47.2,53.4 48.1,51.8 48.9,50.2 49.7,48.5 50.5,46.9 51.3,45.3 52.1,43.7 52.9,42.1 53.8,40.6 54.6,39.2 55.4,37.9 56.2,36.6 57.0,35.4 57.8,34.3 58.6,33.4 59.4,32.5 60.2,31.8 61.1,31.2 61.9,30.7 62.7,30.3 63.5,30.1 64.3,30.0 65.1,30.0 65.9,30.2 66.8,30.6 67.6,31.0 68.4,31.6 69.2,32.3 70.0,33.1 70.8,34.1 71.6,35.1 72.4,36.3 73.2,37.5 74.1,38.8 74.9,40.2 75.7,41.7 76.5,43.2 77.3,44.8 78.1,46.4 78.9,48.0 79.7,49.7 80.6,51.3 81.4,53.0 82.2,54.6 83.0,56.2 83.8,57.7 84.6,59.2 85.4,60.7 86.2,62.0 87.1,63.3 87.9,64.5 88.7,65.6 89.5,66.5 90.3,67.4 91.1,68.2 91.9,68.8 92.8,69.3 93.6,69.7 94.4,69.9 95.2,70.0 96.0,70.0 96.8,69.8 97.6,69.5 98.4,69.0 99.2,68.5 100.1,67.8 100.9,67.0 101.7,66.0 102.5,65.0 103.3,63.9 104.1,62.6 104.9,61.3 105.8,59.9 106.6,58.4 107.4,56.9 108.2,55.4 109.0,53.7 109.8,52.1 110.6,50.5 111.4,48.8 112.2,47.2 113.1,45.6 113.9,44.0 114.7,42.4 115.5,40.9 116.3,39.5 117.1,38.1 117.9,36.8 118.8,35.6 119.6,34.5 120.4,33.5 121.2,32.7 122.0,31.9 122.8,31.3 123.6,30.8 124.4,30.4 125.2,30.1 126.1,30.0 126.9,30.0 127.7,30.2 128.5,30.5 129.3,30.9 130.1,31.5 130.9,32.1 131.8,32.9 132.6,33.9 133.4,34.9 134.2,36.0 135.0,37.3 135.8,38.6 136.6,40.0 137.4,41.4 138.2,42.9 139.1,44.5 139.9,46.1 140.7,47.7 141.5,49.4 142.3,51.0 143.1,52.7 143.9,54.3 144.8,55.9 145.6,57.4 146.4,58.9 147.2,60.4 148.0,61.8" fill="none" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="4 3"/><polyline points="18.0,50.0 18.8,56.6 19.6,63.0 20.4,69.0 21.2,74.5 22.1,79.4 22.9,83.4 23.7,86.6 24.5,88.7 25.3,89.9 26.1,89.9 26.9,88.8 27.8,86.7 28.6,83.6 29.4,79.6 30.2,74.8 31.0,69.3 31.8,63.3 32.6,56.9 33.4,50.3 34.2,43.7 35.1,37.3 35.9,31.3 36.7,25.7 37.5,20.8 38.3,16.7 39.1,13.5 39.9,11.3 40.8,10.2 41.6,10.1 42.4,11.1 43.2,13.2 44.0,16.2 44.8,20.2 45.6,25.0 46.4,30.5 47.2,36.5 48.1,42.8 48.9,49.4 49.7,55.9 50.5,62.4 51.3,68.4 52.1,74.0 52.9,78.9 53.8,83.1 54.6,86.3 55.4,88.6 56.2,89.8 57.0,89.9 57.8,89.0 58.6,87.0 59.4,83.9 60.2,80.0 61.1,75.3 61.9,69.8 62.7,63.8 63.5,57.5 64.3,50.9 65.1,44.4 65.9,37.9 66.8,31.8 67.6,26.2 68.4,21.3 69.2,17.1 70.0,13.8 70.8,11.5 71.6,10.2 72.4,10.1 73.2,11.0 74.1,12.9 74.9,15.9 75.7,19.8 76.5,24.5 77.3,29.9 78.1,35.9 78.9,42.2 79.7,48.7 80.6,55.3 81.4,61.8 82.2,67.9 83.0,73.5 83.8,78.5 84.6,82.7 85.4,86.1 86.2,88.4 87.1,89.7 87.9,90.0 88.7,89.1 89.5,87.2 90.3,84.3 91.1,80.4 91.9,75.7 92.8,70.4 93.6,64.4 94.4,58.1 95.2,51.6 96.0,45.0 96.8,38.5 97.6,32.4 98.4,26.7 99.2,21.7 100.1,17.5 100.9,14.1 101.7,11.7 102.5,10.3 103.3,10.0 104.1,10.8 104.9,12.7 105.8,15.6 106.6,19.4 107.4,24.0 108.2,29.4 109.0,35.3 109.8,41.6 110.6,48.1 111.4,54.7 112.2,61.2 113.1,67.3 113.9,73.0 114.7,78.1 115.5,82.4 116.3,85.8 117.1,88.2 117.9,89.6 118.8,90.0 119.6,89.2 120.4,87.4 121.2,84.6 122.0,80.8 122.8,76.2 123.6,70.9 124.4,65.0 125.2,58.7 126.1,52.2 126.9,45.6 127.7,39.1 128.5,33.0 129.3,27.3 130.1,22.2 130.9,17.8 131.8,14.4 132.6,11.9 133.4,10.4 134.2,10.0 135.0,10.7 135.8,12.5 136.6,15.3 137.4,19.0 138.2,23.5 139.1,28.8 139.9,34.7 140.7,41.0 141.5,47.5 142.3,54.1 143.1,60.6 143.9,66.7 144.8,72.5 145.6,77.6 146.4,82.0 147.2,85.5 148.0,88.0" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>D</figcaption></figure>
+    </div>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="D"><span>Die Induktivität wird auf ein Viertel verkleinert, <span class="m" data-tex="L \to L/4" data-plain="L → L/4"></span>.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="A"><span>Die Kapazität wird vervierfacht, <span class="m" data-tex="C \to 4C" data-plain="C → 4C"></span>.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="C"><span>Die Induktivität wird vervierfacht, <span class="m" data-tex="L \to 4L" data-plain="L → 4L"></span>.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="B"><span>Die Kapazität wird auf ein Viertel verkleinert, <span class="m" data-tex="C \to C/4" data-plain="C → C/4"></span>.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Ein Schwingkreis hat <span class="m" data-tex="L = 25\,\mathrm{mH}" data-plain="L = 25 mH"></span> und <span class="m" data-tex="C = 4{,}0\,\mu\mathrm{F}" data-plain="C = 4,0 µF"></span>. Bei welchem Widerstand schwingt er gerade nicht mehr, wenn er sich selbst überlassen wird? Berechne den Grenzwiderstand.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="Ω">Ω</option>
+        <option value="kΩ">kΩ</option>
+        <option value="1/s">1/s</option>
+        <option value="H">H</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die Grenze zwischen Schwingfall und Kriechfall hängt am Vergleich von zwei Größen, die du aus Abschnitt 3 kennst. Gesucht ist der Widerstand, bei dem beide gleich sind.</div>
+    <div class="hilfe-text" data-stufe="2">Setze <span class="m" data-tex="\delta = \omega_0" data-plain="δ = ω₀"></span>, also <span class="m" data-tex="R/(2L) = 1/\sqrt{LC}" data-plain="R/(2L) = 1/√(L·C)"></span>, und löse nach <span class="m" data-tex="R" data-plain="R"></span> auf. Rechne mit Henry und Farad.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="R_{\text{ap}} = 2\sqrt{\dfrac{L}{C}} = 2\sqrt{\dfrac{0{,}025\,\mathrm{H}}{4{,}0\cdot 10^{-6}\,\mathrm{F}}} = 2\sqrt{6250}\,\Omega = 2\cdot 79{,}1\,\Omega = 158\,\Omega" data-plain="R_ap = 2·√(L/C) = 2·√(0,025 H / 4,0·10⁻⁶ F) = 2·√6250 Ω = 2 · 79,1 Ω = 158 Ω"></span>. Einheitenprobe: <span class="m" data-tex="\mathrm{H}/\mathrm{F} = \Omega^2" data-plain="H/F = Ω²"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Ein Kondensator mit <span class="m" data-tex="C = 20\,\mu\mathrm{F}" data-plain="C = 20 µF"></span> wird auf <span class="m" data-tex="U_0 = 50\,\mathrm{V}" data-plain="U₀ = 50 V"></span> geladen und dann mit einer Spule mit <span class="m" data-tex="L = 80\,\mathrm{mH}" data-plain="L = 80 mH"></span> verbunden. Der Widerstand ist vernachlässigbar. Berechne den größten Strom, der im Kreis fließt.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="A">A</option>
+        <option value="mA">mA</option>
+        <option value="V">V</option>
+        <option value="J">J</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Ohne Widerstand geht keine Energie verloren. Die Energie, die anfangs im Kondensator steckt, steckt später im Strom der Spule.</div>
+    <div class="hilfe-text" data-stufe="2">Berechne die Anfangsenergie des Kondensators und setze sie gleich <span class="m" data-tex="\tfrac{1}{2}L\,I_{\max}^2" data-plain="½·L·I_max²"></span>. Löse nach <span class="m" data-tex="I_{\max}" data-plain="I_max"></span> auf.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="W = \tfrac{1}{2}\,C\,U_0^2 = \tfrac{1}{2}\cdot 20\cdot 10^{-6}\,\mathrm{F}\cdot(50\,\mathrm{V})^2 = 25\,\mathrm{mJ}" data-plain="W = ½·C·U₀² = ½ · 20·10⁻⁶ F · (50 V)² = 25 mJ"></span>. Aus <span class="m" data-tex="\tfrac{1}{2}L\,I_{\max}^2 = W" data-plain="½·L·I_max² = W"></span> folgt <span class="m" data-tex="I_{\max} = \sqrt{2W/L} = \sqrt{0{,}050\,\mathrm{J}/0{,}080\,\mathrm{H}} = \sqrt{0{,}625}\,\mathrm{A} = 0{,}79\,\mathrm{A}" data-plain="I_max = √(2W/L) = √(0,050 J / 0,080 H) = √0,625 A = 0,79 A"></span>. Probe über <span class="m" data-tex="I_{\max} = U_0\sqrt{C/L} = 50\cdot 0{,}0158\,\mathrm{A}" data-plain="I_max = U₀·√(C/L) = 50 · 0,0158 A"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a6">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Ein Sender soll eine ungedämpfte Hochfrequenzschwingung erzeugen. Erkläre, warum es nicht genügt, den Schwingkreis einmal anzustoßen, beschreibe das Prinzip der Rückkopplung und begründe, warum die Amplitude trotz laufender Energiezufuhr nicht beliebig wächst.</div>
+    <textarea placeholder="Deine Erklärung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a6">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Jeder reale Kreis hat einen Widerstand (Draht, Kern, Abstrahlung). In ihm wird die Leistung <span class="m" data-tex="R\,I^2" data-plain="R·I²"></span> in Wärme umgewandelt, die Energie sinkt wie <span class="m" data-tex="e^{-2\delta t}" data-plain="e^(−2δt)"></span>. Ein einmal angestoßener Kreis liefert deshalb nur ein abklingendes Signal, das sich nicht als gleichmäßiger Träger eignet.</p>
+      <p>Bei der Rückkopplung nimmt ein Verstärker (Röhre, Transistor) ein Signal vom Kreis ab, verstärkt es und führt es über eine Rückkopplungsspule im richtigen Takt zu: Der Strom aus dem Verstärker ist in Phase mit dem Strom im Kreis, damit schiebt er immer in Bewegungsrichtung an, wie beim Anstoßen einer Schaukel. Die Energie stammt aus der Versorgungsspannung des Verstärkers. Beim Einschalten genügt Rauschen als Anstoß; die Amplitude wächst, solange die zugeführte Leistung größer ist als <span class="m" data-tex="R\,I^2" data-plain="R·I²"></span>.</p>
+      <p>Die Amplitude bleibt stehen, weil die Verlustleistung mit dem Quadrat des Stroms wächst, die Zufuhr aber höchstens linear (und der Verstärker ab einer Grenze übersteuert). Im Gleichgewicht ist die Zufuhr je Periode so groß wie der Verlust, die Energie bleibt konstant.</p>
+      <p><strong>Bewertungskriterien.</strong> Verluste im Widerstand als Ursache der Dämpfung · Notwendigkeit der Energiezufuhr · Zufuhr in richtiger Phase mit Verstärker und Rückkopplungsspule · Energiequelle benannt · Gleichgewicht von Zufuhr und Verlust als Begründung für die konstante Amplitude.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-num="a7">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Ein Mitschüler fasst die Analogie zwischen Federpendel und Schwingkreis so zusammen: „Der Kondensator ist die Feder, also <span class="m" data-tex="C = D" data-plain="C = D"></span>. Die Spule ist die Masse, also <span class="m" data-tex="L = m" data-plain="L = m"></span>. Damit gilt alles aus der Mechanik unverändert auch für den Schwingkreis.“ Nimm zu dieser Aussage Stellung: Was stimmt, was musst du korrigieren, und wo hat die Analogie Grenzen?</div>
+    <textarea placeholder="Deine Stellungnahme…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a7">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Die Rollen stimmen: Der Kondensator ist der Speicher, aus dem die Rückstellung kommt, die Spule trägt die Trägheit des Stromes. Falsch ist das Gleichsetzen der Größen. Es entspricht <span class="m" data-tex="1/C" data-plain="1/C"></span> der Federkonstante <span class="m" data-tex="D" data-plain="D"></span>, nicht <span class="m" data-tex="C" data-plain="C"></span>: Eine große Kapazität nimmt viel Ladung bei wenig Spannung auf und ist „weich“. Die Probe über die Schwingungsdauer zeigt es: Mehr <span class="m" data-tex="C" data-plain="C"></span> macht den Kreis langsamer, mehr <span class="m" data-tex="D" data-plain="D"></span> macht das Pendel schneller. Außerdem haben die Größen verschiedene Einheiten, eine Gleichsetzung ist daher sinnlos; <span class="m" data-tex="L" data-plain="L"></span> entspricht <span class="m" data-tex="m" data-plain="m"></span> nur in der Rolle, nicht dem Wert nach. Zur Übersetzung gehören außerdem <span class="m" data-tex="x \to Q" data-plain="x → Q"></span>, <span class="m" data-tex="v \to I" data-plain="v → I"></span>, <span class="m" data-tex="b \to R" data-plain="b → R"></span> und <span class="m" data-tex="F \to U_e" data-plain="F → U_e"></span>.</p>
+      <p>„Alles unverändert“ stimmt nur für die Gleichungen, die linear sind: Solange <span class="m" data-tex="L" data-plain="L"></span>, <span class="m" data-tex="C" data-plain="C"></span> und <span class="m" data-tex="R" data-plain="R"></span> konstant bleiben, lassen sich alle Ergebnisse (Periode, Dämpfungsfälle, Resonanzkurve) übersetzen. Das gilt nicht mehr, wenn ein Eisenkern in die Sättigung geht (<span class="m" data-tex="L" data-plain="L"></span> hängt dann vom Strom ab) oder wenn das System nichtlinear wird, ähnlich wie eine Feder jenseits des Hookeschen Bereichs. Die Analogie betrifft die Gleichung, nicht die Ursachen: Im Kreis gibt es keine bewegte Masse, sondern Energie in Feldern. Dazu kommen Effekte ohne mechanisches Gegenstück, etwa die Abstrahlung eines Kreises mit Antenne bei hohen Frequenzen.</p>
+      <p><strong>Bewertungskriterien.</strong> Rollen von Kondensator und Spule richtig zugeordnet · Korrektur <span class="m" data-tex="1/C" data-plain="1/C"></span> statt <span class="m" data-tex="C" data-plain="C"></span> begründet (Probe über die Periode oder die Härte der Feder) · Gleichsetzung der Größen zurückgewiesen · Übertragbarkeit auf lineare Gleichungen benannt · mindestens eine Grenze der Analogie mit Beispiel.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 6 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">6</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Das Wichtigste in sechs Sätzen</h3>
+    <ul>
+      <li>In einem Kreis aus Kondensator und Spule pendelt die Energie zwischen dem elektrischen und dem magnetischen Feld. Die Spannung am Kondensator ist die Rückstellung, die Selbstinduktion der Spule die Trägheit; Spannung und Strom sind um eine Viertelperiode verschoben.</li>
+      <li>Die Maschenregel <span class="m" data-tex="-L\,\dot{I} = Q/C" data-plain="−L·I' = Q/C"></span> führt auf <span class="m" data-tex="\ddot{Q} + Q/(LC) = 0" data-plain="Q'' + Q/(L·C) = 0"></span>, dieselbe Gleichung wie beim Federpendel. Die Frequenz folgt aus der Thomsonschen Formel <span class="m" data-tex="T_0 = 2\pi\sqrt{LC}" data-plain="T₀ = 2π·√(L·C)"></span> und hängt nicht von der Anfangsspannung ab.</li>
+      <li>Ohne Widerstand ist <span class="m" data-tex="W = Q^2/(2C) + \tfrac{1}{2}L\,I^2" data-plain="W = Q²/(2C) + ½·L·I²"></span> konstant, und der größte Strom ist <span class="m" data-tex="I_{\max} = \omega_0 Q_0 = U_0\sqrt{C/L}" data-plain="I_max = ω₀·Q₀ = U₀·√(C/L)"></span>.</li>
+      <li>Das Wörterbuch der Analogie: <span class="m" data-tex="x \to Q" data-plain="x → Q"></span>, <span class="m" data-tex="v \to I" data-plain="v → I"></span>, <span class="m" data-tex="m \to L" data-plain="m → L"></span>, <span class="m" data-tex="D \to 1/C" data-plain="D → 1/C"></span>, <span class="m" data-tex="b \to R" data-plain="b → R"></span>, <span class="m" data-tex="F \to U_e" data-plain="F → U_e"></span>.</li>
+      <li>Ein Widerstand wandelt Energie in Wärme um: <span class="m" data-tex="\dot{W} = -R\,I^2" data-plain="W' = −R·I²"></span>. Mit <span class="m" data-tex="\delta = R/(2L)" data-plain="δ = R/(2L)"></span> klingen Amplitude und (doppelt so schnell) Energie ab; der Kreis schwingt nur für <span class="m" data-tex="R &lt; 2\sqrt{L/C}" data-plain="R &lt; 2·√(L/C)"></span>. Ein Verstärker mit Rückkopplung ersetzt die Verluste im richtigen Takt.</li>
+      <li>Wird der Kreis angetrieben, ist der Strom bei <span class="m" data-tex="\omega_e = \omega_0" data-plain="ω_e = ω₀"></span> am größten, <span class="m" data-tex="\hat{I} = U_0/R" data-plain="Î = U₀/R"></span>. Eine kleinere Dämpfung macht die Spitze höher und schmaler (<span class="m" data-tex="\Delta\omega = R/L" data-plain="Δω = R/L"></span>); so wählt ein Radio einen Sender aus, den man über <span class="m" data-tex="C" data-plain="C"></span> abstimmt.</li>
+    </ul>
+  </div>
+
+  <div class="hinweis">
+    <strong>Blick aufs Zentralabitur.</strong> Aufgaben zum Schwingkreis laufen im Leistungskurs typischerweise auf drei Dinge hinaus: das Berechnen von <span class="m" data-tex="T_0" data-plain="T₀"></span>, <span class="m" data-tex="f_0" data-plain="f₀"></span>, Energie und größtem Strom, das Deuten von Zeitdiagrammen für Spannung, Strom und Energie sowie das Übertragen von Ergebnissen aus der Mechanik. Alle drei hast du hier geübt. Welche Teilthemen im jeweiligen Abiturjahr verbindlich sind, legt die Vorgabe des Landes fest; das schulinterne Curriculum ordnet sie Q1 oder Q2 zu. Als Anschluss folgen die Wellen: Schwingungen, die sich im Raum ausbreiten.
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Ich kann …</h3>
+    <div class="check">
+      <label><input type="checkbox"><span>… den Ablauf einer elektromagnetischen Schwingung in Viertelperioden beschreiben und angeben, wo die Energie steckt.</span></label>
+      <label><input type="checkbox"><span>… die Schwingungsgleichung aus der Maschenregel herleiten und die Thomsonsche Formel anwenden und umstellen.</span></label>
+      <label><input type="checkbox"><span>… Energie und größten Strom aus den Daten eines ungedämpften Kreises berechnen.</span></label>
+      <label><input type="checkbox"><span>… die Analogie zur Mechanik nutzen, um Ergebnisse in beide Richtungen zu übertragen, und ihre Grenzen nennen.</span></label>
+      <label><input type="checkbox"><span>… die Dämpfung im Kreis beschreiben, den Grenzwiderstand berechnen und die Rückkopplung zur Entdämpfung erklären.</span></label>
+      <label><input type="checkbox"><span>… die Resonanz im angetriebenen Kreis deuten und die Abstimmung eines Empfängers begründen.</span></label>
+    </div>
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnis als Text kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+
+  <details class="lehrer">
+    <summary>Didaktische Hinweise (Lehrkraft)</summary>
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Schwingende Systeme und Wellen“, Q1 LK. Vorausgesetzt werden die Module „Selbstinduktion“ (Induktivität, Energie der Spule) und „Mechanische Schwingungen“ (Bewegungsgleichung, Dämpfungsfälle, Resonanz); das Modul überträgt deren Ergebnisse und leitet nur das Neue selbst her. Die „Ich kann …“-Sätze sind eigene Formulierungen, keine Zitate aus dem Kernlehrplan.</p>
+    <p><strong>Offene Punkte.</strong> Der Kernlehrplan nennt für Q1 nur die Namen der Inhaltsfelder. Nicht geklärt sind (a), ob der elektromagnetische Schwingkreis im schulinternen Lehrplan unter „Schwingende Systeme und Wellen“ oder unter „Ladungen, Felder und Induktion“ geführt wird (der Chip folgt der Einordnung in <code>fachliches/modulliste.md</code>), (b), ob der angetriebene Kreis mit der Stromamplitude, der Rückkopplung und der Resonanzbreite Pflicht oder Vertiefung ist, und (c), wie verbindlich die Dämpfungsfälle im Schwingkreis im Zentralabitur sind. Wird (b) verneint, lassen sich der letzte Teil von Abschnitt 3, Aufgabe a6 und Punkt 3 des Beobachtungsauftrags herausnehmen; Abschnitte 1 und 2 sind in sich geschlossen. Die Vorzeichenkonvention (Strom positiv, wenn er die obere Platte auflädt, also <span class="m" data-tex="I = \dot{Q}" data-plain="I = Q'"></span>) ist eine Festlegung dieses Moduls; Bücher, die den Entladestrom positiv zählen, schreiben <span class="m" data-tex="I = -\dot{Q}" data-plain="I = −Q'"></span> und kommen auf dieselbe Schwingungsgleichung.</p>
+    <p><strong>Zeitbedarf.</strong> Abschnitte 1 und 2 etwa 45 Minuten, Abschnitt 3 etwa 30 Minuten, Simulation mit Beobachtungsauftrag 20 Minuten, Übungen 25 Minuten. Die beiden Aufgaben im Anforderungsbereich III eignen sich als Hausaufgabe. Für eine Doppelstunde reichen Abschnitte 1 und 2 sowie der Beobachtungsauftrag, Punkt 1 und 2.</p>
+    <p><strong>Typische Hürden.</strong> Erstens die Vorstellung, bei <span class="m" data-tex="U_C = 0" data-plain="U_C = 0"></span> sei „nichts mehr los“; der Erklärteil greift sie mit Tabelle und Hinweis auf. Zweitens das Gleichsetzen von <span class="m" data-tex="C" data-plain="C"></span> mit der Federkonstante statt <span class="m" data-tex="1/C" data-plain="1/C"></span>; dagegen stehen der Hinweis in Abschnitt 2, die Zuordnungsaufgabe a3 und a7. Drittens die Verwechslung von Dämpfung und Induktivität (Abschnitt 3). Viertens die Energie: Sie pendelt mit der halben Periode des Stroms, und ihre Summe fällt im gedämpften Kreis doppelt so schnell wie die Amplitude.</p>
+    <p><strong>Modellgrenzen.</strong> Die Simulation zeigt nur den Reihenschwingkreis mit konstantem <span class="m" data-tex="R" data-plain="R"></span>, idealem Kondensator und idealer Spule; sie berechnet die Gleichung mit dem Runge-Kutta-Verfahren vierter Ordnung. Sie läuft in Zeitlupe (1 s Wartezeit entspricht 5 ms im Kreis); ein echter Kreis dieser Größe schwingt mit einigen hundert Hertz. Die Resonanzkurve unten kommt aus der Formel, der Ring zeigt die in der Simulation gemessene Stromamplitude. Ein Eisenkern mit Sättigung, Verluste im Dielektrikum und Abstrahlung sind nicht modelliert. Die Werte 8,2 MHz, 5,5 µH und 68 pF im Einstieg sind Rechenbeispiele, keine Herstellerangaben.</p>
+    <p><strong>Formelleiste.</strong> Die Energien von Kondensator und Spule stehen nur als Summe in der Leiste; die Beziehung <span class="m" data-tex="\omega = 2\pi f" data-plain="ω = 2π·f"></span> und der Ort der Energie im Kondensator stehen bewusst nicht dort, weil die Vorwissensfragen 2 und 3 sie sonst beantworten würden. Der größte Strom <span class="m" data-tex="I_{\max} = U_0\sqrt{C/L}" data-plain="I_max = U₀·√(C/L)"></span> steht nur im Text, damit die erste Simulationsfrage nicht in der Leiste abzulesen ist.</p>
+    <p><strong>Experimentbezug.</strong> Die Simulation ersetzt den Realversuch nicht. Sinnvoll ist ein Schwingkreis aus Spule und Kondensatorbox mit Schalter, Oszilloskop oder Messwerterfassung (Spannung über dem Kondensator, Strom über einen kleinen Messwiderstand), dazu ein Funktionsgenerator für den Resonanzversuch. Ein Eisenkern in der Spule verändert <span class="m" data-tex="L" data-plain="L"></span> und erhöht meist die Dämpfung; ein Vergleich mit und ohne Kern passt zu Abschnitt 3. Die Seite dient der Auswertung und der gezielten Variation von <span class="m" data-tex="L" data-plain="L"></span>, <span class="m" data-tex="C" data-plain="C"></span> und <span class="m" data-tex="R" data-plain="R"></span>.</p>
+    <p><strong>Differenzierung.</strong> Das dreistufige Hilfesystem trägt die Binnendifferenzierung. Schnelle Gruppen können die Breite der Resonanzspitze selbst herleiten, den Unterschied zwischen Strom- und Spannungsresonanz untersuchen (Abschnitt 3, Hinweis) oder in der Simulation prüfen, wie sich Höhe und Breite der Spitze bei verschiedenen <span class="m" data-tex="L" data-plain="L"></span> verhalten.</p>
+  </details>
+
+  <footer>
+    Physik LK Q1 · Elektromagnetischer Schwingkreis · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+
+<!-- Formelsammlung: nur im Druck sichtbar, wird aus formelDaten erzeugt -->
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+
+<!-- =============== FORMELLEISTE =============== -->
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/bausteine.md, Abschnitt 10. abschnitt = id der <section>, ziel = id der
+// Formel im Text. tex setzt KaTeX, plain ist der Klartext ohne Netz. Alle Texte ohne HTML.
+var formelDaten = [
+  {abschnitt:"grundlagen", titel:"Kondensator und Spule schwingen zusammen", formeln:[
+    {id:"masche", ziel:"f-masche", tex:"-L\\,\\dfrac{\\mathrm{d}I}{\\mathrm{d}t} = \\dfrac{Q}{C}", plain:"−L·dI/dt = Q/C",
+     zeichen:[
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H"},
+       {tex:"\\dfrac{\\mathrm{d}I}{\\mathrm{d}t}", plain:"dI/dt", text:"Änderungsrate der Stromstärke", einheit:"A/s"},
+       {tex:"Q", plain:"Q", text:"Ladung der oberen Kondensatorplatte", einheit:"C"},
+       {tex:"C", plain:"C", text:"Kapazität des Kondensators", einheit:"F"}],
+     gilt:"Reihenkreis aus Kondensator und Spule ohne Widerstand und ohne Quelle. Die Stromstärke zählt positiv, wenn sie die obere Platte auflädt, also I = Q'. Bei der anderen Zählung (Entladestrom positiv) steht ein anderes Vorzeichen vor dI/dt.",
+     fehler:"Das Minuszeichen weglassen oder die Induktionsspannung der Spule mit der Quellenspannung verwechseln. Die Spule liefert U_ind = −L·dI/dt; ohne das Minus bekäme die Gleichung eine wachsende statt einer schwingenden Lösung."},
+    {id:"bew-lc", ziel:"f-bew-lc", tex:"L\\,\\ddot{Q} + \\dfrac{Q}{C} = 0", plain:"L·Q'' + Q/C = 0",
+     zeichen:[
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H"},
+       {tex:"\\ddot{Q}", plain:"Q''", text:"zweite Ableitung der Ladung nach der Zeit, gleich der Änderungsrate der Stromstärke", einheit:"A/s"},
+       {tex:"Q", plain:"Q", text:"Ladung der oberen Kondensatorplatte", einheit:"C"},
+       {tex:"C", plain:"C", text:"Kapazität des Kondensators", einheit:"F"}],
+     gilt:"Ungedämpfter Schwingkreis. Sie hat dieselbe Form wie m·x'' + D·x = 0 beim Federpendel, mit x → Q, m → L und D → 1/C.",
+     fehler:"In die Analogie D → C statt D → 1/C einsetzen. Die Kapazität steht im Nenner; ein großer Kondensator entspricht einer weichen Feder."},
+    {id:"thomson", ziel:"f-thomson", tex:"\\omega_0 = \\dfrac{1}{\\sqrt{LC}}", plain:"ω₀ = 1/√(L·C)",
+     zeichen:[
+       {tex:"\\omega_0", plain:"ω₀", text:"Eigenkreisfrequenz des ungedämpften Schwingkreises", einheit:"rad/s"},
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H"},
+       {tex:"C", plain:"C", text:"Kapazität des Kondensators", einheit:"F"}],
+     gilt:"Ungedämpfter Reihenkreis mit idealer Spule und idealem Kondensator. Die Schwingungsdauer folgt aus T₀ = 2π/ω₀ = 2π·√(L·C). Die Anfangsladung geht nicht ein.",
+     fehler:"Mikrofarad oder Millihenry ungeprüft einsetzen. L muss in H und C in F eingehen; erst dann ergibt L·C die Einheit s²."},
+    {id:"schwingung-q", ziel:"f-schwingung-q", tex:"Q = Q_0\\cos(\\omega_0 t)", plain:"Q = Q₀·cos(ω₀t)",
+     zeichen:[
+       {tex:"Q", plain:"Q", text:"Ladung der oberen Platte zur Zeit t", einheit:"C"},
+       {tex:"Q_0", plain:"Q₀", text:"Anfangsladung, Q₀ = C·U₀", einheit:"C"},
+       {tex:"\\omega_0", plain:"ω₀", text:"Eigenkreisfrequenz", einheit:"rad/s"},
+       {tex:"t", plain:"t", text:"Zeit seit dem Loslassen des geladenen Kondensators", einheit:"s"}],
+     gilt:"Ungedämpfte Schwingung, die mit vollem Kondensator und ohne Strom beginnt. Die Stromstärke folgt durch Ableiten: I = −ω₀·Q₀·sin(ω₀t).",
+     fehler:"Strom und Spannung am Kondensator gleichzeitig maximal erwarten. Beide sind um eine Viertelperiode gegeneinander verschoben, der Strom hat seinen größten Betrag, wenn die Spannung null ist."},
+    {id:"energie", ziel:"f-energie", tex:"W = \\dfrac{Q^2}{2C} + \\tfrac{1}{2}\\,L\\,I^2", plain:"W = Q²/(2C) + ½·L·I²",
+     zeichen:[
+       {tex:"W", plain:"W", text:"Gesamtenergie des Kreises", einheit:"J"},
+       {tex:"Q", plain:"Q", text:"Ladung der oberen Platte", einheit:"C"},
+       {tex:"C", plain:"C", text:"Kapazität des Kondensators", einheit:"F"},
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H"},
+       {tex:"I", plain:"I", text:"momentane Stromstärke", einheit:"A"}],
+     gilt:"Ohne Widerstand ist W konstant. Beide Summanden pendeln mit der halben Periode des Stroms zwischen null und dem Höchstwert.",
+     fehler:"Die beiden Terme einzeln konstant erwarten. Konstant ist nur die Summe; was der eine verliert, gewinnt der andere."}
+  ]},
+  {abschnitt:"vertiefung", titel:"Dämpfung, Rückkopplung und Resonanz", formeln:[
+    {id:"bew-rlc", ziel:"f-bew-rlc", tex:"L\\,\\ddot{Q} + R\\,\\dot{Q} + \\dfrac{Q}{C} = 0", plain:"L·Q'' + R·Q' + Q/C = 0",
+     zeichen:[
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H"},
+       {tex:"\\ddot{Q}", plain:"Q''", text:"zweite Ableitung der Ladung nach der Zeit", einheit:"A/s"},
+       {tex:"R", plain:"R", text:"ohmscher Widerstand im Kreis (Draht, Spule, Verluste)", einheit:"Ω"},
+       {tex:"\\dot{Q}", plain:"Q'", text:"erste Ableitung der Ladung, die Stromstärke", einheit:"A"},
+       {tex:"Q", plain:"Q", text:"Ladung der oberen Platte", einheit:"C"},
+       {tex:"C", plain:"C", text:"Kapazität des Kondensators", einheit:"F"}],
+     gilt:"Reihenkreis mit konstantem Widerstand ohne Quelle. Sie entspricht m·x'' + b·x' + D·x = 0 mit b → R.",
+     fehler:"R mit der Abklingkonstante δ gleichsetzen. Erst δ = R/(2L) steht im Exponenten der Hüllkurve."},
+    {id:"delta", ziel:"f-delta", tex:"\\delta = \\dfrac{R}{2L}", plain:"δ = R/(2L)",
+     zeichen:[
+       {tex:"\\delta", plain:"δ", text:"Abklingkonstante, Amplitude ~ e^(−δt)", einheit:"1/s"},
+       {tex:"R", plain:"R", text:"ohmscher Widerstand im Kreis", einheit:"Ω"},
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H"}],
+     gilt:"Reihenkreis mit konstantem Widerstand. Im Schwingfall gilt δ < ω₀, die Kreisfrequenz der abklingenden Schwingung ist ω_d = √(ω₀² − δ²).",
+     fehler:"Aus der Spule folge stärkere Dämpfung. Bei gleichem R wird δ mit größerem L kleiner; die Spule hält die Schwingung länger am Leben."},
+    {id:"grenz", ziel:"f-grenz", tex:"R_{\\text{ap}} = 2\\sqrt{\\dfrac{L}{C}}", plain:"R_ap = 2·√(L/C)",
+     zeichen:[
+       {tex:"R_{\\text{ap}}", plain:"R_ap", text:"Widerstand des aperiodischen Grenzfalls", einheit:"Ω"},
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H"},
+       {tex:"C", plain:"C", text:"Kapazität des Kondensators", einheit:"F"}],
+     gilt:"Folgt aus δ = ω₀. Für R < R_ap schwingt der Kreis, für R ≥ R_ap kehrt die Ladung ohne Überschwingen zurück.",
+     fehler:"Die Wurzel vergessen oder Henry und Farad in andere Einheiten einsetzen. Probe über die Einheit: H/F ist Ω²."},
+    {id:"energie-ab", ziel:"f-energie-ab", tex:"W(t) = W_0\\,e^{-2\\delta t}", plain:"W(t) = W₀·e^(−2δt)",
+     zeichen:[
+       {tex:"W(t)", plain:"W(t)", text:"Gesamtenergie zur Zeit t", einheit:"J"},
+       {tex:"W_0", plain:"W₀", text:"Gesamtenergie zu Beginn, t = 0", einheit:"J"},
+       {tex:"\\delta", plain:"δ", text:"Abklingkonstante", einheit:"1/s"},
+       {tex:"t", plain:"t", text:"Zeit", einheit:"s"}],
+     gilt:"Schwingfall bei schwacher Dämpfung, gemittelt über eine Periode. Die Energie nimmt mit der Leistung R·I² ab, die im Widerstand frei wird.",
+     fehler:"Die Energie wie die Amplitude mit e^(−δt) abklingen lassen. Sie ist dem Quadrat der Amplitude proportional und schrumpft deshalb doppelt so schnell."},
+    {id:"istrom", ziel:"f-istrom", tex:"\\footnotesize\\hat{I} = U_0/\\sqrt{R^2 + (\\omega_e L - 1/(\\omega_e C))^2}", plain:"Î = U₀ / √(R² + (ω_e·L − 1/(ω_e·C))²)",
+     zeichen:[
+       {tex:"\\hat{I}", plain:"Î", text:"Stromamplitude im eingeschwungenen Zustand", einheit:"A"},
+       {tex:"U_0", plain:"U₀", text:"Amplitude der Erregerspannung U_e(t) = U₀·sin(ω_e·t)", einheit:"V"},
+       {tex:"R", plain:"R", text:"ohmscher Widerstand im Kreis", einheit:"Ω"},
+       {tex:"\\omega_e", plain:"ω_e", text:"Kreisfrequenz des Erregers", einheit:"rad/s"},
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H"},
+       {tex:"C", plain:"C", text:"Kapazität des Kondensators", einheit:"F"}],
+     gilt:"Reihenkreis, eingeschwungener Zustand, sinusförmige Erregerspannung konstanter Amplitude. Der Strom schwingt mit der Erregerfrequenz.",
+     fehler:"Die Erregerfrequenz f_e in Hz statt der Kreisfrequenz ω_e = 2π·f_e einsetzen. In die Formel geht ω_e in rad/s ein."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{"r": 1, "fb": ["Gerade das verhindert die Selbstinduktion. Bei jeder Änderung des Stroms entsteht in der Spule eine Induktionsspannung U_ind = −L·dI/dt, die der Änderung entgegenwirkt. Ein sprunghafter Abfall auf null bräuchte eine unendlich große Gegenspannung, also verläuft die Änderung stetig.", "Richtig. Die Induktionsspannung wirkt so, dass der Strom sich nicht sprunghaft ändert: Er fließt zunächst in derselben Richtung weiter und nimmt dann mit der Zeit ab. Genau dieses Weitertreiben des Stroms bringt im Schwingkreis den Kondensator wieder zum Aufladen.", "Die Spule treibt den Strom in derselben Richtung weiter, nicht gegenläufig. Sie wirkt zwar wie eine Quelle, aber so, dass sie die bisherige Stromrichtung stützt (Lenzsche Regel). Eine Umkehr würde die Änderung verstärken, statt ihr entgegenzuwirken."]},
+  vw2:{"r": 1, "fb": ["In einem Kondensator ist nichts chemisch gebunden. Die Ladungen auf den Platten erzeugen das Feld; die Energie steckt in diesem Feld und wird beim Entladen frei. Ein Kondensator ist eben keine Batterie.", "Richtig. Die Energie steckt im elektrischen Feld zwischen den Platten. Sie wächst mit der Ladung und der Spannung, und beim Entladen wird sie frei. Genau diese Feldenergie pendelt im Schwingkreis zur Spule hinüber, die ihre Energie im Magnetfeld speichert.", "Wärme entsteht erst, wenn ein Strom durch einen Widerstand fließt. Beim Aufladen mit einer Quelle steigt die gespeicherte Feldenergie; sie kann beim Entladen vollständig wieder abgegeben werden, ohne dass dabei Wärme in den Platten gespeichert wäre."]},
+  vw3:{"r": 1, "fb": ["Das ist die Frequenz selbst, zahlenmäßig eingesetzt. Die Kreisfrequenz ist ω = 2π·f, weil eine volle Schwingung dem Winkel 2π entspricht. Bei 50 Hz sind das 314 s⁻¹.", "Richtig. ω = 2π·f = 2π·50 s⁻¹ = 314 s⁻¹. Die Kreisfrequenz ist immer um den Faktor 2π größer als die Frequenz, weil eine Schwingung einem vollen Winkel 2π entspricht.", "Hier wurde durch 2π geteilt statt mit 2π multipliziert. Plausibilitätsprobe: Eine Schwingung entspricht dem Winkel 2π, also muss die Kreisfrequenz größer sein als die Frequenz, nicht kleiner."]},
+  sim1:{"r": 0, "fb": ["Richtig. Eine vierfache Kapazität verdoppelt die Periode, T ~ √C. Bei gleicher Spannung trägt sie vier Mal so viel Ladung und die vierfache Energie, ½·C·U₀²; wegen ½·L·I² = W steigt der größte Strom auf das Doppelte, I_max = U₀·√(C/L). In der Simulation siehst du bei 5 µF etwa 71 mA, bei 20 µF etwa 141 mA.", "Die Spannung U₀ ist gleich, aber nicht die Energie: Sie beträgt ½·C·U₀² und wächst mit C. Der größere Kondensator speichert bei gleicher Spannung mehr Ladung und mehr Energie. In der Simulation siehst du das im Energiediagramm und am Strom: Er ist nicht gleich geblieben.", "Die Periode wächst nur mit der Wurzel, T ~ √C: Vierfaches C ergibt die doppelte Periode, nicht die vierfache. Auch der Strom wird nicht kleiner. Die Energie ½·C·U₀² wächst bei gleicher Spannung, und mit ihr I_max."]},
+  sim2:{"r": 0, "fb": ["Richtig. In der Resonanz gilt Î = U₀/R. Bei halber Stromamplitude fällt dort die doppelte Spannung am Widerstand ab. In der Simulation sind es 250 mA bei 20 Ω und 125 mA bei 40 Ω.", "In der Resonanz heben sich die Wirkungen von Spule und Kondensator gegenseitig auf; deshalb ist der Strom dort besonders groß. Was dann noch den Strom begrenzt, ist allein der Widerstand, Î = U₀/R. Verdoppelst du R, halbiert sich Î.", "Ein größerer Widerstand begrenzt den Strom stärker, er nimmt ihn nicht größer. In der Resonanz steht R allein im Nenner, Î = U₀/R: Doppeltes R bedeutet halben Strom."]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{"wert": 6.81, "einheit": "ms", "tol": 0.05, "alt": {"wert": 0.00681, "einheit": "s"}, "ok": "Richtig. T₀ = 2π·√(L·C) = 2π·√(0,25 H · 4,7 µF) = 6,81 ms.", "falschEinheit": "Der Zahlenwert passt zur Schwingungsdauer, aber die wird in Zeit gemessen, in ms oder s. Hz wäre die Einheit der Frequenz, V die einer Spannung.", "nah": "Knapp daneben – prüfe, ob du Mikrofarad in Farad umgerechnet und die Wurzel aus L·C gezogen hast, bevor du mit 2π multiplizierst.", "weit": "Das passt noch nicht. Nutze die Hilfen unten: T₀ = 2π·√(L·C) mit L in H und C in F."},
+  a2:{"wert": 0.211, "einheit": "µH", "tol": 0.003, "alt": {"wert": 211, "einheit": "nH"}, "ok": "Richtig. L = 1/(4π²·f²·C) = 1/(4π² · (1,0·10⁸ s⁻¹)² · 12·10⁻¹² F) = 0,211 µH.", "falschEinheit": "Der Zahlenwert passt zur Induktivität, aber die Einheit nicht. Millihenry wären tausendmal mehr; pF ist die Einheit einer Kapazität.", "nah": "Fast. Hast du f und nicht ω eingesetzt, und beides richtig quadriert? In 4π²·f²·C stecken f und C im Nenner.", "weit": "Das passt noch nicht. Stelle ω₀ = 1/√(L·C) mit ω₀ = 2π·f nach L um und rechne MHz und pF in Hz und F um."},
+  a4:{"wert": 158, "einheit": "Ω", "tol": 2, "alt": {"wert": 0.158, "einheit": "kΩ"}, "ok": "Richtig. R_ap = 2·√(L/C) = 2·√(0,025 H / 4,0 µF) = 2 · 79,1 Ω = 158 Ω.", "falschEinheit": "Der Zahlenwert passt zum Grenzwiderstand, aber ein Widerstand wird in Ω oder kΩ angegeben. 1/s wäre eine Abklingkonstante, H eine Induktivität.", "nah": "Knapp daneben – prüfe, ob du den Faktor 2 und die Wurzel berücksichtigt hast und mit L in H und C in F gerechnet hast.", "weit": "Das passt noch nicht. Nutze die Hilfen unten: Der Grenzfall liegt bei δ = ω₀, mit δ = R/(2L) und ω₀ = 1/√(L·C)."},
+  a5:{"wert": 0.79, "einheit": "A", "tol": 0.01, "alt": {"wert": 790, "einheit": "mA"}, "ok": "Richtig. W = ½·C·U₀² = 25 mJ und I_max = √(2W/L) = √(0,050 J / 0,080 H) = 0,79 A.", "falschEinheit": "Der Zahlenwert passt zur Stromstärke, aber die wird in A oder mA gemessen. V wäre eine Spannung, J eine Energie.", "nah": "Knapp daneben – prüfe, ob du bei der Energie ½·C·U₀² quadriert hast und bei I_max die Wurzel aus 2W/L gezogen hast.", "weit": "Das passt noch nicht. Nutze die Hilfen unten: Die Anfangsenergie des Kondensators wird später zur Energie ½·L·I² der Spule."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.a3 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier richtig. Die Periode hängt mit √(L·C) zusammen, der größte Strom mit √(C/L): Mehr Kapazität bedeutet eine längere Periode und einen größeren Strom, mehr Induktivität eine längere Periode und einen kleineren Strom.";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Gehe zweistufig vor: Wird die Periode länger oder kürzer (Wurzel aus L·C)? Und wohin geht der Höchststrom, wenn bei gleicher Spannung die Energie ½·C·U₀² und die Trägheit L ins Spiel kommen?";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: Schwingkreis ============ */
+(function(){
+  var cvK = document.getElementById("cvK"), ctxK = cvK.getContext("2d");
+  var cvU = document.getElementById("cvU"), ctxU = cvU.getContext("2d");
+  var cvW = document.getElementById("cvW"), ctxW = cvW.getContext("2d");
+
+  // Zeitlupe: TS Sekunden Kreiszeit je Sekunde Echtzeit (1 s warten = 5 ms im Kreis). FENSTER ist in Kreiszeit gemessen.
+  var TS = 0.005, FENSTER = 0.05;
+  var DT_PROBE = 5e-5;     // Abstand der gespeicherten Punkte für die Diagramme in s
+  var H_MAX = 2e-5;        // größter Zeitschritt der Integration in s
+  var MESSFENSTER_MAX = 0.06;
+  var FE_MIN = 20, FE_MAX = 400;
+
+  var farbU = "#1d4ed8", farbI = "#0d7a52", farbH = "#5b6b7f", farbF = "#8a6100", TINTE = "#0f2135";
+
+  var L = 0.10, C = 10e-6, R = 0, U0 = 10, Ue = 5, fe = 100;
+  var Q = C * U0, I = 0, t = 0, phaseE = 0;
+  var erreger = false, pause = false, raf = false, ansicht = "en";
+  var tP = [], uP = [], iP = [], eP = [], cP = [], lP = [], probeRest = 0;
+  var huelle = null;       // {t0, A} solange sie gilt: Schwingfall, Erreger aus, Parameter seit t0 unverändert
+  var letzteZeit = null;
+
+  var $ = function(id){ return document.getElementById(id); };
+  function fmt(z, n){ return z.toFixed(n).replace(".", ","); }
+  function minus(s){ return s.replace("-", "−"); }
+  function stellen(v){ return v >= 10 ? 0 : (v >= 1 ? 1 : 2); }
+
+  function w0(){ return 1 / Math.sqrt(L * C); }
+  function delta(){ return R / (2 * L); }
+  function rAp(){ return 2 * Math.sqrt(L / C); }
+  function fall(){
+    var d = delta(), w = w0();
+    if(R === 0) return "ungedämpft";
+    if(Math.abs(d / w - 1) < 0.02) return "Grenzfall";
+    return d < w ? "Schwingfall" : "Kriechfall";
+  }
+  function wd(){ return Math.sqrt(Math.max(w0() * w0() - delta() * delta(), 0)); }
+  function stromFormel(f){
+    var w = 2 * Math.PI * f;
+    return Ue / Math.max(Math.sqrt(R * R + Math.pow(w * L - 1 / (w * C), 2)), 1e-9);
+  }
+
+  /* ---------- Schwingung ---------- */
+  function ableit(q, i, ph){ return (-q / C - R * i + (erreger ? Ue * Math.sin(ph) : 0)) / L; }
+  function schrittRK(h){
+    var we = 2 * Math.PI * fe;
+    var k1q = I,                  k1i = ableit(Q, I, phaseE);
+    var k2q = I + h / 2 * k1i,    k2i = ableit(Q + h / 2 * k1q, I + h / 2 * k1i, phaseE + we * h / 2);
+    var k3q = I + h / 2 * k2i,    k3i = ableit(Q + h / 2 * k2q, I + h / 2 * k2i, phaseE + we * h / 2);
+    var k4q = I + h * k3i,        k4i = ableit(Q + h * k3q, I + h * k3i, phaseE + we * h);
+    Q += h / 6 * (k1q + 2 * k2q + 2 * k3q + k4q);
+    I += h / 6 * (k1i + 2 * k2i + 2 * k3i + k4i);
+    t += h; phaseE += we * h;
+    probeRest += h;
+    if(probeRest >= DT_PROBE){
+      probeRest -= DT_PROBE;
+      tP.push(t); uP.push(Q / C); iP.push(I); eP.push(erreger ? Ue * Math.sin(phaseE) : 0);
+      cP.push(0.5 * Q * Q / C); lP.push(0.5 * L * I * I);
+      if(tP.length > 3000){ tP.splice(0, 600); uP.splice(0, 600); iP.splice(0, 600); eP.splice(0, 600); cP.splice(0, 600); lP.splice(0, 600); }
+    }
+  }
+  // Hüllkurve der freien gedämpften Schwingung der Kondensatorspannung, verankert im aktuellen Zustand
+  function verankere(){
+    var d = delta(), w = wd();
+    if(erreger || R <= 0 || d >= w0() || w <= 0){ huelle = null; return; }
+    huelle = {t0: t, A: Math.sqrt(Q * Q + Math.pow((I + d * Q) / w, 2)) / C};
+  }
+  function leeren(){ tP = []; uP = []; iP = []; eP = []; cP = []; lP = []; probeRest = 0; }
+
+  /* ---------- Bedienung ---------- */
+  function regler(id, anzeige, f, nachher){
+    var el = $(id);
+    el.addEventListener("input", function(){ f(parseFloat(el.value)); $(anzeige).textContent = nachher(); verankere(); });
+  }
+  regler("rL", "lL", function(z){ L = z; }, function(){ return fmt(L, 2); });
+  regler("rC", "lC", function(z){ C = z * 1e-6; }, function(){ return String(Math.round(C * 1e6)); });
+  regler("rR", "lR", function(z){ R = z; }, function(){ return String(Math.round(R)); });
+  regler("rU0", "lU0", function(z){ U0 = z; }, function(){ return String(Math.round(U0)); });
+  regler("rUe", "lUe", function(z){ Ue = z; }, function(){ return fmt(Ue, 1); });
+  regler("rFe", "lFe", function(z){ fe = z; }, function(){ return String(Math.round(fe)); });
+
+  $("cErr").addEventListener("change", function(){
+    erreger = this.checked;
+    if(erreger){ phaseE = 0; huelle = null; } else verankere();
+  });
+  $("cRaf").addEventListener("change", function(){ raf = this.checked; });
+  $("bPause").addEventListener("click", function(){
+    pause = !pause; this.textContent = pause ? "Weiter" : "Pause";
+  });
+  $("bAus").addEventListener("click", function(){
+    Q = C * U0; I = 0; phaseE = 0; verankere();
+  });
+  $("bKrit").addEventListener("click", function(){
+    var r = $("rR"); r.value = Math.min(Math.round(rAp()), parseFloat(r.max));
+    R = parseFloat(r.value); $("lR").textContent = String(Math.round(R)); verankere();
+  });
+  $("bReset").addEventListener("click", function(){
+    Q = C * U0; I = 0; t = 0; phaseE = 0; leeren(); verankere();
+  });
+  function ansichtSetzen(a){
+    ansicht = a;
+    $("bEn").setAttribute("aria-pressed", a === "en" ? "true" : "false");
+    $("bRes").setAttribute("aria-pressed", a === "res" ? "true" : "false");
+  }
+  $("bEn").addEventListener("click", function(){ ansichtSetzen("en"); });
+  $("bRes").addEventListener("click", function(){ ansichtSetzen("res"); });
+
+  /* ---------- Hauptschleife ---------- */
+  function schritt(zeit){
+    if(letzteZeit === null) letzteZeit = zeit;
+    var dtR = Math.min(0.05, (zeit - letzteZeit) / 1000);
+    letzteZeit = zeit;
+    if(!pause){
+      var dtS = dtR * TS * (raf ? 5 : 1);
+      var hMax = Math.min(H_MAX, 2 * Math.PI / w0() / 300);
+      var n = Math.max(1, Math.ceil(dtS / hMax)), h = dtS / n;
+      for(var k = 0; k < n; k++) schrittRK(h);
+    }
+    if(!isFinite(Q) || !isFinite(I)){ Q = C * U0; I = 0; }   // Schutz, sollte nie auslösen
+    anzeigen();
+    zeichneKreis();
+    zeichneUI();
+    if(ansicht === "en") zeichneEnergie(); else zeichneResonanz();
+    requestAnimationFrame(schritt);
+  }
+
+  function stromAmplitude(){
+    var d = delta(), w = wd();
+    var T = erreger ? 1 / fe : (R > 0 && d < w0() && w > 0 ? 2 * Math.PI / w : 2 * Math.PI / w0());
+    var fT = Math.max(2e-3, Math.min(T * 1.02, MESSFENSTER_MAX));
+    var amp = 0;
+    for(var i = tP.length - 1; i >= 0 && tP[i] >= t - fT; i--) amp = Math.max(amp, Math.abs(iP[i]));
+    return amp;
+  }
+  function maText(a){ return fmt(a * 1000, a * 1000 >= 100 ? 0 : 1) + " mA"; }
+
+  function anzeigen(){
+    var d = delta(), f = fall(), wc = 0.5 * Q * Q / C, wl = 0.5 * L * I * I;
+    $("aZeit").textContent = fmt(t * 1000, 1) + " ms";
+    $("aU").textContent = minus(fmt(Q / C, 2)) + " V";
+    $("aI").textContent = minus(fmt(I * 1000, 1)) + " mA";
+    $("aWC").textContent = fmt(wc * 1e6, 0) + " µJ";
+    $("aWL").textContent = fmt(wl * 1e6, 0) + " µJ";
+    $("aWg").textContent = fmt((wc + wl) * 1e6, 0) + " µJ";
+    if(f === "Schwingfall"){ $("aTName").textContent = "T_d"; $("aT").textContent = fmt(2 * Math.PI / wd() * 1000, 2) + " ms"; }
+    else if(f === "ungedämpft"){ $("aTName").textContent = "T₀"; $("aT").textContent = fmt(2 * Math.PI / w0() * 1000, 2) + " ms"; }
+    else { $("aTName").textContent = "T"; $("aT").textContent = "keine Schwingung"; }
+    $("aF0").textContent = fmt(w0() / (2 * Math.PI), 1) + " Hz";
+    $("aD").textContent = fmt(d, 0) + " 1/s";
+    $("aFall").textContent = f;
+    $("aRap").textContent = fmt(rAp(), 0) + " Ω";
+    $("aIm").textContent = maText(stromAmplitude());
+    $("aIf").textContent = erreger ? maText(stromFormel(fe)) : "–";
+  }
+
+  /* ---------- Zeichenhilfen ---------- */
+  function strecke(ctx, x1, y1, x2, y2, farbe, breite){
+    ctx.strokeStyle = farbe; ctx.lineWidth = breite;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+  function pfeilH(ctx, xA, xB, y, farbe){
+    if(Math.abs(xB - xA) < 4) return;
+    var r = xB > xA ? 1 : -1;
+    strecke(ctx, xA, y, xB, y, farbe, 4);
+    ctx.fillStyle = farbe; ctx.beginPath();
+    ctx.moveTo(xB + 10 * r, y); ctx.lineTo(xB - 4 * r, y - 8); ctx.lineTo(xB - 4 * r, y + 8); ctx.closePath(); ctx.fill();
+  }
+  function pfeilV(ctx, x, yA, yB, farbe, breite){
+    var r = yB > yA ? 1 : -1;
+    strecke(ctx, x, yA, x, yB, farbe, breite);
+    ctx.fillStyle = farbe; ctx.beginPath();
+    ctx.moveTo(x, yB + 7 * r); ctx.lineTo(x - 5, yB - 3 * r); ctx.lineTo(x + 5, yB - 3 * r); ctx.closePath(); ctx.fill();
+  }
+  function schoen(v){
+    v = Math.max(v, 1e-9);
+    var e = Math.pow(10, Math.floor(Math.log(v) / Math.LN10)), m = v / e, st = [1, 1.5, 2, 3, 4, 5, 6, 8, 10];
+    for(var i = 0; i < st.length; i++) if(m <= st[i] + 1e-9) return st[i] * e;
+    return 10 * e;
+  }
+  function fensterMax(feld){
+    var tStart = Math.max(FENSTER, t) - FENSTER, m = 0;
+    for(var i = tP.length - 1; i >= 0 && tP[i] >= tStart; i--) m = Math.max(m, Math.abs(feld[i]));
+    return m;
+  }
+
+  /* ---------- Zeichnen: Schaltbild ---------- */
+  function zeichneKreis(){
+    var ctx = ctxK, W = cvK.width, H = cvK.height;
+    var xC = 250, xL = 760, yO = 50, yU = 220, yP1 = 105, yP2 = 165;
+    var u = Q / C, uRef = Math.max(fensterMax(uP), Math.abs(u), 0.01);
+    var iRef = Math.max(fensterMax(iP), Math.abs(I), 1e-5), qRef = uRef * C;
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+
+    // Leitungen (mit Lücken für Widerstand und Quelle)
+    var dr = 2.5, gr = "#475569";
+    strecke(ctx, xC, yO, R > 0 ? 520 : xL, yO, gr, dr);
+    if(R > 0) strecke(ctx, 600, yO, xL, yO, gr, dr);
+    strecke(ctx, xC, yO, xC, yP1, gr, dr);
+    strecke(ctx, xC, yP2, xC, yU, gr, dr);
+    strecke(ctx, xC, yU, erreger ? 480 : xL, yU, gr, dr);
+    if(erreger) strecke(ctx, 520, yU, xL, yU, gr, dr);
+    strecke(ctx, xL, yO, xL, 72, gr, dr);
+    strecke(ctx, xL, 198, xL, yU, gr, dr);
+
+    // Kondensator: Feld, Platten, Vorzeichen
+    var fa = Math.min(1, Math.abs(u) / uRef);
+    ctx.fillStyle = "rgba(29,78,216," + (0.05 + 0.2 * fa).toFixed(3) + ")";
+    ctx.fillRect(xC - 60, yP1, 120, yP2 - yP1);
+    if(Math.abs(u) > 1e-3 * uRef){
+      for(var k = 0; k < 5; k++){
+        var xk = xC - 48 + k * 24;
+        if(u > 0) pfeilV(ctx, xk, yP1 + 8, yP2 - 8, "rgba(29,78,216," + (0.25 + 0.6 * fa).toFixed(3) + ")", 2);
+        else pfeilV(ctx, xk, yP2 - 8, yP1 + 8, "rgba(29,78,216," + (0.25 + 0.6 * fa).toFixed(3) + ")", 2);
+      }
+    }
+    var pos = "#c2410c", neg = "#1d4ed8";
+    strecke(ctx, xC - 60, yP1, xC + 60, yP1, Q >= 0 ? pos : neg, 6);
+    strecke(ctx, xC - 60, yP2, xC + 60, yP2, Q >= 0 ? neg : pos, 6);
+    var nz = Math.round(7 * Math.min(1, Math.abs(Q) / qRef));
+    ctx.font = "700 18px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    for(k = 0; k < nz; k++){
+      var xz = xC - 54 + k * (108 / 6);
+      ctx.fillStyle = Q >= 0 ? pos : neg; ctx.fillText(Q >= 0 ? "+" : "−", xz, yP1 - 14);
+      ctx.fillStyle = Q >= 0 ? neg : pos; ctx.fillText(Q >= 0 ? "−" : "+", xz, yP2 + 14);
+    }
+    ctx.fillStyle = TINTE; ctx.font = "600 16px sans-serif"; ctx.textAlign = "right";
+    ctx.fillText("C = " + String(Math.round(C * 1e6)) + " µF", xC - 78, (yP1 + yP2) / 2);
+
+    // Spule mit Feldleuchten
+    var ia = Math.min(1, Math.abs(I) / iRef);
+    var gl = ctx.createRadialGradient(xL, 135, 5, xL, 135, 95);
+    gl.addColorStop(0, "rgba(13,122,82," + (0.45 * ia).toFixed(3) + ")"); gl.addColorStop(1, "rgba(13,122,82,0)");
+    ctx.fillStyle = gl; ctx.fillRect(xL - 100, 35, 200, 200);
+    ctx.strokeStyle = "#0d7a52"; ctx.lineWidth = 3; ctx.lineJoin = "round";
+    var nw = 5, y0 = 72, y1 = 198, sw = (y1 - y0) / nw;
+    for(k = 0; k < nw; k++){
+      ctx.beginPath(); ctx.arc(xL, y0 + (k + 0.5) * sw, sw / 2, -Math.PI / 2, Math.PI / 2, false); ctx.stroke();
+    }
+    ctx.fillStyle = TINTE; ctx.font = "600 16px sans-serif"; ctx.textAlign = "left";
+    ctx.fillText("L = " + fmt(L, 3) + " H", xL + 52, 135);
+    ctx.fillStyle = farbI; ctx.font = "13px sans-serif"; ctx.fillText("Feld ∼ |I|", xL + 52, 158);
+
+    // Widerstand
+    if(R > 0){
+      ctx.strokeStyle = "#475569"; ctx.lineWidth = 2.5; ctx.fillStyle = "#f1f5f9";
+      ctx.fillRect(520, yO - 14, 80, 28); ctx.strokeRect(520, yO - 14, 80, 28);
+      ctx.fillStyle = TINTE; ctx.font = "600 15px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText("R = " + String(Math.round(R)) + " Ω", 560, yO);
+    }
+    // Erregerquelle
+    if(erreger){
+      ctx.strokeStyle = farbF; ctx.lineWidth = 2.5; ctx.fillStyle = "#fff8e6";
+      ctx.beginPath(); ctx.arc(500, yU, 20, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = farbF; ctx.font = "700 20px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText("∼", 500, yU - 2);
+      ctx.font = "13px sans-serif"; ctx.fillText("U_e = " + minus(fmt(Ue * Math.sin(phaseE), 1)) + " V", 500, yU + 34);
+    }
+    // Stromrichtung (positiv: lädt die obere Platte, also auf der oberen Leitung nach links)
+    var dir = I > 0 ? -1 : 1, len = 150 * ia, xm = 405;
+    pfeilH(ctx, xm - dir * len / 2, xm + dir * len / 2, yO - 22, farbI);
+    ctx.fillStyle = farbI; ctx.font = "600 15px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "alphabetic";
+    ctx.fillText("I", xm, yO - 36);
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "13px sans-serif"; ctx.textAlign = "left";
+    ctx.fillText("Pfeil nach links: I > 0, lädt die obere Platte", 18, 22);
+    ctx.fillText("U_C = " + minus(fmt(u, 2)) + " V", 18, 244);
+  }
+
+  /* ---------- Zeichnen: Spannung und Strom ---------- */
+  function zeitgitter(ctx, X, o, H, u, tStart, tEnde){
+    ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.font = "13px sans-serif";
+    var s0 = Math.ceil(tStart * 100 - 1e-9) / 100;
+    for(var s = s0; s <= tEnde + 1e-9; s += 0.01){
+      ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(X(s), o - 6); ctx.lineTo(X(s), H - u); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = "#64748b"; ctx.fillText(fmt(s * 1000, 0), X(s), H - u + 6);
+    }
+  }
+  function zeichneUI(){
+    var ctx = ctxU, W = cvU.width, H = cvU.height, l = 72, r = 72, o = 30, u = 30;
+    var tEnde = Math.max(FENSTER, t), tStart = tEnde - FENSTER, i;
+    var uMax = schoen(Math.max(fensterMax(uP), Math.abs(Q / C), erreger ? Ue : 0) * 1.1);
+    var iMax = schoen(Math.max(fensterMax(iP), Math.abs(I)) * 1000 * 1.1) / 1000;
+    var yNull = o + (H - o - u) / 2, hh = (H - o - u) / 2;
+    function X(tt){ return l + (tt - tStart) / FENSTER * (W - l - r); }
+    function YU(v){ return yNull - Math.max(-uMax * 1.05, Math.min(uMax * 1.05, v)) / uMax * hh; }
+    function YI(v){ return yNull - Math.max(-iMax * 1.05, Math.min(iMax * 1.05, v)) / iMax * hh; }
+
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+    zeitgitter(ctx, X, o, H, u, tStart, tEnde);
+    ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(l, o - 6); ctx.lineTo(l, H - u); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W - r, o - 6); ctx.lineTo(W - r, H - u); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(l, yNull); ctx.lineTo(W - r, yNull); ctx.stroke();
+    ctx.font = "13px sans-serif"; ctx.textBaseline = "middle";
+    ctx.fillStyle = farbU; ctx.textAlign = "left"; ctx.fillText("U in V", 8, 13);
+    ctx.textAlign = "right";
+    ctx.fillText(fmt(uMax, stellen(uMax)), l - 6, o); ctx.fillText("0", l - 6, yNull); ctx.fillText("−" + fmt(uMax, stellen(uMax)), l - 6, H - u);
+    ctx.fillStyle = farbI; ctx.textAlign = "right"; ctx.fillText("I in mA", W - 8, 13);
+    ctx.textAlign = "left";
+    ctx.fillText(fmt(iMax * 1000, stellen(iMax * 1000)), W - r + 6, o); ctx.fillText("−" + fmt(iMax * 1000, stellen(iMax * 1000)), W - r + 6, H - u);
+    ctx.fillStyle = "#5b6b7f"; ctx.textAlign = "left"; ctx.fillText("t in ms", W - r - 50, H - u + 20);
+
+    // Hüllkurve der Kondensatorspannung
+    if(huelle){
+      var d = delta(), ta = Math.max(huelle.t0, tStart);
+      ctx.strokeStyle = farbH; ctx.lineWidth = 1.8; ctx.setLineDash([7, 5]);
+      [1, -1].forEach(function(vz){
+        ctx.beginPath();
+        for(var k = 0; k <= 120; k++){
+          var tt = ta + (t - ta) * k / 120, val = vz * huelle.A * Math.exp(-d * (tt - huelle.t0));
+          if(k === 0) ctx.moveTo(X(tt), YU(val)); else ctx.lineTo(X(tt), YU(val));
+        }
+        ctx.stroke();
+      });
+      ctx.setLineDash([]);
+    }
+    // Erregerspannung
+    if(erreger){
+      ctx.strokeStyle = farbF; ctx.lineWidth = 1.6; ctx.beginPath();
+      var began = false;
+      for(i = 0; i < tP.length; i++){
+        if(tP[i] < tStart) continue;
+        if(!began){ ctx.moveTo(X(tP[i]), YU(eP[i])); began = true; } else ctx.lineTo(X(tP[i]), YU(eP[i]));
+      }
+      ctx.stroke();
+    }
+    // Strom und Kondensatorspannung
+    function kurve(feld, Y, farbe, breite){
+      ctx.strokeStyle = farbe; ctx.lineWidth = breite; ctx.lineJoin = "round"; ctx.beginPath();
+      var an = false;
+      for(var k = 0; k < tP.length; k++){
+        if(tP[k] < tStart) continue;
+        if(!an){ ctx.moveTo(X(tP[k]), Y(feld[k])); an = true; } else ctx.lineTo(X(tP[k]), Y(feld[k]));
+      }
+      ctx.stroke();
+    }
+    kurve(iP, YI, farbI, 2.6);
+    kurve(uP, YU, farbU, 3);
+    if(tP.length){
+      ctx.fillStyle = farbU; ctx.beginPath(); ctx.arc(X(t), YU(Q / C), 5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = farbI; ctx.beginPath(); ctx.arc(X(t), YI(I), 5, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.textBaseline = "middle"; ctx.textAlign = "left"; ctx.font = "13px sans-serif";
+    var lx = l + 10;
+    ctx.fillStyle = farbU; ctx.fillText("U_C(t)", lx, 12); lx += 62;
+    ctx.fillStyle = farbI; ctx.fillText("I(t)", lx, 12); lx += 50;
+    if(huelle){ ctx.fillStyle = farbH; ctx.fillText("Hüllkurve ± U·e^(−δt)", lx, 12); lx += 170; }
+    if(erreger){ ctx.fillStyle = farbF; ctx.fillText("Erregerspannung U_e(t)", lx, 12); }
+  }
+
+  /* ---------- Zeichnen: Energien ---------- */
+  function zeichneEnergie(){
+    var ctx = ctxW, W = cvW.width, H = cvW.height, l = 72, r = 72, o = 30, u = 30;
+    var tEnde = Math.max(FENSTER, t), tStart = tEnde - FENSTER, i;
+    var wMax = 0;
+    for(i = tP.length - 1; i >= 0 && tP[i] >= tStart; i--) wMax = Math.max(wMax, cP[i] + lP[i]);
+    wMax = schoen(Math.max(wMax, 0.5 * Q * Q / C + 0.5 * L * I * I) * 1.1 * 1e6) / 1e6;
+    function X(tt){ return l + (tt - tStart) / FENSTER * (W - l - r); }
+    function Y(v){ return H - u - Math.min(v, wMax * 1.05) / wMax * (H - o - u); }
+
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+    zeitgitter(ctx, X, o, H, u, tStart, tEnde);
+    ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(l, o - 6); ctx.lineTo(l, H - u); ctx.lineTo(W - r, H - u); ctx.stroke();
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "13px sans-serif"; ctx.textBaseline = "middle"; ctx.textAlign = "left";
+    ctx.fillText("W in µJ", 8, 13);
+    ctx.textAlign = "right"; ctx.fillText(fmt(wMax * 1e6, stellen(wMax * 1e6)), l - 6, o); ctx.fillText("0", l - 6, H - u);
+    ctx.textAlign = "left"; ctx.fillText("t in ms", W - r - 50, H - u + 20);
+
+    // gestapelte Flächen: unten Kondensator, darüber Spule
+    var idx = [];
+    for(i = 0; i < tP.length; i++) if(tP[i] >= tStart) idx.push(i);
+    if(idx.length > 1){
+      function flaeche(unten, oben, farbe){
+        ctx.fillStyle = farbe; ctx.beginPath();
+        for(var k = 0; k < idx.length; k++){ var j = idx[k]; if(k === 0) ctx.moveTo(X(tP[j]), Y(oben(j))); else ctx.lineTo(X(tP[j]), Y(oben(j))); }
+        for(k = idx.length - 1; k >= 0; k--){ j = idx[k]; ctx.lineTo(X(tP[j]), Y(unten(j))); }
+        ctx.closePath(); ctx.fill();
+      }
+      flaeche(function(){ return 0; }, function(j){ return cP[j]; }, "rgba(29,78,216,0.35)");
+      flaeche(function(j){ return cP[j]; }, function(j){ return cP[j] + lP[j]; }, "rgba(13,122,82,0.35)");
+      ctx.strokeStyle = TINTE; ctx.lineWidth = 2.4; ctx.lineJoin = "round"; ctx.beginPath();
+      for(var k2 = 0; k2 < idx.length; k2++){ var jj = idx[k2]; if(k2 === 0) ctx.moveTo(X(tP[jj]), Y(cP[jj] + lP[jj])); else ctx.lineTo(X(tP[jj]), Y(cP[jj] + lP[jj])); }
+      ctx.stroke();
+    }
+    ctx.textBaseline = "middle"; ctx.textAlign = "left"; ctx.font = "13px sans-serif";
+    var lx = l + 10;
+    ctx.fillStyle = farbU; ctx.fillText("W_C (Kondensator, unten)", lx, 12); lx += 190;
+    ctx.fillStyle = farbI; ctx.fillText("W_L (Spule, darüber)", lx, 12); lx += 160;
+    ctx.fillStyle = TINTE; ctx.fillText("Summe W = W_C + W_L", lx, 12);
+  }
+
+  /* ---------- Zeichnen: Resonanzkurve ---------- */
+  function zeichneResonanz(){
+    var ctx = ctxW, W = cvW.width, H = cvW.height, l = 72, r = 90, o = 30, u = 34;
+    var f0 = w0() / (2 * Math.PI);
+    var N = 360, k, maxK = 0, pts = [];
+    for(k = 0; k <= N; k++){
+      var f = FE_MIN + (FE_MAX - FE_MIN) * k / N, a = stromFormel(f);
+      pts.push([f, a]); maxK = Math.max(maxK, a);
+    }
+    var ymax = schoen(Math.min(maxK, Ue / Math.max(R, 5)) * 1.1 * 1000) / 1000;
+    function X(f){ return l + (f - FE_MIN) / (FE_MAX - FE_MIN) * (W - l - r); }
+    function Y(a){ return H - u - Math.min(a, ymax * 1.05) / ymax * (H - o - u); }
+
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+    ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.font = "13px sans-serif";
+    for(var fg = 50; fg <= FE_MAX + 1e-9; fg += 50){
+      ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(X(fg), o - 6); ctx.lineTo(X(fg), H - u); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = "#64748b"; ctx.fillText(String(fg), X(fg), H - u + 6);
+    }
+    ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(l, o - 6); ctx.lineTo(l, H - u); ctx.lineTo(W - r, H - u); ctx.stroke();
+    ctx.fillStyle = "#5b6b7f"; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+    ctx.fillText("Î in mA (eingeschwungen)", 8, 13);
+    ctx.textAlign = "right"; ctx.fillText(fmt(ymax * 1000, stellen(ymax * 1000)), l - 6, o); ctx.fillText("0", l - 6, H - u);
+    ctx.textAlign = "left"; ctx.fillText("f_e in Hz", W - r + 4, H - u + 16);
+
+    // Eigenfrequenz f₀
+    if(f0 >= FE_MIN && f0 <= FE_MAX){
+      strecke(ctx, X(f0), H - u - 6, X(f0), H - u + 6, TINTE, 2);
+      ctx.fillStyle = TINTE; ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.font = "600 13px sans-serif";
+      ctx.fillText("f₀", X(f0), H - u + 17);
+    }
+    // Kurve aus der Formel
+    ctx.strokeStyle = erreger ? farbI : "#7fd1ae"; ctx.lineWidth = 3; ctx.lineJoin = "round"; ctx.beginPath();
+    for(k = 0; k <= N; k++){ if(k === 0) ctx.moveTo(X(pts[k][0]), Y(pts[k][1])); else ctx.lineTo(X(pts[k][0]), Y(pts[k][1])); }
+    ctx.stroke();
+    // Marke der laufenden Erregung
+    var xe = X(fe), ye = Y(stromFormel(fe));
+    ctx.setLineDash([6, 5]); strecke(ctx, xe, o - 6, xe, H - u, erreger ? farbF : "#cbd5e1", 1.6); ctx.setLineDash([]);
+    ctx.font = "13px sans-serif"; ctx.textBaseline = "middle"; ctx.textAlign = "left";
+    if(erreger){
+      ctx.fillStyle = farbF; ctx.beginPath(); ctx.arc(xe, ye, 6, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = farbU; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(xe, Y(stromAmplitude()), 8, 0, Math.PI * 2); ctx.stroke();
+      ctx.fillStyle = farbF; ctx.fillText("Formel", 220, 12);
+      ctx.fillStyle = farbU; ctx.fillText("Ring: gemessene Stromamplitude in der Simulation", 280, 12);
+    } else {
+      ctx.fillStyle = "#64748b";
+      ctx.fillText("Erreger aus – Kurve gilt für die eingestellten Werte von U_e, L, C und R" + (R === 0 ? " (bei R = 0 ist die Spitze unendlich hoch)" : ""), 220, 12);
+    }
+  }
+
+  verankere();
+  requestAnimationFrame(schritt);
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1",
+    vw2:"Vorwissen 2",
+    vw3:"Vorwissen 3",
+    sim1:"Simulation 1",
+    sim2:"Simulation 2",
+    a1:"Aufgabe 1 (Periode des Kreises)",
+    a2:"Aufgabe 2 (Induktivität für UKW)",
+    a3:"Aufgabe 3 (Zuordnung)",
+    a4:"Aufgabe 4 (Grenzwiderstand)",
+    a5:"Aufgabe 5 (größter Strom)"
+  };
+  var zeilen = ["Elektromagnetischer Schwingkreis – Physik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Offene Aufgabe " + (i + 1) + ":\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>

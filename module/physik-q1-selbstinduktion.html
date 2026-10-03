@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Selbstinduktion – Physik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#1d4ed8;
+  --akzent-hell:#eff6ff;
+  --akzent-rand:#bfdbfe;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#1e3a8a,#1d4ed8);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#1a43b8;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Physik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Selbstinduktion</h1>
+    <div class="meta">
+      <span class="chip">Inhaltsfeld: Ladungen, Felder und Induktion</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+      <span class="chip">ca. 120 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Ein Klassiker aus fast jeder Physiksammlung: Eine Spule mit Eisenkern hängt über einen Schalter an einer Quelle mit nur wenigen Volt. Parallel zur Spule sitzt eine kleine Glimmlampe, und die braucht zum Zünden 80 bis 100 Volt. Schließt du den Schalter, bleibt sie dunkel – kein Wunder, so viel Spannung liegt ja gar nicht an. Öffnest du ihn, blitzt sie hell auf. Für einen Augenblick liegt an der Lampe ein Vielfaches der Quellenspannung, und das an einer Stelle des Kreises, an der überhaupt keine Quelle mehr angeschlossen ist.</p>
+
+  <p>Dasselbe steckt hinter einem Alltagseffekt: Wenn du im Dunkeln bei einem laufenden Gerät mit Motor den Stecker ziehst, siehst du manchmal einen kleinen Funken an den Kontakten. Und wer Schaltungen mit Relais baut, lötet fast immer eine Diode parallel zur Relaisspule, damit Schalter und Transistoren das Abschalten überleben. Auf dieser Seite klärst du drei Fragen: Wie kann beim Öffnen eines Schalters eine höhere Spannung entstehen, als die Quelle liefert? Warum passiert das nur beim Ausschalten, während der Strom beim Einschalten ganz gemächlich anwächst? Und woher nimmt der Funke seine Energie?</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Drei Fragen aus der Sekundarstufe I und der Einführungsphase. Wenn du hier hängst, lohnt sich ein Blick zurück, bevor du weitermachst.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Eine Spule mit dem Drahtwiderstand <span class="m" data-tex="30\,\Omega" data-plain="30 Ω"></span> liegt in Reihe mit einem Widerstand von <span class="m" data-tex="18\,\Omega" data-plain="18 Ω"></span> an einer Gleichspannungsquelle mit <span class="m" data-tex="24\,\mathrm{V}" data-plain="24 V"></span>. Nach sehr langer Zeit fließt ein zeitlich konstanter Strom. Wie groß ist er?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span><span class="m" data-tex="0{,}80\,\mathrm{A}" data-plain="0,80 A"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span><span class="m" data-tex="0{,}50\,\mathrm{A}" data-plain="0,50 A"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span><span class="m" data-tex="1{,}33\,\mathrm{A}" data-plain="1,33 A"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Ein Wagen fährt mit der Geschwindigkeit <span class="m" data-tex="v" data-plain="v"></span>. Seine Geschwindigkeit wird verdreifacht. Wie ändert sich seine kinetische Energie?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span>Sie wird dreimal so groß.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span>Sie wird neunmal so groß.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span>Sie wird sechsmal so groß.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Zwei Wagen mit den Massen <span class="m" data-tex="m" data-plain="m"></span> und <span class="m" data-tex="3m" data-plain="3m"></span> werden aus der Ruhe von derselben konstanten Kraft <span class="m" data-tex="F" data-plain="F"></span> angeschoben. Was gilt nach der gleichen Zeit <span class="m" data-tex="t" data-plain="t"></span> für ihre Geschwindigkeiten?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span>Beide Wagen sind gleich schnell, weil dieselbe Kraft wirkt.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span>Der schwerere Wagen hat nur ein Drittel der Geschwindigkeit des leichteren.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span>Der schwerere Wagen hat nur ein Neuntel der Geschwindigkeit des leichteren.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 SELBSTINDUKTION UND INDUKTIVITÄT =============== -->
+<section id="selbstinduktion">
+  <div class="stufe"><div class="nr">2</div><h2>Selbstinduktion und Induktivität</h2></div>
+
+  <p>Im Modul zur Induktion kam die Flussänderung immer von außen: ein bewegter Magnet, eine gezogene Schleife. Es geht aber auch ohne fremde Hilfe. Ein Strom in einer Spule erzeugt ein Magnetfeld, und dieses Feld durchsetzt die Windungen der Spule selbst. Ändert sich der Strom, ändert sich der Fluss durch die eigenen Windungen, und nach dem Induktionsgesetz entsteht in derselben Spule eine Spannung. Diesen Vorgang nennt man <strong>Selbstinduktion</strong>. Der Amerikaner Joseph Henry entdeckte ihn 1832, unabhängig von Faraday; nach ihm ist die Einheit der Induktivität benannt.</p>
+
+  <p>Für eine Spule mit konstanter Permeabilitätszahl ist das Feld proportional zum Strom, also auch der Fluss durch jede Windung. Der Quotient aus dem gesamten Fluss <span class="m" data-tex="N\cdot\Phi" data-plain="N · Φ"></span> und dem Strom hängt deshalb nur vom Bau der Spule ab. Er heißt <strong>Induktivität</strong>:</p>
+
+  <div class="m block" id="f-l-def" data-tex="L = \dfrac{N\cdot\Phi}{I}" data-plain="L = N · Φ / I"></div>
+
+  <p>Die Einheit ist das Henry: <span class="m" data-tex="1\,\mathrm{H} = 1\,\dfrac{\mathrm{Wb}}{\mathrm{A}} = 1\,\dfrac{\mathrm{V\,s}}{\mathrm{A}} = 1\,\Omega\,\mathrm{s}" data-plain="1 H = 1 Wb/A = 1 V·s/A = 1 Ω·s"></span>. Setzt du <span class="m" data-tex="N\,\Phi = L\,I" data-plain="N · Φ = L · I"></span> in das Induktionsgesetz <span class="m" data-tex="U_{\text{ind}} = -N\,\dot\Phi" data-plain="U_ind = −N · dΦ/dt"></span> ein und ist <span class="m" data-tex="L" data-plain="L"></span> konstant, folgt das Gesetz der Selbstinduktion:</p>
+
+  <div class="m block" id="f-selbstind" data-tex="U_{\text{ind}} = -L\,\dfrac{\mathrm{d}I}{\mathrm{d}t}" data-plain="U_ind = −L · dI/dt"></div>
+
+  <p>Das Minuszeichen ist dasselbe wie im Induktionsgesetz. Der Zählpfeil von <span class="m" data-tex="U_{\text{ind}}" data-plain="U_ind"></span> zeigt in Stromrichtung, so wie man den Pfeil einer Quelle im Kreis zeichnet. Dann gilt:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Situation</th><th>Stromänderung</th><th>Vorzeichen von <span class="m" data-tex="U_{\text{ind}}" data-plain="U_ind"></span></th><th>Wirkung nach Lenz</th></tr>
+    <tr><td>Strom wächst</td><td><span class="m" data-tex="\dfrac{\mathrm{d}I}{\mathrm{d}t} &gt; 0" data-plain="dI/dt &gt; 0"></span></td><td>negativ</td><td>wirkt der Quelle entgegen, bremst den Anstieg</td></tr>
+    <tr><td>Strom konstant</td><td><span class="m" data-tex="\dfrac{\mathrm{d}I}{\mathrm{d}t} = 0" data-plain="dI/dt = 0"></span></td><td>null</td><td>wirkt gar nicht</td></tr>
+    <tr><td>Strom fällt</td><td><span class="m" data-tex="\dfrac{\mathrm{d}I}{\mathrm{d}t} &lt; 0" data-plain="dI/dt &lt; 0"></span></td><td>positiv</td><td>wirkt in Stromrichtung, hält den Strom aufrecht</td></tr>
+  </table>
+  </div>
+
+  <div class="merksatz">
+    <b>Trägheit des Stroms</b>
+    Eine Spule verhält sich gegenüber dem Strom wie ein schwerer Wagen gegenüber der Geschwindigkeit. Sie hat nichts gegen einen konstanten Strom, wehrt sich aber gegen jede Änderung, und zwar umso stärker, je schneller die Änderung erfolgt. Die Induktivität <span class="m" data-tex="L" data-plain="L"></span> spielt dabei die Rolle der Masse.
+  </div>
+
+  <h3>Die lange Spule</h3>
+  <p>Für eine lange, gerade Spule mit <span class="m" data-tex="N" data-plain="N"></span> Windungen, der Länge <span class="m" data-tex="l" data-plain="l"></span> und der Querschnittsfläche <span class="m" data-tex="A" data-plain="A"></span> lässt sich die Induktivität aus den Bauteilmaßen berechnen. Mit einem Kern der Permeabilitätszahl <span class="m" data-tex="\mu_\mathrm{r}" data-plain="µ_r"></span> (Luft: <span class="m" data-tex="\mu_\mathrm{r} = 1" data-plain="µ_r = 1"></span>) gilt</p>
+
+  <div class="m block" id="f-l-spule" data-tex="L = \mu_0\,\mu_\mathrm{r}\,\dfrac{N^2 A}{l}" data-plain="L = µ₀ · µ_r · N² · A / l"></div>
+
+  <p>mit der magnetischen Feldkonstante <span class="m" data-tex="\mu_0 = 4\pi\cdot10^{-7}\,\dfrac{\mathrm{V\,s}}{\mathrm{A\,m}}" data-plain="µ₀ = 4π · 10⁻⁷ V·s/(A·m)"></span>. Achte darauf, dass die Länge ein kleines <span class="m" data-tex="l" data-plain="l"></span> ist und die Induktivität ein großes <span class="m" data-tex="L" data-plain="L"></span>.</p>
+
+  <details>
+    <summary>Herleitung von <span class="m" data-tex="L = \mu_0\mu_\mathrm{r}N^2A/l" data-plain="L = µ₀·µ_r·N²·A/l"></span> und Erklärung des Faktors <span class="m" data-tex="N^2" data-plain="N²"></span></summary>
+    <p>Im Inneren einer langen Spule ist das Feld homogen mit der Flussdichte <span class="m" data-tex="B = \mu_0\,\mu_\mathrm{r}\,\dfrac{N\,I}{l}" data-plain="B = µ₀ · µ_r · N · I / l"></span>. Der Fluss durch eine Windung ist <span class="m" data-tex="\Phi = B\,A" data-plain="Φ = B · A"></span>, der Gesamtfluss durch alle Windungen also <span class="m" data-tex="N\,\Phi = \mu_0\,\mu_\mathrm{r}\,\dfrac{N^2 A}{l}\,I" data-plain="N · Φ = µ₀ · µ_r · N² · A / l · I"></span>. Teilst du durch <span class="m" data-tex="I" data-plain="I"></span>, bleibt die Induktivität übrig.</p>
+    <p>Das Quadrat hat zwei Ursachen: <span class="m" data-tex="N" data-plain="N"></span> Windungen erzeugen ein <span class="m" data-tex="N" data-plain="N"></span>-mal so starkes Feld, und <span class="m" data-tex="N" data-plain="N"></span> Windungen werden von diesem Feld durchsetzt. Verdoppelst du bei gleicher Länge und gleichem Querschnitt die Windungszahl, wird die Induktivität viermal so groß.</p>
+    <p>Die Formel setzt voraus, dass die Spule lang gegenüber ihrem Durchmesser ist. Ein weicher Eisenkern vergrößert <span class="m" data-tex="L" data-plain="L"></span> um den Faktor <span class="m" data-tex="\mu_\mathrm{r}" data-plain="µ_r"></span> (Richtwert: einige Hundert bis einige Tausend). Ab einer Flussdichte von etwa 2 T ist das Eisen gesättigt, dann bleibt <span class="m" data-tex="L" data-plain="L"></span> nicht mehr konstant. In diesem Modul rechnest du immer mit einer konstanten Induktivität.</p>
+  </details>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Die Selbstinduktion verhindert den Strom." Falsch. Sie hemmt nur seine <em>Änderung</em>. Fließt ein konstanter Strom, ist <span class="m" data-tex="\mathrm{d}I/\mathrm{d}t = 0" data-plain="dI/dt = 0"></span> und damit <span class="m" data-tex="U_{\text{ind}} = 0" data-plain="U_ind = 0"></span>. Dann wirkt die Spule nur noch mit dem Widerstand ihres Drahtes.
+  </div>
+</section>
+
+<!-- =============== 3 EIN- UND AUSSCHALTVORGANG =============== -->
+<section id="schalten">
+  <div class="stufe"><div class="nr">3</div><h2>Ein- und Ausschaltvorgang</h2></div>
+
+  <p>Wir betrachten die Schaltung aus der Simulation weiter unten. Eine Quelle mit der Gleichspannung <span class="m" data-tex="U_0" data-plain="U₀"></span> liegt über einen Schalter an einer Spule. Deren Induktivität ist <span class="m" data-tex="L" data-plain="L"></span>, der Gesamtwiderstand ihres Kreises <span class="m" data-tex="R" data-plain="R"></span> (Spulendraht plus etwaiger Vorwiderstand). Parallel zur Spule liegt ein Zweig mit dem Widerstand <span class="m" data-tex="R_S" data-plain="R_S"></span>. Solange der Schalter geschlossen ist, hängt dieser Zweig direkt an der Quelle und beeinflusst den Strom in der Spule nicht. Öffnest du den Schalter, bilden Spule und <span class="m" data-tex="R_S" data-plain="R_S"></span> einen geschlossenen Kreis, den <em>Freilaufkreis</em>. Sein Gesamtwiderstand ist <span class="m" data-tex="R_F = R + R_S" data-plain="R_F = R + R_S"></span>.</p>
+
+  <h3>Einschalten: der Strom wächst gemächlich</h3>
+  <p>Im Einschaltkreis liefert die Quelle <span class="m" data-tex="U_0" data-plain="U₀"></span>, die Selbstinduktion liefert <span class="m" data-tex="U_{\text{ind}}" data-plain="U_ind"></span>, und beide zusammen treiben den Strom durch den Widerstand:</p>
+
+  <div class="m block" id="f-masche-ein" data-tex="U_0 + U_{\text{ind}} = R\cdot I" data-plain="U₀ + U_ind = R · I"></div>
+
+  <p>Im Moment des Schließens ist <span class="m" data-tex="I = 0" data-plain="I = 0"></span>, also ist <span class="m" data-tex="U_{\text{ind}} = -U_0" data-plain="U_ind = −U₀"></span>: Die Selbstinduktion hält der Quelle vollständig die Waage, es fließt noch nichts. Mit <span class="m" data-tex="U_{\text{ind}} = -L\,\mathrm{d}I/\mathrm{d}t" data-plain="U_ind = −L · dI/dt"></span> wächst der Strom zu Beginn mit der Rate <span class="m" data-tex="\mathrm{d}I/\mathrm{d}t = U_0/L" data-plain="dI/dt = U₀/L"></span>. Je größer <span class="m" data-tex="I" data-plain="I"></span> wird, desto mehr Spannung fällt an <span class="m" data-tex="R" data-plain="R"></span> ab, desto kleiner wird <span class="m" data-tex="|U_{\text{ind}}|" data-plain="|U_ind|"></span>, und der Anstieg flacht ab. Die Lösung dieser Gleichung ist ein exponentielles Anwachsen:</p>
+
+  <div class="m block" id="f-i-ein" data-tex="I(t) = I_\infty\,\bigl(1 - e^{-t/\tau}\bigr)" data-plain="I(t) = I_∞ · (1 − e^(−t/τ))"></div>
+
+  <p>Dabei ist <span class="m" data-tex="I_\infty = U_0/R" data-plain="I_∞ = U₀/R"></span> der Strom, der sich nach sehr langer Zeit einstellt, und <span class="m" data-tex="\tau" data-plain="τ"></span> die <strong>Zeitkonstante</strong>:</p>
+
+  <div class="m block" id="f-tau" data-tex="\tau = \dfrac{L}{R}" data-plain="τ = L / R"></div>
+
+  <p>Die Einheit passt: <span class="m" data-tex="\mathrm{H}/\Omega = (\mathrm{V\,s/A})/(\mathrm{V/A}) = \mathrm{s}" data-plain="H/Ω = (V·s/A)/(V/A) = s"></span>. Die Spannung an der Spule ist <span class="m" data-tex="U_{\text{ind}}(t) = -U_0\,e^{-t/\tau}" data-plain="U_ind(t) = −U₀ · e^(−t/τ)"></span>, sie klingt also mit derselben Zeitkonstante ab.</p>
+
+  <details>
+    <summary>Nachprüfen: Löst die Funktion die Gleichung?</summary>
+    <p>Aus der Maschenregel wird mit <span class="m" data-tex="U_{\text{ind}} = -L\,\mathrm{d}I/\mathrm{d}t" data-plain="U_ind = −L · dI/dt"></span> die Gleichung <span class="m" data-tex="U_0 = R\,I + L\,\mathrm{d}I/\mathrm{d}t" data-plain="U₀ = R · I + L · dI/dt"></span>. Setze <span class="m" data-tex="I = I_\infty(1 - e^{-t/\tau})" data-plain="I = I_∞ · (1 − e^(−t/τ))"></span> ein. Die Ableitung ist <span class="m" data-tex="\mathrm{d}I/\mathrm{d}t = (I_\infty/\tau)\,e^{-t/\tau}" data-plain="dI/dt = (I_∞/τ) · e^(−t/τ)"></span>. Mit <span class="m" data-tex="\tau = L/R" data-plain="τ = L/R"></span> ergibt sich für den Term <span class="m" data-tex="L\,\mathrm{d}I/\mathrm{d}t" data-plain="L · dI/dt"></span> genau <span class="m" data-tex="R\,I_\infty\,e^{-t/\tau}" data-plain="R · I_∞ · e^(−t/τ)"></span>. Dieser Term hebt sich mit dem e-Anteil von <span class="m" data-tex="R\,I" data-plain="R · I"></span> auf, übrig bleibt <span class="m" data-tex="R\,I_\infty = U_0" data-plain="R · I_∞ = U₀"></span>. Die Gleichung ist erfüllt.</p>
+  </details>
+
+  <p>Wie schnell der Strom seinen Endwert erreicht, zeigt die Tabelle. Nach <span class="m" data-tex="\tau" data-plain="τ"></span> ist er noch nicht am Ziel, sondern erst bei knapp zwei Dritteln:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Zeit</th><th><span class="m" data-tex="\tau" data-plain="τ"></span></th><th><span class="m" data-tex="2\tau" data-plain="2τ"></span></th><th><span class="m" data-tex="3\tau" data-plain="3τ"></span></th><th><span class="m" data-tex="5\tau" data-plain="5τ"></span></th></tr>
+    <tr><td>Anteil von <span class="m" data-tex="I_\infty" data-plain="I_∞"></span></td><td>63,2 %</td><td>86,5 %</td><td>95,0 %</td><td>99,3 %</td></tr>
+  </table>
+  </div>
+
+  <p>Grafisch heißt das: Die Anfangstangente an <span class="m" data-tex="I(t)" data-plain="I(t)"></span> schneidet den Endwert genau bei <span class="m" data-tex="t = \tau" data-plain="t = τ"></span>.</p>
+
+  <h3>Ausschalten: die Spannung springt</h3>
+  <p>Öffnest du den Schalter, fließt der Spulenstrom im Freilaufkreis weiter. Die Quelle ist abgetrennt, also entfällt <span class="m" data-tex="U_0" data-plain="U₀"></span>. Als Maschenregel bleibt</p>
+
+  <div class="m block" id="f-masche-aus" data-tex="U_{\text{ind}} = R_F\cdot I" data-plain="U_ind = R_F · I"></div>
+
+  <p>Mit <span class="m" data-tex="U_{\text{ind}} = -L\,\mathrm{d}I/\mathrm{d}t" data-plain="U_ind = −L · dI/dt"></span> folgt <span class="m" data-tex="\mathrm{d}I/\mathrm{d}t = -(R_F/L)\,I" data-plain="dI/dt = −(R_F/L) · I"></span>. Das ist die Gleichung eines exponentiellen Abklingens. Mit dem Strom <span class="m" data-tex="I_0" data-plain="I₀"></span> im Moment des Öffnens gilt</p>
+
+  <div class="m block" id="f-i-aus" data-tex="I(t) = I_0\,e^{-t/\tau_{\text{aus}}}" data-plain="I(t) = I₀ · e^(−t/τ_aus)"></div>
+
+  <div class="m block" id="f-tau-aus" data-tex="\tau_{\text{aus}} = \dfrac{L}{R_F}" data-plain="τ_aus = L / R_F"></div>
+
+  <p>Der entscheidende Punkt: Der Strom durch eine Spule kann nicht springen, denn ein Sprung hieße <span class="m" data-tex="\mathrm{d}I/\mathrm{d}t \to \infty" data-plain="dI/dt → ∞"></span> und damit unendlich viel Spannung. Direkt nach dem Öffnen fließt also noch <span class="m" data-tex="I_0" data-plain="I₀"></span>, und dieser Strom muss durch den Widerstand <span class="m" data-tex="R_F" data-plain="R_F"></span>. Dafür braucht es die Spannung</p>
+
+  <div class="m block" id="f-spitze" data-tex="U_{\text{ind}}(0^+) = R_F\cdot I_0" data-plain="U_ind(0⁺) = R_F · I₀"></div>
+
+  <p>Sie ist positiv, zeigt also in Stromrichtung und hält den Strom aufrecht. Je größer <span class="m" data-tex="R_F" data-plain="R_F"></span>, desto höher die Spitze und desto schneller das Abklingen. Ein geöffneter Schalter ohne Freilaufzweig hat einen riesigen Widerstand: Die Luftstrecke muss durchschlagen werden, und es entsteht ein Funke.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th></th><th>Einschalten</th><th>Ausschalten</th></tr>
+    <tr><td>Maschenregel</td><td><span class="m" data-tex="U_0 + U_{\text{ind}} = R\,I" data-plain="U₀ + U_ind = R · I"></span></td><td><span class="m" data-tex="U_{\text{ind}} = R_F\,I" data-plain="U_ind = R_F · I"></span></td></tr>
+    <tr><td>Strom</td><td>wächst von 0 auf <span class="m" data-tex="I_\infty" data-plain="I_∞"></span></td><td>fällt von <span class="m" data-tex="I_0" data-plain="I₀"></span> auf 0</td></tr>
+    <tr><td>Vorzeichen von U_ind</td><td>negativ (bremst)</td><td>positiv (stützt)</td></tr>
+    <tr><td>Zeitkonstante</td><td><span class="m" data-tex="L/R" data-plain="L/R"></span></td><td><span class="m" data-tex="L/R_F" data-plain="L/R_F"></span></td></tr>
+  </table>
+  </div>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „<span class="m" data-tex="\tau" data-plain="τ"></span> ist die Zeit, bis der Strom seinen Endwert erreicht hat." Falsch. Nach <span class="m" data-tex="\tau" data-plain="τ"></span> sind erst gut 63 % des Endwerts erreicht. Praktisch ist der Vorgang nach etwa <span class="m" data-tex="5\tau" data-plain="5τ"></span> abgeschlossen.
+  </div>
+
+  <div class="merksatz">
+    <b>Zurück zum Einstieg</b>
+    Solange die Glimmlampe nicht zündet, hat der Spulenstrom nach dem Öffnen kaum einen Weg. Die Selbstinduktionsspannung steigt deshalb so weit an, bis die Lampe zündet und den Strom aufnimmt. Die 80 bis 100 Volt sind also nicht die Quellenspannung, sondern das, was die Spule beim Öffnen aufbringen kann. Ein Kreis mit hohem Widerstand <span class="m" data-tex="R_F" data-plain="R_F"></span> erzeugt eine hohe Spannungsspitze, obwohl die Quelle nur wenige Volt liefert. Woher die Energie dafür stammt, klärt der nächste Abschnitt.
+  </div>
+</section>
+
+<!-- =============== 4 ENERGIE IM MAGNETFELD =============== -->
+<section id="energie">
+  <div class="stufe"><div class="nr">4</div><h2>Energie im Magnetfeld</h2></div>
+
+  <p>Beim Einschalten arbeitet die Quelle gegen die Selbstinduktionsspannung, denn diese bremst den Anstieg. Diese Arbeit ist nicht verloren: Sie steckt als Energie im Magnetfeld der Spule und kommt beim Ausschalten wieder heraus. Sie lässt sich aus dem Gesetz der Selbstinduktion berechnen:</p>
+
+  <div class="m block" id="f-energie" data-tex="W_{\text{mag}} = \dfrac{1}{2}\,L\,I^2" data-plain="W_mag = ½ · L · I²"></div>
+
+  <details>
+    <summary>Herleitung der Feldenergie</summary>
+    <p>Um den Strom gegen die Selbstinduktionsspannung weiter anwachsen zu lassen, muss die Quelle die Leistung <span class="m" data-tex="P = -U_{\text{ind}}\,I = L\,I\,\dfrac{\mathrm{d}I}{\mathrm{d}t}" data-plain="P = −U_ind · I = L · I · dI/dt"></span> aufbringen. In der Zeit <span class="m" data-tex="\mathrm{d}t" data-plain="dt"></span> ist das die Arbeit <span class="m" data-tex="L\,I\,\mathrm{d}I" data-plain="L · I · dI"></span>. Summierst du vom Strom null bis zum Strom <span class="m" data-tex="I" data-plain="I"></span> auf, ergibt sich <span class="m" data-tex="W = \int_0^{I} L\,i\,\mathrm{d}i = \tfrac{1}{2}L\,I^2" data-plain="W = ∫ L · i · di = ½ · L · I²"></span>.</p>
+    <p>Beim Ausschalten kommt genau diese Energie im Freilaufkreis wieder heraus. Die Leistung im Widerstand <span class="m" data-tex="R_F" data-plain="R_F"></span> ist <span class="m" data-tex="R_F\,I^2" data-plain="R_F · I²"></span> mit <span class="m" data-tex="I = I_0 e^{-t/\tau_{\text{aus}}}" data-plain="I = I₀ · e^(−t/τ_aus)"></span>. Das Integral über alle Zeiten ergibt <span class="m" data-tex="R_F\,I_0^2\,\tau_{\text{aus}}/2" data-plain="R_F · I₀² · τ_aus/2"></span>, und mit <span class="m" data-tex="\tau_{\text{aus}} = L/R_F" data-plain="τ_aus = L/R_F"></span> bleibt <span class="m" data-tex="\tfrac{1}{2}L\,I_0^2" data-plain="½ · L · I₀²"></span>. Die Bilanz geht auf, unabhängig von <span class="m" data-tex="R_F" data-plain="R_F"></span>.</p>
+  </details>
+
+  <p>Die Energie steckt im Feld, nicht im Draht. Bezogen auf das Volumen <span class="m" data-tex="V" data-plain="V"></span> ergibt sich die Energiedichte. Für die lange Spule mit <span class="m" data-tex="V = A\,l" data-plain="V = A · l"></span> folgt aus <span class="m" data-tex="W_{\text{mag}} = \tfrac{1}{2}L\,I^2" data-plain="W_mag = ½ · L · I²"></span>, <span class="m" data-tex="L = \mu_0\mu_\mathrm{r}N^2A/l" data-plain="L = µ₀·µ_r·N²·A/l"></span> und <span class="m" data-tex="I = B\,l/(\mu_0\mu_\mathrm{r}N)" data-plain="I = B·l/(µ₀·µ_r·N)"></span>:</p>
+
+  <div class="m block" id="f-dichte" data-tex="w_{\text{mag}} = \dfrac{B^2}{2\,\mu_0\,\mu_\mathrm{r}}" data-plain="w_mag = B² / (2 · µ₀ · µ_r)"></div>
+
+  <p>Diese Beziehung hängt nur noch vom Feld ab, nicht mehr von der Spule, und gilt deshalb auch außerhalb von Spulen. Das Gegenstück im elektrischen Feld ist die Energiedichte <span class="m" data-tex="\tfrac{1}{2}\varepsilon_0E^2" data-plain="½ · ε₀ · E²"></span>: In beiden Fällen ist die Energie proportional zum Quadrat der Feldgröße.</p>
+
+  <div class="merksatz">
+    <b>Woher der Funke seine Energie hat</b>
+    Nicht aus dem Nichts. Die Energie <span class="m" data-tex="\tfrac{1}{2}L\,I_0^2" data-plain="½ · L · I₀²"></span> hat die Quelle beim Einschalten in das Magnetfeld gepumpt. Beim Öffnen wird sie in kurzer Zeit im Funken oder in <span class="m" data-tex="R_F" data-plain="R_F"></span> freigesetzt. Die Spannungsspitze ist nur der Weg, auf dem sie herauskommt, nicht ihre Quelle. Beispiel: Bei <span class="m" data-tex="L = 0{,}50\,\mathrm{H}" data-plain="L = 0,50 H"></span> und <span class="m" data-tex="I_0 = 0{,}60\,\mathrm{A}" data-plain="I₀ = 0,60 A"></span> sind es <span class="m" data-tex="\tfrac{1}{2}\cdot0{,}50\,\mathrm{H}\cdot(0{,}60\,\mathrm{A})^2 = 0{,}090\,\mathrm{J}" data-plain="½ · 0,50 H · (0,60 A)² = 0,090 J"></span>, also 90 mJ.
+  </div>
+</section>
+
+<!-- =============== 5 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">5</div><h2>Der RL-Kreis in der Simulation</h2></div>
+
+  <p>Die Simulation zeigt die Schaltung aus Abschnitt 3: Quelle, Schalter, Spule mit Drahtwiderstand <span class="m" data-tex="R" data-plain="R"></span>, daneben die Glimmlampe und der Freilaufzweig mit <span class="m" data-tex="R_S" data-plain="R_S"></span>. Beim Einschalten und beim Ausschalten entstehen zeitgleich das <span class="m" data-tex="I\text{-}t" data-plain="I-t"></span>- und das <span class="m" data-tex="U_{\text{ind}}\text{-}t" data-plain="U_ind-t"></span>-Diagramm. Die Zeitachse trägt Millisekunden; der Vorgang läuft in Zeitlupe ab, sodass das Zeitfenster von sechs Zeitkonstanten in etwa fünf Sekunden abläuft.</p>
+
+  <p>Die Glimmlampe zündet, sobald die Spannung an der Spule 90 V übersteigt. Sie wird dabei als reiner Spannungsmelder behandelt, ihr Strom bleibt unberücksichtigt. Nimmst du den Freilaufzweig heraus, schließt ein Funke am geöffneten Schalter den Kreis; dafür wird ein Widerstand von 5000 Ω angenommen (Modellannahme). Änderungen an <span class="m" data-tex="U_0" data-plain="U₀"></span>, <span class="m" data-tex="R" data-plain="R"></span> und <span class="m" data-tex="L" data-plain="L"></span> setzen die Schaltung zurück, <span class="m" data-tex="R_S" data-plain="R_S"></span> wirkt beim nächsten Ausschalten.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    1. Schalte mit den Voreinstellungen ein und warte, bis sich der Strom nicht mehr ändert. Achte darauf, wann die I-t-Kurve am steilsten ist und wann <span class="m" data-tex="U_{\text{ind}}" data-plain="U_ind"></span> seinen größten Betrag hat.<br>
+    2. Schalte aus. Wiederhole Ein- und Ausschalten mit anderem <span class="m" data-tex="R_S" data-plain="R_S"></span> und vergleiche Höhe und Breite des Spannungspulses sowie das Aufleuchten der Lampe.<br>
+    3. Finde durch Probieren den Schutzwiderstand, ab dem die Lampe gerade zündet, und prüfe deinen Wert durch Rechnung.
+  </div>
+
+  <div class="sim">
+    <canvas id="cvSim" width="1000" height="300"></canvas>
+    <div class="trenner"></div>
+    <canvas id="cvI" width="1000" height="170"></canvas>
+    <div class="trenner"></div>
+    <canvas id="cvU" width="1000" height="170"></canvas>
+
+    <div class="anzeige">
+      <div>Stromstärke I<span id="aI">0,000 A</span></div>
+      <div>Spannung U_ind<span id="aU">0,0 V</span></div>
+      <div>Zeitkonstante τ<span id="aTau">25,0 ms</span></div>
+      <div>Feldenergie ½·L·I²<span id="aW">0,0 mJ</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label>Quellenspannung U₀ <b><span id="lU">12</span> V</b></label>
+          <input type="range" id="rU" min="6" max="24" value="12">
+        </div>
+        <div>
+          <label>Widerstand R <b><span id="lR">20</span> Ω</b></label>
+          <input type="range" id="rR" min="10" max="50" value="20">
+        </div>
+        <div>
+          <label>Induktivität L <b><span id="lL">0,50</span> H</b></label>
+          <input type="range" id="rL" min="10" max="100" step="5" value="50">
+        </div>
+        <div>
+          <label>Schutzwiderstand R_S <b><span id="lS">200</span> Ω</b></label>
+          <input type="range" id="rS" min="0" max="400" step="10" value="200">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button class="primaer" id="bEin">Einschalten</button>
+        <button id="bAus">Ausschalten</button>
+        <button id="bReset">Zurücksetzen</button>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px;margin-left:6px">
+          <input type="checkbox" id="cOhne" style="accent-color:var(--akzent);width:16px;height:16px">
+          Freilaufzweig entfernen (Funke)
+        </label>
+      </div>
+      <p id="simHinweis" aria-live="polite" style="margin:10px 0 0;font-size:14px;color:var(--grau)"></p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Du schaltest denselben Strom einmal mit <span class="m" data-tex="R_S = 100\,\Omega" data-plain="R_S = 100 Ω"></span> und einmal mit <span class="m" data-tex="R_S = 300\,\Omega" data-plain="R_S = 300 Ω"></span> aus. Was passiert mit der <em>Fläche</em> unter dem Spannungspuls im U_ind-t-Diagramm?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>Sie wird größer, weil die Spitze höher ist.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>Sie bleibt gleich: höhere Spitze bei kürzerer Dauer.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>Sie wird kleiner, weil der Puls kürzer ist.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Beim Ausschalten klingt der Strom mit <span class="m" data-tex="R_S = 400\,\Omega" data-plain="R_S = 400 Ω"></span> deutlich schneller ab als mit <span class="m" data-tex="R_S = 100\,\Omega" data-plain="R_S = 100 Ω"></span>, obwohl vorher derselbe Strom floss. Die im Magnetfeld gespeicherte Energie ist in beiden Fällen gleich. Wie passt das zusammen?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>Bei 400 Ω war weniger Energie im Feld gespeichert.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span>Dieselbe Energie wird bei größerem Widerstand in kürzerer Zeit umgesetzt.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>Bei größerem Widerstand wird weniger Energie umgesetzt, deshalb ist der Vorgang früher vorbei.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+</section>
+
+<!-- =============== 6 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">6</div><h2>Übungen</h2></div>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Eine lange Spule ohne Kern hat <span class="m" data-tex="N = 500" data-plain="N = 500"></span> Windungen, die Länge <span class="m" data-tex="l = 25\,\mathrm{cm}" data-plain="l = 25 cm"></span> und die Querschnittsfläche <span class="m" data-tex="A = 12\,\mathrm{cm^2}" data-plain="A = 12 cm²"></span>. Berechne ihre Induktivität.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="H">H</option>
+        <option value="mH">mH</option>
+        <option value="V">V</option>
+        <option value="Wb">Wb</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Rechne Länge und Fläche zuerst in Meter und Quadratmeter um. Ohne Kern ist die Permeabilitätszahl 1.</div>
+    <div class="hilfe-text" data-stufe="2">Die lange Spule hat die Induktivität <span class="m" data-tex="L = \mu_0\,\mu_\mathrm{r}\,\dfrac{N^2 A}{l}" data-plain="L = µ₀ · µ_r · N² · A / l"></span> mit <span class="m" data-tex="\mu_0 = 4\pi\cdot10^{-7}\,\mathrm{V\,s/(A\,m)}" data-plain="µ₀ = 4π · 10⁻⁷ V·s/(A·m)"></span> und <span class="m" data-tex="\mu_\mathrm{r} = 1" data-plain="µ_r = 1"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="A = 12\cdot10^{-4}\,\mathrm{m^2}" data-plain="A = 12 · 10⁻⁴ m²"></span>, <span class="m" data-tex="l = 0{,}25\,\mathrm{m}" data-plain="l = 0,25 m"></span>, also <span class="m" data-tex="L = 4\pi\cdot10^{-7}\,\dfrac{\mathrm{V\,s}}{\mathrm{A\,m}}\cdot\dfrac{500^2\cdot12\cdot10^{-4}\,\mathrm{m^2}}{0{,}25\,\mathrm{m}} = 1{,}51\cdot10^{-3}\,\mathrm{H} = 1{,}51\,\mathrm{mH}" data-plain="L = 4π · 10⁻⁷ V·s/(A·m) · 500² · 12 · 10⁻⁴ m² / 0,25 m = 1,51 · 10⁻³ H = 1,51 mH"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Durch eine Spule mit der Induktivität <span class="m" data-tex="L = 0{,}80\,\mathrm{H}" data-plain="L = 0,80 H"></span> fließt ein Strom von <span class="m" data-tex="2{,}5\,\mathrm{A}" data-plain="2,5 A"></span>. Er wird beim Öffnen des Schalters innerhalb von <span class="m" data-tex="5{,}0\,\mathrm{ms}" data-plain="5,0 ms"></span> gleichmäßig auf null verringert. Berechne den Betrag der Selbstinduktionsspannung.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="V">V</option>
+        <option value="kV">kV</option>
+        <option value="A">A</option>
+        <option value="W">W</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Bei gleichmäßiger Änderung darf der Differentialquotient durch den Differenzenquotienten ersetzt werden. Wandle die Zeit in Sekunden um.</div>
+    <div class="hilfe-text" data-stufe="2">Für den Betrag gilt <span class="m" data-tex="|U_{\text{ind}}| = L\,\dfrac{|\Delta I|}{\Delta t}" data-plain="|U_ind| = L · |ΔI| / Δt"></span> mit <span class="m" data-tex="\Delta t = 0{,}0050\,\mathrm{s}" data-plain="Δt = 0,0050 s"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="|U_{\text{ind}}| = 0{,}80\,\mathrm{H}\cdot\dfrac{2{,}5\,\mathrm{A}}{0{,}0050\,\mathrm{s}} = 0{,}80\,\mathrm{H}\cdot500\,\dfrac{\mathrm{A}}{\mathrm{s}} = 400\,\mathrm{V}" data-plain="|U_ind| = 0,80 H · 2,5 A / 0,0050 s = 0,80 H · 500 A/s = 400 V"></span>. Das ist ein Vielfaches der Zündspannung einer Glimmlampe, obwohl die Quelle nur wenige Volt liefern muss.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die Diagramme zeigen den Strom <span class="m" data-tex="I(t)" data-plain="I(t)"></span> in einer Spule. Diagramm A gehört zu einer Spule mit <span class="m" data-tex="L = 0{,}50\,\mathrm{H}" data-plain="L = 0,50 H"></span> und <span class="m" data-tex="R = 20\,\Omega" data-plain="R = 20 Ω"></span>, die an <span class="m" data-tex="U_0 = 12\,\mathrm{V}" data-plain="U₀ = 12 V"></span> eingeschaltet wird; die gestrichelte Linie markiert dessen Endwert. Ordne jeder Situation das passende Diagramm zu.</div>
+
+    <div class="diagramme">
+      <figure><svg viewBox="0 0 160 90"><line x1="12" y1="78" x2="152" y2="78" stroke="#94a3b8"/><line x1="18" y1="8" x2="18" y2="82" stroke="#94a3b8"/><line x1="18" y1="20" x2="150" y2="20" stroke="#94a3b8" stroke-dasharray="4 3"/><polyline points="18.0,78.0 21.2,70.1 24.4,63.4 27.6,57.5 30.8,52.4 34.0,48.0 37.2,44.2 40.4,41.0 43.6,38.1 46.8,35.7 50.0,33.5 53.2,31.7 56.4,30.1 59.6,28.8 62.8,27.6 66.0,26.5 69.2,25.7 72.4,24.9 75.6,24.2 78.8,23.7 82.0,23.2 85.2,22.7 88.4,22.4 91.6,22.0 94.8,21.8 98.0,21.5 101.2,21.3 104.4,21.1 107.6,21.0 110.8,20.9 114.0,20.7 117.2,20.6 120.4,20.6 123.6,20.5 126.8,20.4 130.0,20.4 133.2,20.3 136.4,20.3 139.6,20.2 142.8,20.2 146.0,20.2" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>A</figcaption></figure>
+      <figure><svg viewBox="0 0 160 90"><line x1="12" y1="78" x2="152" y2="78" stroke="#94a3b8"/><line x1="18" y1="8" x2="18" y2="82" stroke="#94a3b8"/><line x1="18" y1="20" x2="150" y2="20" stroke="#94a3b8" stroke-dasharray="4 3"/><polyline points="18.0,20.0 21.2,27.9 24.4,34.6 27.6,40.5 30.8,45.6 34.0,50.0 37.2,53.8 40.4,57.0 43.6,59.9 46.8,62.3 50.0,64.5 53.2,66.3 56.4,67.9 59.6,69.2 62.8,70.4 66.0,71.5 69.2,72.3 72.4,73.1 75.6,73.8 78.8,74.3 82.0,74.8 85.2,75.3 88.4,75.6 91.6,76.0 94.8,76.2 98.0,76.5 101.2,76.7 104.4,76.9 107.6,77.0 110.8,77.1 114.0,77.3 117.2,77.4 120.4,77.4 123.6,77.5 126.8,77.6 130.0,77.6 133.2,77.7 136.4,77.7 139.6,77.8 142.8,77.8 146.0,77.8" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>B</figcaption></figure>
+      <figure><svg viewBox="0 0 160 90"><line x1="12" y1="78" x2="152" y2="78" stroke="#94a3b8"/><line x1="18" y1="8" x2="18" y2="82" stroke="#94a3b8"/><line x1="18" y1="20" x2="150" y2="20" stroke="#94a3b8" stroke-dasharray="4 3"/><polyline points="18.0,78.0 21.2,73.9 24.4,70.1 27.6,66.6 30.8,63.4 34.0,60.3 37.2,57.5 40.4,54.9 43.6,52.4 46.8,50.1 50.0,48.0 53.2,46.1 56.4,44.2 59.6,42.5 62.8,41.0 66.0,39.5 69.2,38.1 72.4,36.8 75.6,35.7 78.8,34.6 82.0,33.5 85.2,32.6 88.4,31.7 91.6,30.9 94.8,30.1 98.0,29.4 101.2,28.8 104.4,28.1 107.6,27.6 110.8,27.0 114.0,26.5 117.2,26.1 120.4,25.7 123.6,25.3 126.8,24.9 130.0,24.5 133.2,24.2 136.4,23.9 139.6,23.7 142.8,23.4 146.0,23.2" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>C</figcaption></figure>
+      <figure><svg viewBox="0 0 160 90"><line x1="12" y1="78" x2="152" y2="78" stroke="#94a3b8"/><line x1="18" y1="8" x2="18" y2="82" stroke="#94a3b8"/><line x1="18" y1="20" x2="150" y2="20" stroke="#94a3b8" stroke-dasharray="4 3"/><polyline points="18.0,78.0 21.2,70.7 24.4,65.2 27.6,61.1 30.8,58.1 34.0,55.8 37.2,54.1 40.4,52.8 43.6,51.8 46.8,51.1 50.0,50.6 53.2,50.2 56.4,49.9 59.6,49.7 62.8,49.5 66.0,49.4 69.2,49.3 72.4,49.2 75.6,49.2 78.8,49.1 82.0,49.1 85.2,49.1 88.4,49.0 91.6,49.0 94.8,49.0 98.0,49.0 101.2,49.0 104.4,49.0 107.6,49.0 110.8,49.0 114.0,49.0 117.2,49.0 120.4,49.0 123.6,49.0 126.8,49.0 130.0,49.0 133.2,49.0 136.4,49.0 139.6,49.0 142.8,49.0 146.0,49.0" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>D</figcaption></figure>
+    </div>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="A"><span>Die Spule aus Diagramm A wird an dieselbe Quelle geschlossen (Vergleichsfall).</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="C"><span>Wie A, aber die Spule hat die doppelte Induktivität.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="D"><span>Wie A, aber der Widerstand des Kreises ist doppelt so groß.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="B"><span>Der Schalter wird geöffnet, nachdem sich der Strom aus A eingestellt hat; der Strom fließt im Freilaufkreis weiter.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Eine Spule mit <span class="m" data-tex="L = 0{,}50\,\mathrm{H}" data-plain="L = 0,50 H"></span> und dem Gesamtwiderstand <span class="m" data-tex="R = 20\,\Omega" data-plain="R = 20 Ω"></span> wird zur Zeit <span class="m" data-tex="t = 0" data-plain="t = 0"></span> an eine Gleichspannung von <span class="m" data-tex="U_0 = 12\,\mathrm{V}" data-plain="U₀ = 12 V"></span> geschlossen; der Anfangsstrom ist null. Berechne die Stromstärke <span class="m" data-tex="50\,\mathrm{ms}" data-plain="50 ms"></span> nach dem Einschalten.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="A">A</option>
+        <option value="mA">mA</option>
+        <option value="V">V</option>
+        <option value="s">s</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Berechne zuerst die Zeitkonstante und den Endwert des Stroms. Dann siehst du, wie viele Zeitkonstanten in 50 ms stecken.</div>
+    <div class="hilfe-text" data-stufe="2">Der Einschaltstrom ist <span class="m" data-tex="I(t) = I_\infty\,(1 - e^{-t/\tau})" data-plain="I(t) = I_∞ · (1 − e^(−t/τ))"></span> mit <span class="m" data-tex="\tau = L/R" data-plain="τ = L/R"></span> und <span class="m" data-tex="I_\infty = U_0/R" data-plain="I_∞ = U₀/R"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\tau = \dfrac{0{,}50\,\mathrm{H}}{20\,\Omega} = 25\,\mathrm{ms}" data-plain="τ = 0,50 H / 20 Ω = 25 ms"></span> und <span class="m" data-tex="I_\infty = \dfrac{12\,\mathrm{V}}{20\,\Omega} = 0{,}60\,\mathrm{A}" data-plain="I_∞ = 12 V / 20 Ω = 0,60 A"></span>. Wegen <span class="m" data-tex="t/\tau = 2" data-plain="t/τ = 2"></span> ist <span class="m" data-tex="I = 0{,}60\,\mathrm{A}\cdot(1 - e^{-2}) = 0{,}60\,\mathrm{A}\cdot0{,}865 = 0{,}52\,\mathrm{A}" data-plain="I = 0,60 A · (1 − e^(−2)) = 0,60 A · 0,865 = 0,52 A"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Durch die Spule aus Aufgabe 1 (<span class="m" data-tex="L = 1{,}51\,\mathrm{mH}" data-plain="L = 1,51 mH"></span>) fließt ein Strom von <span class="m" data-tex="2{,}0\,\mathrm{A}" data-plain="2,0 A"></span>. Berechne die im Magnetfeld der Spule gespeicherte Energie.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="J">J</option>
+        <option value="mJ">mJ</option>
+        <option value="W">W</option>
+        <option value="V">V</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die Energie hängt nur von der Induktivität und vom Strom ab. Achte darauf, welche Größe im Quadrat steht.</div>
+    <div class="hilfe-text" data-stufe="2">Es gilt <span class="m" data-tex="W_{\text{mag}} = \dfrac{1}{2}\,L\,I^2" data-plain="W_mag = ½ · L · I²"></span>. Die Induktivität musst du in Henry einsetzen.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="W_{\text{mag}} = \dfrac{1}{2}\cdot1{,}51\cdot10^{-3}\,\mathrm{H}\cdot(2{,}0\,\mathrm{A})^2 = 3{,}0\cdot10^{-3}\,\mathrm{J} = 3{,}0\,\mathrm{mJ}" data-plain="W_mag = ½ · 1,51 · 10⁻³ H · (2,0 A)² = 3,0 · 10⁻³ J = 3,0 mJ"></span>. Zur Kontrolle über das Feld: <span class="m" data-tex="B = \mu_0 N I/l = 5{,}0\,\mathrm{mT}" data-plain="B = µ₀ · N · I / l = 5,0 mT"></span>, <span class="m" data-tex="w = B^2/(2\mu_0) = 10\,\mathrm{J/m^3}" data-plain="w = B²/(2µ₀) = 10 J/m³"></span>, <span class="m" data-tex="V = A\,l = 3{,}0\cdot10^{-4}\,\mathrm{m^3}" data-plain="V = A · l = 3,0 · 10⁻⁴ m³"></span>, und <span class="m" data-tex="w\cdot V" data-plain="w · V"></span> ergibt wieder 3,0 mJ.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a6">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Eine Relaisspule wird über einen Transistor geschaltet. Parallel zur Spule liegt eine Diode, die im Normalbetrieb sperrt (Schutzdiode). Erkläre, was ohne Diode beim Abschalten des Stroms passiert, wie die Diode dieses Problem löst und welchen Preis man dafür zahlt.</div>
+    <textarea placeholder="Deine Erklärung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a6">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Ohne Diode sinkt der Spulenstrom beim Abschalten in sehr kurzer Zeit auf null. Wegen <span class="m" data-tex="U_{\text{ind}} = -L\,\mathrm{d}I/\mathrm{d}t" data-plain="U_ind = −L · dI/dt"></span> entsteht eine sehr große Spannung, die den Transistor durchschlagen oder am Schalter einen Funken erzeugen kann. Der Strom kann nicht springen, er sucht sich einen Weg über die Luftstrecke oder das Halbleiterbauteil.</p>
+      <p>Mit Diode hat der Spulenstrom einen Freilaufkreis. Die Spannung an der Spule bleibt auf etwa die Flussspannung der Diode begrenzt (typisch 0,7 V), statt auf viele Hundert Volt zu steigen. Der Preis: Der Freilaufkreis hat nur einen kleinen Widerstand <span class="m" data-tex="R_F" data-plain="R_F"></span> (Spulendraht plus Diode), also ist <span class="m" data-tex="\tau_{\text{aus}} = L/R_F" data-plain="τ_aus = L/R_F"></span> groß, der Strom klingt langsam ab und das Relais fällt verzögert ab. Die gespeicherte Energie <span class="m" data-tex="\tfrac{1}{2}L\,I_0^2" data-plain="½ · L · I₀²"></span> wird dabei in Wärme umgesetzt, hauptsächlich im Spulendraht.</p>
+      <p><strong>Bewertungskriterien.</strong> Nennung von <span class="m" data-tex="U_{\text{ind}} = -L\,\mathrm{d}I/\mathrm{d}t" data-plain="U_ind = −L · dI/dt"></span> mit schnell fallendem Strom · Freilaufkreis als Funktion der Diode · Begrenzung der Spannung · Nachteil der langsameren Stromabnahme · Energiebilanz.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-num="a7">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Eine Schülerin beobachtet: „Beim Öffnen des Schalters entsteht an der Spule eine Spannung von mehreren Hundert Volt, obwohl die Quelle nur 12 Volt liefert. Damit habe ich mehr Energie gewonnen, als ich hineingesteckt habe." Nimm zu dieser Aussage physikalisch begründet Stellung.</div>
+    <textarea placeholder="Deine Stellungnahme…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a7">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Die Aussage verwechselt Spannung mit Energie. Die Spannungsspitze ist nur für sehr kurze Zeit vorhanden. Die Energie, die dabei umgesetzt wird, ist die im Magnetfeld gespeicherte Energie <span class="m" data-tex="W = \tfrac{1}{2}L\,I_0^2" data-plain="W = ½ · L · I₀²"></span>, und diese hat die Quelle vorher beim Einschalten in das Feld gebracht. Verluste im Widerstand kommen noch hinzu.</p>
+      <p>Die hohe Spannung ist also kein Energiegewinn, sondern die Form, in der die Energie in kurzer Zeit wieder herauskommt: Die Fläche unter dem Spannungspuls ist <span class="m" data-tex="L\,I_0" data-plain="L · I₀"></span>, sie hängt nicht vom Widerstand des Kreises ab. Ein höherer Widerstand macht den Puls höher und dafür kürzer. Insgesamt gilt der Energieerhaltungssatz.</p>
+      <p><strong>Bewertungskriterien.</strong> Unterscheidung von Spannung und Energie · gespeicherte Feldenergie als Quelle des Funkens · Herkunft der Energie beim Einschalten · Hinweis auf die kurze Dauer · Energieerhaltung.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 7 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">7</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Das Wichtigste in fünf Sätzen</h3>
+    <ul>
+      <li>Ändert sich der Strom in einer Spule, entsteht in ihr selbst eine Spannung: <span class="m" data-tex="U_{\text{ind}} = -L\,\dfrac{\mathrm{d}I}{\mathrm{d}t}" data-plain="U_ind = −L · dI/dt"></span>. Die Induktivität <span class="m" data-tex="L" data-plain="L"></span> hängt nur vom Bau der Spule ab, bei der langen Spule ist <span class="m" data-tex="L = \mu_0\mu_\mathrm{r}N^2A/l" data-plain="L = µ₀·µ_r·N²·A/l"></span>.</li>
+      <li>Die Selbstinduktion hemmt jede Stromänderung. Der Strom durch eine Spule kann daher nicht springen.</li>
+      <li>Beim Einschalten wächst der Strom mit <span class="m" data-tex="I_\infty(1 - e^{-t/\tau})" data-plain="I_∞(1 − e^(−t/τ))"></span> auf seinen Endwert, <span class="m" data-tex="\tau = L/R" data-plain="τ = L/R"></span>.</li>
+      <li>Beim Ausschalten klingt der Strom mit <span class="m" data-tex="\tau_{\text{aus}} = L/R_F" data-plain="τ_aus = L/R_F"></span> ab, und die Spannung springt auf <span class="m" data-tex="R_F\,I_0" data-plain="R_F · I₀"></span>, im Grenzfall bis zum Funken.</li>
+      <li>Im Magnetfeld steckt die Energie <span class="m" data-tex="\tfrac{1}{2}L\,I^2" data-plain="½ · L · I²"></span>, bei der Spule mit der Dichte <span class="m" data-tex="B^2/(2\mu_0\mu_\mathrm{r})" data-plain="B²/(2·µ₀·µ_r)"></span>. Der Funke bezieht sie aus dem Feld.</li>
+    </ul>
+  </div>
+
+  <div class="hinweis">
+    <strong>Blick aufs Zentralabitur.</strong> Aufgaben zur Selbstinduktion kommen im LK als Auswertung von <span class="m" data-tex="I\text{-}t" data-plain="I-t"></span>- und <span class="m" data-tex="U\text{-}t" data-plain="U-t"></span>-Diagrammen vor (Tangente, Zeitkonstante ablesen), als Rechnung mit <span class="m" data-tex="\tau" data-plain="τ"></span> und <span class="m" data-tex="W" data-plain="W"></span> und als Bewertungsaufgabe zu Schutzbeschaltungen. Beides hast du hier geübt. Als Anschluss folgt der elektromagnetische Schwingkreis: Dort tauscht die Spule ihre Feldenergie mit einem Kondensator aus.
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Ich kann …</h3>
+    <div class="check">
+      <label><input type="checkbox"><span>… erklären, warum in einer Spule bei Stromänderung eine Spannung entsteht, und das Vorzeichen mit der Lenzschen Regel begründen.</span></label>
+      <label><input type="checkbox"><span>… die Induktivität einer langen Spule aus Windungszahl, Länge, Querschnitt und Kern berechnen.</span></label>
+      <label><input type="checkbox"><span>… den Einschaltstrom <span class="m" data-tex="I(t)" data-plain="I(t)"></span> mit der Zeitkonstante <span class="m" data-tex="\tau = L/R" data-plain="τ = L/R"></span> berechnen und skizzieren.</span></label>
+      <label><input type="checkbox"><span>… erklären, warum der Strom in einer Spule nicht springen kann und beim Ausschalten eine Spannungsspitze entsteht.</span></label>
+      <label><input type="checkbox"><span>… die Energie im Magnetfeld einer Spule berechnen und angeben, woher der Funke sie bezieht.</span></label>
+      <label><input type="checkbox"><span>… eine Schutzdiode an einer Relaisspule begründen und ihren Preis nennen.</span></label>
+    </div>
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnis als Text kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+
+  <details class="lehrer">
+    <summary>Didaktische Hinweise (Lehrkraft)</summary>
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Ladungen, Felder und Induktion“, Q1 LK. Vorausgesetzt werden Induktionsgesetz, magnetischer Fluss und Lenzsche Regel (Modul „Elektromagnetische Induktion“). Anschluss: elektromagnetischer Schwingkreis. Gegeninduktion, Transformator und Wechselstromwiderstand der Spule sind bewusst nicht enthalten.</p>
+    <p><strong>Zeitbedarf.</strong> Abschnitte 1 und 2 etwa 30 Minuten, Abschnitte 3 und 4 etwa 30 Minuten, Simulation mit Beobachtungsauftrag 25 Minuten, Übungen 35 Minuten. Für eine Doppelstunde eignen sich Abschnitte 1 bis 5, die Aufgaben mit Anforderungsbereich III lassen sich als Hausaufgabe abtrennen.</p>
+    <p><strong>Typische Hürden.</strong> Erfahrungsgemäß halten sich zwei Vorstellungen hartnäckig: dass die Selbstinduktion den Strom „verhindert“ statt seine Änderung zu hemmen, und dass die Spannungsspitze beim Ausschalten „Energie erzeugt“. Beide greift die Seite gezielt an (Merksatz zur Trägheit des Stroms, Aufgabe a7). Dritte Hürde ist die Zeitkonstante: Nach <span class="m" data-tex="\tau" data-plain="τ"></span> ist der Vorgang nicht beendet.</p>
+    <p><strong>Modellgrenzen.</strong> Die Simulation rechnet mit konstanter Induktivität, idealer Quelle und einer Glimmlampe, die den Kreis nicht belastet. Der Funke am Schalter ist als Widerstand von 5000 Ω modelliert; ein realer Lichtbogen hat eine nichtlineare Kennlinie. Die Sättigung von Eisenkernen wird nur genannt.</p>
+    <p><strong>Experimentbezug.</strong> Die Simulation ersetzt den Realversuch nicht. Sinnvoll ist der Versuch mit Spule, Eisenkern und Glimmlampe an wenigen Volt; die Seite dient zur Auswertung, zur Variation von <span class="m" data-tex="R_S" data-plain="R_S"></span> und zur Sicherung. Ein Zweikanal-Oszilloskop zeigt <span class="m" data-tex="I(t)" data-plain="I(t)"></span> über einen kleinen Messwiderstand und <span class="m" data-tex="U(t)" data-plain="U(t)"></span> gleichzeitig.</p>
+    <p><strong>Differenzierung.</strong> Das dreistufige Hilfesystem trägt die Binnendifferenzierung. Schnelle Gruppen können zusätzlich zeigen, dass die Fläche unter dem Spannungspuls beim Ausschalten unabhängig von <span class="m" data-tex="R_S" data-plain="R_S"></span> ist (Simulation, Frage 1), und diese Fläche als <span class="m" data-tex="L\,I_0" data-plain="L · I₀"></span> herleiten.</p>
+  </details>
+
+  <footer>
+    Physik LK Q1 · Selbstinduktion · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+
+<!-- Formelsammlung: nur im Druck sichtbar, wird aus formelDaten erzeugt -->
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+
+<!-- =============== FORMELLEISTE =============== -->
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/bausteine.md, Abschnitt 10. abschnitt = id der <section>, ziel = id der
+// Formel im Text. tex setzt KaTeX, plain ist der Klartext ohne Netz. Alle Texte ohne HTML.
+var formelDaten = [
+  {abschnitt:"selbstinduktion", titel:"Selbstinduktion und Induktivität", formeln:[
+    {id:"l-def", ziel:"f-l-def", tex:"L = \\dfrac{N\\cdot\\Phi}{I}", plain:"L = N · Φ / I",
+     zeichen:[
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H = V·s/A"},
+       {tex:"N", plain:"N", text:"Windungszahl der Spule", einheit:"dimensionslos"},
+       {tex:"\\Phi", plain:"Φ", text:"magnetischer Fluss durch eine einzelne Windung", einheit:"Wb = T·m²"},
+       {tex:"I", plain:"I", text:"Stromstärke in der Spule, die den Fluss erzeugt", einheit:"A"}],
+     gilt:"Der Kern hat eine konstante Permeabilitätszahl, der Fluss ist also proportional zum Strom. Dann hängt L nur vom Bau der Spule ab, nicht vom Strom.",
+     fehler:"Φ als Fluss durch die ganze Spule lesen und noch einmal mit N multiplizieren. Φ ist der Fluss durch eine einzelne Windung; das N steht schon in der Formel."},
+    {id:"selbstind", ziel:"f-selbstind", tex:"U_{\\text{ind}} = -L\\,\\dfrac{\\mathrm{d}I}{\\mathrm{d}t}", plain:"U_ind = −L · dI/dt",
+     zeichen:[
+       {tex:"U_{\\text{ind}}", plain:"U_ind", text:"Selbstinduktionsspannung; der Zählpfeil zeigt in Stromrichtung", einheit:"V"},
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H = V·s/A"},
+       {tex:"\\dfrac{\\mathrm{d}I}{\\mathrm{d}t}", plain:"dI/dt", text:"Änderungsrate der Stromstärke: Ableitung nach der Zeit t, also die Steigung im I-t-Diagramm", einheit:"A/s"}],
+     gilt:"Die Induktivität ist konstant. Das Minuszeichen gilt für den Zählpfeil in Stromrichtung: Wächst der Strom, ist U_ind negativ und bremst den Anstieg; fällt er, ist U_ind positiv und hält den Strom aufrecht.",
+     fehler:"Die Stromstärke selbst statt ihrer Änderungsrate einsetzen und meinen, ein großer Strom induziere viel. Bei konstantem Strom ist U_ind gleich null, egal wie groß I ist."},
+    {id:"l-spule", ziel:"f-l-spule", tex:"L = \\mu_0\\,\\mu_\\mathrm{r}\\,\\dfrac{N^2 A}{l}", plain:"L = µ₀ · µ_r · N² · A / l",
+     zeichen:[
+       {tex:"L", plain:"L", text:"Induktivität der Spule (großes L)", einheit:"H = V·s/A"},
+       {tex:"\\mu_0", plain:"µ₀", text:"magnetische Feldkonstante, µ₀ = 4π · 10⁻⁷ V·s/(A·m)", einheit:"V·s/(A·m)"},
+       {tex:"\\mu_\\mathrm{r}", plain:"µ_r", text:"Permeabilitätszahl des Kerns; für Luft gilt µ_r = 1", einheit:"dimensionslos"},
+       {tex:"N", plain:"N", text:"Windungszahl", einheit:"dimensionslos"},
+       {tex:"A", plain:"A", text:"Querschnittsfläche der Spule", einheit:"m²"},
+       {tex:"l", plain:"l", text:"Länge der Spule (kleines l)", einheit:"m"}],
+     gilt:"Lange, gerade Spule, deren Länge groß gegen den Durchmesser ist, mit homogenem Feld im Inneren und konstantem µ_r. Bei kurzen Spulen ist die Formel nur eine Näherung, in gesättigtem Eisen gilt sie nicht mehr.",
+     fehler:"Die Windungszahl nur einfach einsetzen. N steht im Quadrat, denn N Windungen erzeugen das Feld und N Windungen werden von ihm durchsetzt."}
+  ]},
+  {abschnitt:"schalten", titel:"Ein- und Ausschaltvorgang", formeln:[
+    {id:"masche-ein", ziel:"f-masche-ein", tex:"U_0 + U_{\\text{ind}} = R\\cdot I", plain:"U₀ + U_ind = R · I",
+     zeichen:[
+       {tex:"U_0", plain:"U₀", text:"Quellenspannung (Gleichspannung)", einheit:"V"},
+       {tex:"U_{\\text{ind}}", plain:"U_ind", text:"Selbstinduktionsspannung mit Zählpfeil in Stromrichtung", einheit:"V"},
+       {tex:"R", plain:"R", text:"Gesamtwiderstand des Einschaltkreises: Spulendraht plus etwaiger Vorwiderstand", einheit:"Ω"},
+       {tex:"I", plain:"I", text:"Stromstärke im Kreis", einheit:"A"}],
+     gilt:"Einschaltkreis mit konstanter Quellenspannung bei geschlossenem Schalter. Weil der Zählpfeil von U_ind in Stromrichtung zeigt, steht es wie eine zweite Quelle links des Gleichheitszeichens.",
+     fehler:"Das Vorzeichen von U_ind falsch lesen. Beim Einschalten wächst der Strom, also ist U_ind negativ und wirkt der Quelle entgegen."},
+    {id:"i-ein", ziel:"f-i-ein", tex:"I(t) = I_\\infty\\,\\bigl(1 - e^{-t/\\tau}\\bigr)", plain:"I(t) = I_∞ · (1 − e^(−t/τ))",
+     zeichen:[
+       {tex:"I(t)", plain:"I(t)", text:"Stromstärke zur Zeit t nach dem Schließen", einheit:"A"},
+       {tex:"I_\\infty", plain:"I_∞", text:"Endwert des Stroms nach sehr langer Zeit", einheit:"A"},
+       {tex:"e", plain:"e", text:"Eulersche Zahl, e ≈ 2,718", einheit:"dimensionslos"},
+       {tex:"t", plain:"t", text:"Zeit seit dem Schließen des Schalters", einheit:"s"},
+       {tex:"\\tau", plain:"τ", text:"Zeitkonstante des Einschaltvorgangs", einheit:"s"}],
+     gilt:"Der Strom ist beim Schließen null und die Quellenspannung konstant. Startet der Strom bei einem anderen Wert, ändert sich nur der Anfangswert, nicht die Zeitkonstante.",
+     fehler:"Den Term 1 − e^(−t/τ) mit e^(−t/τ) verwechseln. Zu Beginn muss der Strom null sein; e^(−t/τ) startet aber bei 1 und beschreibt einen Abfall."},
+    {id:"tau", ziel:"f-tau", tex:"\\tau = \\dfrac{L}{R}", plain:"τ = L / R",
+     zeichen:[
+       {tex:"\\tau", plain:"τ", text:"Zeitkonstante des Einschaltvorgangs", einheit:"s = H/Ω"},
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H = V·s/A"},
+       {tex:"R", plain:"R", text:"Gesamtwiderstand des Einschaltkreises", einheit:"Ω"}],
+     gilt:"Einschaltkreis mit konstantem Widerstand R. Beim Ausschalten gilt statt R der Widerstand des Freilaufkreises.",
+     fehler:"τ für die Zeit halten, bis der Strom seinen Endwert erreicht hat. Nach τ ist der Strom erst bei gut 63 % des Endwerts; der Vorgang gilt nach etwa 5τ als abgeschlossen."},
+    {id:"masche-aus", ziel:"f-masche-aus", tex:"U_{\\text{ind}} = R_F\\cdot I", plain:"U_ind = R_F · I",
+     zeichen:[
+       {tex:"U_{\\text{ind}}", plain:"U_ind", text:"Selbstinduktionsspannung mit Zählpfeil in Stromrichtung; beim Ausschalten positiv", einheit:"V"},
+       {tex:"R_F", plain:"R_F", text:"Gesamtwiderstand des Freilaufkreises, R_F = R + R_S", einheit:"Ω"},
+       {tex:"I", plain:"I", text:"Stromstärke im Freilaufkreis", einheit:"A"}],
+     gilt:"Der Schalter ist geöffnet, die Quelle abgetrennt und der Spulenstrom fließt im geschlossenen Freilaufkreis weiter. Deshalb entfällt U₀.",
+     fehler:"Für R_F nur den Schutzwiderstand R_S einsetzen. Der Draht der Spule liegt im Freilaufkreis mit in Reihe, also zählt R + R_S."},
+    {id:"i-aus", ziel:"f-i-aus", tex:"I(t) = I_0\\,e^{-t/\\tau_{\\text{aus}}}", plain:"I(t) = I₀ · e^(−t/τ_aus)",
+     zeichen:[
+       {tex:"I(t)", plain:"I(t)", text:"Stromstärke zur Zeit t nach dem Öffnen", einheit:"A"},
+       {tex:"I_0", plain:"I₀", text:"Stromstärke im Moment des Öffnens", einheit:"A"},
+       {tex:"t", plain:"t", text:"Zeit seit dem Öffnen des Schalters", einheit:"s"},
+       {tex:"\\tau_{\\text{aus}}", plain:"τ_aus", text:"Zeitkonstante des Ausschaltvorgangs", einheit:"s"}],
+     gilt:"Der Schalter öffnet zur Zeit t = 0. Der Strom setzt genau bei dem Wert I₀ ein, den er vor dem Öffnen hatte, denn er kann nicht springen.",
+     fehler:"Meinen, der Strom falle beim Öffnen sofort auf null. Er klingt exponentiell ab und fließt direkt nach dem Öffnen unverändert weiter."},
+    {id:"tau-aus", ziel:"f-tau-aus", tex:"\\tau_{\\text{aus}} = \\dfrac{L}{R_F}", plain:"τ_aus = L / R_F",
+     zeichen:[
+       {tex:"\\tau_{\\text{aus}}", plain:"τ_aus", text:"Zeitkonstante des Ausschaltvorgangs", einheit:"s = H/Ω"},
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H = V·s/A"},
+       {tex:"R_F", plain:"R_F", text:"Gesamtwiderstand des Freilaufkreises", einheit:"Ω"}],
+     gilt:"Freilaufkreis mit konstantem Widerstand R_F. Ein größerer Widerstand lässt den Strom schneller abklingen.",
+     fehler:"Beim Ausschalten dieselbe Zeitkonstante wie beim Einschalten verwenden. Der Widerstand des Kreises ist ein anderer, also ändert sich auch τ."},
+    {id:"spitze", ziel:"f-spitze", tex:"U_{\\text{ind}}(0^+) = R_F\\cdot I_0", plain:"U_ind(0⁺) = R_F · I₀",
+     zeichen:[
+       {tex:"U_{\\text{ind}}(0^+)", plain:"U_ind(0⁺)", text:"Selbstinduktionsspannung unmittelbar nach dem Öffnen", einheit:"V"},
+       {tex:"R_F", plain:"R_F", text:"Gesamtwiderstand des Freilaufkreises", einheit:"Ω"},
+       {tex:"I_0", plain:"I₀", text:"Stromstärke im Moment des Öffnens", einheit:"A"}],
+     gilt:"Gilt nur für den Augenblick direkt nach dem Öffnen; danach klingt die Spannung mit τ_aus ab. Die Spitze ist umso höher, je größer der Widerstand des Freilaufkreises ist.",
+     fehler:"Die Quellenspannung U₀ als obere Grenze der Spannung ansehen. Die Spannung an der Spule bestimmt R_F · I₀, und die kann ein Vielfaches von U₀ betragen."}
+  ]},
+  {abschnitt:"energie", titel:"Energie im Magnetfeld", formeln:[
+    {id:"energie", ziel:"f-energie", tex:"W_{\\text{mag}} = \\dfrac{1}{2}\\,L\\,I^2", plain:"W_mag = ½ · L · I²",
+     zeichen:[
+       {tex:"W_{\\text{mag}}", plain:"W_mag", text:"im Magnetfeld der Spule gespeicherte Energie", einheit:"J"},
+       {tex:"L", plain:"L", text:"Induktivität der Spule", einheit:"H = V·s/A"},
+       {tex:"I", plain:"I", text:"Stromstärke in der Spule", einheit:"A"}],
+     gilt:"Konstante Induktivität, also ein Kern ohne Sättigung. Die Energie gilt für den jeweiligen Augenblick und ändert sich mit dem Strom.",
+     fehler:"Energie und Leistung verwechseln. W_mag ist die im Feld gespeicherte Energie zu einem Zeitpunkt. Sie hängt nur vom aktuellen Strom ab, nicht davon, wie schnell er erreicht wurde."},
+    {id:"dichte", ziel:"f-dichte", tex:"w_{\\text{mag}} = \\dfrac{B^2}{2\\,\\mu_0\\,\\mu_\\mathrm{r}}", plain:"w_mag = B² / (2 · µ₀ · µ_r)",
+     zeichen:[
+       {tex:"w_{\\text{mag}}", plain:"w_mag", text:"Energiedichte: Feldenergie je Volumen", einheit:"J/m³"},
+       {tex:"B", plain:"B", text:"magnetische Flussdichte", einheit:"T"},
+       {tex:"\\mu_0", plain:"µ₀", text:"magnetische Feldkonstante", einheit:"V·s/(A·m)"},
+       {tex:"\\mu_\\mathrm{r}", plain:"µ_r", text:"Permeabilitätszahl des Materials im Feld", einheit:"dimensionslos"}],
+     gilt:"Ein Bereich, in dem das Feld homogen ist, etwa im Inneren einer langen Spule. Bei inhomogenem Feld muss man über das Volumen integrieren.",
+     fehler:"B statt B² einsetzen. Die Energiedichte wächst quadratisch mit der Flussdichte: Bei doppeltem B speichert dasselbe Volumen die vierfache Energie."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{r:1, fb:[
+    "Hier steht nur der Spulendraht im Nenner (24 V / 30 Ω = 0,80 A). Der zweite Widerstand liegt aber in Reihe und gehört dazu: In der Reihenschaltung addieren sich die Widerstände zu 30 Ω + 18 Ω = 48 Ω.",
+    "Richtig. I = U/(R₁ + R₂) = 24 V / 48 Ω = 0,50 A. Merke dir den Gedanken: Ein konstanter Strom sieht in der Spule nur ihren Drahtwiderstand. Dass das nicht selbstverständlich ist, sondern eine Folge dessen, was auf dieser Seite kommt, siehst du gleich.",
+    "24 V / 18 Ω = 1,33 A würde fließen, wenn die Spule nur ein Stück widerstandsloser Draht wäre. Ihr Draht hat aber 30 Ω; der Gesamtwiderstand ist die Summe 48 Ω."
+  ]},
+  vw2:{r:1, fb:[
+    "Das gälte, wenn die Energie proportional zu v wäre. In E_kin = ½·m·v² steht die Geschwindigkeit aber im Quadrat: Aus 3v wird (3v)² = 9v².",
+    "Richtig. E_kin = ½·m·v², also (3v)² = 9·v². Ein Zusammenhang, bei dem die Energie mit dem Quadrat einer Größe wächst, kommt gleich in der Spule wieder: Dort ist die Größe die Stromstärke.",
+    "3 · 2 = 6 rechnet die Verdreifachung mit dem Faktor 2 aus ½·m·v². Der Faktor ½ ist aber eine Konstante und ändert sich nicht; nur v wird verdreifacht und dabei quadriert: 3² = 9."
+  ]},
+  vw3:{r:1, fb:[
+    "Die Kraft ist gleich, aber sie muss verschieden viel Masse in Bewegung setzen. Aus F = m·a folgt a = F/m: Die dreifache Masse bekommt nur ein Drittel der Beschleunigung.",
+    "Richtig. a = F/m, also v = a·t = (F/m)·t. Bei dreifacher Masse ist die Beschleunigung ein Drittel, und nach gleicher Zeit auch die Geschwindigkeit. Die Masse ist das Maß dafür, wie sehr sich ein Körper einer Änderung seiner Geschwindigkeit widersetzt. Für die Spule gibt es gleich ein genaues Gegenstück.",
+    "Hier ist die Masse quadriert worden (3² = 9). Die Masse steht in a = F/m aber nur einfach im Nenner; das Quadrat gehört zur Energie ½·m·v², nicht zur Beschleunigung."
+  ]},
+  sim1:{r:1, fb:[
+    "Die Spitze wird zwar höher, aber der Puls klingt auch schneller ab (kleineres τ_aus). Beides gleicht sich genau aus.",
+    "Richtig. Die Fläche unter der U_ind-Kurve ist R_F·I₀·τ_aus = R_F·I₀·L/R_F = L·I₀ und hängt nicht von R_S ab. Anschaulich ist sie der Gesamtfluss N·Φ, der beim Ausschalten verschwindet.",
+    "Der Puls wird kürzer, aber gleichzeitig höher. Die kürzere Dauer wird durch die höhere Spitze genau ausgeglichen."
+  ]},
+  sim2:{r:1, fb:[
+    "Die Energie im Feld ist ½·L·I₀² und hängt nur von L und dem Strom im Moment des Öffnens ab, nicht von R_S. Der Strom war in beiden Fällen derselbe.",
+    "Richtig. Die gespeicherte Energie ½·L·I₀² ist in beiden Fällen gleich. Ein größerer Widerstand R_F setzt sie mit größerer Leistung R_F·I² um, deshalb ist τ_aus = L/R_F kleiner und der Strom nach kürzerer Zeit abgeklungen.",
+    "Es wird nicht weniger Energie umgesetzt, sondern dieselbe: Die gesamte Feldenergie landet im Freilaufkreis. Sie wird nur schneller umgesetzt, weil die Leistung größer ist."
+  ]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{wert:1.51, einheit:"mH", tol:0.02, alt:{wert:0.00151, einheit:"H"},
+      ok:"Richtig. L = µ₀·N²·A/l = 4π·10⁻⁷ V·s/(A·m) · 500² · 12·10⁻⁴ m² / 0,25 m = 1,51 mH.",
+      falschEinheit:"Der Zahlenwert passt zu einer anderen Einheit. Die Induktivität wird in Henry gemessen, hier bietet sich mH an.",
+      nah:"Knapp daneben – hast du Fläche und Länge in m² und m umgerechnet? 1 cm² = 10⁻⁴ m².",
+      weit:"Das passt noch nicht. Nutze die Hilfen unten: L = µ₀·µ_r·N²·A/l, und die Windungszahl steht im Quadrat."},
+  a2:{wert:400, einheit:"V", tol:5, alt:{wert:0.4, einheit:"kV"},
+      ok:"Richtig. |U_ind| = L·|ΔI|/Δt = 0,80 H · 2,5 A / 0,0050 s = 400 V.",
+      falschEinheit:"Der Zahlenwert stimmt, aber eine Spannung wird in Volt (oder kV) angegeben, nicht in Ampere oder Watt.",
+      nah:"Fast. Prüfe Δt = 5,0 ms = 0,0050 s und ΔI = 2,5 A.",
+      weit:"Noch nicht. Bei gleichmäßiger Änderung ist |U_ind| = L·|ΔI|/Δt. Rechne die Zeit in Sekunden um."},
+  a4:{wert:0.52, einheit:"A", tol:0.01, alt:{wert:520, einheit:"mA"},
+      ok:"Richtig. τ = L/R = 25 ms und I_∞ = 0,60 A, also I(50 ms) = 0,60 A · (1 − e⁻²) = 0,52 A.",
+      falschEinheit:"Der Zahlenwert passt, aber die Stromstärke wird in Ampere oder Milliampere angegeben.",
+      nah:"Knapp daneben – prüfe, wie viele Zeitkonstanten in 50 ms stecken: t/τ = 2.",
+      weit:"Das passt noch nicht. Berechne zuerst τ = L/R und I_∞ = U₀/R und setze dann in I(t) = I_∞·(1 − e^(−t/τ)) ein."},
+  a5:{wert:3.0, einheit:"mJ", tol:0.1, alt:{wert:0.0030, einheit:"J"},
+      ok:"Richtig. W = ½·L·I² = ½ · 1,51·10⁻³ H · (2,0 A)² = 3,0 mJ.",
+      falschEinheit:"Der Zahlenwert passt zur falschen Einheit. Energie wird in Joule (oder mJ) gemessen, nicht in Watt oder Volt.",
+      nah:"Fast. Prüfe den Faktor ½ und dass der Strom quadriert wird; L musst du in Henry einsetzen.",
+      weit:"Das passt noch nicht. Nutze W = ½·L·I² mit L = 1,51·10⁻³ H und I = 2,0 A."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.a3 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier richtig. Beim Einschalten legt R den Endwert fest und L nur die Zeit, die der Strom bis dorthin braucht. Beim Ausschalten klingt der Strom von seinem Endwert exponentiell ab.";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Frage dich bei jeder Situation: Wohin läuft der Strom (Endwert U₀/R), und wie schnell (Zeitkonstante L/R)? Ein größeres L verlangsamt nur, ein größeres R senkt den Endwert und beschleunigt.";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: RL-Kreis ============ */
+(function(){
+  var cvS = document.getElementById("cvSim"), ctxS = cvS.getContext("2d");
+  var cvI = document.getElementById("cvI"),   ctxI = cvI.getContext("2d");
+  var cvU = document.getElementById("cvU"),   ctxU = cvU.getContext("2d");
+
+  var DAUER = 5;          // so viele Sekunden läuft das Zeitfenster (6 Zeitkonstanten) auf dem Bildschirm ab
+  var R_BOGEN = 5000;     // Modellannahme: Widerstand des Funkens am geöffneten Schalter
+  var U_ZUND = 90;        // Zündspannung der Glimmlampe (Literaturwert 80 bis 100 V)
+
+  var U0 = 12, R = 20, L = 0.50, RS = 200, ohneZweig = false;
+  var phase = "ruhe";     // ruhe | ein | aus
+  var I1 = 0;             // Strom zu Beginn des laufenden Vorgangs
+  var tp = 0, tau = L / R, tF = 6 * tau, RF = R + RS;
+  var leuchten = 0, letzteZeit = null;
+
+  var $ = function(id){ return document.getElementById(id); };
+  var rU = $("rU"), rR = $("rR"), rL = $("rL"), rS = $("rS"), cOhne = $("cOhne");
+  var hinweis = $("simHinweis");
+
+  function fmt(z, n){ return z.toFixed(n).replace(".", ","); }
+  function fmtU(v){
+    var a = Math.abs(v);
+    if(a < 0.05) return "0,0 V";
+    return (a >= 1000 ? fmt(v / 1000, 2) + " kV" : fmt(v, a >= 100 ? 0 : 1) + " V").replace("-", "−");
+  }
+  function freilauf(){ return R + (ohneZweig ? R_BOGEN : RS); }
+
+  // Strom und Selbstinduktionsspannung (Zählpfeil in Stromrichtung) zur Zeit t des laufenden Vorgangs
+  function iAt(t){
+    if(phase === "ein") return U0 / R + (I1 - U0 / R) * Math.exp(-t / tau);
+    if(phase === "aus") return I1 * Math.exp(-t / tau);
+    return 0;
+  }
+  function uAt(t){
+    var i = iAt(t);
+    if(phase === "ein") return R * i - U0;
+    if(phase === "aus") return RF * i;
+    return 0;
+  }
+  function fenster(){ return phase === "ruhe" ? 6 * L / R : tF; }
+
+  function starte(p, i0){
+    phase = p; I1 = i0; tp = 0;
+    if(p === "ein"){ tau = L / R; }
+    else { RF = freilauf(); tau = L / RF; }
+    tF = 6 * tau;
+    hinweis.textContent = "";
+  }
+  function reset(){
+    phase = "ruhe"; I1 = 0; tp = 0; leuchten = 0;
+    tau = L / R; tF = 6 * tau; RF = freilauf();
+    hinweis.textContent = "";
+  }
+
+  rU.addEventListener("input", function(){ U0 = parseInt(rU.value, 10); $("lU").textContent = U0; reset(); });
+  rR.addEventListener("input", function(){ R = parseInt(rR.value, 10); $("lR").textContent = R; reset(); });
+  rL.addEventListener("input", function(){ L = rL.value / 100; $("lL").textContent = fmt(L, 2); reset(); });
+  function schutzGeaendert(){
+    RS = parseInt(rS.value, 10); $("lS").textContent = RS;
+    ohneZweig = cOhne.checked;
+    rS.disabled = ohneZweig;
+    if(phase === "aus") starte("aus", I1);   // Vorgang mit dem neuen Widerstand von vorn
+    else RF = freilauf();
+  }
+  rS.addEventListener("input", schutzGeaendert);
+  cOhne.addEventListener("change", schutzGeaendert);
+
+  $("bEin").addEventListener("click", function(){
+    if(phase === "ein") return;
+    starte("ein", iAt(tp));
+  });
+  $("bAus").addEventListener("click", function(){
+    if(phase === "aus") return;
+    var i = iAt(tp);
+    if(phase === "ruhe" || i < 1e-4){
+      hinweis.textContent = "Es fließt noch kein Strom. Schalte zuerst ein und warte etwas.";
+      return;
+    }
+    starte("aus", i);
+  });
+  $("bReset").addEventListener("click", reset);
+
+  function schritt(zeit){
+    if(letzteZeit === null) letzteZeit = zeit;
+    var dt = Math.min(0.05, (zeit - letzteZeit) / 1000);
+    letzteZeit = zeit;
+
+    if(phase !== "ruhe" && tp < tF) tp = Math.min(tF, tp + dt * tF / DAUER);
+
+    var i = iAt(tp), u = uAt(tp);
+    var uPar = phase === "ein" ? U0 : (phase === "aus" ? Math.abs(u) : 0);   // Spannung an den Parallelzweigen
+    leuchten = uPar > U_ZUND ? 1 : leuchten * 0.85;
+
+    $("aI").textContent = fmt(i, 3) + " A";
+    $("aU").textContent = fmtU(u);
+    $("aTau").textContent = fmt((phase === "aus" ? tau : L / R) * 1000, tau < 0.0001 && phase === "aus" ? 3 : 1) + " ms";
+    var w = 0.5 * L * i * i * 1000;
+    $("aW").textContent = fmt(w, w < 10 ? 2 : 1) + " mJ";
+
+    zeichneSchaltbild(i, u, uPar);
+    zeichneKurve(ctxI, cvI, "I");
+    zeichneKurve(ctxU, cvU, "U");
+    requestAnimationFrame(schritt);
+  }
+
+  /* ---------- Schaltbild ---------- */
+  function strecke(ctx, x1, y1, x2, y2, farbe, breite){
+    ctx.strokeStyle = farbe; ctx.lineWidth = breite;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+  function pfeil(ctx, x, y, richtung, farbe){      // kleine Pfeilspitze; richtung: "auf" oder "ab"
+    var d = richtung === "ab" ? 1 : -1;
+    ctx.fillStyle = farbe;
+    ctx.beginPath(); ctx.moveTo(x, y + 9 * d); ctx.lineTo(x - 7, y - 5 * d); ctx.lineTo(x + 7, y - 5 * d);
+    ctx.closePath(); ctx.fill();
+  }
+  function widerstand(ctx, x, y1, y2, farbe){
+    ctx.strokeStyle = farbe; ctx.lineWidth = 3; ctx.fillStyle = "#fff";
+    ctx.fillRect(x - 13, y1, 26, y2 - y1); ctx.strokeRect(x - 13, y1, 26, y2 - y1);
+  }
+
+  function zeichneSchaltbild(i, u, uPar){
+    var ctx = ctxS, W = cvS.width, H = cvS.height;
+    var GRAU = "#94a3b8", BLAU = "#1d4ed8", TINTE = "#0f2135";
+    var yO = 90, yU = 270, xQ = 170, xSp = 520, xLa = 670, xRs = 830, xS0 = 250, xS1 = 370;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+
+    var imax = Math.max(U0 / R, 0.05);
+    var bSp = i > 1e-4 ? 2 + 3 * Math.min(1, i / imax) : 2;
+    var cSp = i > 1e-4 ? BLAU : GRAU;
+    var geschl = phase === "ein";
+    var iQuelle = geschl ? i + (ohneZweig ? 0 : U0 / RS) : 0;
+    var bQ = iQuelle > 1e-4 ? 2 + 3 * Math.min(1, iQuelle / (imax + (ohneZweig ? 0 : U0 / Math.max(RS, 10)))) : 2;
+    var cQ = iQuelle > 1e-4 ? BLAU : GRAU;
+
+    // Quelle links
+    strecke(ctx, xQ, yO, xQ, 170, cQ, bQ); strecke(ctx, xQ, 190, xQ, yU, cQ, bQ);
+    strecke(ctx, xQ - 26, 170, xQ + 26, 170, TINTE, 4);
+    strecke(ctx, xQ - 14, 190, xQ + 14, 190, TINTE, 4);
+    ctx.fillStyle = TINTE; ctx.font = "600 17px sans-serif"; ctx.textAlign = "right"; ctx.textBaseline = "middle";
+    ctx.fillText("U₀ = " + U0 + " V", xQ - 34, 180);
+    ctx.textAlign = "left"; ctx.fillText("+", xQ + 8, 158);
+
+    // obere Leitung: Quelle bis Schalter, Schalter, Schalter bis rechts
+    strecke(ctx, xQ, yO, xS0, yO, cQ, bQ);
+    strecke(ctx, xS1, yO, xRs, yO, geschl ? cQ : cSp, geschl ? bQ : bSp);
+    ctx.fillStyle = TINTE;
+    ctx.beginPath(); ctx.arc(xS0, yO, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(xS1, yO, 5, 0, Math.PI * 2); ctx.fill();
+    if(geschl) strecke(ctx, xS0, yO, xS1, yO, TINTE, 4);
+    else strecke(ctx, xS0, yO, xS1 - 18, yO - 42, TINTE, 4);
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "600 16px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(geschl ? "Schalter zu" : "Schalter offen", (xS0 + xS1) / 2, yO - 60);
+
+    // untere Leitung
+    strecke(ctx, xQ, yU, xQ + 0, yU, cQ, bQ);
+    strecke(ctx, xQ, yU, xSp, yU, geschl ? cQ : cSp, geschl ? bQ : bSp);
+    strecke(ctx, xSp, yU, xRs, yU, cSp, bSp);
+
+    // Spulenzweig
+    strecke(ctx, xSp, yO, xSp, 118, cSp, bSp);
+    widerstand(ctx, xSp, 118, 156, cSp);
+    ctx.fillStyle = TINTE; ctx.font = "600 16px sans-serif"; ctx.textAlign = "right";
+    ctx.fillText("R", xSp - 22, 137);
+    strecke(ctx, xSp, 156, xSp, 166, cSp, bSp);
+    ctx.strokeStyle = cSp; ctx.lineWidth = Math.max(4, bSp);
+    for(var k = 0; k < 4; k++){
+      ctx.beginPath(); ctx.ellipse(xSp, 176 + k * 20, 15, 10, 0, -Math.PI / 2, Math.PI / 2); ctx.stroke();
+    }
+    strecke(ctx, xSp, 246, xSp, yU, cSp, bSp);
+    ctx.fillStyle = TINTE; ctx.textAlign = "right";
+    ctx.fillText("Spule L = " + fmt(L, 2) + " H", xSp - 26, 216);
+    if(i > 1e-4) pfeil(ctx, xSp, 106, "ab", BLAU);
+
+    // Glimmlampe
+    var gl = leuchten;
+    strecke(ctx, xLa, yO, xLa, 159, GRAU, 2); strecke(ctx, xLa, 211, xLa, yU, GRAU, 2);
+    if(gl > 0.02){
+      var g = ctx.createRadialGradient(xLa, 185, 4, xLa, 185, 70);
+      g.addColorStop(0, "rgba(245,158,11," + (0.85 * gl) + ")"); g.addColorStop(1, "rgba(245,158,11,0)");
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(xLa, 185, 70, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.fillStyle = gl > 0.5 ? "#fde68a" : "#f1f5f9"; ctx.strokeStyle = TINTE; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc(xLa, 185, 26, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    strecke(ctx, xLa - 12, 173, xLa - 12, 197, "#64748b", 3); strecke(ctx, xLa + 12, 173, xLa + 12, 197, "#64748b", 3);
+    ctx.fillStyle = TINTE; ctx.textAlign = "center"; ctx.font = "600 16px sans-serif";
+    ctx.fillText("Glimmlampe", xLa, 233);
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "15px sans-serif";
+    ctx.fillText("zündet über 90 V", xLa, 253);
+
+    // Freilaufzweig
+    if(!ohneZweig){
+      var iRs = phase === "ein" ? U0 / RS : (phase === "aus" ? i : 0);
+      var cRs = iRs > 1e-4 ? BLAU : GRAU, bRs = iRs > 1e-4 ? 2 + 3 * Math.min(1, iRs / imax) : 2;
+      strecke(ctx, xRs, yO, xRs, 150, cRs, bRs); widerstand(ctx, xRs, 150, 214, cRs); strecke(ctx, xRs, 214, xRs, yU, cRs, bRs);
+      ctx.fillStyle = TINTE; ctx.font = "600 16px sans-serif"; ctx.textAlign = "left";
+      ctx.fillText("R_S = " + RS + " Ω", xRs + 22, 182);
+      if(iRs > 1e-4) pfeil(ctx, xRs, 118, phase === "aus" ? "auf" : "ab", BLAU);
+    } else {
+      strecke(ctx, xRs, yO, xRs, 150, "#e2e8f0", 2); strecke(ctx, xRs, 214, xRs, yU, "#e2e8f0", 2);
+      ctx.strokeStyle = "#cbd5e1"; ctx.setLineDash([6, 5]); ctx.lineWidth = 2; ctx.strokeRect(xRs - 13, 150, 26, 64); ctx.setLineDash([]);
+      ctx.fillStyle = "#94a3b8"; ctx.font = "15px sans-serif"; ctx.textAlign = "left";
+      ctx.fillText("Zweig entfernt", xRs + 22, 182);
+    }
+
+    // Funke am geöffneten Schalter
+    if(ohneZweig && phase === "aus" && i > 0.02 * Math.max(I1, 1e-9)){
+      ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 4; ctx.lineJoin = "round";
+      ctx.beginPath(); ctx.moveTo(xS1 - 18, yO - 42); ctx.lineTo(xS1 - 6, yO - 26); ctx.lineTo(xS1 - 22, yO - 16);
+      ctx.lineTo(xS1 - 4, yO - 4); ctx.lineTo(xS1, yO); ctx.stroke();
+      ctx.fillStyle = "#b45309"; ctx.font = "600 16px sans-serif"; ctx.textAlign = "left";
+      ctx.fillText("Funke", xS1 + 14, yO - 26);
+    }
+
+    // Selbstinduktionsspannung
+    ctx.fillStyle = "#b45309"; ctx.font = "600 17px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("U_ind = " + fmtU(u), (xSp + xLa) / 2, 292);
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "15px sans-serif"; ctx.textAlign = "left";
+    ctx.fillText(phase === "ruhe" ? "Schalter offen, kein Strom" : (phase === "ein" ? "Einschalten" : "Ausschalten"), 20, 292);
+  }
+
+  /* ---------- Diagramme ---------- */
+  function schrittZeit(T){
+    var roh = T / 6, p = Math.pow(10, Math.floor(Math.log(roh) / Math.LN10)), m = roh / p;
+    return (m < 1.5 ? 1 : (m < 3.5 ? 2 : (m < 7.5 ? 5 : 10))) * p;
+  }
+  function zeichneKurve(ctx, cv, was){
+    var W = cv.width, H = cv.height, l = 72, r = 40, o = 30, u = 30;
+    var T = fenster();
+    var i0 = phase === "ruhe" ? 0 : iAt(0);
+    var iEnd = U0 / R;
+    var ymax, farbe, titel, mitte;
+    if(was === "I"){
+      ymax = Math.max(phase === "ein" || phase === "ruhe" ? iEnd : 0, phase === "aus" ? I1 : 0, 0.05) * 1.25;
+      farbe = "#1d4ed8"; titel = "I in A"; mitte = false;
+    } else {
+      ymax = phase === "ruhe" ? U0 * 1.2 : Math.max(Math.abs(uAt(0)), 1e-3) * 1.2;
+      farbe = "#b45309"; titel = "U_ind in V"; mitte = true;
+    }
+    var yNull = mitte ? o + (H - o - u) / 2 : H - u;
+    var skala = (mitte ? (H - o - u) / 2 : (H - o - u)) / ymax;
+    function X(t){ return l + (t / T) * (W - l - r); }
+    function Y(v){ return yNull - v * skala; }
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+
+    // Zeitgitter
+    var st = schrittZeit(T), stMs = st * 1000, dez = stMs >= 1 ? 0 : (stMs >= 0.1 ? 1 : 2);
+    ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.font = "13px sans-serif";
+    for(var tt = 0; tt <= T + 1e-12; tt += st){
+      ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(X(tt), o - 6); ctx.lineTo(X(tt), H - u); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = "#64748b"; ctx.fillText(fmt(tt * 1000, dez), X(tt), H - u + 6);
+    }
+    // Achsen
+    ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(l, o - 6); ctx.lineTo(l, H - u); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(l, yNull); ctx.lineTo(W - r, yNull); ctx.stroke();
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "13px sans-serif";
+    ctx.textAlign = "left"; ctx.textBaseline = "middle"; ctx.fillText(titel, 8, 13);
+    ctx.textAlign = "right";
+    var obenTxt = was === "I" ? fmt(ymax, 2) : fmtU(ymax);
+    ctx.fillText(obenTxt, l - 6, mitte ? o : o + 4);
+    ctx.fillText("0", l - 6, yNull);
+    if(mitte) ctx.fillText("−" + obenTxt, l - 6, H - u);
+    ctx.textAlign = "left"; ctx.fillText("t in ms", W - r + 4, H - u + 14);
+
+    // Hilfslinien
+    ctx.setLineDash([7, 5]);
+    if(was === "I" && phase !== "ruhe"){
+      var ziel = phase === "ein" ? iEnd : 0;
+      if(phase === "ein"){
+        ctx.strokeStyle = "#475569"; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(l, Y(iEnd)); ctx.lineTo(W - r, Y(iEnd)); ctx.stroke();
+        ctx.setLineDash([]); ctx.fillStyle = "#475569"; ctx.textAlign = "right"; ctx.font = "13px sans-serif";
+        ctx.fillText("I_∞", W - r - 4, Y(iEnd) - 9); ctx.setLineDash([7, 5]);
+      }
+      ctx.strokeStyle = "#1d4ed8"; ctx.lineWidth = 1.5;   // Anfangstangente, trifft das Ziel bei t = τ
+      ctx.beginPath(); ctx.moveTo(X(0), Y(i0)); ctx.lineTo(X(tau), Y(ziel)); ctx.stroke();
+    }
+    if(was === "U" && phase === "aus" && ymax > U_ZUND){
+      ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(l, Y(U_ZUND)); ctx.lineTo(W - r, Y(U_ZUND)); ctx.stroke();
+      ctx.setLineDash([]); ctx.fillStyle = "#b45309"; ctx.textAlign = "right"; ctx.font = "13px sans-serif";
+      ctx.fillText("Zündspannung 90 V", W - r - 4, Y(U_ZUND) - 9); ctx.setLineDash([7, 5]);
+    }
+    ctx.setLineDash([]);
+    if(phase !== "ruhe"){
+      ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.5;   // Marke bei t = τ
+      ctx.beginPath(); ctx.moveTo(X(tau), yNull - 5); ctx.lineTo(X(tau), yNull + 5); ctx.stroke();
+      ctx.fillStyle = "#475569"; ctx.textAlign = "center"; ctx.textBaseline = "bottom"; ctx.font = "600 14px sans-serif";
+      ctx.fillText("τ", X(tau), yNull - 7);
+    }
+
+    // Kurve bis zur laufenden Zeit
+    if(phase !== "ruhe"){
+      var n = 260, k;
+      ctx.strokeStyle = farbe; ctx.lineWidth = 3; ctx.lineJoin = "round"; ctx.beginPath();
+      for(k = 0; k <= n; k++){
+        var t = tp * k / n, v = was === "I" ? iAt(t) : uAt(t);
+        if(k === 0) ctx.moveTo(X(t), Y(v)); else ctx.lineTo(X(t), Y(v));
+      }
+      ctx.stroke();
+      var vJetzt = was === "I" ? iAt(tp) : uAt(tp);
+      ctx.fillStyle = farbe; ctx.beginPath(); ctx.arc(X(tp), Y(vJetzt), 5, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
+  schutzGeaendert();
+  reset();
+  requestAnimationFrame(schritt);
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1", vw2:"Vorwissen 2", vw3:"Vorwissen 3",
+    sim1:"Simulation 1", sim2:"Simulation 2",
+    a1:"Aufgabe 1 (Induktivität)", a2:"Aufgabe 2 (Selbstinduktionsspannung)", a3:"Aufgabe 3 (Zuordnung)",
+    a4:"Aufgabe 4 (Einschaltstrom)", a5:"Aufgabe 5 (Feldenergie)"
+  };
+  var zeilen = ["Selbstinduktion – Physik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Offene Aufgabe " + (i + 1) + ":\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>

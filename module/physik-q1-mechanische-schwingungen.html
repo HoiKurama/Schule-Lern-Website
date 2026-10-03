@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mechanische Schwingungen – Physik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#1d4ed8;
+  --akzent-hell:#eff6ff;
+  --akzent-rand:#bfdbfe;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#1e3a8a,#1d4ed8);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#1a43b8;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <div class="fachzeile">Physik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Mechanische Schwingungen</h1>
+    <p style="margin:0 0 14px;opacity:.9">Vom Federpendel zur Resonanz: Wie ein schwingendes System auf Rückstellkraft, Reibung und Antrieb antwortet</p>
+    <div class="meta">
+      <span class="chip">Physik LK · Q1</span>
+      <span class="chip">Inhaltsfeld: Schwingende Systeme und Wellen</span>
+      <span class="chip">ca. 150 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Ein Kind sitzt auf einer Schaukel mit drei Meter langen Ketten und wird angestoßen. Es schwingt hin und her, und alle dreieinhalb Sekunden ist es wieder am Ausgangspunkt. Stößt du im richtigen Moment nach, schaukelt es mit jedem Mal höher; stößt du im falschen Moment, bremst du es. Und hörst du ganz auf, wird die Schaukel von selbst langsamer, obwohl niemand sie bremst. Drei Beobachtungen, ein System – und bei keiner sagt der Alltag, warum es so ist.</p>
+
+  <details>
+    <summary>Woher die dreieinhalb Sekunden?</summary>
+    <p>Die Formel dazu leitest du in Abschnitt 2 her: <span class="m" data-tex="T = 2\pi\sqrt{l/g}" data-plain="T = 2π·√(l/g)"></span>. Für <span class="m" data-tex="l = 3{,}0\,\mathrm{m}" data-plain="l = 3,0 m"></span> ergibt das <span class="m" data-tex="T = 3{,}47\,\mathrm{s}" data-plain="T = 3,47 s"></span>. Die Waschmaschine aus dem nächsten Absatz wird in den Aufgaben wieder aufgegriffen.</p>
+  </details>
+
+  <p>Dieselbe Physik steckt in einer Waschmaschine. Beim Hochfahren der Schleuderdrehzahl schüttelt sie sich kurz heftig und wandert über den Boden, bei voller Drehzahl dagegen läuft sie erstaunlich ruhig. Schneller heißt hier also nicht stärker, sondern nach einem kurzen Höhepunkt wieder schwächer. Auf dieser Seite klärst du drei Fragen: Was legt fest, wie schnell ein System schwingt? Warum verschwindet eine Schwingung von selbst? Und warum genügt ein rhythmischer, aber schwacher Antrieb, um riesige Ausschläge zu erzeugen – und warum nur zu bestimmten Zeiten?</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Drei Fragen aus der Sekundarstufe I und der Einführungsphase. Wenn du hier hängst, lohnt sich ein Blick zurück, bevor du weitermachst.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Eine Schraubenfeder folgt dem Hookeschen Gesetz. Du verdreifachst ihre Auslenkung aus der Ruhelage. Was geschieht mit der Rückstellkraft?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span>Sie bleibt gleich, weil die Federkonstante sich nicht ändert.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span>Sie verdreifacht sich, weil die Kraft mit der Auslenkung im gleichen Verhältnis wächst.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span>Sie verneunfacht sich, weil in der Federenergie <span class="m" data-tex="\tfrac{1}{2}\,D\,s^2" data-plain="½·D·s²"></span> ein Quadrat steht.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Ein Fadenpendel wird ausgelenkt und ohne Anstoß losgelassen. Reibung ist vernachlässigbar. An welcher Stelle seiner Bahn ist die Geschwindigkeit des Pendelkörpers am größten?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span>Am Umkehrpunkt, weil dort die Auslenkung am größten ist.</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span>An der tiefsten Stelle, weil dort die gesamte Energie Bewegungsenergie ist.</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span>Überall gleich, weil die Gesamtenergie erhalten bleibt.</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Ein Fadenpendel führt in 8,0 s genau 4 vollständige Schwingungen aus. Wie groß ist seine Frequenz?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span><span class="m" data-tex="0{,}50\,\mathrm{Hz}" data-plain="0,50 Hz"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span><span class="m" data-tex="2{,}0\,\mathrm{Hz}" data-plain="2,0 Hz"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span><span class="m" data-tex="32\,\mathrm{Hz}" data-plain="32 Hz"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 ERKLÄRTEIL =============== -->
+<section id="grundlagen">
+  <div class="stufe"><div class="nr">2</div><h2>Von der Rückstellkraft zur harmonischen Schwingung</h2></div>
+
+  <h3>Was eine Schwingung ausmacht</h3>
+  <p>Ein System schwingt, wenn es um eine <strong>Ruhelage</strong> hin und her läuft. Die Ruhelage ist die Stelle, an der es ohne Anstoß liegen bleibt. Dort verschwindet die Kraft. Wird das System ausgelenkt, wirkt eine <strong>Rückstellkraft</strong>, die zur Ruhelage zeigt. Dazu kommt die Trägheit: Beim Durchgang durch die Ruhelage ist die Kraft null, aber der Körper hat Geschwindigkeit und läuft weiter. <strong>Rückstellkraft plus Trägheit</strong> – mehr braucht es nicht, damit ein System schwingt.</p>
+
+  <p>Beschrieben wird das mit vier Größen. Die <strong>Auslenkung</strong> <span class="m" data-tex="x(t)" data-plain="x(t)"></span> gibt den Ort relativ zur Ruhelage an. Die <strong>Amplitude</strong> <span class="m" data-tex="x_{\max}" data-plain="x_max"></span> ist ihr größter Betrag. Die <strong>Schwingungsdauer</strong> <span class="m" data-tex="T" data-plain="T"></span> ist die Zeit für einen vollständigen Hin- und Rückweg, die <strong>Frequenz</strong> ist <span class="m" data-tex="f = 1/T" data-plain="f = 1/T"></span>. Weil wir gleich mit Sinus und Kosinus rechnen, ist die <strong>Kreisfrequenz</strong> bequemer:</p>
+
+  <div class="m block" id="f-kreisfrequenz" data-tex="\omega = \dfrac{2\pi}{T} = 2\pi f \qquad [\omega] = 1\,\dfrac{\mathrm{rad}}{\mathrm{s}}" data-plain="ω = 2π/T = 2π·f     [ω] = 1 rad/s"></div>
+
+  <p>Ein Beispiel: Bei <span class="m" data-tex="T = 0{,}80\,\mathrm{s}" data-plain="T = 0,80 s"></span> ist <span class="m" data-tex="f = 1{,}25\,\mathrm{Hz}" data-plain="f = 1,25 Hz"></span> und <span class="m" data-tex="\omega = 7{,}854\,\mathrm{rad/s}" data-plain="ω = 7,854 rad/s"></span>. Die Zahl <span class="m" data-tex="2\pi" data-plain="2π"></span> steckt darin, weil <span class="m" data-tex="\omega t" data-plain="ω·t"></span> der Winkel im Bogenmaß ist, den ein Punkt auf einem Kreis in der Zeit <span class="m" data-tex="t" data-plain="t"></span> zurücklegt: Eine volle Schwingung entspricht einem vollen Umlauf <span class="m" data-tex="2\pi" data-plain="2π"></span>.</p>
+
+  <div class="merksatz">
+    <b>Harmonische Schwingung</b>
+    Eine Schwingung heißt <strong>harmonisch</strong>, wenn die Auslenkung sinusförmig von der Zeit abhängt: <span class="m" data-tex="x(t) = x_{\max}\sin(\omega t + \varphi_0)" data-plain="x(t) = x_max·sin(ωt + φ₀)"></span>. Ob ein reales System so schwingt, ist keine Frage der Definition, sondern der Rückstellkraft – das klärt der nächste Abschnitt.
+  </div>
+
+  <p>Geschwindigkeit und Beschleunigung folgen durch Ableiten. Für <span class="m" data-tex="x(t) = x_{\max}\sin(\omega t)" data-plain="x(t) = x_max·sin(ωt)"></span> gilt:</p>
+
+  <div class="m block" id="f-schwingung" data-tex="x = x_{\max}\sin(\omega t), \quad v = \dot{x} = x_{\max}\,\omega\cos(\omega t), \quad a = \ddot{x} = -x_{\max}\,\omega^2\sin(\omega t)" data-plain="x = x_max·sin(ωt),   v = x' = x_max·ω·cos(ωt),   a = x'' = −x_max·ω²·sin(ωt)"></div>
+
+  <p>Daraus liest du zwei Dinge ab. Erstens die <strong>Höchstwerte</strong>: <span class="m" data-tex="v_{\max} = \omega\,x_{\max}" data-plain="v_max = ω·x_max"></span> und <span class="m" data-tex="a_{\max} = \omega^2\,x_{\max}" data-plain="a_max = ω²·x_max"></span>. Bei <span class="m" data-tex="x_{\max} = 4{,}0\,\mathrm{cm}" data-plain="x_max = 4,0 cm"></span> und <span class="m" data-tex="T = 0{,}80\,\mathrm{s}" data-plain="T = 0,80 s"></span> sind das <span class="m" data-tex="v_{\max} = 0{,}314\,\mathrm{m/s}" data-plain="v_max = 0,314 m/s"></span> und <span class="m" data-tex="a_{\max} = 2{,}47\,\mathrm{m/s^2}" data-plain="a_max = 2,47 m/s²"></span>. Zweitens die <strong>Proportionalität</strong> <span class="m" data-tex="a = -\omega^2 x" data-plain="a = −ω²·x"></span>: Die Beschleunigung ist der Auslenkung entgegengerichtet und ihr proportional. Das ist die Signatur der harmonischen Schwingung.</p>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Wo die Auslenkung am größten ist, ist auch die Geschwindigkeit am größten – da ist am meisten Bewegung im Spiel." Falsch, und zwar genau umgekehrt. Sieh dir die drei Formeln oben an: <span class="m" data-tex="x" data-plain="x"></span> ist am größten, wo der Sinus 1 ist, dort ist der Kosinus 0, also <span class="m" data-tex="v = 0" data-plain="v = 0"></span>. Physikalisch: Im Umkehrpunkt ist die Rückstellkraft am größten, sie hat die Bewegung gerade zum Stillstand gebracht und dreht sie um. Durch die Ruhelage läuft der Körper dagegen mit größter Geschwindigkeit, obwohl dort die Kraft null ist. Kraft und Geschwindigkeit sind bei der Schwingung um eine Viertelperiode gegeneinander verschoben. Wer das verinnerlicht hat, versteht später auch die Phasenlage bei der Resonanz.
+  </div>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Stelle</th><th><span class="m" data-tex="x" data-plain="x"></span></th><th><span class="m" data-tex="v" data-plain="v"></span></th><th><span class="m" data-tex="a" data-plain="a"></span></th></tr>
+    <tr><td>Umkehrpunkt</td><td><span class="m" data-tex="\pm x_{\max}" data-plain="±x_max"></span></td><td>0</td><td><span class="m" data-tex="\mp\omega^2 x_{\max}" data-plain="∓ω²·x_max"></span></td></tr>
+    <tr><td>Ruhelage</td><td>0</td><td><span class="m" data-tex="\pm\omega\,x_{\max}" data-plain="±ω·x_max"></span></td><td>0</td></tr>
+  </table>
+  </div>
+
+  <p>Der Betrag der Geschwindigkeit ist in der Ruhelage am größten, der Betrag der Beschleunigung im Umkehrpunkt.</p>
+
+  <h3>Das Federpendel</h3>
+  <p>Eine Feder, die dem Hookeschen Gesetz folgt, liefert genau die Rückstellkraft, die man braucht:</p>
+
+  <div class="m block" data-tex="F = -D\,x" data-plain="F = −D·x"></div>
+
+  <p>Die Federkonstante <span class="m" data-tex="D" data-plain="D"></span> (Einheit N/m) sagt, wie viel Kraft pro Meter Auslenkung nötig ist. Das Minuszeichen ist keine Formalität: Es besagt, dass die Kraft der Auslenkung <strong>entgegengerichtet</strong> ist. Sie zeigt immer zur Ruhelage.</p>
+
+  <p>Setzt man das ins zweite Newtonsche Gesetz ein, ergibt sich die <strong>Bewegungsgleichung</strong> des Federpendels. Wir betrachten eine horizontale, reibungsfreie Anordnung, damit die Gewichtskraft keine Rolle spielt (bei senkrechtem Aufhängen verschiebt sie nur die Ruhelage):</p>
+
+  <div class="m block" id="f-bew-feder" data-tex="m\,\ddot{x} = -D\,x \quad\Longleftrightarrow\quad \ddot{x} + \dfrac{D}{m}\,x = 0" data-plain="m·x'' = −D·x   ⟺   x'' + (D/m)·x = 0"></div>
+
+  <p>In dieser Gleichung kommen die Funktion <span class="m" data-tex="x(t)" data-plain="x(t)"></span> selbst und ihre zweite Ableitung vor. Aus dem vorigen Abschnitt kennst du eine Funktion, deren zweite Ableitung ein negatives Vielfaches von ihr selbst ist: den Sinus. Ob das die Gleichung löst und welche Kreisfrequenz herauskommt, zeigt die Herleitung. Das Ergebnis gleich vorweg:</p>
+
+  <div class="m block" id="f-omega-feder" data-tex="\omega_0 = \sqrt{\dfrac{D}{m}} \qquad T_0 = 2\pi\sqrt{\dfrac{m}{D}}" data-plain="ω₀ = √(D/m)     T₀ = 2π·√(m/D)"></div>
+
+  <details>
+    <summary>Herleitung: Warum das Federpendel harmonisch schwingt und wie groß <span class="m" data-tex="T_0" data-plain="T₀"></span> ist</summary>
+    <p><strong>Schritt 1 – Ansatz.</strong> Wir probieren <span class="m" data-tex="x(t) = x_{\max}\sin(\omega_0 t + \varphi_0)" data-plain="x(t) = x_max·sin(ω₀t + φ₀)"></span> mit noch unbekanntem <span class="m" data-tex="\omega_0" data-plain="ω₀"></span> und prüfen, ob die Bewegungsgleichung erfüllt werden kann.</p>
+    <p><strong>Schritt 2 – Ableiten.</strong></p>
+    <div class="m block" data-tex="\dot{x} = x_{\max}\,\omega_0\cos(\omega_0 t+\varphi_0), \qquad \ddot{x} = -x_{\max}\,\omega_0^2\sin(\omega_0 t+\varphi_0) = -\omega_0^2\,x" data-plain="x' = x_max·ω₀·cos(ω₀t + φ₀),   x'' = −x_max·ω₀²·sin(ω₀t + φ₀) = −ω₀²·x"></div>
+    <p><strong>Schritt 3 – Einsetzen.</strong> In <span class="m" data-tex="\ddot{x} + (D/m)\,x = 0" data-plain="x'' + (D/m)·x = 0"></span> eingesetzt:</p>
+    <div class="m block" data-tex="-\omega_0^2\,x + \dfrac{D}{m}\,x = \left(\dfrac{D}{m}-\omega_0^2\right)x = 0" data-plain="−ω₀²·x + (D/m)·x = (D/m − ω₀²)·x = 0"></div>
+    <p>Das gilt für <em>jedes</em> <span class="m" data-tex="x(t)" data-plain="x(t)"></span>, wenn der Klammerausdruck null ist, also für <span class="m" data-tex="\omega_0 = \sqrt{D/m}" data-plain="ω₀ = √(D/m)"></span>. Der Ansatz löst die Gleichung genau für diese Kreisfrequenz. Amplitude <span class="m" data-tex="x_{\max}" data-plain="x_max"></span> und Phase <span class="m" data-tex="\varphi_0" data-plain="φ₀"></span> sind frei – sie legen die <strong>Anfangsbedingungen</strong> fest (wie weit ausgelenkt, mit welchem Anstoß).</p>
+    <p><strong>Schritt 4 – Periode.</strong> Aus <span class="m" data-tex="\omega_0 = 2\pi/T_0" data-plain="ω₀ = 2π/T₀"></span> folgt <span class="m" data-tex="T_0 = 2\pi\sqrt{m/D}" data-plain="T₀ = 2π·√(m/D)"></span>.</p>
+    <p><strong>Schritt 5 – Einheitenprobe.</strong> <span class="m" data-tex="[m/D] = \dfrac{\mathrm{kg}}{\mathrm{N/m}} = \dfrac{\mathrm{kg\,m}}{\mathrm{kg\,m/s^2}} = \mathrm{s}^2" data-plain="[m/D] = kg / (N/m) = kg·m/(kg·m/s²) = s²"></span>, die Wurzel liefert Sekunden. ✓</p>
+    <p><strong>Was daran auffällt.</strong> Die Amplitude kommt in der Formel für <span class="m" data-tex="T_0" data-plain="T₀"></span> nicht vor. Ein Federpendel, das doppelt so weit ausgelenkt wird, braucht für einen Umlauf <em>genauso lange</em> – es läuft schneller, weil die Rückstellkraft größer ist, und legt einen längeren Weg zurück, beides gleicht sich exakt aus. Das gilt nur, weil die Kraft proportional zur Auslenkung ist.</p>
+  </details>
+
+  <p>Ein Federpendel mit <span class="m" data-tex="m = 0{,}200\,\mathrm{kg}" data-plain="m = 0,200 kg"></span> und <span class="m" data-tex="D = 8{,}0\,\mathrm{N/m}" data-plain="D = 8,0 N/m"></span>: <span class="m" data-tex="\omega_0 = \sqrt{8{,}0/0{,}200}\,\mathrm{s^{-1}} = \sqrt{40}\,\mathrm{s^{-1}} = 6{,}325\,\mathrm{rad/s}" data-plain="ω₀ = √(8,0/0,200) s⁻¹ = √40 s⁻¹ = 6,325 rad/s"></span>, <span class="m" data-tex="T_0 = 2\pi/6{,}325\,\mathrm{s} = 0{,}9935\,\mathrm{s}" data-plain="T₀ = 2π/6,325 s = 0,9935 s"></span> und <span class="m" data-tex="f_0 = 1{,}007\,\mathrm{Hz}" data-plain="f₀ = 1,007 Hz"></span>. Eine numerische Probe bestätigt die Amplitudenunabhängigkeit: Bei Anfangsauslenkungen von 2 cm und von 10 cm ergibt sich in beiden Fällen <span class="m" data-tex="T_0 = 0{,}9935\,\mathrm{s}" data-plain="T₀ = 0,9935 s"></span>.</p>
+
+  <div class="merksatz">
+    <b>Isochronismus</b>
+    Beim Federpendel hängt die Schwingungsdauer von der Masse und der Federkonstante ab, <strong>nicht von der Amplitude</strong>. Größere Masse macht das Pendel langsamer, härtere Feder macht es schneller. Diese Eigenschaft ist keine Naturregel, sondern eine Folge der <strong>linearen</strong> Rückstellkraft. Sobald die Kraft nichtlinear wird, verliert sie ihre Gültigkeit.
+  </div>
+
+  <h3>Das Fadenpendel</h3>
+  <p>Beim Fadenpendel kommt die Rückstellkraft nicht aus einer Feder, sondern aus der Gewichtskraft. Ein Pendelkörper der Masse <span class="m" data-tex="m" data-plain="m"></span> hängt an einem Faden der Länge <span class="m" data-tex="l" data-plain="l"></span> und ist um den Winkel <span class="m" data-tex="\theta" data-plain="θ"></span> ausgelenkt. Nur die Gewichtskraftkomponente <strong>tangential zur Kreisbahn</strong> treibt die Bewegung an: <span class="m" data-tex="F_t = -m\,g\sin\theta" data-plain="F_t = −m·g·sin θ"></span>. Die Komponente längs des Fadens wird vom Faden aufgenommen und ändert die Bewegung längs der Bahn nicht.</p>
+
+  <p>Für kleine Winkel gilt <span class="m" data-tex="\sin\theta \approx \theta" data-plain="sin θ ≈ θ"></span> (im Bogenmaß). Die Auslenkung längs der Bahn ist <span class="m" data-tex="x = l\,\theta" data-plain="x = l·θ"></span>. Damit wird die Kraft zu</p>
+
+  <div class="m block" data-tex="F_t \approx -m g\,\theta = -\dfrac{m g}{l}\,x" data-plain="F_t ≈ −m·g·θ = −(m·g/l)·x"></div>
+
+  <p>Das ist ein Kraftgesetz <span class="m" data-tex="F = -D_{\text{eff}}\,x" data-plain="F = −D_eff·x"></span> mit <span class="m" data-tex="D_{\text{eff}} = m g/l" data-plain="D_eff = m·g/l"></span> – dieselbe Form wie beim Federpendel. Das Ergebnis:</p>
+
+  <div class="m block" id="f-faden" data-tex="\omega_0 = \sqrt{\dfrac{g}{l}} \qquad T_0 = 2\pi\sqrt{\dfrac{l}{g}}" data-plain="ω₀ = √(g/l)     T₀ = 2π·√(l/g)"></div>
+
+  <details>
+    <summary>Herleitung: Fadenpendel, Kleinwinkelnäherung und warum die Masse fehlt</summary>
+    <p><strong>Schritt 1 – Kraft längs der Bahn.</strong> Die Gewichtskraft <span class="m" data-tex="m g" data-plain="m·g"></span> zeigt nach unten. Zerlegt man sie am Pendelkörper in eine Komponente längs des Fadens (Betrag <span class="m" data-tex="m g\cos\theta" data-plain="m·g·cos θ"></span>) und eine tangential dazu (<span class="m" data-tex="m g\sin\theta" data-plain="m·g·sin θ"></span>), so ist nur die zweite für die Bewegung längs der Bahn relevant. Sie zeigt zur Ruhelage: <span class="m" data-tex="F_t = -m g\sin\theta" data-plain="F_t = −m·g·sin θ"></span>.</p>
+    <p><strong>Schritt 2 – Bewegungsgleichung.</strong> Mit <span class="m" data-tex="x = l\,\theta" data-plain="x = l·θ"></span> und <span class="m" data-tex="a_t = \ddot{x} = l\,\ddot{\theta}" data-plain="a_t = x'' = l·θ''"></span> lautet Newton II längs der Bahn:</p>
+    <div class="m block" data-tex="m\,l\,\ddot{\theta} = -m g \sin\theta \quad\Longrightarrow\quad \ddot{\theta} + \dfrac{g}{l}\sin\theta = 0" data-plain="m·l·θ'' = −m·g·sin θ   ⟹   θ'' + (g/l)·sin θ = 0"></div>
+    <p><strong>Die Masse kürzt sich heraus.</strong> Kraft (Gewicht) und Trägheit sind beide proportional zu <span class="m" data-tex="m" data-plain="m"></span>. Darum steht in der Bewegungsgleichung keine Masse. Das ist kein Zufall: Es ist die Aussage, dass <strong>schwere und träge Masse gleich sind</strong> – Galilei und später Newton haben das mit Pendeln aus verschiedenen Materialien geprüft und keinen Unterschied in der Schwingungsdauer gefunden. Beim Federpendel dagegen kommt die Kraft nicht aus der Masse, deshalb steht dort <span class="m" data-tex="m" data-plain="m"></span> im Ergebnis.</p>
+    <p><strong>Schritt 3 – Kleinwinkelnäherung.</strong> Für <span class="m" data-tex="\sin\theta \approx \theta" data-plain="sin θ ≈ θ"></span> (θ im Bogenmaß) wird die Gleichung linear: <span class="m" data-tex="\ddot{\theta} + (g/l)\,\theta = 0" data-plain="θ'' + (g/l)·θ = 0"></span>. Sie hat dieselbe Form wie beim Federpendel, nur <span class="m" data-tex="D/m" data-plain="D/m"></span> ist durch <span class="m" data-tex="g/l" data-plain="g/l"></span> ersetzt, also ist <span class="m" data-tex="\omega_0 = \sqrt{g/l}" data-plain="ω₀ = √(g/l)"></span>.</p>
+    <p><strong>Schritt 4 – Wie gut ist die Näherung?</strong> Der relative Fehler von <span class="m" data-tex="\theta" data-plain="θ"></span> gegenüber <span class="m" data-tex="\sin\theta" data-plain="sin θ"></span> beträgt bei 5° etwa 0,13 %, bei 10° etwa 0,51 %, bei 15° etwa 1,15 % und bei 20° etwa 2,06 %. Die tatsächliche Schwingungsdauer wächst mit der Amplitude (exakte Rechnung mit elliptischem Integral, Faktor gegenüber <span class="m" data-tex="T_0" data-plain="T₀"></span>): bei 10° etwa 1,0019, bei 30° etwa 1,0174, bei 60° etwa 1,0732. Das Fadenpendel ist also <strong>nur näherungsweise</strong> isochron; die Näherung ist bis etwa 10° besser als ein halbes Prozent.</p>
+  </details>
+
+  <p>Für <span class="m" data-tex="l = 1{,}00\,\mathrm{m}" data-plain="l = 1,00 m"></span> und <span class="m" data-tex="g = 9{,}81\,\mathrm{m/s^2}" data-plain="g = 9,81 m/s²"></span> ist <span class="m" data-tex="T_0 = 2\pi\sqrt{1{,}00/9{,}81}\,\mathrm{s} = 2{,}006\,\mathrm{s}" data-plain="T₀ = 2π·√(1,00/9,81) s = 2,006 s"></span>. Für genau <span class="m" data-tex="T_0 = 2{,}000\,\mathrm{s}" data-plain="T₀ = 2,000 s"></span> – ein Pendel, das im Sekundentakt tickt, also je Halbperiode eine Sekunde braucht – braucht man <span class="m" data-tex="l = g\,(T/2\pi)^2 = 0{,}994\,\mathrm{m}" data-plain="l = g·(T/2π)² = 0,994 m"></span>.</p>
+
+  <div class="merksatz">
+    <b>Was die Schwingungsdauer bestimmt</b>
+    Die Schwingungsdauer eines Fadenpendels hängt nur von der Länge und vom Ortsfaktor ab, <strong>nicht von der Masse</strong> und (in der Näherung kleiner Winkel) nicht von der Amplitude. Wer <span class="m" data-tex="T" data-plain="T"></span> halbieren will, muss die Länge <strong>vierteln</strong>, nicht halbieren. Das Federpendel dagegen ist von der Masse abhängig: <span class="m" data-tex="T \sim \sqrt{m}" data-plain="T ~ √m"></span>.
+  </div>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Ein schwerer Pendelkörper schwingt langsamer, weil er träger ist." Beim Fadenpendel stimmt das nicht: Die größere Masse ist zwar träger, wird aber im gleichen Maß stärker von der Erde angezogen. Beide Effekte heben sich auf. Beim Federpendel gilt dagegen die Erwartung – dort hängt die Federkraft nicht von der Masse ab, die Trägheit schon. Wer beides in einen Topf wirft, hat die Formeln <span class="m" data-tex="T = 2\pi\sqrt{l/g}" data-plain="T = 2π√(l/g)"></span> und <span class="m" data-tex="T = 2\pi\sqrt{m/D}" data-plain="T = 2π√(m/D)"></span> nicht verstanden, sondern nur gemerkt.
+  </div>
+
+  <h3>Energie der ungedämpften Schwingung</h3>
+  <p>Ohne Reibung bleibt die mechanische Energie erhalten. Sie setzt sich beim Federpendel aus der Spannenergie der Feder und der Bewegungsenergie des Körpers zusammen: in jeder Lage gilt <span class="m" data-tex="E = \tfrac{1}{2}D\,x^2 + \tfrac{1}{2}m\,v^2" data-plain="E = ½·D·x² + ½·m·v²"></span>. Im Umkehrpunkt ist <span class="m" data-tex="v = 0" data-plain="v = 0"></span>, die gesamte Energie steckt dort in der Feder:</p>
+
+  <div class="m block" id="f-energie" data-tex="E = \tfrac{1}{2}\,D\,x_{\max}^2" data-plain="E = ½·D·x_max²"></div>
+
+  <p>In der Ruhelage ist <span class="m" data-tex="x = 0" data-plain="x = 0"></span>, dort steckt alles in der Bewegung, also <span class="m" data-tex="E = \tfrac{1}{2}m\,v_{\max}^2" data-plain="E = ½·m·v_max²"></span>. Beide Ausdrücke sind gleich, und daraus folgt ohne jede Ableitung <span class="m" data-tex="v_{\max} = x_{\max}\sqrt{D/m} = \omega_0\,x_{\max}" data-plain="v_max = x_max·√(D/m) = ω₀·x_max"></span> – dasselbe Ergebnis wie oben. Beide Wege stützen sich gegenseitig: Aus der Kinematik folgt die Energie, aus der Energie die Kinematik.</p>
+
+  <p>Für das Pendel mit <span class="m" data-tex="m = 0{,}200\,\mathrm{kg}" data-plain="m = 0,200 kg"></span>, <span class="m" data-tex="D = 8{,}0\,\mathrm{N/m}" data-plain="D = 8,0 N/m"></span> und <span class="m" data-tex="x_{\max} = 6{,}0\,\mathrm{cm}" data-plain="x_max = 6,0 cm"></span> ist <span class="m" data-tex="E = \tfrac{1}{2}\cdot 8{,}0\,\mathrm{N/m}\cdot(0{,}060\,\mathrm{m})^2 = 14{,}4\,\mathrm{mJ}" data-plain="E = ½ · 8,0 N/m · (0,060 m)² = 14,4 mJ"></span> und <span class="m" data-tex="v_{\max} = 6{,}325\,\mathrm{s^{-1}}\cdot 0{,}060\,\mathrm{m} = 0{,}379\,\mathrm{m/s}" data-plain="v_max = 6,325 s⁻¹ · 0,060 m = 0,379 m/s"></span>. Bei halber Amplitude (<span class="m" data-tex="x = 3{,}0\,\mathrm{cm}" data-plain="x = 3,0 cm"></span>) steckt in der Feder nur ein <strong>Viertel</strong> der Energie, also 3,6 mJ; drei Viertel sind Bewegungsenergie und die Geschwindigkeit ist <span class="m" data-tex="v = 0{,}866\,v_{\max} = 0{,}329\,\mathrm{m/s}" data-plain="v = 0,866·v_max = 0,329 m/s"></span> – nicht die halbe Höchstgeschwindigkeit.</p>
+
+  <div class="merksatz">
+    <b>Energie pendelt, Summe bleibt</b>
+    Bei einer ungedämpften Schwingung pendelt die Energie zweimal je Periode zwischen Spannenergie und Bewegungsenergie hin und her, die Summe bleibt konstant. Sie ist proportional zum <strong>Quadrat der Amplitude</strong>: Doppelte Amplitude heißt vierfache Energie. Genau diese Aussage brauchst du gleich, um zu verstehen, was Reibung mit der Amplitude macht.
+  </div>
+</section>
+
+<!-- =============== 3 VERTIEFUNG =============== -->
+<section id="vertiefung">
+  <div class="stufe"><div class="nr">3</div><h2>Dämpfung, Antrieb und Resonanz</h2></div>
+
+  <h3>Die gedämpfte Schwingung</h3>
+  <p>Jede reale Schwingung verliert Energie: Luft bremst, in der Feder entsteht Wärme, das Lager reibt. Das einfachste Modell dafür ist eine Reibungskraft, die <strong>proportional zur Geschwindigkeit</strong> ist und ihr entgegenwirkt:</p>
+
+  <div class="m block" data-tex="F_R = -b\,v \qquad [b] = 1\,\dfrac{\mathrm{N\,s}}{\mathrm{m}} = 1\,\dfrac{\mathrm{kg}}{\mathrm{s}}" data-plain="F_R = −b·v     [b] = 1 N·s/m = 1 kg/s"></div>
+
+  <p>Das trifft gut zu, wenn sich ein Körper langsam durch eine Flüssigkeit oder durch Luft bewegt, und auch für die Wirbelstrombremse aus dem Induktionsmodul. <strong>Gleitreibung</strong> folgt einem anderen Gesetz (konstanter Betrag) und ist hier nicht gemeint. Mit der Rückstellkraft zusammen lautet Newton II</p>
+
+  <div class="m block" id="f-bew-daempf" data-tex="m\,\ddot{x} = -D\,x - b\,\dot{x} \quad\Longleftrightarrow\quad \ddot{x} + 2\delta\,\dot{x} + \omega_0^2\,x = 0, \qquad \delta = \dfrac{b}{2m}" data-plain="m·x'' = −D·x − b·x'   ⟺   x'' + 2δ·x' + ω₀²·x = 0,   δ = b/(2m)"></div>
+
+  <p>Die <strong>Abklingkonstante</strong> <span class="m" data-tex="\delta" data-plain="δ"></span> (Einheit 1/s) hat die Rolle, die die Zeitkonstante bei einem exponentiellen Abfall hat. Die Gleichung hat, je nachdem, wie groß <span class="m" data-tex="\delta" data-plain="δ"></span> gegenüber <span class="m" data-tex="\omega_0" data-plain="ω₀"></span> ist, drei verschiedene Sorten von Lösungen. Die Herleitung liefert sie alle.</p>
+
+  <details>
+    <summary>Herleitung: Die drei Dämpfungsfälle</summary>
+    <p><strong>Schritt 1 – Exponentialfaktor abspalten.</strong> Die Reibung lässt die Auslenkung abklingen. Wir spalten das ab: <span class="m" data-tex="x(t) = e^{-\delta t}\,u(t)" data-plain="x(t) = e^(−δt)·u(t)"></span> mit einer noch unbekannten Funktion <span class="m" data-tex="u(t)" data-plain="u(t)"></span>. Die Produktregel liefert</p>
+    <div class="m block" data-tex="\dot{x} = e^{-\delta t}\,(\dot{u} - \delta u), \qquad \ddot{x} = e^{-\delta t}\,(\ddot{u} - 2\delta\dot{u} + \delta^2 u)" data-plain="x' = e^(−δt)·(u' − δ·u),   x'' = e^(−δt)·(u'' − 2δ·u' + δ²·u)"></div>
+    <p><strong>Schritt 2 – Einsetzen.</strong> In <span class="m" data-tex="\ddot{x} + 2\delta\,\dot{x} + \omega_0^2\,x = 0" data-plain="x'' + 2δ·x' + ω₀²·x = 0"></span> eingesetzt und durch <span class="m" data-tex="e^{-\delta t}" data-plain="e^(−δt)"></span> geteilt (das ist nie null):</p>
+    <div class="m block" data-tex="\ddot{u} - 2\delta\dot{u} + \delta^2 u + 2\delta\dot{u} - 2\delta^2 u + \omega_0^2 u = \ddot{u} + (\omega_0^2 - \delta^2)\,u = 0" data-plain="u'' − 2δ·u' + δ²·u + 2δ·u' − 2δ²·u + ω₀²·u = u'' + (ω₀² − δ²)·u = 0"></div>
+    <p>Die Terme mit <span class="m" data-tex="u'" data-plain="u'"></span> heben sich auf. Übrig bleibt eine Gleichung, die wir schon kennen – mit einer geänderten Kreisfrequenz.</p>
+    <p><strong>Schritt 3 – Drei Fälle.</strong></p>
+    <ol>
+      <li><strong>Schwingfall,</strong> <span class="m" data-tex="\delta &lt; \omega_0" data-plain="δ &lt; ω₀"></span>: Dann ist <span class="m" data-tex="\omega_d^2 = \omega_0^2 - \delta^2 &gt; 0" data-plain="ω_d² = ω₀² − δ² &gt; 0"></span> und <span class="m" data-tex="u = x_{\max}\cos(\omega_d t + \varphi_0)" data-plain="u = x_max·cos(ω_d·t + φ₀)"></span> (wie bei der Herleitung des Federpendels, mit <span class="m" data-tex="\omega_d" data-plain="ω_d"></span> statt <span class="m" data-tex="\omega_0" data-plain="ω₀"></span>), also
+        <div class="m block" id="f-schwingfall" data-tex="x(t) = x_{\max}\,e^{-\delta t}\cos(\omega_d t + \varphi_0), \qquad \omega_d = \sqrt{\omega_0^2 - \delta^2}" data-plain="x(t) = x_max·e^(−δt)·cos(ω_d·t + φ₀),   ω_d = √(ω₀² − δ²)"></div>
+      </li>
+      <li><strong>Aperiodischer Grenzfall,</strong> <span class="m" data-tex="\delta = \omega_0" data-plain="δ = ω₀"></span>: Es bleibt <span class="m" data-tex="u'' = 0" data-plain="u'' = 0"></span>, also <span class="m" data-tex="u = c_1 + c_2 t" data-plain="u = c₁ + c₂·t"></span> und <span class="m" data-tex="x = (c_1 + c_2 t)\,e^{-\delta t}" data-plain="x = (c₁ + c₂·t)·e^(−δt)"></span>. Keine Schwingung, höchstens ein einziger Nulldurchgang, danach Rückkehr zur Ruhelage.</li>
+      <li><strong>Kriechfall,</strong> <span class="m" data-tex="\delta &gt; \omega_0" data-plain="δ &gt; ω₀"></span>: <span class="m" data-tex="u'' = \kappa^2 u" data-plain="u'' = κ²·u"></span> mit <span class="m" data-tex="\kappa = \sqrt{\delta^2 - \omega_0^2}" data-plain="κ = √(δ² − ω₀²)"></span>, also Exponentialfunktionen <span class="m" data-tex="u = A\,e^{\kappa t} + B\,e^{-\kappa t}" data-plain="u = A·e^(κt) + B·e^(−κt)"></span>. Wegen <span class="m" data-tex="\kappa &lt; \delta" data-plain="κ &lt; δ"></span> klingen beide Anteile ab; der langsamere mit <span class="m" data-tex="e^{-(\delta-\kappa)t}" data-plain="e^(−(δ−κ)t)"></span> bestimmt das späte Verhalten.</li>
+    </ol>
+    <p><strong>Schritt 4 – Was das heißt.</strong> Im Schwingfall ist der Faktor <span class="m" data-tex="e^{-\delta t}" data-plain="e^(−δt)"></span> die <strong>Hüllkurve</strong>: Die Maxima liegen auf <span class="m" data-tex="\pm x_{\max}e^{-\delta t}" data-plain="±x_max·e^(−δt)"></span>. Aufeinanderfolgende Maxima im Abstand <span class="m" data-tex="T_d" data-plain="T_d"></span> haben ein <strong>festes Verhältnis</strong>:</p>
+    <div class="m block" id="f-dekrement" data-tex="\Lambda = \delta\,T_d = \ln\dfrac{x_n}{x_{n+1}}" data-plain="Λ = δ·T_d = ln(x_n / x_(n+1))"></div>
+    <p>Hier ist <span class="m" data-tex="x_n/x_{n+1} = e^{\delta T_d}" data-plain="x_n / x_(n+1) = e^(δ·T_d)"></span>. Die Größe <span class="m" data-tex="\Lambda" data-plain="Λ"></span> heißt <strong>logarithmisches Dekrement</strong>. Es lässt sich direkt aus einem Diagramm bestimmen: zwei benachbarte Maxima ablesen, Verhältnis bilden, Logarithmus nehmen.</p>
+    <p><strong>Schritt 5 – Energie.</strong> Die Energie ist proportional zum Amplitudenquadrat, also <span class="m" data-tex="E(t) \sim e^{-2\delta t}" data-plain="E(t) ~ e^(−2δt)"></span>. Je Periode bleibt der Bruchteil <span class="m" data-tex="e^{-2\Lambda}" data-plain="e^(−2Λ)"></span>.</p>
+    <p><strong>Nachprobe.</strong> Eine numerische Integration der Bewegungsgleichung (Runge-Kutta-Verfahren) liefert für das Zahlenbeispiel unten dieselbe Kurve wie die Formel; die Abweichung liegt unter <span class="m" data-tex="10^{-12}\,\mathrm{m}" data-plain="10⁻¹² m"></span>. Das Ergebnis ist also keine Näherung, sondern exakt.</p>
+  </details>
+
+  <p>Wir nehmen dasselbe Federpendel wie oben (<span class="m" data-tex="m = 0{,}200\,\mathrm{kg}" data-plain="m = 0,200 kg"></span>, <span class="m" data-tex="D = 8{,}0\,\mathrm{N/m}" data-plain="D = 8,0 N/m"></span>, <span class="m" data-tex="\omega_0 = 6{,}325\,\mathrm{rad/s}" data-plain="ω₀ = 6,325 rad/s"></span>), aber mit <span class="m" data-tex="b = 0{,}20\,\mathrm{kg/s}" data-plain="b = 0,20 kg/s"></span>: <span class="m" data-tex="\delta = b/(2m) = 0{,}20/0{,}400\,\mathrm{s^{-1}} = 0{,}50\,\mathrm{s^{-1}}" data-plain="δ = b/(2m) = 0,20/0,400 s⁻¹ = 0,50 s⁻¹"></span>, klein gegen <span class="m" data-tex="\omega_0" data-plain="ω₀"></span>, also Schwingfall. Dann ist <span class="m" data-tex="\omega_d = \sqrt{6{,}325^2 - 0{,}50^2}\,\mathrm{s^{-1}} = 6{,}305\,\mathrm{rad/s}" data-plain="ω_d = √(6,325² − 0,50²) s⁻¹ = 6,305 rad/s"></span> und <span class="m" data-tex="T_d = 2\pi/6{,}305\,\mathrm{s} = 0{,}9966\,\mathrm{s}" data-plain="T_d = 2π/6,305 s = 0,9966 s"></span> gegenüber <span class="m" data-tex="T_0 = 0{,}9935\,\mathrm{s}" data-plain="T₀ = 0,9935 s"></span> – die Periode wird um 0,31 % länger. Das logarithmische Dekrement ist <span class="m" data-tex="\Lambda = 0{,}50\cdot 0{,}9966 = 0{,}4983" data-plain="Λ = 0,50 · 0,9966 = 0,4983"></span>; die nächste Amplitude beträgt <span class="m" data-tex="e^{-0{,}4983} = 60{,}8\,\%" data-plain="e^(−0,4983) = 60,8 %"></span> der vorigen, die Energie nach einer Periode 36,9 % der vorigen. Nach etwa <span class="m" data-tex="5/\delta = 10\,\mathrm{s}" data-plain="5/δ = 10 s"></span> ist die Amplitude auf <span class="m" data-tex="e^{-5} = 0{,}67\,\%" data-plain="e^(−5) = 0,67 %"></span> gefallen.</p>
+
+  <p>Welcher der drei Fälle eintritt, entscheidet allein der Vergleich von <span class="m" data-tex="\delta" data-plain="δ"></span> und <span class="m" data-tex="\omega_0" data-plain="ω₀"></span>. Für das Beispielpendel gilt:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Fall</th><th>Bedingung</th><th>Reibung im Beispiel</th><th>Verhalten</th></tr>
+    <tr><td>Schwingfall</td><td><span class="m" data-tex="\delta &lt; \omega_0" data-plain="δ &lt; ω₀"></span></td><td>z. B. <span class="m" data-tex="b = 0{,}20\,\mathrm{kg/s}" data-plain="b = 0,20 kg/s"></span> (<span class="m" data-tex="\delta = 0{,}50\,\mathrm{s^{-1}}" data-plain="δ = 0,50 s⁻¹"></span>)</td><td>schwingt mit abklingender Amplitude</td></tr>
+    <tr><td>aperiodischer Grenzfall</td><td><span class="m" data-tex="\delta = \omega_0" data-plain="δ = ω₀"></span>, d. h. <span class="m" data-tex="b = 2\sqrt{mD}" data-plain="b = 2·√(m·D)"></span></td><td><span class="m" data-tex="b = 2{,}530\,\mathrm{kg/s}" data-plain="b = 2,530 kg/s"></span> (<span class="m" data-tex="\delta = 6{,}325\,\mathrm{s^{-1}}" data-plain="δ = 6,325 s⁻¹"></span>)</td><td>kein Überschwingen, schnellste Rückkehr</td></tr>
+    <tr><td>Kriechfall</td><td><span class="m" data-tex="\delta &gt; \omega_0" data-plain="δ &gt; ω₀"></span></td><td>z. B. <span class="m" data-tex="b = 4{,}0\,\mathrm{kg/s}" data-plain="b = 4,0 kg/s"></span> (<span class="m" data-tex="\delta = 10\,\mathrm{s^{-1}}" data-plain="δ = 10 s⁻¹"></span>)</td><td>kein Überschwingen, langsame Rückkehr</td></tr>
+  </table>
+  </div>
+
+  <p>Der kritische Wert ist <span class="m" data-tex="b_{\text{krit}} = 2m\omega_0 = 2\sqrt{mD} = 2\sqrt{0{,}200\cdot 8{,}0}\,\mathrm{kg/s} = 2{,}530\,\mathrm{kg/s}" data-plain="b_krit = 2·m·ω₀ = 2·√(m·D) = 2·√(0,200·8,0) kg/s = 2,530 kg/s"></span>. Der Kriechfall ist <strong>langsamer</strong> als der Grenzfall, obwohl die Reibung größer ist: Die große Reibung bremst auch die Rückkehr. Deshalb streben Messinstrumente mit Zeiger oft den Grenzfall an – der Zeiger soll schnell und ohne Nachschwingen zur Ruhe kommen.</p>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> Zwei Denkfehler stehen bei der Dämpfung oft zusammen. Erstens: „Reibung ändert nur die Amplitude, die Schwingungsdauer bleibt." Nicht ganz – <span class="m" data-tex="\omega_d &lt; \omega_0" data-plain="ω_d &lt; ω₀"></span>, also ist <span class="m" data-tex="T_d &gt; T_0" data-plain="T_d &gt; T₀"></span>. Bei schwacher Dämpfung ist der Unterschied winzig (hier 0,31 %), bei starker Dämpfung nicht mehr. Zweitens: „Die Amplitude nimmt mit jeder Schwingung um denselben <em>Betrag</em> ab." Nein – um denselben <em>Faktor</em>. Die Kurve ist exponentiell, nicht linear. Mit der Vorstellung vom festen Betrag müsste die Schwingung nach endlich vielen Perioden aufhören; tatsächlich wird sie beliebig klein, aber nie null.
+  </div>
+
+  <div class="merksatz">
+    <b>Dämpfung</b>
+    Reibung verkleinert die Amplitude bei jeder Schwingung um denselben <strong>Faktor</strong> <span class="m" data-tex="e^{-\Lambda}" data-plain="e^(−Λ)"></span>; die Energie schrumpft um den Faktor <span class="m" data-tex="e^{-2\Lambda}" data-plain="e^(−2Λ)"></span>. Ob ein System überhaupt noch schwingt, entscheidet allein der Vergleich <span class="m" data-tex="\delta" data-plain="δ"></span> gegen <span class="m" data-tex="\omega_0" data-plain="ω₀"></span>.
+  </div>
+
+  <h3>Die erzwungene Schwingung</h3>
+  <p>Schwingt ein System nicht sich selbst überlassen, sondern wird periodisch angetrieben, heißt das <strong>erzwungene Schwingung</strong>. Der <strong>Erreger</strong> übt die Kraft <span class="m" data-tex="F(t) = F_0\sin(\omega_e t)" data-plain="F(t) = F₀·sin(ω_e·t)"></span> aus (Index <em>e</em> für Erreger); das schwingende System heißt <strong>Resonator</strong>. Die Bewegungsgleichung gilt nun mit <span class="m" data-tex="F_0 \ne 0" data-plain="F₀ ≠ 0"></span>:</p>
+
+  <div class="m block" data-tex="\ddot{x} + 2\delta\,\dot{x} + \omega_0^2\,x = \dfrac{F_0}{m}\,\sin(\omega_e t)" data-plain="x'' + 2δ·x' + ω₀²·x = (F₀/m)·sin(ω_e·t)"></div>
+
+  <p>Nach dem Start überlagern sich zwei Anteile: die abklingende freie Schwingung des Systems (sie ist nach etwa <span class="m" data-tex="5/\delta" data-plain="5/δ"></span> vergessen) und eine Schwingung, die <strong>bleibt</strong>. Im eingeschwungenen Zustand gilt der wichtigste Satz dieses Abschnitts:</p>
+
+  <div class="merksatz">
+    <b>Eingeschwungener Zustand</b>
+    Nach dem Einschwingen schwingt das System <strong>mit der Frequenz des Erregers</strong>, nicht mit seiner eigenen. Die Eigenfrequenz <span class="m" data-tex="\omega_0" data-plain="ω₀"></span> bestimmt nur, <strong>wie stark</strong> es dabei ausschlägt und <strong>wie weit es dem Erreger hinterherhinkt</strong>.
+  </div>
+
+  <p>Wie stark und wie weit, liefern die beiden folgenden Formeln. Die Herleitung steht darunter; das Ergebnis vorweg. Die Amplitude <span class="m" data-tex="x_{\max}" data-plain="x_max"></span> ist hier mit dem Dach als <span class="m" data-tex="\hat{x}" data-plain="x̂"></span> geschrieben, gemeint ist dieselbe Größe:</p>
+
+  <div class="m block" id="f-amplitude" data-tex="\hat{x} = \dfrac{F_0}{\sqrt{(D - m\omega_e^2)^2 + (b\omega_e)^2}}" data-plain="x̂ = F₀ / √((D − m·ω_e²)² + (b·ω_e)²)"></div>
+
+  <div class="m block" id="f-phase" data-tex="\tan\varphi = \dfrac{b\,\omega_e}{D - m\omega_e^2}" data-plain="tan φ = b·ω_e / (D − m·ω_e²)"></div>
+
+  <details>
+    <summary>Herleitung: Amplitude und Phase der erzwungenen Schwingung</summary>
+    <p><strong>Schritt 1 – Ansatz.</strong> Wir suchen die bleibende Lösung in der Form <span class="m" data-tex="x(t) = x_{\max}\sin(\omega_e t - \varphi)" data-plain="x(t) = x_max·sin(ω_e·t − φ)"></span> mit unbekannter Amplitude <span class="m" data-tex="x_{\max}" data-plain="x_max"></span> und unbekannter Verschiebung <span class="m" data-tex="\varphi" data-plain="φ"></span> (positives <span class="m" data-tex="\varphi" data-plain="φ"></span> heißt: die Antwort <strong>hinkt</strong> dem Erreger hinterher). Zur Abkürzung sei <span class="m" data-tex="\vartheta = \omega_e t - \varphi" data-plain="ϑ = ω_e·t − φ"></span>. Dann ist <span class="m" data-tex="x = x_{\max}\sin\vartheta" data-plain="x = x_max·sin ϑ"></span>, <span class="m" data-tex="\dot{x} = x_{\max}\omega_e\cos\vartheta" data-plain="x' = x_max·ω_e·cos ϑ"></span> und <span class="m" data-tex="\ddot{x} = -x_{\max}\omega_e^2\sin\vartheta" data-plain="x'' = −x_max·ω_e²·sin ϑ"></span>.</p>
+    <p><strong>Schritt 2 – Einsetzen</strong> in <span class="m" data-tex="m\ddot{x} + b\dot{x} + D x = F_0\sin(\omega_e t)" data-plain="m·x'' + b·x' + D·x = F₀·sin(ω_e·t)"></span>, wobei <span class="m" data-tex="\omega_e t = \vartheta + \varphi" data-plain="ω_e·t = ϑ + φ"></span> ist:</p>
+    <div class="m block" data-tex="x_{\max}\Big[(D - m\omega_e^2)\sin\vartheta + b\omega_e\cos\vartheta\Big] = F_0\,\big(\sin\vartheta\cos\varphi + \cos\vartheta\sin\varphi\big)" data-plain="x_max·[(D − m·ω_e²)·sin ϑ + b·ω_e·cos ϑ] = F₀·(sin ϑ·cos φ + cos ϑ·sin φ)"></div>
+    <p><strong>Schritt 3 – Koeffizientenvergleich.</strong> Die Gleichung muss für <em>jedes</em> <span class="m" data-tex="\vartheta" data-plain="ϑ"></span> gelten, also müssen die Faktoren vor <span class="m" data-tex="\sin\vartheta" data-plain="sin ϑ"></span> und vor <span class="m" data-tex="\cos\vartheta" data-plain="cos ϑ"></span> getrennt übereinstimmen:</p>
+    <div class="m block" data-tex="x_{\max}\,(D - m\omega_e^2) = F_0\cos\varphi, \qquad x_{\max}\,b\,\omega_e = F_0\sin\varphi" data-plain="x_max·(D − m·ω_e²) = F₀·cos φ,   x_max·b·ω_e = F₀·sin φ"></div>
+    <p><strong>Schritt 4 – Auflösen.</strong> Quadrieren und Addieren (<span class="m" data-tex="\sin^2 + \cos^2 = 1" data-plain="sin² + cos² = 1"></span>) gibt die Amplitude, Dividieren die Phase. Wegen <span class="m" data-tex="\sin\varphi \ge 0" data-plain="sin φ ≥ 0"></span> liegt <span class="m" data-tex="\varphi" data-plain="φ"></span> zwischen 0 und 180°. Teilt man durch <span class="m" data-tex="m" data-plain="m"></span> und nutzt <span class="m" data-tex="D/m = \omega_0^2" data-plain="D/m = ω₀²"></span> sowie <span class="m" data-tex="b/m = 2\delta" data-plain="b/m = 2δ"></span>, wird daraus</p>
+    <div class="m block" data-tex="x_{\max}(\omega_e) = \dfrac{F_0/m}{\sqrt{(\omega_0^2 - \omega_e^2)^2 + (2\delta\,\omega_e)^2}}, \qquad \tan\varphi = \dfrac{2\delta\,\omega_e}{\omega_0^2 - \omega_e^2}" data-plain="x_max(ω_e) = (F₀/m) / √((ω₀² − ω_e²)² + (2δ·ω_e)²),   tan φ = 2δ·ω_e / (ω₀² − ω_e²)"></div>
+    <p><strong>Nachprobe.</strong> Eine numerische Integration der Bewegungsgleichung (Runge-Kutta-Verfahren) liefert nach dem Einschwingen für das Zahlenbeispiel unten dieselben Amplituden wie die Formel; die Abweichung liegt unter 0,01 mm.</p>
+  </details>
+
+  <p>Die Formel für die Amplitude sieht in drei Bereichen der Erregerfrequenz ganz unterschiedlich aus:</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Erregung</th><th>Näherung</th><th>Antwort</th><th>Phase φ</th></tr>
+    <tr><td>tief, <span class="m" data-tex="\omega_e \ll \omega_0" data-plain="ω_e ≪ ω₀"></span></td><td><span class="m" data-tex="x_{\max} \approx F_0/D" data-plain="x_max ≈ F₀/D"></span></td><td>Feder gibt nach, als würde man <strong>langsam</strong> drücken (quasistatisch)</td><td>≈ 0° (in Phase)</td></tr>
+    <tr><td>Resonanz, <span class="m" data-tex="\omega_e \approx \omega_0" data-plain="ω_e ≈ ω₀"></span></td><td><span class="m" data-tex="x_{\max} \approx F_0/(b\,\omega_0)" data-plain="x_max ≈ F₀/(b·ω₀)"></span></td><td>nur die Reibung begrenzt, Höchstwert</td><td>≈ 90°</td></tr>
+    <tr><td>hoch, <span class="m" data-tex="\omega_e \gg \omega_0" data-plain="ω_e ≫ ω₀"></span></td><td><span class="m" data-tex="x_{\max} \approx F_0/(m\,\omega_e^2)" data-plain="x_max ≈ F₀/(m·ω_e²)"></span></td><td>Trägheit dominiert, der Körper kann nicht folgen, die Amplitude fällt</td><td>≈ 180° (Gegenphase)</td></tr>
+  </table>
+  </div>
+
+  <p>Im hohen Bereich fällt die Amplitude mit dem Quadrat der Erregerfrequenz. Damit ist im Modell geklärt, warum die Waschmaschine bei voller Drehzahl ruhig läuft: Oberhalb der Resonanz folgt die Masse dem Antrieb kaum noch. (Bei einer echten Unwucht wächst die Erregerkraft selbst mit dem Quadrat der Drehzahl; die Amplitude fällt dann nicht weiter ab, bleibt aber klein.) Beim Hochfahren durchläuft die Erregerfrequenz dagegen den Resonanzbereich: kurzzeitig starkes Rütteln. Praktisch bedeutet das, den Resonanzbereich möglichst schnell zu durchlaufen und darüber zu bleiben.</p>
+
+  <p>Dasselbe Pendel (<span class="m" data-tex="m = 0{,}200\,\mathrm{kg}" data-plain="m = 0,200 kg"></span>, <span class="m" data-tex="D = 8{,}0\,\mathrm{N/m}" data-plain="D = 8,0 N/m"></span>, <span class="m" data-tex="b = 0{,}20\,\mathrm{kg/s}" data-plain="b = 0,20 kg/s"></span>) mit Erregerkraft <span class="m" data-tex="F_0 = 0{,}50\,\mathrm{N}" data-plain="F₀ = 0,50 N"></span>:</p>
+  <ul>
+    <li><strong>tief:</strong> <span class="m" data-tex="x_{\text{stat}} = F_0/D = 0{,}50\,\mathrm{N}/8{,}0\,\mathrm{N/m} = 6{,}25\,\mathrm{cm}" data-plain="x_stat = F₀/D = 0,50 N / 8,0 N/m = 6,25 cm"></span>.</li>
+    <li><strong>Resonanz:</strong> <span class="m" data-tex="x_{\max}(\omega_0) = F_0/(b\,\omega_0) = 0{,}50/(0{,}20\cdot 6{,}325)\,\mathrm{m} = 39{,}5\,\mathrm{cm}" data-plain="x_max(ω₀) = F₀/(b·ω₀) = 0,50/(0,20 · 6,325) m = 39,5 cm"></span> – das <strong>6,32-fache</strong> der statischen Auslenkung. Dieses Verhältnis ist <span class="m" data-tex="\omega_0/(2\delta) = 6{,}325/1{,}0" data-plain="ω₀/(2δ) = 6,325/1,0"></span>, die <strong>Überhöhung</strong> bei schwacher Dämpfung.</li>
+    <li><strong>hoch:</strong> bei <span class="m" data-tex="\omega_e = 2\,\omega_0" data-plain="ω_e = 2·ω₀"></span> nur <span class="m" data-tex="x_{\max} = 2{,}07\,\mathrm{cm}" data-plain="x_max = 2,07 cm"></span> – rund 5 % der Resonanzamplitude.</li>
+  </ul>
+  <p>Zur Einordnung: Bei 40 cm Ausschlag ist eine Feder mit <span class="m" data-tex="D = 8\,\mathrm{N/m}" data-plain="D = 8 N/m"></span> längst nicht mehr im Hookeschen Bereich. Das Zahlenbeispiel zeigt die Formel, nicht das Verhalten eines echten Bauteils.</p>
+
+  <details>
+    <summary>Wo liegt das Maximum? Resonanzfrequenz und Spitzenhöhe</summary>
+    <p>Die Amplitude ist maximal, wo der Radikand <span class="m" data-tex="R(\omega_e) = (\omega_0^2 - \omega_e^2)^2 + 4\delta^2\omega_e^2" data-plain="R(ω_e) = (ω₀² − ω_e²)² + 4δ²·ω_e²"></span> am kleinsten ist. Ableiten:</p>
+    <div class="m block" data-tex="\dfrac{\mathrm{d}R}{\mathrm{d}\omega_e} = -4\omega_e(\omega_0^2-\omega_e^2) + 8\delta^2\omega_e = 4\omega_e\,(\omega_e^2 - \omega_0^2 + 2\delta^2)" data-plain="dR/dω_e = −4·ω_e·(ω₀² − ω_e²) + 8·δ²·ω_e = 4·ω_e·(ω_e² − ω₀² + 2δ²)"></div>
+    <p>Nullsetzen (mit <span class="m" data-tex="\omega_e \ne 0" data-plain="ω_e ≠ 0"></span>) liefert</p>
+    <div class="m block" id="f-resonanz" data-tex="\omega_{\text{res}} = \sqrt{\omega_0^2 - 2\delta^2}" data-plain="ω_res = √(ω₀² − 2δ²)"></div>
+    <p>Das Maximum liegt also <strong>unterhalb</strong> von <span class="m" data-tex="\omega_0" data-plain="ω₀"></span>, und es existiert nur für <span class="m" data-tex="\delta &lt; \omega_0/\sqrt{2}" data-plain="δ &lt; ω₀/√2"></span>. Bei stärkerer Dämpfung fällt die Kurve von <span class="m" data-tex="F_0/D" data-plain="F₀/D"></span> aus monoton ab. Setzt man <span class="m" data-tex="\omega_{\text{res}}" data-plain="ω_res"></span> ein, wird <span class="m" data-tex="R = 4\delta^2(\omega_0^2 - \delta^2)" data-plain="R = 4δ²·(ω₀² − δ²)"></span> und die Spitzenhöhe</p>
+    <div class="m block" data-tex="x_{\max,\text{res}} = \dfrac{F_0/m}{2\delta\sqrt{\omega_0^2 - \delta^2}}" data-plain="x_max,res = (F₀/m) / (2δ·√(ω₀² − δ²))"></div>
+    <p>Im Beispielsystem: <span class="m" data-tex="\omega_{\text{res}} = \sqrt{40 - 0{,}50}\,\mathrm{s^{-1}} = 6{,}285\,\mathrm{rad/s}" data-plain="ω_res = √(40 − 0,50) s⁻¹ = 6,285 rad/s"></span> (also <span class="m" data-tex="f_{\text{res}} = 1{,}0003\,\mathrm{Hz}" data-plain="f_res = 1,0003 Hz"></span> gegenüber <span class="m" data-tex="f_0 = 1{,}0066\,\mathrm{Hz}" data-plain="f₀ = 1,0066 Hz"></span>) und <span class="m" data-tex="x_{\max,\text{res}} = 39{,}65\,\mathrm{cm}" data-plain="x_max,res = 39,65 cm"></span> – nur 0,3 % über dem Wert bei <span class="m" data-tex="\omega_0" data-plain="ω₀"></span>. Bei schwacher Dämpfung darf man <span class="m" data-tex="\omega_{\text{res}} \approx \omega_0" data-plain="ω_res ≈ ω₀"></span> setzen. Die Spitzenhöhe ist umgekehrt proportional zu <span class="m" data-tex="\delta" data-plain="δ"></span>: <strong>halbe Reibung, doppelte Spitze</strong>. Für <span class="m" data-tex="\delta \to 0" data-plain="δ → 0"></span> wächst sie über alle Grenzen – das ist die Resonanzkatastrophe der idealen, ungedämpften Rechnung. In Wirklichkeit begrenzen Dämpfung und das Versagen des linearen Kraftgesetzes den Ausschlag.</p>
+  </details>
+
+  <details>
+    <summary>Warum die Schaukel im richtigen Rhythmus hochgeht</summary>
+    <p>Bei <span class="m" data-tex="\omega_e = \omega_0" data-plain="ω_e = ω₀"></span> ist <span class="m" data-tex="\varphi = 90^\circ" data-plain="φ = 90°"></span>. Dann ist <span class="m" data-tex="x = -x_{\max}\cos(\omega_e t)" data-plain="x = −x_max·cos(ω_e·t)"></span>, also <span class="m" data-tex="v = x_{\max}\,\omega_e\sin(\omega_e t)" data-plain="v = x_max·ω_e·sin(ω_e·t)"></span>: Kraft und Geschwindigkeit sind <strong>in Phase</strong>. Der Erreger drückt in jedem Augenblick in die Richtung, in die sich das System gerade bewegt, die Leistung <span class="m" data-tex="P = F\cdot v" data-plain="P = F·v"></span> ist nie negativ und die Energieaufnahme maximal. Bei der Schaukel heißt das: Du schiebst, wenn das Kind sich von dir weg bewegt, nicht dann, wenn es zurückkommt.</p>
+    <p>Im eingeschwungenen Zustand nimmt die Reibung genauso viel Leistung auf, wie der Erreger liefert. Im Beispielsystem ist die mittlere Leistung <span class="m" data-tex="P = F_0^2/(2b) = 0{,}25/0{,}40\,\mathrm{W} = 0{,}625\,\mathrm{W}" data-plain="P = F₀²/(2b) = 0,25/0,40 W = 0,625 W"></span>, und <span class="m" data-tex="\tfrac{1}{2}\,b\,v_{\max}^2 = \tfrac{1}{2}\cdot 0{,}20\cdot(2{,}5\,\mathrm{m/s})^2 = 0{,}625\,\mathrm{W}" data-plain="½·b·v_max² = ½ · 0,20 · (2,5 m/s)² = 0,625 W"></span> – beide Seiten stimmen überein.</p>
+  </details>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> „Resonanz heißt: Erreger und System schwingen gleich schnell und schaukeln sich zu Tode." Drei Dinge sind dabei zu berichtigen. Erstens: Im eingeschwungenen Zustand schwingt das System <em>immer</em> mit der Erregerfrequenz – auch unterhalb und oberhalb der Resonanz. Was sich mit <span class="m" data-tex="\omega_e" data-plain="ω_e"></span> ändert, ist die <em>Amplitude</em> und die <em>Phase</em>. Zweitens: Das Maximum liegt bei starker Dämpfung merklich <em>unterhalb</em> von <span class="m" data-tex="\omega_0" data-plain="ω₀"></span>, nicht exakt darauf. Drittens: Die Amplitude wächst nicht unbegrenzt, sie wird durch die Dämpfung begrenzt. Gefährlich wird Resonanz erst, wenn der Ausschlag über das hinausgeht, was ein Bauteil aushält. Mit ausreichend Dämpfung oder ausreichend Abstand zur Eigenfrequenz ist sie harmlos oder sogar erwünscht (Musikinstrument, Schaukel, Radioempfänger).
+  </div>
+
+  <div class="merksatz">
+    <b>Resonanz</b>
+    Resonanz ist der Bereich, in dem ein periodisch angetriebenes System die größte Amplitude erreicht: Die Erregerfrequenz liegt nahe der Eigenfrequenz, der Erreger liefert Energie in Phase mit der Geschwindigkeit, und nur die Dämpfung begrenzt die Höhe. <strong>Weit oberhalb</strong> der Resonanz ist das System träge und schlägt kaum noch aus.
+  </div>
+
+  <p>Ein Ausblick: Dieselbe Gleichung beschreibt den elektromagnetischen Schwingkreis aus Spule und Kondensator – nur die Namen der Größen ändern sich.</p>
+</section>
+
+<!-- =============== 4 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">4</div><h2>Das Pendel in der Simulation</h2></div>
+
+  <p>Die Simulation zeigt ein horizontales Federpendel: eine Masse auf einer reibungsfreien Schiene, links an einer Feder befestigt. Darunter entsteht laufend das <span class="m" data-tex="x\text{-}t" data-plain="x-t"></span>-Diagramm der letzten zehn Sekunden, und ganz unten siehst du die <strong>Resonanzkurve</strong> des eingestellten Systems: die Amplitude im eingeschwungenen Zustand, aufgetragen über der Erregerfrequenz <span class="m" data-tex="f_e" data-plain="f_e"></span>. Die Bewegung wird aus der Bewegungsgleichung <span class="m" data-tex="m\ddot{x} = -Dx - b\dot{x} + F_0\sin(\omega_e t)" data-plain="m·x'' = −D·x − b·x' + F₀·sin(ω_e·t)"></span> schrittweise berechnet (Runge-Kutta-Verfahren). Die Kurve im unteren Diagramm kommt dagegen aus der Formel aus Abschnitt 3.</p>
+
+  <p>Du kannst die Masse mit der Maus oder dem Finger verschieben und loslassen, oder mit dem Regler und dem Knopf eine Anfangsauslenkung vorgeben. Ist der Erreger eingeschaltet, schiebt eine Kraft <span class="m" data-tex="F(t) = F_0\sin(\omega_e t)" data-plain="F(t) = F₀·sin(ω_e·t)"></span> die Masse hin und her. Das Verschieben von Masse, Federkonstante oder Reibung ändert das System mitten in der Bewegung; Ausschläge über 45 cm werden nicht mehr gezeichnet. Mit „Zeitraffer“ läuft der Vorgang fünfmal schneller, damit das Einschwingen nicht zu lange dauert.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    1. Schalte die Reibung auf <span class="m" data-tex="b = 0" data-plain="b = 0"></span> und den Erreger aus. Lenke die Masse um 3 cm aus und lies die Schwingungsdauer im <span class="m" data-tex="x\text{-}t" data-plain="x-t"></span>-Diagramm ab, dann um 10 cm. Vergleiche mit der angezeigten Periode. Vervierfache danach die Masse von 0,10 kg aus und beschreibe, was mit der Periode passiert.<br>
+    2. Stelle <span class="m" data-tex="b = 0{,}20\,\mathrm{kg/s}" data-plain="b = 0,20 kg/s"></span> ein und lenke aus. Lies zwei benachbarte Maxima ab, bilde ihr Verhältnis und vergleiche mit <span class="m" data-tex="e^{-\Lambda}" data-plain="e^(−Λ)"></span>. Erhöhe dann <span class="m" data-tex="b" data-plain="b"></span> langsam, bis die Masse nicht mehr überschwingt, und prüfe den Wert mit „Grenzfall einstellen“.<br>
+    3. Schalte den Erreger ein, stelle <span class="m" data-tex="f_e = 0{,}60\,\mathrm{Hz}" data-plain="f_e = 0,60 Hz"></span> ein und warte das Einschwingen ab (Zeitraffer). Bestimme die Schwingungsdauer der Masse. Suche dann mit <span class="m" data-tex="f_e" data-plain="f_e"></span> die größte Amplitude und wiederhole die Suche mit doppelter Reibung. Formuliere, wie Höhe und Lage des Maximums von <span class="m" data-tex="b" data-plain="b"></span> abhängen.
+  </div>
+
+  <div class="sim">
+    <canvas id="cvSim" width="1000" height="250" role="img" aria-label="Federpendel: Masse an einer Feder, verschiebbar"></canvas>
+    <div class="trenner"></div>
+    <canvas id="cvX" width="1000" height="220" role="img" aria-label="x-t-Diagramm der letzten zehn Sekunden"></canvas>
+    <div class="trenner"></div>
+    <canvas id="cvR" width="1000" height="220" role="img" aria-label="Resonanzkurve: Amplitude über der Erregerfrequenz"></canvas>
+
+    <div class="anzeige">
+      <div>Auslenkung x<span id="aX">0,0 cm</span></div>
+      <div>Geschwindigkeit v<span id="aV">0,000 m/s</span></div>
+      <div>Periode <span id="aTName">T₀</span><span id="aT">0,993 s</span></div>
+      <div>Abklingkonstante δ<span id="aD">0,50 1/s</span></div>
+      <div>Dämpfungsfall<span id="aFall">Schwingfall</span></div>
+      <div>Amplitude, gemessen<span id="aAm">0,0 cm</span></div>
+      <div>Amplitude, Formel<span id="aAf">–</span></div>
+      <div>Phase φ, Formel<span id="aPh">–</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label>Masse m <b><span id="lM">0,200</span> kg</b></label>
+          <input type="range" id="rM" min="0.10" max="0.50" step="0.05" value="0.20">
+        </div>
+        <div>
+          <label>Federkonstante D <b><span id="lD">8,0</span> N/m</b></label>
+          <input type="range" id="rD" min="2" max="20" step="0.5" value="8">
+        </div>
+        <div>
+          <label>Reibungskoeffizient b <b><span id="lB">0,20</span> kg/s</b></label>
+          <input type="range" id="rB" min="0" max="4" step="0.01" value="0.2">
+        </div>
+        <div>
+          <label>Anfangsauslenkung x₀ <b><span id="lX0">8</span> cm</b></label>
+          <input type="range" id="rX0" min="1" max="12" step="1" value="8">
+        </div>
+        <div>
+          <label>Erregerkraft F₀ <b><span id="lF">0,50</span> N</b></label>
+          <input type="range" id="rF" min="0.1" max="0.8" step="0.05" value="0.5">
+        </div>
+        <div>
+          <label>Erregerfrequenz f_e <b><span id="lFe">1,00</span> Hz</b></label>
+          <input type="range" id="rFe" min="0.2" max="2.5" step="0.01" value="1">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button class="primaer" id="bAus">Auslenken und loslassen</button>
+        <button id="bPause">Pause</button>
+        <button id="bKrit">Grenzfall einstellen</button>
+        <button id="bReset">Zurücksetzen</button>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px;margin-left:6px">
+          <input type="checkbox" id="cErr" style="accent-color:var(--akzent);width:16px;height:16px">
+          Erreger einschalten
+        </label>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px">
+          <input type="checkbox" id="cRaf" style="accent-color:var(--akzent);width:16px;height:16px">
+          Zeitraffer
+        </label>
+      </div>
+      <p id="simHinweis" aria-live="polite" style="margin:10px 0 0;font-size:14px;color:var(--grau)"></p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Du schaltest den Erreger mit <span class="m" data-tex="f_e = 0{,}60\,\mathrm{Hz}" data-plain="f_e = 0,60 Hz"></span> ein; die Eigenfrequenz des Pendels beträgt etwa 1,0 Hz. Nach dem Einschwingen liest du im <span class="m" data-tex="x\text{-}t" data-plain="x-t"></span>-Diagramm die Schwingungsdauer der Masse ab. Welcher Wert ergibt sich?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>Etwa 1,0 s – die Masse schwingt mit ihrer Eigenperiode weiter, der Erreger ändert nur die Höhe.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>Etwa 1,7 s – die Masse folgt der Periode des Erregers.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>Zwischen beiden Werten, etwa 1,3 s – Erreger und System einigen sich auf einen Mittelwert.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Der Erreger läuft bei der Resonanz, also mit <span class="m" data-tex="f_e \approx f_0" data-plain="f_e ≈ f₀"></span>, und die Amplitude ist eingeschwungen. Du halbierst den Reibungskoeffizienten von <span class="m" data-tex="0{,}40\,\mathrm{kg/s}" data-plain="0,40 kg/s"></span> auf <span class="m" data-tex="0{,}20\,\mathrm{kg/s}" data-plain="0,20 kg/s"></span> und wartest wieder das Einschwingen ab. Was passiert mit der Amplitude?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>Sie wird etwa doppelt so groß.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span>Sie wird etwa um die Hälfte größer, also auf das 1,5-Fache.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>Sie bleibt etwa gleich, weil sich nur die Abklingzeit ändert.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+</section>
+
+<!-- =============== 5 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">5</div><h2>Übungen</h2></div>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Ein Federpendel besteht aus einem Körper der Masse <span class="m" data-tex="m = 0{,}250\,\mathrm{kg}" data-plain="m = 0,250 kg"></span> an einer Feder mit der Federkonstante <span class="m" data-tex="D = 12\,\mathrm{N/m}" data-plain="D = 12 N/m"></span>. Reibung ist vernachlässigbar. Berechne die Schwingungsdauer.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="s">s</option>
+        <option value="Hz">Hz</option>
+        <option value="m/s">m/s</option>
+        <option value="N">N</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die Schwingungsdauer hängt nur von Masse und Federkonstante ab. Die Amplitude ist nicht angegeben und wird auch nicht gebraucht.</div>
+    <div class="hilfe-text" data-stufe="2">Für das Federpendel gilt <span class="m" data-tex="T_0 = 2\pi\sqrt{m/D}" data-plain="T₀ = 2π·√(m/D)"></span>. Setze Masse in kg und Federkonstante in N/m ein.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="T_0 = 2\pi\sqrt{\dfrac{0{,}250\,\mathrm{kg}}{12\,\mathrm{N/m}}} = 2\pi\cdot 0{,}1443\,\mathrm{s} = 0{,}907\,\mathrm{s}" data-plain="T₀ = 2π·√(0,250 kg / 12 N/m) = 2π · 0,1443 s = 0,907 s"></span>. Die Frequenz wäre <span class="m" data-tex="f_0 = 1/T_0 = 1{,}10\,\mathrm{Hz}" data-plain="f₀ = 1/T₀ = 1,10 Hz"></span> – danach war nicht gefragt.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Ein Fadenpendel soll bei kleinen Ausschlägen die Schwingungsdauer <span class="m" data-tex="T = 3{,}0\,\mathrm{s}" data-plain="T = 3,0 s"></span> haben (Ortsfaktor <span class="m" data-tex="g = 9{,}81\,\mathrm{m/s^2}" data-plain="g = 9,81 m/s²"></span>). Berechne die nötige Fadenlänge.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="m">m</option>
+        <option value="cm">cm</option>
+        <option value="s">s</option>
+        <option value="kg">kg</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die Masse des Pendelkörpers ist nicht angegeben und wird nicht gebraucht. Stelle die Formel für die Schwingungsdauer nach der gesuchten Größe um.</div>
+    <div class="hilfe-text" data-stufe="2">Aus <span class="m" data-tex="T = 2\pi\sqrt{l/g}" data-plain="T = 2π·√(l/g)"></span> folgt durch Quadrieren <span class="m" data-tex="l = g\,\left(T/2\pi\right)^2" data-plain="l = g·(T/2π)²"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="l = 9{,}81\,\dfrac{\mathrm{m}}{\mathrm{s}^2}\cdot\left(\dfrac{3{,}0\,\mathrm{s}}{2\pi}\right)^2 = 9{,}81\,\dfrac{\mathrm{m}}{\mathrm{s}^2}\cdot 0{,}228\,\mathrm{s}^2 = 2{,}24\,\mathrm{m}" data-plain="l = 9,81 m/s² · (3,0 s / 2π)² = 9,81 m/s² · 0,228 s² = 2,24 m"></span>. Probe: Das ist etwa die Länge der Schaukelketten aus dem Einstieg (3,0 m ergibt 3,47 s).</div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die vier Diagramme zeigen die Auslenkung <span class="m" data-tex="x(t)" data-plain="x(t)"></span> desselben Federpendels, jeweils aus der gleichen Anfangsauslenkung ohne Anstoß losgelassen. Nur der Reibungskoeffizient <span class="m" data-tex="b" data-plain="b"></span> ist verschieden; alle Diagramme haben dieselben Achsen. Ordne jeder Situation das passende Diagramm zu.</div>
+
+    <div class="diagramme">
+      <figure><svg viewBox="0 0 160 100"><line x1="12" y1="50" x2="152" y2="50" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="94" stroke="#94a3b8"/><text x="141" y="62" font-size="9" fill="#64748b">t</text><text x="22" y="12" font-size="9" fill="#64748b">x</text><polyline points="18.0,12.0 19.1,12.4 20.2,13.5 21.2,15.1 22.3,17.0 23.4,19.1 24.5,21.2 25.6,23.4 26.7,25.6 27.8,27.7 28.8,29.7 29.9,31.6 31.0,33.4 32.1,35.0 33.2,36.5 34.2,37.9 35.3,39.2 36.4,40.3 37.5,41.4 38.6,42.3 39.7,43.2 40.8,44.0 41.8,44.7 42.9,45.3 44.0,45.8 45.1,46.3 46.2,46.7 47.2,47.1 48.3,47.5 49.4,47.8 50.5,48.0 51.6,48.3 52.7,48.5 53.8,48.7 54.8,48.8 55.9,49.0 57.0,49.1 58.1,49.2 59.2,49.3 60.2,49.4 61.3,49.5 62.4,49.5 63.5,49.6 64.6,49.7 65.7,49.7 66.8,49.7 67.8,49.8 68.9,49.8 70.0,49.8 71.1,49.8 72.2,49.9 73.2,49.9 74.3,49.9 75.4,49.9 76.5,49.9 77.6,49.9 78.7,49.9 79.8,50.0 80.8,50.0 81.9,50.0 83.0,50.0 84.1,50.0 85.2,50.0 86.2,50.0 87.3,50.0 88.4,50.0 89.5,50.0 90.6,50.0 91.7,50.0 92.8,50.0 93.8,50.0 94.9,50.0 96.0,50.0 97.1,50.0 98.2,50.0 99.2,50.0 100.3,50.0 101.4,50.0 102.5,50.0 103.6,50.0 104.7,50.0 105.8,50.0 106.8,50.0 107.9,50.0 109.0,50.0 110.1,50.0 111.2,50.0 112.2,50.0 113.3,50.0 114.4,50.0 115.5,50.0 116.6,50.0 117.7,50.0 118.8,50.0 119.8,50.0 120.9,50.0 122.0,50.0 123.1,50.0 124.2,50.0 125.2,50.0 126.3,50.0 127.4,50.0 128.5,50.0 129.6,50.0 130.7,50.0 131.8,50.0 132.8,50.0 133.9,50.0 135.0,50.0 136.1,50.0 137.2,50.0 138.2,50.0 139.3,50.0 140.4,50.0 141.5,50.0 142.6,50.0 143.7,50.0 144.8,50.0 145.8,50.0 146.9,50.0 148.0,50.0" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>A</figcaption></figure>
+      <figure><svg viewBox="0 0 160 100"><line x1="12" y1="50" x2="152" y2="50" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="94" stroke="#94a3b8"/><text x="141" y="62" font-size="9" fill="#64748b">t</text><text x="22" y="12" font-size="9" fill="#64748b">x</text><polyline points="18.0,12.0 19.1,12.5 20.2,13.9 21.2,16.1 22.3,19.3 23.4,23.1 24.5,27.7 25.6,32.7 26.7,38.3 27.8,44.1 28.8,50.0 29.9,55.9 31.0,61.7 32.1,67.3 33.2,72.3 34.2,76.9 35.3,80.7 36.4,83.9 37.5,86.1 38.6,87.5 39.7,88.0 40.8,87.5 41.8,86.1 42.9,83.9 44.0,80.7 45.1,76.9 46.2,72.3 47.2,67.3 48.3,61.7 49.4,55.9 50.5,50.0 51.6,44.1 52.7,38.3 53.8,32.7 54.8,27.7 55.9,23.1 57.0,19.3 58.1,16.1 59.2,13.9 60.2,12.5 61.3,12.0 62.4,12.5 63.5,13.9 64.6,16.1 65.7,19.3 66.8,23.1 67.8,27.7 68.9,32.7 70.0,38.3 71.1,44.1 72.2,50.0 73.2,55.9 74.3,61.7 75.4,67.3 76.5,72.3 77.6,76.9 78.7,80.7 79.8,83.9 80.8,86.1 81.9,87.5 83.0,88.0 84.1,87.5 85.2,86.1 86.2,83.9 87.3,80.7 88.4,76.9 89.5,72.3 90.6,67.3 91.7,61.7 92.8,55.9 93.8,50.0 94.9,44.1 96.0,38.3 97.1,32.7 98.2,27.7 99.2,23.1 100.3,19.3 101.4,16.1 102.5,13.9 103.6,12.5 104.7,12.0 105.8,12.5 106.8,13.9 107.9,16.1 109.0,19.3 110.1,23.1 111.2,27.7 112.2,32.7 113.3,38.3 114.4,44.1 115.5,50.0 116.6,55.9 117.7,61.7 118.8,67.3 119.8,72.3 120.9,76.9 122.0,80.7 123.1,83.9 124.2,86.1 125.2,87.5 126.3,88.0 127.4,87.5 128.5,86.1 129.6,83.9 130.7,80.7 131.8,76.9 132.8,72.3 133.9,67.3 135.0,61.7 136.1,55.9 137.2,50.0 138.2,44.1 139.3,38.3 140.4,32.7 141.5,27.7 142.6,23.1 143.7,19.3 144.8,16.1 145.8,13.9 146.9,12.5 148.0,12.0" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>B</figcaption></figure>
+      <figure><svg viewBox="0 0 160 100"><line x1="12" y1="50" x2="152" y2="50" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="94" stroke="#94a3b8"/><text x="141" y="62" font-size="9" fill="#64748b">t</text><text x="22" y="12" font-size="9" fill="#64748b">x</text><polyline points="18.0,12.0 19.1,12.3 20.2,13.1 21.2,14.0 22.3,14.9 23.4,15.8 24.5,16.7 25.6,17.6 26.7,18.4 27.8,19.3 28.8,20.1 29.9,20.9 31.0,21.7 32.1,22.4 33.2,23.2 34.2,23.9 35.3,24.6 36.4,25.2 37.5,25.9 38.6,26.5 39.7,27.2 40.8,27.8 41.8,28.4 42.9,28.9 44.0,29.5 45.1,30.0 46.2,30.6 47.2,31.1 48.3,31.6 49.4,32.1 50.5,32.6 51.6,33.0 52.7,33.5 53.8,33.9 54.8,34.3 55.9,34.8 57.0,35.2 58.1,35.6 59.2,35.9 60.2,36.3 61.3,36.7 62.4,37.0 63.5,37.4 64.6,37.7 65.7,38.0 66.8,38.4 67.8,38.7 68.9,39.0 70.0,39.3 71.1,39.5 72.2,39.8 73.2,40.1 74.3,40.4 75.4,40.6 76.5,40.9 77.6,41.1 78.7,41.3 79.8,41.6 80.8,41.8 81.9,42.0 83.0,42.2 84.1,42.4 85.2,42.6 86.2,42.8 87.3,43.0 88.4,43.2 89.5,43.4 90.6,43.6 91.7,43.7 92.8,43.9 93.8,44.1 94.9,44.2 96.0,44.4 97.1,44.5 98.2,44.7 99.2,44.8 100.3,45.0 101.4,45.1 102.5,45.2 103.6,45.3 104.7,45.5 105.8,45.6 106.8,45.7 107.9,45.8 109.0,45.9 110.1,46.0 111.2,46.1 112.2,46.2 113.3,46.3 114.4,46.4 115.5,46.5 116.6,46.6 117.7,46.7 118.8,46.8 119.8,46.9 120.9,47.0 122.0,47.1 123.1,47.1 124.2,47.2 125.2,47.3 126.3,47.4 127.4,47.4 128.5,47.5 129.6,47.6 130.7,47.6 131.8,47.7 132.8,47.8 133.9,47.8 135.0,47.9 136.1,47.9 137.2,48.0 138.2,48.0 139.3,48.1 140.4,48.1 141.5,48.2 142.6,48.2 143.7,48.3 144.8,48.3 145.8,48.4 146.9,48.4 148.0,48.5" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>C</figcaption></figure>
+      <figure><svg viewBox="0 0 160 100"><line x1="12" y1="50" x2="152" y2="50" stroke="#94a3b8"/><line x1="18" y1="6" x2="18" y2="94" stroke="#94a3b8"/><text x="141" y="62" font-size="9" fill="#64748b">t</text><text x="22" y="12" font-size="9" fill="#64748b">x</text><polyline points="18.0,12.0 19.1,12.5 20.2,13.8 21.2,16.0 22.3,19.0 23.4,22.6 24.5,26.7 25.6,31.3 26.7,36.2 27.8,41.3 28.8,46.5 29.9,51.5 31.0,56.4 32.1,61.0 33.2,65.2 34.2,68.8 35.3,71.9 36.4,74.4 37.5,76.2 38.6,77.3 39.7,77.7 40.8,77.4 41.8,76.5 42.9,75.0 44.0,72.9 45.1,70.3 46.2,67.3 47.2,64.0 48.3,60.4 49.4,56.7 50.5,52.9 51.6,49.2 52.7,45.7 53.8,42.3 54.8,39.2 55.9,36.5 57.0,34.2 58.1,32.4 59.2,31.0 60.2,30.2 61.3,29.8 62.4,29.9 63.5,30.6 64.6,31.7 65.7,33.1 66.8,35.0 67.8,37.2 68.9,39.6 70.0,42.1 71.1,44.8 72.2,47.6 73.2,50.3 74.3,52.9 75.4,55.4 76.5,57.6 77.6,59.6 78.7,61.3 79.8,62.7 80.8,63.8 81.9,64.4 83.0,64.7 84.1,64.6 85.2,64.2 86.2,63.5 87.3,62.4 88.4,61.1 89.5,59.5 90.6,57.8 91.7,55.9 92.8,54.0 93.8,52.0 94.9,50.0 96.0,48.1 97.1,46.3 98.2,44.6 99.2,43.1 100.3,41.8 101.4,40.8 102.5,40.0 103.6,39.5 104.7,39.3 105.8,39.3 106.8,39.6 107.9,40.1 109.0,40.9 110.1,41.8 111.2,42.9 112.2,44.2 113.3,45.5 114.4,47.0 115.5,48.4 116.6,49.9 117.7,51.3 118.8,52.6 119.8,53.8 120.9,54.9 122.0,55.9 123.1,56.6 124.2,57.2 125.2,57.6 126.3,57.8 127.4,57.8 128.5,57.6 129.6,57.3 130.7,56.7 131.8,56.0 132.8,55.2 133.9,54.3 135.0,53.4 136.1,52.3 137.2,51.3 138.2,50.2 139.3,49.2 140.4,48.2 141.5,47.3 142.6,46.5 143.7,45.8 144.8,45.2 145.8,44.8 146.9,44.5 148.0,44.3" fill="none" stroke="#1d4ed8" stroke-width="2.5"/></svg><figcaption>D</figcaption></figure>
+    </div>
+
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="D"><span>Die Dämpfung ist schwach: Die Abklingkonstante beträgt nur ein Zehntel der Eigenkreisfrequenz, <span class="m" data-tex="\delta = 0{,}1\,\omega_0" data-plain="δ = 0,1·ω₀"></span>.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="A"><span>Der Reibungskoeffizient hat genau den kritischen Wert, <span class="m" data-tex="\delta = \omega_0" data-plain="δ = ω₀"></span>.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="B"><span>Die Reibung ist vernachlässigbar, <span class="m" data-tex="b = 0" data-plain="b = 0"></span>.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="C"><span>Die Dämpfung ist dreimal so groß wie im Grenzfall, <span class="m" data-tex="\delta = 3\,\omega_0" data-plain="δ = 3·ω₀"></span>.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Im <span class="m" data-tex="x\text{-}t" data-plain="x-t"></span>-Diagramm eines gedämpften Federpendels liest du zwei aufeinanderfolgende Maxima ab: zuerst <span class="m" data-tex="10{,}0\,\mathrm{cm}" data-plain="10,0 cm"></span>, dann <span class="m" data-tex="6{,}0\,\mathrm{cm}" data-plain="6,0 cm"></span>. Sie liegen <span class="m" data-tex="0{,}80\,\mathrm{s}" data-plain="0,80 s"></span> auseinander. Berechne die Abklingkonstante <span class="m" data-tex="\delta" data-plain="δ"></span>.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="1/s">1/s</option>
+        <option value="s">s</option>
+        <option value="kg/s">kg/s</option>
+        <option value="Hz">Hz</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Der zeitliche Abstand zweier benachbarter Maxima ist eine Schwingungsdauer. Ihr Verhältnis ist bei jedem Paar gleich – daraus ergibt sich eine Größe, die du logarithmieren musst.</div>
+    <div class="hilfe-text" data-stufe="2">Benutze das Dekrement: <span class="m" data-tex="\Lambda = \ln(x_n/x_{n+1})" data-plain="Λ = ln(x_n/x_(n+1))"></span> und <span class="m" data-tex="\Lambda = \delta\,T_d" data-plain="Λ = δ·T_d"></span>. Löse nach <span class="m" data-tex="\delta" data-plain="δ"></span> auf.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\Lambda = \ln\dfrac{10{,}0}{6{,}0} = 0{,}511" data-plain="Λ = ln(10,0/6,0) = 0,511"></span>, also <span class="m" data-tex="\delta = \dfrac{\Lambda}{T_d} = \dfrac{0{,}511}{0{,}80\,\mathrm{s}} = 0{,}64\,\mathrm{s^{-1}}" data-plain="δ = Λ/T_d = 0,511 / 0,80 s = 0,64 s⁻¹"></span>. Die Amplitude sinkt in jeder Periode auf 60 % – nicht um einen festen Betrag.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Ein Resonator mit <span class="m" data-tex="m = 0{,}50\,\mathrm{kg}" data-plain="m = 0,50 kg"></span>, <span class="m" data-tex="D = 50\,\mathrm{N/m}" data-plain="D = 50 N/m"></span> und <span class="m" data-tex="b = 1{,}0\,\mathrm{kg/s}" data-plain="b = 1,0 kg/s"></span> wird von einer Kraft mit der Amplitude <span class="m" data-tex="F_0 = 2{,}0\,\mathrm{N}" data-plain="F₀ = 2,0 N"></span> und der Kreisfrequenz <span class="m" data-tex="\omega_e = 8{,}0\,\mathrm{rad/s}" data-plain="ω_e = 8,0 rad/s"></span> angetrieben. Berechne die Amplitude im eingeschwungenen Zustand.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="cm">cm</option>
+        <option value="m">m</option>
+        <option value="m/s">m/s</option>
+        <option value="N">N</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Die Eigenkreisfrequenz liegt bei 10 rad/s, die Erregung also nicht ganz in der Resonanz. Die Reibung darfst du trotzdem nicht weglassen: Sie steht unter der Wurzel.</div>
+    <div class="hilfe-text" data-stufe="2">Nutze <span class="m" data-tex="x_{\max} = F_0/\sqrt{(D - m\omega_e^2)^2 + (b\omega_e)^2}" data-plain="x_max = F₀ / √((D − m·ω_e²)² + (b·ω_e)²)"></span>. Berechne die beiden Klammerausdrücke getrennt, beide in N/m.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="D - m\omega_e^2 = 50 - 0{,}50\cdot 8{,}0^2 = 18\,\mathrm{N/m}" data-plain="D − m·ω_e² = 50 − 0,50 · 8,0² = 18 N/m"></span> und <span class="m" data-tex="b\,\omega_e = 1{,}0\cdot 8{,}0 = 8{,}0\,\mathrm{N/m}" data-plain="b·ω_e = 1,0 · 8,0 = 8,0 N/m"></span>. Damit ist <span class="m" data-tex="x_{\max} = \dfrac{2{,}0\,\mathrm{N}}{\sqrt{18^2 + 8{,}0^2}\,\mathrm{N/m}} = \dfrac{2{,}0}{19{,}7}\,\mathrm{m} = 0{,}102\,\mathrm{m} = 10{,}2\,\mathrm{cm}" data-plain="x_max = 2,0 N / (√(18² + 8,0²) N/m) = 2,0/19,7 m = 0,102 m = 10,2 cm"></span>. Ohne Reibung im Nenner bekämst du 11,1 cm – ein merklich falscher Wert.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a6">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Beim Hochfahren der Schleuder schüttelt sich eine Waschmaschine kurz heftig und wandert über den Boden; bei voller Drehzahl läuft sie ruhig. Erkläre dieses Verhalten mit dem Modell der erzwungenen Schwingung, begründe, warum es sinnvoll ist, den kritischen Drehzahlbereich schnell zu durchfahren, und erläutere, welche Rolle die Stoßdämpfer der Maschine dabei spielen.</div>
+    <textarea placeholder="Deine Erklärung…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a6">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Die Trommel mit ihrer Wäscheunwucht wirkt als Erreger: Sie drückt mit der Drehfrequenz periodisch auf die Maschine, die als Masse auf Federn und Dämpfern ein schwingungsfähiges System (Resonator) mit eigener Eigenfrequenz <span class="m" data-tex="f_0" data-plain="f₀"></span> ist. Beim Hochfahren wandert die Erregerfrequenz durch <span class="m" data-tex="f_0" data-plain="f₀"></span>. Dort herrscht Resonanz: Die Amplitude ist am größten, <span class="m" data-tex="x_{\max} \approx F_0/(b\,\omega_0)" data-plain="x_max ≈ F₀/(b·ω₀)"></span>, und nur die Dämpfung begrenzt sie. Oberhalb der Resonanz ist das System träge: Die Masse kann dem schnellen Antrieb nicht folgen, die Amplitude ist klein. (Bei einer echten Unwucht wächst die Erregerkraft selbst mit dem Quadrat der Drehzahl; die Amplitude fällt dann nicht weiter, bleibt aber klein.)</p>
+      <p>Schnelles Durchfahren hilft, weil ein System Zeit zum Einschwingen braucht (Größenordnung <span class="m" data-tex="5/\delta" data-plain="5/δ"></span>). Wird der Bereich schnell durchlaufen, erreicht die Amplitude ihren Höchstwert gar nicht erst. Die Dämpfer vergrößern <span class="m" data-tex="b" data-plain="b"></span> und senken damit die Resonanzspitze (<span class="m" data-tex="x_{\max}" data-plain="x_max"></span> ist umgekehrt proportional zu <span class="m" data-tex="\delta" data-plain="δ"></span>). Der Preis: Bei zu großer Dämpfung nimmt die Schwingung oberhalb der Resonanz weniger ab, die Kräfte auf den Boden steigen.</p>
+      <p><strong>Bewertungskriterien.</strong> Zuordnung Erreger und Resonator · Resonanz bei Erregerfrequenz nahe der Eigenfrequenz mit großer Amplitude · träges Verhalten und kleine Amplitude oberhalb · Einschwingzeit als Grund für schnelles Durchfahren · Dämpfung begrenzt die Spitze, mit Hinweis auf die Grenzen.</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-num="a7">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Ein Mitschüler behauptet: „Wenn ich eine Schaukel immer genau im Takt ihrer Eigenfrequenz anstoße, schaukelt sie sich immer weiter hoch, bis sie sich überschlägt. Die Reibung ist dabei nebensächlich.“ Nimm zu dieser Aussage physikalisch begründet Stellung.</div>
+    <textarea placeholder="Deine Stellungnahme…"></textarea>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a7">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Teilweise richtig: Im Takt der Eigenfrequenz nimmt das System am meisten Energie auf, weil Kraft und Geschwindigkeit in Phase sind und der Erreger immer in Bewegungsrichtung schiebt. Falsch ist „immer weiter“ und „nebensächlich“. Die zugeführte Leistung wächst nur linear mit der Amplitude, <span class="m" data-tex="P_{\text{zu}} = \tfrac{1}{2}F_0\,\omega\,x_{\max}" data-plain="P_zu = ½·F₀·ω·x_max"></span>, die von der Reibung aufgenommene aber quadratisch, <span class="m" data-tex="P_{\text{ab}} = \tfrac{1}{2}\,b\,\omega^2 x_{\max}^2" data-plain="P_ab = ½·b·ω²·x_max²"></span>. Beide werden bei <span class="m" data-tex="x_{\max} = F_0/(b\,\omega_0)" data-plain="x_max = F₀/(b·ω₀)"></span> gleich; dort bleibt die Amplitude stehen. Ohne jede Reibung gäbe es keine Grenze, und die Amplitude würde mit der Zeit immer größer.</p>
+      <p>Dazu kommt, dass eine Schaukel nur für kleine Winkel isochron ist: Mit wachsender Amplitude wird die Schwingungsdauer länger (bei 60° etwa 7 % gegenüber dem Kleinwinkelwert), der Takt des Anstoßens passt nicht mehr zur Eigenfrequenz, und die Energieaufnahme sinkt. Die Reibung entscheidet also über die erreichbare Höhe, und die Aussage des Mitschülers ist nur im Modell ohne Dämpfung richtig.</p>
+      <p><strong>Bewertungskriterien.</strong> Energieaufnahme im Takt der Eigenfrequenz (Kraft und Geschwindigkeit in Phase) · Leistungsbilanz: Zufuhr linear, Verlust quadratisch in der Amplitude · Begrenzung der Amplitude durch die Dämpfung · Hinweis auf Verstimmung bei großen Winkeln · Stellungnahme zu „nebensächlich“.</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 6 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">6</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Das Wichtigste in sechs Sätzen</h3>
+    <ul>
+      <li>Rückstellkraft plus Trägheit lassen ein System schwingen. Ist die Kraft proportional zur Auslenkung, ist die Schwingung harmonisch, <span class="m" data-tex="x = x_{\max}\sin(\omega t + \varphi_0)" data-plain="x = x_max·sin(ωt + φ₀)"></span>. Beim Durchgang durch die Ruhelage ist die Geschwindigkeit am größten, im Umkehrpunkt die Beschleunigung.</li>
+      <li>Das Federpendel hat <span class="m" data-tex="T_0 = 2\pi\sqrt{m/D}" data-plain="T₀ = 2π·√(m/D)"></span>, das Fadenpendel (kleine Winkel) <span class="m" data-tex="T_0 = 2\pi\sqrt{l/g}" data-plain="T₀ = 2π·√(l/g)"></span>. Die Amplitude geht in beide nicht ein; beim Fadenpendel fehlt auch die Masse.</li>
+      <li>Die Gesamtenergie <span class="m" data-tex="\tfrac{1}{2}D\,x_{\max}^2" data-plain="½·D·x_max²"></span> pendelt zwischen Spann- und Bewegungsenergie und ist dem Quadrat der Amplitude proportional.</li>
+      <li>Geschwindigkeitsproportionale Reibung lässt die Amplitude um einen festen <em>Faktor</em> <span class="m" data-tex="e^{-\Lambda}" data-plain="e^(−Λ)"></span> je Periode sinken, <span class="m" data-tex="\Lambda = \delta\,T_d" data-plain="Λ = δ·T_d"></span>. Ob überhaupt geschwungen wird, entscheidet der Vergleich von <span class="m" data-tex="\delta = b/(2m)" data-plain="δ = b/(2m)"></span> mit <span class="m" data-tex="\omega_0" data-plain="ω₀"></span>.</li>
+      <li>Im eingeschwungenen Zustand schwingt ein angetriebenes System mit der <strong>Erregerfrequenz</strong>. Amplitude und Phase ergeben sich aus <span class="m" data-tex="\omega_e" data-plain="ω_e"></span>, <span class="m" data-tex="\omega_0" data-plain="ω₀"></span> und <span class="m" data-tex="\delta" data-plain="δ"></span>.</li>
+      <li>Resonanz heißt: Erregerfrequenz nahe der Eigenfrequenz, Kraft in Phase mit der Geschwindigkeit, Amplitude <span class="m" data-tex="\approx F_0/(b\,\omega_0)" data-plain="≈ F₀/(b·ω₀)"></span>. Die Höhe der Spitze ist umgekehrt proportional zur Dämpfung, weit oberhalb schlägt das System kaum noch aus.</li>
+    </ul>
+  </div>
+
+  <div class="hinweis">
+    <strong>Blick aufs Zentralabitur.</strong> Schwingungsaufgaben im Leistungskurs laufen typischerweise auf drei Dinge hinaus: das Auswerten von <span class="m" data-tex="x\text{-}t" data-plain="x-t"></span>- und Resonanzdiagrammen (Periode, Amplitude, Dekrement ablesen), das Rechnen mit <span class="m" data-tex="T_0" data-plain="T₀"></span>, <span class="m" data-tex="\delta" data-plain="δ"></span> und <span class="m" data-tex="x_{\max}" data-plain="x_max"></span> und das Begründen von Aussagen zu Dämpfung und Resonanz. Alle drei hast du hier geübt. Welche Teilthemen im jeweiligen Abiturjahr verbindlich sind, legt die Vorgabe des Landes fest; das schulinterne Curriculum ordnet sie Q1 oder Q2 zu. Als Anschluss folgt der elektromagnetische Schwingkreis: Dort tauscht die Spule ihre Feldenergie mit einem Kondensator aus, und dieselben Gleichungen gelten mit anderen Namen.
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Ich kann …</h3>
+    <div class="check">
+      <label><input type="checkbox"><span>… erklären, warum eine Rückstellkraft allein nicht genügt, und Auslenkung, Geschwindigkeit und Beschleunigung einer harmonischen Schwingung zeitlich zuordnen.</span></label>
+      <label><input type="checkbox"><span>… die Schwingungsdauer von Feder- und Fadenpendel berechnen und die Unabhängigkeit von Amplitude und (beim Fadenpendel) Masse begründen.</span></label>
+      <label><input type="checkbox"><span>… die Energie einer ungedämpften Schwingung angeben und ihre Umwandlung beschreiben.</span></label>
+      <label><input type="checkbox"><span>… die Abklingkonstante und das logarithmische Dekrement aus einem <span class="m" data-tex="x\text{-}t" data-plain="x-t"></span>-Diagramm bestimmen und die drei Dämpfungsfälle unterscheiden.</span></label>
+      <label><input type="checkbox"><span>… Amplitude und Phase einer erzwungenen Schwingung berechnen und die Resonanzkurve deuten.</span></label>
+      <label><input type="checkbox"><span>… Aussagen zu Resonanz und Dämpfung an Beispielen aus dem Alltag bewerten.</span></label>
+    </div>
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnis als Text kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+
+  <details class="lehrer">
+    <summary>Didaktische Hinweise (Lehrkraft)</summary>
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Schwingende Systeme und Wellen“, Q1 LK. Vorausgesetzt wird die Mechanik der Einführungsphase (Newton II, Energieerhaltung, Kreisbewegung mit Winkelgeschwindigkeit). Das Modul steht vor dem geplanten Wellenmodul; zum elektromagnetischen Schwingkreis gibt es nur den Ausblick am Ende von Abschnitt 3. Die „Ich kann …“-Sätze sind eigene Formulierungen in Anlehnung an die Kompetenzbereiche, keine Zitate aus dem Kernlehrplan.</p>
+    <p><strong>Offene Punkte.</strong> Der Kernlehrplan nennt für Q1 nur den Namen des Inhaltsfeldes. Nicht geklärt sind (a), ob Dämpfung, erzwungene Schwingung und Resonanz im schulinternen Lehrplan in Q1 stehen oder ins Wellenmodul gehören, (b), ob das logarithmische Dekrement Pflicht oder Vertiefung ist, und (c), wie verbindlich einzelne Teile im Zentralabitur sind. Wird (a) verneint, lassen sich Abschnitt 3, die Aufgaben a3 bis a7 und die Punkte 2 und 3 des Beobachtungsauftrags ins Wellenmodul verschieben; Abschnitte 1 und 2 sind in sich geschlossen.</p>
+    <p><strong>Zeitbedarf.</strong> Abschnitte 1 und 2 etwa 50 Minuten, Abschnitt 3 etwa 40 Minuten, Simulation mit Beobachtungsauftrag 25 Minuten, Übungen 35 Minuten. Die beiden Aufgaben im Anforderungsbereich III eignen sich als Hausaufgabe. Für eine Doppelstunde reichen Abschnitte 1 und 2 sowie der Beobachtungsauftrag, Punkt 1 und 2.</p>
+    <p><strong>Typische Hürden.</strong> Erstens die Verwechslung von Auslenkung und Geschwindigkeit (Umkehrpunkt gleich schnellste Stelle), greift der Erklärteil mit Hinweis und Tabelle auf. Zweitens „schwere Pendel schwingen langsamer“, sie wird beim Fadenpendel und beim Federpendel getrennt behandelt. Drittens die Vorstellung, Resonanz heiße „beide schwingen gleich schnell“ und führe immer zur Zerstörung; dagegen stehen der Hinweis im Erklärteil, die Simulation (Beobachtungsauftrag 3) und Aufgabe a7. Vierte Hürde sind die Indizes: <span class="m" data-tex="\omega_0" data-plain="ω₀"></span> ist die Eigen-, <span class="m" data-tex="\omega_e" data-plain="ω_e"></span> die Erregerkreisfrequenz, <span class="m" data-tex="\omega_d" data-plain="ω_d"></span> die der gedämpften Schwingung.</p>
+    <p><strong>Modellgrenzen.</strong> Die Simulation zeigt nur das horizontale Federpendel mit geschwindigkeitsproportionaler Reibung und konstanter Erregerkraft; das Fadenpendel kommt nur im Text und in den Aufgaben vor. Die Bewegung wird mit dem Runge-Kutta-Verfahren vierter Ordnung berechnet; die Resonanzkurve unten kommt aus der Formel, der grüne Ring zeigt die in der Simulation gemessene Amplitude. Bei Ausschlägen über 45 cm wird nicht mehr gezeichnet; das lineare Kraftgesetz wäre dort ohnehin verlassen. Bei einer echten Unwucht wächst die Erregerkraft mit dem Quadrat der Drehzahl; das Modul behandelt sie als konstant und sagt das an der Stelle der Waschmaschine.</p>
+    <p><strong>Formelleiste.</strong> Das Hookesche Gesetz <span class="m" data-tex="F = -Dx" data-plain="F = −D·x"></span>, die Summe der Energieanteile und die Beziehung <span class="m" data-tex="f = 1/T" data-plain="f = 1/T"></span> stehen bewusst nicht in der Formelleiste, weil die Vorwissensfragen 1 bis 3 sie sonst beantworten würden. Sie stehen im Text.</p>
+    <p><strong>Experimentbezug.</strong> Die Simulation ersetzt den Realversuch nicht. Sinnvoll sind Federpendel mit Stoppuhr oder Bewegungssensor (Periode gegen Masse und Amplitude), Fadenpendel mit verschieden schweren Körpern, ein Pendel mit Wirbelstromdämpfung und ein Resonanzversuch mit Erreger, etwa am Pohlschen Rad. Die Seite dient der Auswertung und der gezielten Variation von <span class="m" data-tex="b" data-plain="b"></span> und <span class="m" data-tex="f_e" data-plain="f_e"></span>.</p>
+    <p><strong>Differenzierung.</strong> Das dreistufige Hilfesystem trägt die Binnendifferenzierung. Schnelle Gruppen können die Lage des Maximums <span class="m" data-tex="\omega_{\text{res}}" data-plain="ω_res"></span> herleiten, die Leistungsbilanz der Schaukel nachvollziehen oder in der Simulation prüfen, bei welchem <span class="m" data-tex="b" data-plain="b"></span> das Maximum verschwindet (Bedingung <span class="m" data-tex="\delta \ge \omega_0/\sqrt{2}" data-plain="δ ≥ ω₀/√2"></span>).</p>
+  </details>
+
+  <footer>
+    Physik LK Q1 · Mechanische Schwingungen · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+
+<!-- Formelsammlung: nur im Druck sichtbar, wird aus formelDaten erzeugt -->
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+
+<!-- =============== FORMELLEISTE =============== -->
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/bausteine.md, Abschnitt 10. abschnitt = id der <section>, ziel = id der
+// Formel im Text. tex setzt KaTeX, plain ist der Klartext ohne Netz. Alle Texte ohne HTML.
+var formelDaten = [
+  {abschnitt:"grundlagen", titel:"Von der Rückstellkraft zur harmonischen Schwingung", formeln:[
+    {id:"kreisfrequenz", ziel:"f-kreisfrequenz", tex:"\\omega = \\dfrac{2\\pi}{T}", plain:"ω = 2π/T",
+     zeichen:[
+       {tex:"\\omega", plain:"ω", text:"Kreisfrequenz der Schwingung", einheit:"rad/s"},
+       {tex:"T", plain:"T", text:"Schwingungsdauer, Zeit für eine vollständige Schwingung", einheit:"s"}],
+     gilt:"Gilt für jede periodische Bewegung mit der Periode T. Im Bogenmaß entspricht eine volle Schwingung dem Winkel 2π.",
+     fehler:"Den Taschenrechner bei sin(ω·t) im Gradmaß lassen. ω wird in rad/s angegeben, der Rechner muss also im Bogenmaß arbeiten."},
+    {id:"schwingung", ziel:"f-schwingung", tex:"x = x_{\\max}\\sin(\\omega t)", plain:"x = x_max·sin(ωt)",
+     zeichen:[
+       {tex:"x", plain:"x", text:"Auslenkung aus der Ruhelage, nach rechts positiv", einheit:"m"},
+       {tex:"x_{\\max}", plain:"x_max", text:"Amplitude, Betrag der größten Auslenkung", einheit:"m"},
+       {tex:"\\omega", plain:"ω", text:"Kreisfrequenz der Schwingung", einheit:"rad/s"},
+       {tex:"t", plain:"t", text:"Zeit seit dem Durchgang durch die Ruhelage nach rechts", einheit:"s"}],
+     gilt:"Harmonische Schwingung, die zur Zeit null in der Ruhelage beginnt. Allgemein kommt eine Anfangsphase φ₀ hinzu. Geschwindigkeit und Beschleunigung folgen durch Ableiten nach der Zeit.",
+     fehler:"Beim Ableiten den Faktor ω vergessen: v = x_max·ω·cos(ωt), nicht x_max·cos(ωt). Bei der zweiten Ableitung kommt ω² vor."},
+    {id:"bew-feder", ziel:"f-bew-feder", tex:"m\\,\\ddot{x} = -D\\,x", plain:"m·x'' = −D·x",
+     zeichen:[
+       {tex:"m", plain:"m", text:"Masse des schwingenden Körpers", einheit:"kg"},
+       {tex:"\\ddot{x}", plain:"x''", text:"Beschleunigung, zweite Ableitung der Auslenkung nach der Zeit", einheit:"m/s²"},
+       {tex:"D", plain:"D", text:"Federkonstante (Richtgröße) der Feder", einheit:"N/m"},
+       {tex:"x", plain:"x", text:"Auslenkung aus der Ruhelage", einheit:"m"}],
+     gilt:"Horizontales, reibungsfreies Federpendel, die Feder bleibt im Hookeschen Bereich. Bei senkrechtem Aufhängen verschiebt die Gewichtskraft nur die Ruhelage.",
+     fehler:"Das Minuszeichen weglassen. Die Kraft zeigt der Auslenkung entgegen; ohne Minus hätte die Gleichung keine schwingende, sondern eine exponentiell wachsende Lösung."},
+    {id:"omega-feder", ziel:"f-omega-feder", tex:"\\omega_0 = \\sqrt{\\dfrac{D}{m}}", plain:"ω₀ = √(D/m)",
+     zeichen:[
+       {tex:"\\omega_0", plain:"ω₀", text:"Eigenkreisfrequenz des ungedämpften Federpendels", einheit:"rad/s"},
+       {tex:"D", plain:"D", text:"Federkonstante", einheit:"N/m"},
+       {tex:"m", plain:"m", text:"Masse des schwingenden Körpers", einheit:"kg"}],
+     gilt:"Ungedämpftes Federpendel mit linearer Rückstellkraft. Die Periode folgt aus T₀ = 2π/ω₀.",
+     fehler:"Masse und Federkonstante vertauschen. Die Federkonstante steht im Zähler unter der Wurzel, die Masse im Nenner. Probe über die Einheit: √((N/m)/kg) ergibt 1/s."},
+    {id:"faden", ziel:"f-faden", tex:"\\omega_0 = \\sqrt{\\dfrac{g}{l}}", plain:"ω₀ = √(g/l)",
+     zeichen:[
+       {tex:"\\omega_0", plain:"ω₀", text:"Eigenkreisfrequenz des Fadenpendels", einheit:"rad/s"},
+       {tex:"g", plain:"g", text:"Ortsfaktor, hier 9,81 m/s²", einheit:"m/s²"},
+       {tex:"l", plain:"l", text:"Länge des Fadens bis zum Schwerpunkt des Pendelkörpers (kleines l)", einheit:"m"}],
+     gilt:"Kleine Auslenkwinkel (Richtwert: bis etwa 10°), masseloser Faden, punktförmiger Körper, keine Reibung. Die Masse des Körpers kommt in der Formel nicht vor.",
+     fehler:"Die Länge in cm statt in m einsetzen oder die Periode mit der Länge statt mit deren Wurzel wachsen lassen. l geht in Meter ein, T wächst mit √l."},
+    {id:"energie", ziel:"f-energie", tex:"E = \\tfrac{1}{2}\\,D\\,x_{\\max}^2", plain:"E = ½·D·x_max²",
+     zeichen:[
+       {tex:"E", plain:"E", text:"Gesamtenergie der Schwingung", einheit:"J"},
+       {tex:"D", plain:"D", text:"Federkonstante", einheit:"N/m"},
+       {tex:"x_{\\max}", plain:"x_max", text:"Amplitude der Schwingung", einheit:"m"}],
+     gilt:"Ungedämpfte Schwingung: Die Energie bleibt konstant. Sie hängt von der Amplitude ab, nicht von der Masse des Körpers.",
+     fehler:"Die Amplitude nur einfach statt quadratisch einsetzen. Doppelte Amplitude bedeutet vierfache Energie."}
+  ]},
+  {abschnitt:"vertiefung", titel:"Dämpfung, Antrieb und Resonanz", formeln:[
+    {id:"bew-daempf", ziel:"f-bew-daempf", tex:"m\\,\\ddot{x} = -D\\,x - b\\,\\dot{x}", plain:"m·x'' = −D·x − b·x'",
+     zeichen:[
+       {tex:"m", plain:"m", text:"Masse des schwingenden Körpers", einheit:"kg"},
+       {tex:"\\ddot{x}", plain:"x''", text:"Beschleunigung", einheit:"m/s²"},
+       {tex:"D", plain:"D", text:"Federkonstante", einheit:"N/m"},
+       {tex:"x", plain:"x", text:"Auslenkung aus der Ruhelage", einheit:"m"},
+       {tex:"b", plain:"b", text:"Reibungskoeffizient, F_R = −b·v", einheit:"kg/s"},
+       {tex:"\\dot{x}", plain:"x'", text:"Geschwindigkeit, erste Ableitung der Auslenkung nach der Zeit", einheit:"m/s"}],
+     gilt:"Reibungskraft proportional zur Geschwindigkeit, etwa bei langsamer Bewegung in Luft oder Flüssigkeit und bei der Wirbelstrombremse. Gleitreibung folgt einem anderen Gesetz.",
+     fehler:"b mit der Abklingkonstante δ gleichsetzen. b hat die Einheit kg/s, δ = b/(2m) die Einheit 1/s. Erst δ steht im Exponenten der Hüllkurve."},
+    {id:"schwingfall", ziel:"f-schwingfall", tex:"x(t) = x_{\\max}\\,e^{-\\delta t}\\cos(\\omega_d t + \\varphi_0)", plain:"x(t) = x_max·e^(−δt)·cos(ω_d·t + φ₀)",
+     zeichen:[
+       {tex:"x(t)", plain:"x(t)", text:"Auslenkung zur Zeit t", einheit:"m"},
+       {tex:"x_{\\max}", plain:"x_max", text:"Amplitude zu Beginn, bei t = 0", einheit:"m"},
+       {tex:"\\delta", plain:"δ", text:"Abklingkonstante, δ = b/(2m)", einheit:"1/s"},
+       {tex:"t", plain:"t", text:"Zeit", einheit:"s"},
+       {tex:"\\omega_d", plain:"ω_d", text:"Kreisfrequenz der gedämpften Schwingung, ω_d = √(ω₀² − δ²)", einheit:"rad/s"},
+       {tex:"\\varphi_0", plain:"φ₀", text:"Anfangsphase, aus den Anfangsbedingungen", einheit:"rad"}],
+     gilt:"Nur für schwache Dämpfung, δ < ω₀. Die Periode T_d = 2π/ω_d ist dann etwas länger als T₀.",
+     fehler:"ω₀ statt ω_d in den Kosinus schreiben oder den Dämpfungsfaktor vergessen. Im Exponenten steht δ = b/(2m), nicht b."},
+    {id:"dekrement", ziel:"f-dekrement", tex:"\\Lambda = \\delta\\,T_d", plain:"Λ = δ·T_d",
+     zeichen:[
+       {tex:"\\Lambda", plain:"Λ", text:"logarithmisches Dekrement, Maß für die Abnahme je Periode", einheit:"dimensionslos"},
+       {tex:"\\delta", plain:"δ", text:"Abklingkonstante", einheit:"1/s"},
+       {tex:"T_d", plain:"T_d", text:"Periode der gedämpften Schwingung", einheit:"s"}],
+     gilt:"Nur im Schwingfall. Gemessen wird an zwei aufeinanderfolgenden Maxima; sie liegen genau eine Periode T_d auseinander.",
+     fehler:"Λ mit der Abklingkonstante δ verwechseln. Λ ist dimensionslos und gilt für eine ganze Periode, δ hat die Einheit 1/s und gilt je Sekunde."},
+    {id:"amplitude", ziel:"f-amplitude", tex:"\\small\\hat{x} = F_0\\,/\\sqrt{(D - m\\omega_e^2)^2 + (b\\omega_e)^2}", plain:"x̂ = F₀ / √((D − m·ω_e²)² + (b·ω_e)²)",
+     zeichen:[
+       {tex:"\\hat{x}", plain:"x̂", text:"Amplitude der Schwingung im eingeschwungenen Zustand (im Text auch x_max)", einheit:"m"},
+       {tex:"F_0", plain:"F₀", text:"Amplitude der Erregerkraft F(t) = F₀·sin(ω_e·t)", einheit:"N"},
+       {tex:"D", plain:"D", text:"Federkonstante", einheit:"N/m"},
+       {tex:"m", plain:"m", text:"Masse des schwingenden Körpers", einheit:"kg"},
+       {tex:"\\omega_e", plain:"ω_e", text:"Kreisfrequenz des Erregers (Index e)", einheit:"rad/s"},
+       {tex:"b", plain:"b", text:"Reibungskoeffizient", einheit:"kg/s"}],
+     gilt:"Eingeschwungener Zustand, also nachdem die freie Schwingung abgeklungen ist. Reibung proportional zur Geschwindigkeit, konstante Erregerkraft.",
+     fehler:"Die Erregerfrequenz f_e in Hz statt der Kreisfrequenz ω_e = 2π·f_e einsetzen. In die Formel geht ω_e in rad/s ein."},
+    {id:"phase", ziel:"f-phase", tex:"\\tan\\varphi = \\dfrac{b\\,\\omega_e}{D - m\\omega_e^2}", plain:"tan φ = b·ω_e / (D − m·ω_e²)",
+     zeichen:[
+       {tex:"\\varphi", plain:"φ", text:"Phasenverschiebung: Um diesen Winkel hinkt die Antwort dem Erreger hinterher", einheit:"rad"},
+       {tex:"b", plain:"b", text:"Reibungskoeffizient", einheit:"kg/s"},
+       {tex:"\\omega_e", plain:"ω_e", text:"Kreisfrequenz des Erregers", einheit:"rad/s"},
+       {tex:"D", plain:"D", text:"Federkonstante", einheit:"N/m"},
+       {tex:"m", plain:"m", text:"Masse des schwingenden Körpers", einheit:"kg"}],
+     gilt:"Eingeschwungener Zustand. Die Antwort hinkt hinterher, deshalb liegt φ zwischen 0° und 180°.",
+     fehler:"Den Wert der Arkustangens-Taste ungeprüft übernehmen. Ist der Nenner negativ, liegt die Erregung oberhalb der Eigenfrequenz; der Rechner liefert dann einen negativen Winkel, und es müssen 180° addiert werden."},
+    {id:"resonanz", ziel:"f-resonanz", tex:"\\omega_{\\text{res}} = \\sqrt{\\omega_0^2 - 2\\delta^2}", plain:"ω_res = √(ω₀² − 2δ²)",
+     zeichen:[
+       {tex:"\\omega_{\\text{res}}", plain:"ω_res", text:"Erregerkreisfrequenz, bei der die Amplitude am größten ist", einheit:"rad/s"},
+       {tex:"\\omega_0", plain:"ω₀", text:"Eigenkreisfrequenz des ungedämpften Systems", einheit:"rad/s"},
+       {tex:"\\delta", plain:"δ", text:"Abklingkonstante", einheit:"1/s"}],
+     gilt:"Nur für δ < ω₀/√2 gibt es ein Maximum. Bei stärkerer Dämpfung fällt die Kurve von F₀/D aus gleichmäßig ab.",
+     fehler:"ω_res und ω₀ für denselben Wert halten. Bei schwacher Dämpfung ist der Unterschied winzig, bei starker nicht."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{"r": 1, "fb": ["Die Federkonstante D bleibt tatsächlich gleich, aber sie ist der Proportionalitätsfaktor, nicht die Kraft. Im Gesetz F = D·s steht s selbst im Term: Dreifache Auslenkung heißt dreifache Kraft. Bei 4,0 cm und 2,0 N sind es bei 12 cm eben 6,0 N.", "Richtig. Aus F = D·s folgt für 4,0 cm und 2,0 N die Federkonstante D = 50 N/m. Bei 12 cm wirkt dann 6,0 N. Die Rückstellkraft wächst linear mit der Auslenkung – genau diese Eigenschaft macht das Federpendel in Abschnitt 2 harmonisch.", "Das Quadrat gehört zur Energie (E = ½·D·s²), nicht zur Kraft. Wer beide Formeln verwechselt, bekommt hier 18 N statt 6,0 N. Merke: Kraft ~ s, Energie ~ s²."]},
+  vw2:{"r": 1, "fb": ["Am Umkehrpunkt kehrt die Bewegung um, dort ist die Geschwindigkeit für einen Augenblick null. Die gesamte Energie steckt dort als Höhenenergie im Körper. Größte Auslenkung heißt größte Höhenenergie, nicht größte Geschwindigkeit.", "Richtig. Beim Herabschwingen wird Höhenenergie in Bewegungsenergie umgewandelt; an der tiefsten Stelle ist E_pot minimal, also E_kin und damit v maximal. Diese Umwandlung ist der Kern des Energiebilds in Abschnitt 2.", "Erhalten bleibt die Summe aus kinetischer und potentieller Energie, nicht die einzelnen Anteile. Sie tauschen sich ständig aus, deshalb ändert sich die Geschwindigkeit laufend."]},
+  vw3:{"r": 0, "fb": ["Richtig. Eine Schwingung dauert T = 8,0 s / 4 = 2,0 s, und f = 1/T = 0,50 Hz. Zwei Sekunden pro Schwingung sind eben eine halbe Schwingung pro Sekunde.", "Die 2,0 sind die Periode T in Sekunden. Die Frequenz ist der Kehrwert f = 1/T und hat die Einheit Hz = 1/s. Wer die Periode nicht umkehrt, verwechselt „Sekunden pro Schwingung“ mit „Schwingungen pro Sekunde“.", "Hier wurde 8,0 · 4 gerechnet. Die Frequenz ist die Zahl der Schwingungen geteilt durch die Zeit, nicht mal die Zeit. Plausibilitätsprobe: 32 Schwingungen pro Sekunde wären ein Ton, kein Pendel."]},
+  sim1:{"r": 1, "fb": ["Die Eigenperiode bestimmt nicht, wie schnell die Masse im eingeschwungenen Zustand schwingt. Die freie Schwingung mit etwa 1,0 s klingt durch die Reibung ab; übrig bleibt die erzwungene Schwingung. Im x-t-Diagramm siehst du nach dem Einschwingen gleichmäßige Wellen im Takt des Erregers.", "Richtig. Nach dem Einschwingen schwingt die Masse mit der Periode des Erregers, T = 1/f_e = 1/0,60 Hz = 1,67 s. Die Eigenfrequenz legt nur fest, wie groß die Amplitude wird und wie weit die Masse dem Erreger hinterherhinkt.", "Einen Mittelwert gibt es nicht. Im eingeschwungenen Zustand kommt nur eine Frequenz vor, die des Erregers. Beide Frequenzen sind nur in der Anlaufphase zu sehen, und die klingt ab (mit Zeitraffer siehst du, wie sie nach einigen Sekunden verschwindet)."]},
+  sim2:{"r": 0, "fb": ["Richtig. In der Resonanz gilt x_max ≈ F₀/(b·ω₀), die Amplitude ist also umgekehrt proportional zu b. Mit den Voreinstellungen (F₀ = 0,50 N, m = 0,200 kg, D = 8,0 N/m) sind es 19,8 cm bei 0,40 kg/s und 39,5 cm bei 0,20 kg/s.", "Das 1,5-Fache wäre kein Verhältnis, das aus der Formel folgt. In der Resonanz steht b allein im Nenner, x_max ≈ F₀/(b·ω₀): Halbe Reibung heißt doppelte Amplitude, nicht anderthalbfache.", "Die Abklingzeit der freien Schwingung ändert sich zwar auch (sie verdoppelt sich), aber die Amplitude im eingeschwungenen Zustand hängt direkt von b ab: In der Resonanz begrenzt allein die Reibung den Ausschlag, x_max ≈ F₀/(b·ω₀)."]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{"wert": 0.907, "einheit": "s", "tol": 0.01, "ok": "Richtig. T₀ = 2π·√(m/D) = 2π·√(0,250 kg / 12 N/m) = 0,907 s.", "falschEinheit": "Der Zahlenwert passt zur Schwingungsdauer, aber die wird in Sekunden gemessen. Hz wäre die Einheit der Frequenz.", "nah": "Knapp daneben – prüfe, ob du m = 0,250 kg und D = 12 N/m eingesetzt hast und die Wurzel gezogen hast, bevor du mit 2π multiplizierst.", "weit": "Das passt noch nicht. Nutze die Hilfen unten: T₀ = 2π·√(m/D), die Masse steht im Zähler."},
+  a2:{"wert": 2.24, "einheit": "m", "tol": 0.03, "alt": {"wert": 224, "einheit": "cm"}, "ok": "Richtig. l = g·(T/2π)² = 9,81 m/s² · (3,0 s / 2π)² = 2,24 m.", "falschEinheit": "Der Zahlenwert passt, aber eine Länge wird in m oder cm angegeben, nicht in s oder kg.", "nah": "Fast. Hast du T durch 2π geteilt und dann quadriert, nicht nur die Wurzel aufgelöst?", "weit": "Das passt noch nicht. Stelle T = 2π·√(l/g) nach l um und beachte, dass die Wurzel beim Umstellen zum Quadrat wird."},
+  a4:{"wert": 0.64, "einheit": "1/s", "tol": 0.02, "ok": "Richtig. Λ = ln(10,0/6,0) = 0,511 und δ = Λ/T_d = 0,511 / 0,80 s = 0,64 1/s.", "falschEinheit": "Der Zahlenwert passt, aber δ ist eine Rate je Sekunde, also 1/s. kg/s wäre der Reibungskoeffizient b, s eine Zeit, Hz eine Frequenz.", "nah": "Knapp daneben – prüfe, ob du den natürlichen Logarithmus verwendet und durch T_d = 0,80 s geteilt hast.", "weit": "Das passt noch nicht. Nutze die Hilfen unten: Die Verbindung zwischen dem Verhältnis zweier Maxima und δ läuft über das logarithmische Dekrement Λ."},
+  a5:{"wert": 10.15, "einheit": "cm", "tol": 0.1, "alt": {"wert": 0.1015, "einheit": "m"}, "ok": "Richtig. x_max = F₀/√((D − m·ω_e²)² + (b·ω_e)²) = 2,0 N / √(18² + 8,0²) N/m = 0,102 m = 10,2 cm.", "falschEinheit": "Der Zahlenwert passt zur Amplitude, aber eine Auslenkung wird in cm oder m angegeben, nicht in m/s oder N.", "nah": "Knapp daneben – prüfe, ob beide Terme unter der Wurzel quadriert und addiert sind und ob ω_e = 8,0 rad/s in beiden vorkommt.", "weit": "Das passt noch nicht. Nutze die Hilfen unten und berechne die beiden Terme unter der Wurzel getrennt."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.a3 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier richtig. Ob überhaupt geschwungen wird, entscheidet der Vergleich von δ und ω₀. Im Kriechfall kommt das System langsamer zur Ruhe als im Grenzfall, obwohl die Reibung größer ist.";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Frage dich bei jeder Situation: Überschwingt die Kurve die Nulllinie? Wenn ja, wie schnell sinkt die Hüllkurve? Wenn nein, welche Kurve kommt schneller zur Ruhelage?";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: Federpendel ============ */
+(function(){
+  var cvS = document.getElementById("cvSim"), ctxS = cvS.getContext("2d");
+  var cvX = document.getElementById("cvX"),   ctxX = cvX.getContext("2d");
+  var cvR = document.getElementById("cvR"),   ctxR = cvR.getContext("2d");
+
+  // Umrechnung Bild <-> Physik: 1000 Pixel je Meter, Ruhelage bei X_RUHE, Wand bei X_WAND.
+  var PX_M = 1000, X_RUHE = 540, X_WAND = 30, X_GRENZE = 0.45;   // Auslenkungen über 45 cm werden nicht gezeichnet
+  var FENSTER = 10;       // Sekunden im x-t-Diagramm
+  var H_INT = 0.002;      // größter Zeitschritt der Integration in s
+  var DT_PROBE = 0.01;    // Abstand der gespeicherten Punkte für das Diagramm in s
+  var FE_MIN = 0.2, FE_MAX = 2.5;
+
+  var farbX = "#1d4ed8", farbV = "#0d7a52", farbH = "#5b6b7f", farbF = "#8a6100", TINTE = "#0f2135";
+
+  var m = 0.20, D = 8, b = 0.20, F0 = 0.5, fe = 1.0, x0 = 0.08;
+  var x = x0, v = 0, t = 0, phaseE = 0;
+  var erreger = false, pause = false, raf = false, zieht = false;
+  var tP = [], xP = [], fP = [], probeRest = 0;
+  var huelle = null;      // {t0, A} solange sie gilt: Schwingfall, Erreger aus, Parameter seit t0 unverändert
+  var letzteZeit = null;
+
+  var $ = function(id){ return document.getElementById(id); };
+  var hinweis = $("simHinweis");
+  function fmt(z, n){ return z.toFixed(n).replace(".", ","); }
+  function minus(s){ return s.replace("-", "−"); }
+
+  function w0(){ return Math.sqrt(D / m); }
+  function delta(){ return b / (2 * m); }
+  function bKrit(){ return 2 * Math.sqrt(m * D); }
+  function fall(){
+    var d = delta(), w = w0();
+    if(b === 0) return "ungedämpft";
+    if(Math.abs(d / w - 1) < 0.02) return "Grenzfall";
+    return d < w ? "Schwingfall" : "Kriechfall";
+  }
+  function wd(){ return Math.sqrt(Math.max(w0() * w0() - delta() * delta(), 0)); }
+  function amplitudeFormel(we){
+    return F0 / Math.sqrt(Math.pow(D - m * we * we, 2) + Math.pow(b * we, 2));
+  }
+  function phaseFormel(we){ return Math.atan2(b * we, D - m * we * we); }
+
+  /* ---------- Bewegung ---------- */
+  function kraft(xx, vv, ph){ return (-D * xx - b * vv + (erreger ? F0 * Math.sin(ph) : 0)) / m; }
+  function schrittRK(h){
+    var we = 2 * Math.PI * fe;
+    var k1x = v,                 k1v = kraft(x, v, phaseE);
+    var k2x = v + h / 2 * k1v,   k2v = kraft(x + h / 2 * k1x, v + h / 2 * k1v, phaseE + we * h / 2);
+    var k3x = v + h / 2 * k2v,   k3v = kraft(x + h / 2 * k2x, v + h / 2 * k2v, phaseE + we * h / 2);
+    var k4x = v + h * k3v,       k4v = kraft(x + h * k3x, v + h * k3v, phaseE + we * h);
+    x += h / 6 * (k1x + 2 * k2x + 2 * k3x + k4x);
+    v += h / 6 * (k1v + 2 * k2v + 2 * k3v + k4v);
+    t += h; phaseE += we * h;
+    probeRest += h;
+    if(probeRest >= DT_PROBE){
+      probeRest -= DT_PROBE;
+      tP.push(t); xP.push(x); fP.push(erreger ? F0 * Math.sin(phaseE) : 0);
+      if(tP.length > 1600){ tP.splice(0, 300); xP.splice(0, 300); fP.splice(0, 300); }
+    }
+  }
+  // Hüllkurve der freien gedämpften Schwingung, verankert im aktuellen Zustand
+  function verankere(){
+    var d = delta(), w = wd();
+    if(erreger || b <= 0 || d >= w0() || w <= 0){ huelle = null; return; }
+    var a = Math.sqrt(x * x + Math.pow((v + d * x) / w, 2));
+    huelle = {t0: t, A: a};
+  }
+
+  /* ---------- Bedienung ---------- */
+  function regler(id, anzeige, f, nachher){
+    var el = $(id);
+    el.addEventListener("input", function(){ f(parseFloat(el.value)); $(anzeige).textContent = nachher(); verankere(); });
+  }
+  regler("rM", "lM", function(z){ m = z; }, function(){ return fmt(m, 3); });
+  regler("rD", "lD", function(z){ D = z; }, function(){ return fmt(D, 1); });
+  regler("rB", "lB", function(z){ b = z; }, function(){ return fmt(b, 2); });
+  regler("rX0", "lX0", function(z){ x0 = z / 100; }, function(){ return String(Math.round(x0 * 100)); });
+  regler("rF", "lF", function(z){ F0 = z; }, function(){ return fmt(F0, 2); });
+  regler("rFe", "lFe", function(z){ fe = z; }, function(){ return fmt(fe, 2); });
+
+  $("cErr").addEventListener("change", function(){
+    erreger = this.checked;
+    if(erreger){ phaseE = 0; huelle = null; } else verankere();
+  });
+  $("cRaf").addEventListener("change", function(){ raf = this.checked; });
+  $("bPause").addEventListener("click", function(){
+    pause = !pause; this.textContent = pause ? "Weiter" : "Pause";
+  });
+  $("bAus").addEventListener("click", function(){
+    x = x0; v = 0; phaseE = 0; verankere();
+  });
+  $("bKrit").addEventListener("click", function(){
+    var r = $("rB"); r.value = Math.min(bKrit(), parseFloat(r.max)).toFixed(2);
+    b = parseFloat(r.value); $("lB").textContent = fmt(b, 2); verankere();
+  });
+  $("bReset").addEventListener("click", function(){
+    x = x0; v = 0; t = 0; phaseE = 0; probeRest = 0;
+    tP = []; xP = []; fP = [];
+    verankere();
+  });
+
+  // Masse mit Maus oder Finger verschieben
+  function px(e){ var r = cvS.getBoundingClientRect(); return (e.clientX - r.left) * cvS.width / r.width; }
+  cvS.style.touchAction = "none";
+  cvS.addEventListener("pointerdown", function(e){
+    var xm = X_RUHE + Math.max(-X_GRENZE, Math.min(X_GRENZE, x)) * PX_M;
+    if(Math.abs(px(e) - xm) > 70) return;
+    zieht = true; cvS.setPointerCapture(e.pointerId); v = 0;
+  });
+  cvS.addEventListener("pointermove", function(e){
+    if(!zieht) return;
+    x = Math.max(-X_GRENZE, Math.min(X_GRENZE, (px(e) - X_RUHE) / PX_M)); v = 0;
+  });
+  function loslassen(){ if(zieht){ zieht = false; verankere(); } }
+  cvS.addEventListener("pointerup", loslassen);
+  cvS.addEventListener("pointercancel", loslassen);
+
+  /* ---------- Hauptschleife ---------- */
+  function schritt(zeit){
+    if(letzteZeit === null) letzteZeit = zeit;
+    var dtR = Math.min(0.05, (zeit - letzteZeit) / 1000);
+    letzteZeit = zeit;
+    if(!pause && !zieht){
+      var dtS = dtR * (raf ? 5 : 1), n = Math.max(1, Math.ceil(dtS / H_INT)), h = dtS / n;
+      for(var k = 0; k < n; k++) schrittRK(h);
+    }
+    if(!isFinite(x) || !isFinite(v)){ x = 0; v = 0; }   // Schutz, sollte nie auslösen
+    anzeigen();
+    zeichneSchiene();
+    zeichneXT();
+    zeichneResonanz();
+    requestAnimationFrame(schritt);
+  }
+
+  function amplitudeGemessen(){
+    var d = delta(), w = wd();
+    var T = erreger ? 1 / fe : (b > 0 && d < w0() && w > 0 ? 2 * Math.PI / w : 2 * Math.PI / w0());
+    var fensterT = Math.max(0.5, Math.min(T * 1.02, 8));
+    var amp = 0;
+    for(var i = tP.length - 1; i >= 0 && tP[i] >= t - fensterT; i--) amp = Math.max(amp, Math.abs(xP[i]));
+    return amp;
+  }
+
+  function cmText(a){ return a * 100 > 100 ? "über 100 cm" : fmt(a * 100, 1) + " cm"; }
+
+  function anzeigen(){
+    var d = delta(), we = 2 * Math.PI * fe, f = fall();
+    $("aX").textContent = minus(fmt(x * 100, 1)) + " cm";
+    $("aV").textContent = minus(fmt(v, 3)) + " m/s";
+    if(f === "Schwingfall"){ $("aTName").textContent = "T_d"; $("aT").textContent = fmt(2 * Math.PI / wd(), 3) + " s"; }
+    else if(f === "ungedämpft"){ $("aTName").textContent = "T₀"; $("aT").textContent = fmt(2 * Math.PI / w0(), 3) + " s"; }
+    else { $("aTName").textContent = "T"; $("aT").textContent = "keine Schwingung"; }
+    $("aD").textContent = fmt(d, 2) + " 1/s";
+    $("aFall").textContent = f;
+    $("aAm").textContent = cmText(amplitudeGemessen());
+    if(erreger){
+      $("aAf").textContent = cmText(amplitudeFormel(we));
+      $("aPh").textContent = fmt(phaseFormel(we) * 180 / Math.PI, 0) + "°";
+    } else { $("aAf").textContent = "–"; $("aPh").textContent = "–"; }
+    hinweis.textContent = Math.abs(x) >= X_GRENZE - 1e-9
+      ? "Der Ausschlag liegt außerhalb der Anzeige (über 45 cm). Eine echte Feder wäre hier längst überdehnt, das lineare Kraftgesetz gilt nicht mehr."
+      : "";
+  }
+
+  /* ---------- Zeichnen: Schiene mit Masse ---------- */
+  function strecke(ctx, x1, y1, x2, y2, farbe, breite){
+    ctx.strokeStyle = farbe; ctx.lineWidth = breite;
+    ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  }
+  function pfeilH(ctx, xA, xB, y, farbe, beschriftung){
+    if(Math.abs(xB - xA) < 4) return;
+    var r = xB > xA ? 1 : -1;
+    strecke(ctx, xA, y, xB, y, farbe, 4);
+    ctx.fillStyle = farbe; ctx.beginPath();
+    ctx.moveTo(xB + 10 * r, y); ctx.lineTo(xB - 4 * r, y - 8); ctx.lineTo(xB - 4 * r, y + 8); ctx.closePath(); ctx.fill();
+    if(beschriftung){
+      ctx.font = "600 15px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "bottom";
+      ctx.fillText(beschriftung, (xA + xB) / 2, y - 10);
+    }
+  }
+  function zeichneSchiene(){
+    var ctx = ctxS, W = cvS.width, H = cvS.height;
+    var yM = 105, hM = 70, bM = 80, ySchiene = yM + hM / 2;
+    var xs = Math.max(-X_GRENZE, Math.min(X_GRENZE, x));
+    var xm = X_RUHE + xs * PX_M;
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+
+    // Ruhelage und Skala
+    ctx.setLineDash([6, 5]); strecke(ctx, X_RUHE, 50, X_RUHE, 240, "#94a3b8", 1.5); ctx.setLineDash([]);
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "13px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for(var cm = -40; cm <= 40; cm += 10){
+      var xx = X_RUHE + cm * PX_M / 100;
+      strecke(ctx, xx, ySchiene + hM / 2 + 6, xx, ySchiene + hM / 2 + 14, "#94a3b8", 1.5);
+      ctx.fillText(minus(String(cm)), xx, ySchiene + hM / 2 + 17);
+    }
+    ctx.textAlign = "left"; ctx.fillText("x in cm", W - 70, 192);
+    ctx.fillStyle = "#5b6b7f"; ctx.textAlign = "center"; ctx.fillText("Ruhelage", X_RUHE, 34);
+
+    // Schiene und Wand
+    strecke(ctx, X_WAND, ySchiene + hM / 2 + 2, W - 10, ySchiene + hM / 2 + 2, "#94a3b8", 3);
+    ctx.fillStyle = "#cbd5e1"; ctx.fillRect(X_WAND - 14, yM - 30, 14, hM + 60);
+    strecke(ctx, X_WAND, yM - 30, X_WAND, yM + hM + 30, "#64748b", 3);
+
+    // Feder (Zickzack) von der Wand zur Masse
+    var xl = xm - bM / 2, n = 14, yF = ySchiene;
+    ctx.strokeStyle = "#475569"; ctx.lineWidth = 3; ctx.lineJoin = "round"; ctx.beginPath();
+    ctx.moveTo(X_WAND, yF);
+    var x1 = X_WAND + 18, x2 = xl - 18;
+    ctx.lineTo(x1, yF);
+    for(var k = 0; k < n; k++){
+      var xk = x1 + (k + 0.5) * (x2 - x1) / n;
+      ctx.lineTo(xk, yF + (k % 2 === 0 ? -16 : 16));
+    }
+    ctx.lineTo(x2, yF); ctx.lineTo(xl, yF); ctx.stroke();
+
+    // Masse
+    ctx.fillStyle = zieht ? "#dbeafe" : "#eff6ff"; ctx.strokeStyle = farbX; ctx.lineWidth = 3;
+    ctx.fillRect(xm - bM / 2, yM, bM, hM); ctx.strokeRect(xm - bM / 2, yM, bM, hM);
+    ctx.fillStyle = TINTE; ctx.font = "600 17px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText("m", xm, yM + hM / 2);
+
+    // Pfeile: Geschwindigkeit (grün), Erregerkraft (gold)
+    var vs = Math.max(-150, Math.min(150, v * 160));
+    pfeilH(ctx, xm, xm + vs, yM - 22, farbV, "v");
+    if(erreger){
+      var fs = Math.sin(phaseE) * F0 / 0.8 * 130;
+      ctx.fillStyle = farbF;
+      pfeilH(ctx, xm, xm + fs, 232, farbF, "");
+    }
+    ctx.textBaseline = "alphabetic"; ctx.textAlign = "left"; ctx.font = "13px sans-serif";
+    ctx.fillStyle = farbV; ctx.fillText("grün: Geschwindigkeit v", 18, 22);
+    if(erreger){ ctx.fillStyle = farbF; ctx.fillText("gold: Erregerkraft F(t)", 18, 40); }
+  }
+
+  /* ---------- Zeichnen: x-t-Diagramm ---------- */
+  function schoen(v){
+    var stufen = [0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.75, 1, 2];
+    for(var i = 0; i < stufen.length; i++) if(v <= stufen[i]) return stufen[i];
+    return stufen[stufen.length - 1];
+  }
+  function zeichneXT(){
+    var ctx = ctxX, W = cvX.width, H = cvX.height, l = 72, r = 40, o = 30, u = 30;
+    var tEnde = Math.max(FENSTER, t), tStart = tEnde - FENSTER;
+    var amp = 0, i;
+    for(i = tP.length - 1; i >= 0 && tP[i] >= tStart; i--) amp = Math.max(amp, Math.abs(xP[i]));
+    amp = Math.max(amp, Math.abs(x));
+    var ymax = schoen(Math.min(amp * 1.1, X_GRENZE));
+    var yNull = o + (H - o - u) / 2, skala = (H - o - u) / 2 / ymax;
+    function X(tt){ return l + (tt - tStart) / FENSTER * (W - l - r); }
+    function Y(val){ return yNull - Math.max(-ymax * 1.05, Math.min(ymax * 1.05, val)) * skala; }
+
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+
+    // Zeitgitter: jede Sekunde
+    ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.font = "13px sans-serif";
+    for(var s = Math.ceil(tStart - 1e-9); s <= tEnde + 1e-9; s++){
+      ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(X(s), o - 6); ctx.lineTo(X(s), H - u); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = "#64748b"; ctx.fillText(String(s), X(s), H - u + 6);
+    }
+    // Achsen
+    ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(l, o - 6); ctx.lineTo(l, H - u); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(l, yNull); ctx.lineTo(W - r, yNull); ctx.stroke();
+    ctx.fillStyle = "#5b6b7f"; ctx.font = "13px sans-serif";
+    ctx.textAlign = "left"; ctx.textBaseline = "middle"; ctx.fillText("x in cm", 8, 13);
+    ctx.textAlign = "right";
+    ctx.fillText(fmt(ymax * 100, 0), l - 6, o); ctx.fillText("0", l - 6, yNull); ctx.fillText("−" + fmt(ymax * 100, 0), l - 6, H - u);
+    ctx.textAlign = "left"; ctx.fillText("t in s", W - r + 4, H - u + 14);
+
+    // Hüllkurve
+    if(huelle){
+      var d = delta(), ta = Math.max(huelle.t0, tStart);
+      ctx.strokeStyle = farbH; ctx.lineWidth = 1.8; ctx.setLineDash([7, 5]);
+      [1, -1].forEach(function(vz){
+        ctx.beginPath();
+        for(var k = 0; k <= 120; k++){
+          var tt = ta + (t - ta) * k / 120, val = vz * huelle.A * Math.exp(-d * (tt - huelle.t0));
+          if(k === 0) ctx.moveTo(X(tt), Y(val)); else ctx.lineTo(X(tt), Y(val));
+        }
+        ctx.stroke();
+      });
+      ctx.setLineDash([]);
+    }
+    // Erregerkraft (Skala frei, F₀ entspricht 60 % der halben Höhe)
+    if(erreger){
+      ctx.strokeStyle = farbF; ctx.lineWidth = 1.6; ctx.beginPath();
+      var began = false;
+      for(i = 0; i < tP.length; i++){
+        if(tP[i] < tStart) continue;
+        var yy = yNull - fP[i] / F0 * 0.6 * ymax * skala;
+        if(!began){ ctx.moveTo(X(tP[i]), yy); began = true; } else ctx.lineTo(X(tP[i]), yy);
+      }
+      ctx.stroke();
+    }
+    // Auslenkung
+    ctx.strokeStyle = farbX; ctx.lineWidth = 3; ctx.lineJoin = "round"; ctx.beginPath();
+    var start = false;
+    for(i = 0; i < tP.length; i++){
+      if(tP[i] < tStart) continue;
+      if(!start){ ctx.moveTo(X(tP[i]), Y(xP[i])); start = true; } else ctx.lineTo(X(tP[i]), Y(xP[i]));
+    }
+    ctx.stroke();
+    if(tP.length){ ctx.fillStyle = farbX; ctx.beginPath(); ctx.arc(X(t), Y(x), 5, 0, Math.PI * 2); ctx.fill(); }
+
+    // Legende
+    ctx.textBaseline = "middle"; ctx.textAlign = "left"; ctx.font = "13px sans-serif";
+    var lx = l + 10;
+    ctx.fillStyle = farbX; ctx.fillText("x(t)", lx, 12); lx += 46;
+    if(huelle){ ctx.fillStyle = farbH; ctx.fillText("Hüllkurve ± x_max·e^(−δt)", lx, 12); lx += 190; }
+    if(erreger){ ctx.fillStyle = farbF; ctx.fillText("Erregerkraft F(t), Maßstab frei", lx, 12); }
+  }
+
+  /* ---------- Zeichnen: Resonanzkurve ---------- */
+  function zeichneResonanz(){
+    var ctx = ctxR, W = cvR.width, H = cvR.height, l = 72, r = 40, o = 30, u = 34;
+    var we0 = w0(), f0 = we0 / (2 * Math.PI);
+    var N = 300, k, maxK = 0, pts = [];
+    for(k = 0; k <= N; k++){
+      var f = FE_MIN + (FE_MAX - FE_MIN) * k / N, a = amplitudeFormel(2 * Math.PI * f);
+      pts.push([f, a]); maxK = Math.max(maxK, a);
+    }
+    var ymax = schoen(Math.min(Math.max(maxK, F0 / D) * 1.1, 0.75));
+    function X(f){ return l + (f - FE_MIN) / (FE_MAX - FE_MIN) * (W - l - r); }
+    function Y(a){ return H - u - Math.min(a, ymax * 1.05) / ymax * (H - o - u); }
+
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+    ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.font = "13px sans-serif";
+    for(var fg = 0.5; fg <= FE_MAX + 1e-9; fg += 0.5){
+      ctx.strokeStyle = "#e2e8f0"; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(X(fg), o - 6); ctx.lineTo(X(fg), H - u); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = "#64748b"; ctx.fillText(fmt(fg, 1), X(fg), H - u + 6);
+    }
+    ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(l, o - 6); ctx.lineTo(l, H - u); ctx.lineTo(W - r, H - u); ctx.stroke();
+    ctx.fillStyle = "#5b6b7f"; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+    ctx.fillText("x_max in cm (eingeschwungen)", 8, 13);
+    ctx.textAlign = "right"; ctx.fillText(fmt(ymax * 100, 0), l - 6, o); ctx.fillText("0", l - 6, H - u);
+    ctx.textAlign = "left"; ctx.fillText("f_e in Hz", W - r + 4, H - u + 16);
+
+    // statische Auslenkung F₀/D
+    var ys = Y(F0 / D);
+    ctx.setLineDash([3, 5]); strecke(ctx, l, ys, W - r, ys, "#94a3b8", 1.3); ctx.setLineDash([]);
+    ctx.fillStyle = "#64748b"; ctx.textAlign = "right"; ctx.textBaseline = "bottom"; ctx.font = "13px sans-serif";
+    ctx.fillText("F₀/D", W - r - 4, ys - 3);
+
+    // Eigenfrequenz f₀
+    if(f0 >= FE_MIN && f0 <= FE_MAX){
+      strecke(ctx, X(f0), H - u - 6, X(f0), H - u + 6, TINTE, 2);
+      ctx.fillStyle = TINTE; ctx.textAlign = "center"; ctx.textBaseline = "top"; ctx.font = "600 13px sans-serif";
+      ctx.fillText("f₀", X(f0), H - u + 17);
+    }
+    // Kurve
+    ctx.strokeStyle = erreger ? farbX : "#93b4f0"; ctx.lineWidth = 3; ctx.lineJoin = "round"; ctx.beginPath();
+    for(k = 0; k <= N; k++){ if(k === 0) ctx.moveTo(X(pts[k][0]), Y(pts[k][1])); else ctx.lineTo(X(pts[k][0]), Y(pts[k][1])); }
+    ctx.stroke();
+    // Marke der laufenden Erregung
+    var xe = X(fe), ye = Y(amplitudeFormel(2 * Math.PI * fe));
+    ctx.setLineDash([6, 5]); strecke(ctx, xe, o - 6, xe, H - u, erreger ? farbF : "#cbd5e1", 1.6); ctx.setLineDash([]);
+    if(erreger){
+      ctx.fillStyle = farbF; ctx.beginPath(); ctx.arc(xe, ye, 6, 0, Math.PI * 2); ctx.fill();
+      var ag = amplitudeGemessen();
+      ctx.strokeStyle = farbV; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(xe, Y(ag), 8, 0, Math.PI * 2); ctx.stroke();
+      ctx.font = "13px sans-serif"; ctx.textBaseline = "middle"; ctx.textAlign = "left";
+      ctx.fillStyle = farbF; ctx.fillText("Formel", l + 10, 12);
+      ctx.fillStyle = farbV; ctx.fillText("Ring: gemessene Amplitude in der Simulation", l + 70, 12);
+    } else {
+      ctx.fillStyle = "#64748b"; ctx.font = "13px sans-serif"; ctx.textAlign = "left"; ctx.textBaseline = "middle";
+      ctx.fillText("Erreger aus – Kurve gilt für die eingestellten Werte von F₀, m, D und b", l + 10, 12);
+    }
+  }
+
+  verankere();
+  requestAnimationFrame(schritt);
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1",
+    vw2:"Vorwissen 2",
+    vw3:"Vorwissen 3",
+    sim1:"Simulation 1",
+    sim2:"Simulation 2",
+    a1:"Aufgabe 1 (Periode Federpendel)",
+    a2:"Aufgabe 2 (Fadenlänge)",
+    a3:"Aufgabe 3 (Zuordnung)",
+    a4:"Aufgabe 4 (Abklingkonstante)",
+    a5:"Aufgabe 5 (erzwungene Amplitude)"
+  };
+  var zeilen = ["Mechanische Schwingungen – Physik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Offene Aufgabe " + (i + 1) + ":\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+</script>
+</body>
+</html>
