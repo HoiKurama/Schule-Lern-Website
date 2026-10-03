@@ -41,7 +41,8 @@ zu kleine Touchziele. Die Screenshots gehörst du selbst angesehen, nicht nur er
 **Druckansicht.** Mit `page.emulateMedia({media:'print'})` prüfen: Bedienelemente, Regler und
 Lehrerteil sind ausgeblendet, Aufgabentexte und Hilfen sichtbar, keine abgeschnittenen Kästen.
 
-**Regeltreue.** Per Textsuche prüfen: kein `localStorage`, kein `sessionStorage`, keine externen
+**Regeltreue.** Per Textsuche prüfen: `localStorage` nur im generischen Speicherblock, kein
+`sessionStorage`, keine externen
 Skript- oder Stylesheet-Verweise außer jsdelivr/KaTeX, keine `TODO`-Reste, kein Lorem ipsum,
 kein englischer Text in der Oberfläche, kein Punkt als Dezimaltrennzeichen in ausgegebenen Zahlen.
 

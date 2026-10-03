@@ -33,7 +33,8 @@ bekommst du fertig geliefert; du erfindest keine neuen Aufgaben und änderst kei
 - Eine Datei, alles inline. Einzige externe Abhängigkeit ist KaTeX über jsdelivr.
 - Jede Formel als `<span class="m" data-tex="…" data-plain="…">`. Fehlt `data-plain`, ist die
   Datei fehlerhaft.
-- Kein `localStorage`, kein Framework, keine zusätzliche Bibliothek.
+- Kein eigenes `localStorage` – gespeichert wird nur über den generischen Speicherblock am
+  Skriptende (siehe `vorlage/bausteine.md` § 9). Kein Framework, keine zusätzliche Bibliothek.
 - Canvas mit festen internen Maßen, Zeigerereignisse statt Mausereignisse.
 - Alle angezeigten Zahlen mit Komma als Dezimaltrennzeichen.
 - Keine Platzhalter, keine `TODO`-Kommentare, kein Lorem ipsum in der ausgelieferten Datei.

@@ -47,8 +47,12 @@ Differenzierung und Experimentbezug. Er verschwindet beim Drucken.
   `https://cdn.jsdelivr.net/npm/katex@0.16.9/`. Jede Formel steht als
   `<span class="m" data-tex="…" data-plain="…">` im Markup. `data-plain` ist **Pflicht** und muss
   ohne KaTeX lesbar sein (Unicode: Φ, Δ, ⁻⁴, ·, ≈). Die Seite muss ohne Netz funktionieren.
-- **Kein `localStorage`, kein `sessionStorage`, keine Cookies.** Der Fortschritt lebt in der
-  Sitzung, Ergebnisse verlassen die Seite nur über den Kopieren-Button.
+- **Speichern nur über den generischen Speicherblock.** Er legt den Bearbeitungsstand eines
+  Moduls im `localStorage` dieses Browsers ab (Schlüssel `q1lernen:<datei>.html`), spielt ihn
+  beim Laden über die Engine wieder ein und liefert der Übersicht eine Kurzbilanz. Sonst kein
+  `localStorage`, kein `sessionStorage`, keine Cookies. Nichts verlässt das Gerät; Ergebnisse
+  gehen nur über den Kopieren-Button hinaus. Jedes Modul hat den Knopf „Gespeicherten Stand
+  löschen“, die Übersicht einen für alle Module (gemeinsam genutzte Schulrechner).
 - **Grafik ausschließlich mit Canvas oder Inline-SVG.** Keine Chart- oder Physik-Bibliothek.
 - **Touch-tauglich**: `pointerdown`/`pointermove` statt `mousedown`/`mousemove`.
 - **Responsiv**: Canvas mit festen internen Maßen (`width="1000"`) und `width:100%` per CSS.

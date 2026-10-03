@@ -20,6 +20,7 @@ Diese Datei beschreibt, was beim Kopieren unverändert bleibt und was ausgetausc
 | Formelleiste (`/* Formelleiste: Aufbau und Bedienung (generisch) */`) | direkt nach `formelnRendern()` | Leiste, Schublade, Formelsammlung, siehe § 10 |
 | Druckmodi (`/* Druck mit oder ohne Lösungen (generisch) */`) | nach der Zuordnungs-Engine, vor der ersten Simulation | Arbeitsblatt und Lösungsdruck, siehe § 11 |
 | Export-Funktion (`#bExport`) | Skriptende | Ergebnis in die Zwischenablage |
+| Speicherblock (`/* Bearbeitungsstand im Browser speichern (generisch) */`) | ganz am Skriptende, nach dem Export | Stand im `localStorage`, Löschknopf, Hinweis, siehe § 9 |
 
 Einzige erlaubte Änderung im `<style>`: die drei Akzent-Tokens in `:root` und der Verlauf in
 `header.kopf`, gemäß Farbtabelle in `CLAUDE.md`. Das gilt für neue Module. Bestehende Module
@@ -272,6 +273,15 @@ Der Selbstcheck listet Kompetenzen als „Ich kann …"-Sätze, formuliert nah a
 Kompetenzerwartungen des Kernlehrplans. Die Export-Funktion sammelt die Ergebnisse aus dem
 Objekt `ergebnisse`; jeder Aufgabenschlüssel muss deshalb in `var namen = {…}` am Skriptende
 eingetragen sein, sonst taucht die Aufgabe im Export nicht auf.
+
+Der **Speicherblock** steht unverändert als letzter Block im Skript. Er liest den Stand aus dem
+DOM (gewählte Option, Zahleneingaben, Zuordnungen, geöffnete Hilfestufen, Textfelder, Selbstcheck)
+und spielt ihn beim Laden als Klicks nach – deshalb muss er nach allen Engines stehen. Er setzt
+die Verträge der Engines voraus: `.opt.richtig/.falsch`, `.rueck.zeig`, `.hilfe-text[data-stufe]`,
+`button[data-loesung]` für Stufe 9. Für die Bilanz der Übersicht zählen nur selbstprüfende
+Aufgaben: `[data-mc]`, `[data-num]` mit Zahlenfeld und `[data-check]`. Ändert sich die Anzahl
+dieser Elemente, verwirft er einen alten Stand. Knopf und Hinweistext erzeugt er selbst; im
+Druck-CSS steht dafür `.speicherhinweis` in der Ausblendliste.
 
 ---
 

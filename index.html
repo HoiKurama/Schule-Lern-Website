@@ -127,6 +127,10 @@ a.kachel:hover{border-color:var(--fc-rand);border-left-color:var(--fc);backgroun
 }
 .marke.offen{background:#fff;border-color:var(--linie);color:var(--grau)}
 .marke.arbeit{background:#fef6e7;border-color:#f3ddb3;color:#8a5a00}
+/* Eigener Bearbeitungsstand aus dem Browser, in der Fachfarbe statt im Grün von „fertig“ */
+.marke.stand{background:var(--fc-hell);border-color:var(--fc-rand);color:var(--fc);text-transform:none;letter-spacing:0;font-size:12px}
+.speicher{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center}
+.speicher[hidden]{display:none}
 
 .leer{padding:22px;text-align:center;color:var(--grau);border:1px dashed var(--linie);border-radius:var(--radius)}
 .leer[hidden]{display:none}
@@ -141,7 +145,7 @@ footer p{margin:0 0 6px}
 @media print{
   header.kopf{background:none;color:#000;border-bottom:2px solid #000}
   .chip{border-color:#999;color:#000;background:none}
-  .filter,.plan,li.geplant,.ablauf{display:none !important}
+  .filter,.plan,li.geplant,.ablauf,.speicher,.marke.stand{display:none !important}
   li.schritt::before{box-shadow:none;border:1px solid #000;background:none;color:#000}
   a.kachel{break-inside:avoid;page-break-inside:avoid}
   a.kachel::after{content:" (" attr(href) ")";font-size:9pt;color:#555}
@@ -155,7 +159,7 @@ footer p{margin:0 0 6px}
   <div class="wrap">
     <div class="fachzeile">Gymnasiale Oberstufe · Nordrhein-Westfalen</div>
     <h1>Interaktive Lernseiten · Qualifikationsphase 1</h1>
-    <p>Jede Seite läuft ohne Installation im Browser – am Schulrechner, am Tablet, zu Hause. Sie enthält einen Erklärteil, eine Simulation zum Ausprobieren, gestufte Übungen mit dreistufigen Hilfen und lässt sich als Arbeitsblatt ausdrucken. Nichts wird gespeichert; Ergebnisse verlassen die Seite nur über den Kopieren-Knopf.</p>
+    <p>Jede Seite läuft ohne Installation im Browser – am Schulrechner, am Tablet, zu Hause. Sie enthält einen Erklärteil, eine Simulation zum Ausprobieren, gestufte Übungen mit dreistufigen Hilfen und lässt sich als Arbeitsblatt ausdrucken. Dein Bearbeitungsstand wird nur in diesem Browser auf diesem Gerät gespeichert; Ergebnisse verlassen die Seite nur über den Kopieren-Knopf.</p>
     <div class="meta">
       <span class="chip">Leistungskurs</span>
       <span class="chip">Kernlehrplan NRW, GOSt</span>
@@ -367,6 +371,8 @@ footer p{margin:0 0 6px}
   <footer>
     <p>Erstellt für den Unterricht in der Qualifikationsphase 1 nach dem Kernlehrplan Nordrhein-Westfalen für die gymnasiale Oberstufe.</p>
     <p>Jede Seite funktioniert eigenständig und ohne Netzverbindung; Formeln bleiben auch dann lesbar, wenn das Schul-WLAN den Formelsatz blockiert.</p>
+    <p class="speicher" id="speicher" hidden><span>Auf diesem Gerät ist ein Bearbeitungsstand gespeichert. An einem gemeinsam genutzten Rechner solltest du ihn am Ende löschen.</span>
+      <button type="button" id="bAllesLoeschen">Gespeicherten Stand löschen</button></p>
   </footer>
 
 </div>
@@ -421,6 +427,41 @@ footer p{margin:0 0 6px}
     b.addEventListener("click", function(){ fach = b.getAttribute("data-fach"); anwenden(); });
   });
   bPlan.addEventListener("click", function(){ planZeigen = !planZeigen; anwenden(); });
+
+  /* Bearbeitungsstand aus den Modulen – liegt nur in diesem Browser (siehe Speicherblock im Modul) */
+  var PREFIX = "q1lernen:", speicher = null;
+  try{ speicher = window.localStorage; speicher.getItem(PREFIX + "probe"); }catch(e){ speicher = null; }
+  var gespeichert = 0;
+  if(speicher){
+    document.querySelectorAll("a.kachel").forEach(function(a){
+      var datei = decodeURIComponent(a.getAttribute("href").split("/").pop());
+      var s = null;
+      try{ s = JSON.parse(speicher.getItem(PREFIX + datei)); }catch(e){ s = null; }
+      if(!s || !s.bilanz) return;
+      gespeichert++;
+      var b = s.bilanz, m = document.createElement("span");
+      m.className = "marke stand";
+      m.textContent = b.bearbeitet
+        ? "Dein Stand: " + b.richtig + " von " + b.gesamt + " Aufgaben richtig"
+        : "Dein Stand: begonnen";
+      a.querySelector(".fuss").appendChild(m);
+    });
+  }
+  var boxSpeicher = document.getElementById("speicher");
+  boxSpeicher.hidden = (gespeichert === 0);
+  document.getElementById("bAllesLoeschen").addEventListener("click", function(){
+    if(!window.confirm("Den gespeicherten Stand aller Module auf diesem Gerät löschen?")) return;
+    try{
+      for(var i = speicher.length - 1; i >= 0; i--){
+        var k = speicher.key(i);
+        if(k && k.indexOf(PREFIX) === 0) speicher.removeItem(k);
+      }
+    }catch(e){}
+    document.querySelectorAll(".marke.stand").forEach(function(m){ m.remove(); });
+    boxSpeicher.hidden = true;
+  });
+  // Zurück-Knopf: Kommt die Seite aus dem Cache, wären die Marken veraltet
+  window.addEventListener("pageshow", function(ev){ if(ev.persisted) location.reload(); });
 
   var n = document.querySelectorAll("a.kachel").length;
   document.getElementById("chipAnzahl").textContent = n === 1 ? "1 Modul verfügbar" : n + " Module verfügbar";

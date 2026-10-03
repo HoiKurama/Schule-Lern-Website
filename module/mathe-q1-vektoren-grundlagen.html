@@ -246,7 +246,7 @@ footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:v
 @media print{
   header.kopf{background:none;color:#000;border-bottom:2px solid #000}
   .chip{border-color:#999;color:#000;background:none}
-  .steuer,.knopfleiste,.hilfen,.lehrer,.startlink{display:none !important}
+  .steuer,.knopfleiste,.hilfen,.lehrer,.startlink,.speicherhinweis{display:none !important}
   details{border:none;background:none;padding:0}
   details[open] > summary{font-weight:700}
   details:not([open]) > *:not(summary){display:none}
@@ -1604,6 +1604,162 @@ document.getElementById("bExport").addEventListener("click", function(){
     }).catch(fallbackKopie);
   } else fallbackKopie();
 });
+
+/* ============ Bearbeitungsstand im Browser speichern (generisch) ============ */
+// Der Stand liegt nur in diesem Browser auf diesem Gerät, ein Schlüssel pro Moduldatei. Beim
+// Laden werden die Klicks nachgespielt, damit die Aufgaben-Engine Rückmeldung und ergebnisse
+// selbst wieder aufbaut – nichts davon wird hier doppelt programmiert.
+(function(){
+  var PREFIX = "q1lernen:";
+  var schluessel = PREFIX + (decodeURIComponent(location.pathname.split("/").pop()) || "modul");
+  var speicher = null;
+  try{
+    speicher = window.localStorage;
+    speicher.setItem(PREFIX + "probe", "1");
+    speicher.removeItem(PREFIX + "probe");
+  }catch(e){ speicher = null; }
+
+  function alle(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+  var mcBoxen = alle("[data-mc]"), zuoKnoepfe = alle("[data-check]");
+  // data-num tragen auch Zuordnungs- und Textaufgaben als Kennung; gezählt wird nur die Zahleneingabe
+  var numBoxen = alle("[data-num]").filter(function(b){ return b.querySelector("input[type=number]"); });
+  var aufgaben = alle(".aufgabe"), texte = alle("textarea"), haken = alle(".check input[type=checkbox]");
+  // Ändert sich der Aufbau des Moduls, passt ein alter Stand nicht mehr und wird verworfen.
+  var bauplan = [mcBoxen.length, numBoxen.length, zuoKnoepfe.length, aufgaben.length,
+                 texte.length, haken.length].join("-");
+  var stumm = true, geloescht = false, timer = null;
+
+  function zustand(){
+    var z = {bauplan: bauplan, zeit: Date.now(), mc: [], num: [], zuo: [], hilfen: [], texte: [], haken: []};
+    mcBoxen.forEach(function(box){
+      var opt = box.querySelector(".opt.richtig, .opt.falsch");
+      z.mc.push(opt ? opt.getAttribute("data-i") : null);
+    });
+    numBoxen.forEach(function(box){
+      var inp = box.querySelector("input[type=number]"), sel = box.querySelector("select"),
+          rueck = box.querySelector(".rueck");
+      z.num.push({w: inp ? inp.value : "", e: sel ? sel.value : "",
+                  p: !!(rueck && rueck.classList.contains("zeig"))});
+    });
+    zuoKnoepfe.forEach(function(btn){
+      var box = btn.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+      z.zuo.push({werte: Array.prototype.map.call(box.querySelectorAll(".zeile select"),
+                   function(s){ return s.value; }),
+                  p: !!(rueck && rueck.classList.contains("zeig"))});
+    });
+    aufgaben.forEach(function(box, ai){
+      box.querySelectorAll(".hilfe-text.zeig").forEach(function(t){
+        z.hilfen.push(ai + ":" + t.getAttribute("data-stufe"));
+      });
+    });
+    texte.forEach(function(t){ z.texte.push(t.value); });
+    haken.forEach(function(h){ z.haken.push(h.checked); });
+
+    // Kurzbilanz für die Übersichtsseite
+    var ergebnisse = window.ergebnisse || {}, bearbeitet = 0, richtig = 0;
+    mcBoxen.concat(numBoxen).forEach(function(box){
+      var k = box.getAttribute("data-mc") || box.getAttribute("data-num");
+      if(k in ergebnisse){ bearbeitet++; if(ergebnisse[k]) richtig++; }
+    });
+    zuoKnoepfe.forEach(function(btn){
+      var zeilen = btn.closest(".aufgabe").querySelectorAll(".zeile");
+      var r = 0, f = 0;
+      zeilen.forEach(function(zl){
+        if(zl.classList.contains("richtig")) r++;
+        else if(zl.classList.contains("falsch")) f++;
+      });
+      if(zeilen.length && r + f === zeilen.length){ bearbeitet++; if(r === zeilen.length) richtig++; }
+    });
+    z.bilanz = {gesamt: mcBoxen.length + numBoxen.length + zuoKnoepfe.length,
+                bearbeitet: bearbeitet, richtig: richtig};
+    return z;
+  }
+
+  function sichern(){
+    if(!speicher || stumm || geloescht) return;
+    try{ speicher.setItem(schluessel, JSON.stringify(zustand())); }catch(e){}
+  }
+  function bald(){
+    if(stumm || geloescht) return;
+    clearTimeout(timer);
+    timer = setTimeout(sichern, 250);
+  }
+
+  function wiederherstellen(z){
+    texte.forEach(function(t, i){ if(typeof z.texte[i] === "string") t.value = z.texte[i]; });
+    haken.forEach(function(h, i){ h.checked = z.haken[i] === true; });
+    numBoxen.forEach(function(box, i){
+      var s = z.num[i]; if(!s) return;
+      var inp = box.querySelector("input[type=number]"), sel = box.querySelector("select"),
+          btn = box.querySelector(".eingabe button");
+      if(inp) inp.value = s.w;
+      if(sel) sel.value = s.e;
+      if(s.p && btn) btn.click();
+    });
+    zuoKnoepfe.forEach(function(btn, i){
+      var s = z.zuo[i]; if(!s) return;
+      btn.closest(".aufgabe").querySelectorAll(".zeile select").forEach(function(sel, j){
+        if(typeof s.werte[j] === "string") sel.value = s.werte[j];
+      });
+      if(s.p) btn.click();
+    });
+    mcBoxen.forEach(function(box, i){
+      if(z.mc[i] == null) return;
+      var opt = box.querySelector('.opt[data-i="' + z.mc[i] + '"]');
+      if(opt) opt.click();
+    });
+    z.hilfen.forEach(function(eintrag){
+      var teile = String(eintrag).split(":"), box = aufgaben[+teile[0]], stufe = teile[1];
+      if(!box) return;
+      var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+      if(!t || t.classList.contains("zeig")) return;
+      var btn = stufe === "9" ? box.querySelector("button[data-loesung]")
+                              : box.querySelector('[data-hilfe="' + stufe + '"]');
+      if(btn) btn.click();
+    });
+  }
+
+  // Hinweis und Löschknopf neben dem Export
+  var bExport = document.getElementById("bExport");
+  var hinweis = document.createElement("p");
+  hinweis.className = "speicherhinweis";
+  hinweis.style.cssText = "font-size:14px;color:var(--grau);margin:10px 0 0";
+  if(speicher){
+    hinweis.textContent = "Dein Bearbeitungsstand wird automatisch gespeichert, und zwar nur in diesem Browser auf diesem Gerät. " +
+      "Arbeitest du an einem gemeinsam genutzten Rechner, lösche ihn am Ende.";
+    var bLoeschen = document.createElement("button");
+    bLoeschen.type = "button";
+    bLoeschen.id = "bStandLoeschen";
+    bLoeschen.textContent = "Gespeicherten Stand löschen";
+    bLoeschen.addEventListener("click", function(){
+      if(!window.confirm("Deinen gespeicherten Stand für dieses Modul löschen? Die Seite wird danach neu geladen.")) return;
+      geloescht = true;
+      clearTimeout(timer);
+      try{ speicher.removeItem(schluessel); }catch(e){}
+      location.reload();
+    });
+    if(bExport) bExport.parentNode.appendChild(bLoeschen);
+  } else {
+    hinweis.textContent = "Dieser Browser erlaubt kein Speichern. Lädst du die Seite neu, ist dein Bearbeitungsstand weg.";
+  }
+  if(bExport){
+    var leiste = bExport.parentNode;
+    leiste.parentNode.insertBefore(hinweis, leiste.nextSibling);
+  }
+
+  if(speicher){
+    var alt = null;
+    try{ alt = JSON.parse(speicher.getItem(schluessel)); }catch(e){ alt = null; }
+    if(alt && alt.bauplan === bauplan){
+      try{ wiederherstellen(alt); }catch(e){}
+    }
+    stumm = false;
+    document.addEventListener("click", bald);
+    document.addEventListener("input", bald);
+    document.addEventListener("change", bald);
+    window.addEventListener("pagehide", function(){ clearTimeout(timer); sichern(); });
+  }
+})();
 </script>
 </body>
 </html>

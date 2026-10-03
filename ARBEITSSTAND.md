@@ -1,5 +1,16 @@
 # Arbeitsstand — Durchgang 2
 
+> **Nachtrag 03.10.2026.** Auf Wunsch des Nutzers ist die Regel „kein `localStorage`“ gelockert.
+> Alle 19 Module haben den Link „← Zur Übersicht“ im Kopf und am Skriptende den generischen
+> Speicherblock (`vorlage/bausteine.md` § 9): Stand je Modul unter `q1lernen:<datei>.html`,
+> Wiederherstellung durch nachgespielte Klicks, Löschknopf neben dem Export. `index.html` zeigt je
+> Kachel „Dein Stand: x von y Aufgaben richtig“ und hat einen Löschknopf für alle Module.
+> Beobachtet beim Einbau, nicht behoben: Die Hilfe-Engine hängt ihren Musterlösungs-Klick an
+> `[data-loesung]`, das trifft auch `.zeile[data-loesung]` der Zuordnung. Folgenlos, solange die
+> Zuordnungsaufgabe keinen `.hilfe-text[data-stufe="9"]` hat.
+> Einschränkung: Firefox trennt `file://`-Seiten in eigene Ursprünge – dort sieht die Übersicht
+> den Stand der Module nur, wenn die Seiten über einen Webserver laufen.
+
 > **Nachtrag 29.09.2026.** Der Rest dieser Datei beschreibt den Stand vom 16.09. Seitdem gilt:
 > Durchgang 2 und 3 sind fertig (10 Module, siehe `fachliches/modulliste.md`), Durchgang 4 ist
 > noch nicht gestartet. Die aktuelle Übergabe steht in `.claude/handoff/latest.md`.
