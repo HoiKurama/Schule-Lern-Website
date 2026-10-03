@@ -43,6 +43,11 @@ header.kopf .wrap{padding-bottom:0}
 .fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
 header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
 .meta{display:flex;flex-wrap:wrap;gap:8px}
+.startlink{display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;padding:5px 14px;
+  border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);
+  color:#fff;font-size:14px;font-weight:600;text-decoration:none}
+.startlink:hover{background:rgba(255,255,255,.26)}
+.startlink:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
   border-radius:999px;padding:4px 12px;font-size:13px}
 
@@ -234,7 +239,7 @@ footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:v
 @media print{
   header.kopf{background:none;color:#000;border-bottom:2px solid #000}
   .chip{border-color:#999;color:#000;background:none}
-  .steuer,.knopfleiste,.hilfen,.lehrer{display:none !important}
+  .steuer,.knopfleiste,.hilfen,.lehrer,.startlink{display:none !important}
   details{border:none;background:none;padding:0}
   details[open] > summary{font-weight:700}
   details:not([open]) > *:not(summary){display:none}
@@ -284,6 +289,7 @@ footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:v
 
 <header class="kopf">
   <div class="wrap">
+    <a class="startlink" href="../index.html">← Zur Übersicht</a>
     <div class="fachzeile">Physik · Qualifikationsphase 1 · Leistungskurs</div>
     <h1>Magnetisches Feld und Lorentzkraft</h1>
     <div style="font-size:15px;opacity:.9;margin:-6px 0 14px">Von der Kraft auf den Leiter zur Kreisbahn des einzelnen Teilchens</div>
