@@ -1,0 +1,10 @@
+# local only, never on GitHub Pages
+_archiv/
+input/
+output/
+# Python
+__pycache__/
+*.pyc
+# Windows
+desktop.ini
+Thumbs.db

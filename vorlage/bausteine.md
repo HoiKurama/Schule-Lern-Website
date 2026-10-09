@@ -23,7 +23,7 @@ Diese Datei beschreibt, was beim Kopieren unverändert bleibt und was ausgetausc
 | Speicherblock (`/* Bearbeitungsstand im Browser speichern (generisch) */`) | ganz am Skriptende, nach dem Export | Stand im `localStorage`, Löschknopf, Hinweis, siehe § 9 |
 
 Einzige erlaubte Änderung im `<style>`: die drei Akzent-Tokens in `:root` und der Verlauf in
-`header.kopf`, gemäß Farbtabelle in `CLAUDE.md`. Das gilt für neue Module. Bestehende Module
+`header.kopf`, gemäß Farbtabelle in `.claude/rules/q1-module.md` (Vault). Das gilt für neue Module. Bestehende Module
 behalten ihr CSS und tauschen nur einzelne Blöcke, siehe Kopieranleitung in § 10.
 
 **Breite Inhalte kapseln.** Zwei Dinge schrumpfen nicht unter ihre Inhaltsbreite und schieben

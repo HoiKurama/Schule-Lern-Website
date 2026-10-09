@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Generischer Modulcheck fuer die Lernseiten (Playwright, Python).
 
-    PYTHONIOENCODING=utf-8 python modulcheck.py "module/DATEI.html" [shots]
+    python modulcheck.py "module/DATEI.html" [shots]
 
 Ausgabe ist JSON mit "blocker" (Modul gilt nicht als fertig) und "maengel". Mit dem zweiten
 Argument entstehen dort Bildschirmfotos und beide Druckfassungen als PDF.
@@ -10,6 +10,9 @@ Die Pruefschritte fuer Formelleiste und Druckmodi liegen in pruefschritte/.
 import sys, os, json, re
 from playwright.sync_api import sync_playwright
 from pruefschritte import browser_starten, formelleiste_pruefen, druckmodi_pruefen
+
+# Unter Windows ist stdout in einer Pipe cp1252; Befunde mit Φ oder → braeche das JSON sonst ab.
+sys.stdout.reconfigure(encoding="utf-8")
 
 DATEI = sys.argv[1]
 SHOTS = sys.argv[2] if len(sys.argv) > 2 else None
