@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feldläufer – Lernspiel Physik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#1d4ed8;
+  --akzent-hell:#eff6ff;
+  --akzent-rand:#bfdbfe;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+  --stern:#d99a00;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:960px;margin:0 auto;padding:0 20px 100px}
+[hidden]{display:none !important}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#1e3a8a,#1d4ed8);
+  color:#fff;padding:34px 0 30px;margin-bottom:26px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 10px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+header.kopf p{margin:0 0 14px;max-width:64ch;opacity:.92;font-size:15px}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.startlink{display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;padding:5px 14px;
+  border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);
+  color:#fff;font-size:14px;font-weight:600;text-decoration:none}
+.startlink:hover{background:rgba(255,255,255,.26)}
+.startlink:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Grundbausteine wie in den Modulen ---------- */
+section{margin:0 0 40px;scroll-margin-top:16px}
+h2{font-size:22px;letter-spacing:-.01em;margin:0 0 12px}
+h3{font-size:17px;margin:22px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block}
+details[open] summary::before{content:"▾ "}
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom;text-transform:none}
+.m.block{display:block;text-align:center;margin:10px 0;font-size:18px;white-space:normal}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;min-height:40px;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button:disabled{opacity:.5;cursor:not-allowed}
+button:disabled:hover{border-color:var(--linie);color:var(--text)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#1a43b8;color:#fff}
+button.primaer:disabled:hover{background:var(--akzent);color:#fff}
+button[aria-pressed="true"]{background:var(--akzent);border-color:var(--akzent);color:#fff}
+:focus-visible{outline:2px solid var(--akzent);outline-offset:2px}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff;touch-action:none}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:18px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px;background:#fff}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt.gesperrt{cursor:default}
+.opt.gesperrt:hover{border-color:var(--linie);background:#fff}
+.opt.gesperrt.richtig:hover{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.gesperrt.falsch:hover{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.rueck.info{background:var(--akzent-hell);border:1px solid var(--akzent-rand);color:#1e3a8a}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text]{font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:140px}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{font:inherit;width:100%;min-height:120px;padding:11px 13px;border:1px solid var(--linie);border-radius:8px;resize:vertical}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px}
+.loesungsweg{margin:10px 0 0;padding:11px 15px 11px 34px;background:var(--flaeche);border-radius:8px;font-size:15px}
+.loesungsweg li{margin-bottom:4px}
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+/* ---------- Spielleiste ---------- */
+.spielleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;
+  margin:0 0 24px;padding:12px 14px;background:var(--flaeche);border:1px solid var(--linie);border-radius:var(--radius)}
+.spielleiste .stand{font-size:15px;font-weight:600;font-variant-numeric:tabular-nums}
+.spielleiste .stand .sterne{font-size:18px}
+.sterne{color:var(--stern);letter-spacing:.06em;white-space:nowrap}
+.sterne .leer{color:#c9d2dd}
+
+/* ---------- Karte ---------- */
+.welt{border:1px solid var(--linie);border-radius:14px;margin:0 0 22px;overflow:hidden;background:#fff}
+.welt-kopf{padding:14px 18px;color:#fff;background:linear-gradient(120deg,#1e3a8a,#2563eb)}
+.welt.w2 .welt-kopf{background:linear-gradient(120deg,#134e4a,#0f766e)}
+.welt-kopf small{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.85}
+.welt-kopf b{font-size:18px}
+.route{list-style:none;margin:0;padding:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;
+  background-image:radial-gradient(var(--linie) 1px,transparent 1px);background-size:18px 18px}
+.route li{margin:0}
+.knoten{width:100%;height:100%;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;
+  padding:12px 14px;border-radius:12px;border:2px solid var(--akzent-rand);background:#fff;min-height:118px}
+.knoten:hover{border-color:var(--akzent);background:var(--akzent-hell);color:var(--text)}
+.knoten .nr{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--akzent);color:#fff;font-weight:700;font-size:14px}
+.welt.w2 .knoten .nr{background:#0f766e}
+.knoten .name{font-weight:700;line-height:1.25}
+.knoten .spiel{font-size:13px;color:var(--grau);line-height:1.3}
+.knoten .info{font-size:12.5px;color:var(--grau);margin-top:auto}
+.knoten.zu{border-style:dashed;border-color:var(--linie);background:var(--flaeche)}
+.knoten.zu .nr{background:#9aa8b8}
+.knoten.geschafft{border-color:#b5e0cd}
+.sonder{display:flex;flex-wrap:wrap;gap:12px;padding:0 18px 18px}
+.sonder button{flex:1 1 220px;text-align:left;border-radius:12px;padding:12px 14px;border:2px solid var(--linie)}
+.sonder button b{display:block}
+.sonder button span{font-size:13px;color:var(--grau)}
+.boss{border:2px solid #f0dfae;border-radius:14px;background:linear-gradient(120deg,#fdf5e2,#fff);padding:16px 18px;margin:0 0 22px;
+  display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.boss b{font-size:18px}
+.boss p{margin:0;font-size:14px;color:var(--grau)}
+
+/* ---------- Station ---------- */
+.stationskopf{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;margin:0 0 6px}
+.stationskopf h2{margin:0}
+.marke{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12px;background:var(--akzent-hell);border:1px solid var(--akzent-rand);color:var(--akzent)}
+.gegeben{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.gegeben span{background:#fff;border:1px solid #f0dfae;border-radius:999px;padding:2px 11px;font-size:14px;font-variant-numeric:tabular-nums}
+.regelzeile{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 14px;align-items:center;margin-bottom:12px}
+.regelzeile label{grid-column:1/-1;font-size:14px;color:var(--grau)}
+.regelzeile input[type=range]{width:100%;accent-color:var(--akzent)}
+.regelzeile .feld{display:flex;gap:6px;align-items:center}
+.regelzeile .feld input{font:inherit;width:120px;padding:7px 10px;border:1px solid var(--linie);border-radius:8px;text-align:right;font-variant-numeric:tabular-nums}
+.versuche{font-size:14px;color:var(--grau)}
+.versuche b{letter-spacing:.15em;color:var(--akzent)}
+.phase{margin-top:22px}
+.vorhersage{margin:0 0 14px;padding:12px 14px;border:1px solid var(--akzent-rand);border-radius:8px;background:#fff}
+.vorhersage .frage{margin-bottom:8px}
+.ergebnisbanner{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px;
+  background:var(--gruen-hell);border:1px solid #b5e0cd}
+.ergebnisbanner.nein{background:var(--rot-hell);border-color:#f3c6c2}
+.ergebnisbanner b{font-size:17px}
+.ergebnisbanner .sterne{font-size:24px}
+.fortschritt{height:8px;border-radius:999px;background:var(--linie);overflow:hidden;margin:6px 0 14px}
+.fortschritt span{display:block;height:100%;background:var(--akzent);transition:width .3s}
+.uhr{font-variant-numeric:tabular-nums;font-weight:700}
+
+/* ---------- Formelbuch ---------- */
+.formelkarten{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.formelkarte{border:1px solid var(--linie);border-radius:var(--radius);padding:12px 14px;background:#fff}
+.formelkarte h3{margin:0 0 6px;font-size:14px;color:var(--grau)}
+.formelkarte .m.block{font-size:17px;margin:6px 0}
+.formelkarte p{margin:0;font-size:14px}
+.formelkarte.zu{background:var(--flaeche);border-style:dashed;color:var(--grau)}
+
+@media (max-width:520px){
+  .wrap{padding-left:16px;padding-right:16px}
+  .route{padding:14px;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .knoten{min-height:108px;padding:10px}
+  .regelzeile{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .fortschritt span{transition:none}
+}
+
+/* ---------- Druck: nur der Ergebnisbogen ---------- */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .startlink,.spielleiste,.knopfleiste,.lehrer,.speicherhinweis,#exportInfo,
+  #vKarte,#vStation,#vAbi,#vExperte,#vFormelbuch{display:none !important}
+  #vErgebnis{display:block !important}
+  body{font-size:11.5pt}
+  .sterne,.sterne .leer{color:#000}
+  *,*::before,*::after{transition:none !important;animation:none !important}
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <a class="startlink" href="../index.html">← Zur Übersicht</a>
+    <div class="fachzeile">Physik · Qualifikationsphase 1 · Leistungskurs · Lernspiel</div>
+    <h1>Feldläufer</h1>
+    <p>Neun Stationen, zwei Welten, eine Abiprüfung. An jeder Station rechnest du, stellst einen Wert ein und siehst sofort, ob die Physik mitspielt. Danach warten drei Bossfragen. Dein Stand bleibt nur in diesem Browser auf diesem Gerät.</p>
+    <div class="meta">
+      <span class="chip">Inhaltsfeld: Ladungen, Felder und Induktion</span>
+      <span class="chip">Inhaltsfeld: Schwingende Systeme und Wellen</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <nav class="spielleiste" aria-label="Spielmenü">
+    <div class="knopfleiste">
+      <button type="button" data-ansicht="vKarte">Karte</button>
+      <button type="button" data-ansicht="vFormelbuch">Formelbuch</button>
+      <button type="button" data-ansicht="vErgebnis">Ergebnis</button>
+    </div>
+    <div class="stand" id="gesamtStand"></div>
+  </nav>
+
+  <!-- =============== Karte =============== -->
+  <section id="vKarte" aria-labelledby="hKarte">
+    <h2 id="hKarte">Karte</h2>
+    <p>Starte bei Station 1. Ab einem Stern öffnet sich die nächste Station. Jede Hilfe kostet einen möglichen Stern, also erst selbst rechnen.</p>
+    <div id="welten"></div>
+    <div class="boss">
+      <div><b>Endgegner: Abiprüfung</b><p id="abiInfo"></p></div>
+      <button type="button" class="primaer" id="bAbiStart">Zur Abiprüfung</button>
+    </div>
+    <div class="knopfleiste">
+      <button type="button" id="bAlleOffen" aria-pressed="false">Alle Stationen öffnen</button>
+      <span class="versuche">Zum Wiederholen vor einer Klausur: alle Stationen und die Abiprüfung frei wählbar.</span>
+    </div>
+  </section>
+
+  <!-- =============== Station =============== -->
+  <section id="vStation" hidden aria-live="polite">
+    <div class="stationskopf">
+      <h2 id="stTitel"></h2>
+      <span class="marke" id="stWelt"></span>
+      <span class="marke" id="stVariante"></span>
+    </div>
+    <p id="stGeschichte"></p>
+
+    <div id="phaseSpiel">
+      <div class="auftrag"><b id="stSpielname"></b>: <span id="stAuftrag"></span>
+        <div class="gegeben" id="stGegeben"></div>
+      </div>
+
+      <div class="sim">
+        <canvas id="cSpiel" width="1000" height="420" aria-label="Simulation der Station"></canvas>
+        <div class="anzeige" id="stAnzeige"></div>
+        <div class="steuer">
+          <div class="vorhersage" id="stVorhersage" hidden></div>
+          <div class="regelzeile">
+            <label for="rWert" id="lWert"></label>
+            <input type="range" id="rWert">
+            <span class="feld"><input type="text" id="tWert" inputmode="decimal" aria-labelledby="lWert"><span id="eWert"></span></span>
+          </div>
+          <div class="knopfleiste">
+            <button type="button" class="primaer" id="bLos">Los!</button>
+            <span class="versuche">Versuche: <b id="stVersuche"></b> · mögliche Sterne: <span id="stMoeglich" class="sterne"></span></span>
+          </div>
+        </div>
+      </div>
+      <div class="rueck" id="stRueck"></div>
+
+      <div class="hilfen" id="stHilfeKnoepfe"></div>
+      <div id="stHilfeTexte"></div>
+
+      <div id="stEnde" class="phase" hidden>
+        <div class="ergebnisbanner" id="stBanner"></div>
+        <div id="stMuster" hidden>
+          <h3>Musterlösung</h3>
+          <ol class="loesungsweg" id="stRechnung"></ol>
+        </div>
+        <div class="knopfleiste">
+          <button type="button" class="primaer" id="bZuFragen">Weiter zu den Bossfragen</button>
+          <button type="button" id="bNeueVariante">Neue Variante spielen</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="phaseFragen" class="phase" hidden>
+      <h3>Bossfragen</h3>
+      <p class="versuche">Die erste Antwort zählt. Danach siehst du die Erklärung.</p>
+      <div id="stFragen"></div>
+      <div class="knopfleiste" id="stAbschluss" hidden>
+        <button type="button" class="primaer" id="bStationFertig">Station abschließen</button>
+        <button type="button" id="bNochmal">Station mit neuer Variante wiederholen</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== Abiprüfung =============== -->
+  <section id="vAbi" hidden aria-labelledby="hAbi">
+    <h2 id="hAbi">Endgegner: Abiprüfung</h2>
+    <div id="abiStart">
+      <p>Neun Fragen, eine aus jeder Station. Die erste Antwort zählt, zurück geht es nicht. Mit Zeitlimit hast du 15 Minuten.</p>
+      <div class="check" style="margin-bottom:14px"><label><input type="checkbox" id="cAbiZeit" checked> Mit Zeitlimit spielen</label></div>
+      <div class="knopfleiste"><button type="button" class="primaer" id="bAbiLos">Prüfung beginnen</button></div>
+    </div>
+    <div id="abiLauf" hidden>
+      <div class="knopfleiste" style="justify-content:space-between">
+        <span id="abiZaehler"></span><span class="uhr" id="abiUhr"></span>
+      </div>
+      <div class="fortschritt"><span id="abiBalken" style="width:0"></span></div>
+      <div id="abiFrage"></div>
+      <div class="knopfleiste"><button type="button" class="primaer" id="bAbiWeiter" disabled>Nächste Frage</button></div>
+    </div>
+    <div id="abiEnde" hidden>
+      <div class="ergebnisbanner" id="abiBanner"></div>
+      <div class="knopfleiste">
+        <button type="button" class="primaer" data-ansicht="vKarte">Zur Karte</button>
+        <button type="button" id="bAbiNochmal">Noch einmal</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============== Expertenauftrag =============== -->
+  <section id="vExperte" hidden aria-labelledby="hExperte">
+    <h2 id="hExperte"></h2>
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="auftrag" id="exAuftrag"></div>
+    <label for="exText" class="versuche">Deine Antwort (bleibt nur auf diesem Gerät):</label>
+    <textarea id="exText"></textarea>
+    <div class="knopfleiste" style="margin-top:10px">
+      <button type="button" class="primaer" id="bExMuster">Musterlösung zeigen</button>
+      <button type="button" data-ansicht="vKarte">Zur Karte</button>
+    </div>
+    <p class="rueck info" id="exHinweis"></p>
+    <div id="exLoesung" hidden>
+      <h3>Musterlösung</h3>
+      <div class="karte" id="exMuster"></div>
+      <h3>Bewertungskriterien: Was steht in deiner Antwort?</h3>
+      <div class="check" id="exKriterien"></div>
+    </div>
+  </section>
+
+  <!-- =============== Formelbuch =============== -->
+  <section id="vFormelbuch" hidden aria-labelledby="hFormelbuch">
+    <h2 id="hFormelbuch">Formelbuch</h2>
+    <p>Jede Station, in der du mindestens einen Stern holst, schaltet ihre Formelkarten frei.</p>
+    <div id="fbInhalt"></div>
+  </section>
+
+  <!-- =============== Ergebnis =============== -->
+  <section id="vErgebnis" hidden aria-labelledby="hErgebnis">
+    <h2 id="hErgebnis">Dein Ergebnis</h2>
+    <div class="tabelle"><table id="erTabelle"></table></div>
+    <p id="erSumme"></p>
+    <div class="knopfleiste">
+      <button type="button" class="primaer" id="bExport">Ergebnis kopieren</button>
+      <button type="button" id="bDrucken">Ergebnisbogen drucken</button>
+    </div>
+    <p class="rueck info" id="exportInfo"></p>
+    <p class="speicherhinweis versuche">Dein Stand liegt nur in diesem Browser. An einem gemeinsam genutzten Rechner solltest du ihn am Ende löschen.</p>
+    <div class="knopfleiste"><button type="button" id="bStandLoeschen">Gespeicherten Stand löschen</button></div>
+  </section>
+
+  <details class="lehrer">
+    <summary>Für Lehrkräfte</summary>
+    <p><b>Einordnung:</b> Das Spiel wiederholt die Inhaltsfelder „Ladungen, Felder und Induktion“ und „Schwingende Systeme und Wellen“ des Leistungskurses Q1. Es setzt die neun Lernseiten der Plattform voraus und ersetzt sie nicht. Formeln, Bezeichnungen und Vorzeichen stimmen mit diesen Seiten überein.</p>
+    <p><b>Zeitbedarf:</b> etwa 10 Minuten je Station, die Abiprüfung dauert höchstens 15 Minuten. Eine Welt passt in eine Doppelstunde.</p>
+    <p><b>Spielmechanik:</b> Jede Station hat drei feste Varianten mit anderen Zahlen. Wer wiederholt, bekommt die nächste Variante. Sterne gibt es nur für das Mini-Spiel, die Bossfragen zählen getrennt. Jede genutzte Hilfe senkt die erreichbare Sternzahl um eins, ein Treffer bringt aber immer mindestens einen Stern.</p>
+    <p><b>Typische Schülerfehler,</b> die das Spiel gezielt anspricht: Einheiten nicht umgerechnet (mm, cm², µF, nF), Spannung und Feldstärke verwechselt, Radius statt Durchmesser im Massenspektrometer, Vorzeichen der Induktionsspannung ohne Lenzsche Regel, Periodendauer und Frequenz vertauscht, Kleinwinkelnäherung beim Gitter ohne Prüfung.</p>
+    <p><b>Differenzierung:</b> Schwächere nutzen die Hilfen und das Formelbuch, Stärkere spielen ohne Hilfe auf drei Sterne und bearbeiten die Expertenaufträge (Anforderungsbereich III). „Alle Stationen öffnen“ erlaubt gezieltes Wiederholen einzelner Themen.</p>
+    <p><b>Experimentbezug:</b> Die Mini-Spiele bilden Standardversuche nach: Plattenkondensator, Elektronenstrahlröhre, Massenspektrometer, Leiterschleife im Magnetfeld, Ausschaltvorgang mit Glimmlampe, Fadenpendel, Schwingkreis, Seilwelle und Gitter mit Laser. Ein Anschluss an den Realversuch bietet sich jeweils an.</p>
+    <p><b>Ergebnisse:</b> Über „Ergebnis kopieren“ geben Lernende ihren Stand weiter, etwa in eine Mail oder ein Lernportfolio. Die Seite selbst sendet nichts.</p>
+  </details>
+
+  <footer>
+    <p>Lernspiel zur Qualifikationsphase 1, Physik Leistungskurs, nach dem Kernlehrplan Nordrhein-Westfalen für die gymnasiale Oberstufe. Läuft ohne Installation und ohne Netzverbindung.</p>
+  </footer>
+</div>
+
+<script>
+/* ============ Spieldaten (aus inhalte/physik-q1-spiel-daten.json, eingebettet mit werkzeug/spieldaten_einbetten.py) ============ */
+var DATEN = /*DATEN-ANFANG*/{}/*DATEN-ENDE*/;
+</script>
+
+<script>
+/* ============ Formeln rendern (mit Fallback), wie im Referenzmodul ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Hilfsfunktionen ============ */
+// Zahl mit n Nachkommastellen und Dezimalkomma
+function fmt(z, n){
+  if(typeof z !== "number" || !isFinite(z)) return "–";
+  return z.toFixed(n).replace(".", ",");
+}
+// Zahl mit s gültigen Ziffern, ohne Exponentenschreibweise im sinnvollen Bereich
+function fmtSig(z, s){
+  if(typeof z !== "number" || !isFinite(z)) return "–";
+  if(z === 0) return "0";
+  var n = Math.max(0, s - 1 - Math.floor(Math.log10(Math.abs(z))));
+  return fmt(z, Math.min(n, 6));
+}
+// Eingabe mit Komma oder Punkt lesen, Leerzeichen und schmale Abstände ignorieren
+function leseZahl(t){
+  var s = String(t).trim().replace(/[\s  ]/g, "").replace(",", ".");
+  if(!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(s)) return NaN;
+  return parseFloat(s);
+}
+function nachkomma(schritt){
+  var s = String(schritt);
+  if(s.indexOf("e-") >= 0) return parseInt(s.split("e-")[1], 10);
+  return s.indexOf(".") >= 0 ? s.split(".")[1].length : 0;
+}
+function el(tag, attrs, text){
+  var e = document.createElement(tag);
+  if(attrs) Object.keys(attrs).forEach(function(k){
+    if(k === "class") e.className = attrs[k];
+    else if(k === "html") e.innerHTML = attrs[k];
+    else e.setAttribute(k, attrs[k]);
+  });
+  if(text !== undefined && text !== null) e.textContent = text;
+  return e;
+}
+function sterneText(n, max){
+  max = max || 3;
+  var s = "";
+  for(var i = 0; i < max; i++) s += (i < n ? "★" : "☆");
+  return s;
+}
+function sterneSpan(n, max){
+  var sp = el("span", {"class":"sterne", "aria-label": n + " von " + (max || 3) + " Sternen"});
+  max = max || 3;
+  for(var i = 0; i < max; i++){
+    var t = el("span", i < n ? null : {"class":"leer"}, i < n ? "★" : "☆");
+    sp.appendChild(t);
+  }
+  return sp;
+}
+</script>
+
+<script>
+/* ============ Zeichenhilfen für alle Stationen ============ */
+var B = 1000, H = 420; // feste interne Canvas-Maße
+var FARBE = {text:"#0f2135", grau:"#5b6b7f", linie:"#dbe3ec", flaeche:"#f6f8fb", akzent:"#1d4ed8",
+  akzentHell:"#eff6ff", rot:"#b42318", rotHell:"#fdeceb", gruen:"#0d7a52", gruenHell:"#e7f6ef",
+  gelb:"#d99a00", gelbHell:"#fdf5e2", feld:"#7c3aed"};
+var SCHRIFT = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif';
+function leeren(c){
+  c.setTransform(1, 0, 0, 1, 0, 0);
+  c.fillStyle = "#fff";
+  c.fillRect(0, 0, B, H);
+}
+function txt(c, s, x, y, o){
+  o = o || {};
+  c.font = (o.fett ? "600 " : "") + (o.gr || 18) + "px " + SCHRIFT;
+  c.fillStyle = o.farbe || FARBE.text;
+  c.textAlign = o.ausr || "left";
+  c.textBaseline = o.basis || "alphabetic";
+  c.fillText(s, x, y);
+}
+function strich(c, x1, y1, x2, y2, farbe, breite, muster){
+  c.beginPath();
+  c.setLineDash(muster || []);
+  c.strokeStyle = farbe || FARBE.text;
+  c.lineWidth = breite || 2;
+  c.moveTo(x1, y1); c.lineTo(x2, y2);
+  c.stroke();
+  c.setLineDash([]);
+}
+function pfeil(c, x1, y1, x2, y2, farbe, breite){
+  strich(c, x1, y1, x2, y2, farbe, breite);
+  var w = Math.atan2(y2 - y1, x2 - x1), k = 10;
+  c.beginPath();
+  c.fillStyle = farbe || FARBE.text;
+  c.moveTo(x2, y2);
+  c.lineTo(x2 - k * Math.cos(w - 0.4), y2 - k * Math.sin(w - 0.4));
+  c.lineTo(x2 - k * Math.cos(w + 0.4), y2 - k * Math.sin(w + 0.4));
+  c.closePath(); c.fill();
+}
+function kreis(c, x, y, r, fuell, rand, breite){
+  c.beginPath();
+  c.arc(x, y, r, 0, 2 * Math.PI);
+  if(fuell){ c.fillStyle = fuell; c.fill(); }
+  if(rand){ c.strokeStyle = rand; c.lineWidth = breite || 2; c.stroke(); }
+}
+function rechteck(c, x, y, w, h, fuell, rand, breite){
+  if(fuell){ c.fillStyle = fuell; c.fillRect(x, y, w, h); }
+  if(rand){ c.strokeStyle = rand; c.lineWidth = breite || 2; c.strokeRect(x, y, w, h); }
+}
+// Glühen um einen Punkt, für Lampen, Funken und Treffer
+function leuchten(c, x, y, r, farbe, staerke){
+  var g = c.createRadialGradient(x, y, 0, x, y, r);
+  g.addColorStop(0, farbe);
+  g.addColorStop(1, "rgba(255,255,255,0)");
+  c.globalAlpha = Math.max(0, Math.min(1, staerke));
+  c.fillStyle = g;
+  c.beginPath(); c.arc(x, y, r, 0, 2 * Math.PI); c.fill();
+  c.globalAlpha = 1;
+}
+function blitz(c, x1, y1, x2, y2, farbe){
+  c.beginPath();
+  c.strokeStyle = farbe || FARBE.gelb;
+  c.lineWidth = 3;
+  c.moveTo(x1, y1);
+  var n = 7;
+  for(var i = 1; i < n; i++){
+    var t = i / n;
+    c.lineTo(x1 + (x2 - x1) * t + (i % 2 ? 9 : -9), y1 + (y2 - y1) * t + (i % 2 ? -5 : 5));
+  }
+  c.lineTo(x2, y2);
+  c.stroke();
+}
+// Zahl mit SI-Vorsatz und schmalem Abstand vor der Einheit, z. B. 1,42 mJ
+function siFmt(x, einheit, sig){
+  if(typeof x !== "number" || !isFinite(x)) return "–";
+  sig = sig || 3;
+  var VORSATZ = [[1e9,"G"],[1e6,"M"],[1e3,"k"],[1,""],[1e-3,"m"],[1e-6,"µ"],[1e-9,"n"],[1e-12,"p"]];
+  var a = Math.abs(x);
+  if(a === 0) return "0 " + einheit;
+  for(var i = 0; i < VORSATZ.length; i++){
+    if(a >= VORSATZ[i][0] * 0.9995 || i === VORSATZ.length - 1){
+      return fmtSig(x / VORSATZ[i][0], sig) + " " + VORSATZ[i][1] + einheit;
+    }
+  }
+}
+// Umrechnungsfaktor einer Reglereinheit in SI
+var FAKTOR = {"m":1, "cm":1e-2, "mm":1e-3, "nm":1e-9, "T":1, "mT":1e-3, "µT":1e-6, "V":1, "kV":1e3,
+  "F":1, "mF":1e-3, "µF":1e-6, "nF":1e-9, "pF":1e-12, "Ω":1, "kΩ":1e3, "Hz":1, "kHz":1e3, "MHz":1e6,
+  "s":1, "ms":1e-3, "m/s":1, "cm/s":1e-2, "H":1, "mH":1e-3};
+function faktor(einheit){
+  if(!(einheit in FAKTOR)) throw new Error("Unbekannte Reglereinheit: " + einheit);
+  return FAKTOR[einheit];
+}
+// Reglerwert der Station id in SI-Einheit
+function reglerSI(id, w){
+  var s = (DATEN.stationen || []).filter(function(x){ return x.id === id; })[0];
+  return w * faktor(s.regler.einheit);
+}
+// Glatte Bewegung für Animationen
+function sanft(p){ return p < 0 ? 0 : p > 1 ? 1 : p * p * (3 - 2 * p); }
+
+/* ============ Simulationen der Stationen ============ */
+// Jede Station liefert: dauer (s), zeichne(ctx, v, w, p), anzeige(v, w, p) und urteil(v, w, treffer).
+// p ist null im Ruhebild, sonst der Fortschritt der Animation von 0 bis 1. Das Ruhebild verrät
+// das Ergebnis nicht. Ob getroffen wurde, entscheidet allein der Trefferbereich aus den Spieldaten.
+var SIMS = {};
+/*SIMS-ANFANG*/
+/*SIMS-ENDE*/
+</script>
+
+<script>
+/* ============ Spielstand: eigener kleiner Speicherblock ============ */
+// Gleicher Schlüssel wie bei den Modulen (q1lernen:<datei>), damit die Übersicht den Stand
+// anzeigt und „Alles löschen“ ihn mit erfasst. Gespeichert wird nur auf diesem Gerät.
+var SPEICHER = (function(){
+  var PREFIX = "q1lernen:";
+  var KEY = PREFIX + decodeURIComponent(location.pathname.split("/").pop() || "physik-q1-spiel.html");
+  var sp = null;
+  try{ sp = window.localStorage; sp.getItem(KEY); }catch(e){ sp = null; }
+  function laden(){
+    if(!sp) return null;
+    try{ return JSON.parse(sp.getItem(KEY)); }catch(e){ return null; }
+  }
+  function sichern(z){
+    if(!sp) return;
+    try{ sp.setItem(KEY, JSON.stringify(z)); }catch(e){}
+  }
+  function loeschen(){
+    if(!sp) return;
+    try{ sp.removeItem(KEY); }catch(e){}
+  }
+  return {laden:laden, sichern:sichern, loeschen:loeschen, verfuegbar: !!sp};
+})();
+</script>
+
+<script>
+/* ============ Spiel ============ */
+var spielTest = {schnell:false};
+
+(function(){
+  var ST = DATEN.stationen || [];
+  var VERSION = 1;
+
+  /* ---------- Zustand ---------- */
+  function leererZustand(){
+    var z = {version:VERSION, alleOffen:false, stationen:{}, abi:{beste:null, versuche:0}, experten:{}};
+    ST.forEach(function(s){ z.stationen[s.id] = {sterne:0, gespielt:0, gewonnen:false, variante:0, fragen:[false,false,false], beantwortet:[false,false,false]}; });
+    (DATEN.expertenauftraege || []).forEach(function(e){ z.experten[e.welt] = {text:"", haken:[], gezeigt:false}; });
+    return z;
+  }
+  var Z = leererZustand();
+  (function(){
+    var g = SPEICHER.laden();
+    if(!g || g.version !== VERSION) return;
+    Z.alleOffen = !!g.alleOffen;
+    if(g.abi) Z.abi = {beste: (typeof g.abi.beste === "number" ? g.abi.beste : null), versuche: g.abi.versuche || 0};
+    ST.forEach(function(s){
+      var a = g.stationen && g.stationen[s.id];
+      if(!a) return;
+      var b = Z.stationen[s.id];
+      b.sterne = Math.max(0, Math.min(3, a.sterne | 0));
+      b.gespielt = a.gespielt | 0;
+      b.gewonnen = !!a.gewonnen;
+      b.variante = ((a.variante | 0) % s.varianten.length + s.varianten.length) % s.varianten.length;
+      for(var i = 0; i < 3; i++){
+        b.fragen[i] = !!(a.fragen && a.fragen[i]);
+        b.beantwortet[i] = !!(a.beantwortet && a.beantwortet[i]);
+      }
+    });
+    Object.keys(Z.experten).forEach(function(w){
+      var a = g.experten && g.experten[w];
+      if(!a) return;
+      Z.experten[w].text = String(a.text || "");
+      Z.experten[w].haken = Array.isArray(a.haken) ? a.haken.map(Boolean) : [];
+      Z.experten[w].gezeigt = !!a.gezeigt;
+    });
+  })();
+
+  function bilanz(){
+    // 9 Mini-Spiele und 27 Bossfragen zählen als Aufgaben
+    var gesamt = 0, bearbeitet = 0, richtig = 0;
+    ST.forEach(function(s){
+      var b = Z.stationen[s.id];
+      gesamt += 1 + s.fragen.length;
+      if(b.gespielt) bearbeitet++;
+      if(b.gewonnen) richtig++;
+      b.beantwortet.forEach(function(x, i){ if(i < s.fragen.length && x) bearbeitet++; });
+      b.fragen.forEach(function(x, i){ if(i < s.fragen.length && x) richtig++; });
+    });
+    return {gesamt:gesamt, bearbeitet:bearbeitet, richtig:richtig};
+  }
+  function sichern(){
+    Z.bilanz = bilanz();
+    Z.zeit = new Date().toISOString();
+    SPEICHER.sichern(Z);
+    kopfAktualisieren();
+  }
+  function summeSterne(){
+    var n = 0;
+    ST.forEach(function(s){ n += Z.stationen[s.id].sterne; });
+    return n;
+  }
+  function kopfAktualisieren(){
+    var k = document.getElementById("gesamtStand");
+    k.textContent = "";
+    k.appendChild(el("span", {"class":"sterne"}, "★ "));
+    k.appendChild(document.createTextNode(summeSterne() + " von " + (ST.length * 3) + " Sternen"));
+  }
+
+  function istOffen(i){
+    if(Z.alleOffen || i === 0) return true;
+    return Z.stationen[ST[i - 1].id].sterne >= 1;
+  }
+  function abiOffen(){
+    return Z.alleOffen || ST.every(function(s){ return Z.stationen[s.id].sterne >= 1; });
+  }
+  function expertOffen(welt){
+    return Z.alleOffen || ST.filter(function(s){ return s.welt === welt; })
+      .every(function(s){ return Z.stationen[s.id].gespielt > 0; });
+  }
+
+  /* ---------- Ansichten ---------- */
+  var ANSICHTEN = ["vKarte","vStation","vAbi","vExperte","vFormelbuch","vErgebnis"];
+  var laufendeAnimation = null;
+  function zeige(id){
+    if(id !== "vAbi") abiUhrStopp();
+    if(laufendeAnimation){ cancelAnimationFrame(laufendeAnimation); laufendeAnimation = null; }
+    ANSICHTEN.forEach(function(a){ document.getElementById(a).hidden = (a !== id); });
+    if(id === "vKarte") karteZeichnen();
+    if(id === "vFormelbuch") formelbuchZeichnen();
+    if(id === "vErgebnis") ergebnisZeichnen();
+    if(id === "vAbi") abiVorbereiten();
+    var ziel = document.getElementById(id);
+    if(ziel && ziel.scrollIntoView && !spielTest.schnell) ziel.scrollIntoView({block:"start"});
+  }
+  document.addEventListener("click", function(ev){
+    var b = ev.target.closest("[data-ansicht]");
+    if(b) zeige(b.getAttribute("data-ansicht"));
+  });
+
+  /* ---------- Karte ---------- */
+  var WELTNAMEN = {1:"Ladungen, Felder und Induktion", 2:"Schwingende Systeme und Wellen"};
+  function karteZeichnen(){
+    var box = document.getElementById("welten");
+    box.textContent = "";
+    [1, 2].forEach(function(w){
+      var welt = el("div", {"class":"welt w" + w});
+      var kopf = el("div", {"class":"welt-kopf"});
+      kopf.appendChild(el("small", null, "Welt " + w));
+      kopf.appendChild(el("b", null, WELTNAMEN[w]));
+      welt.appendChild(kopf);
+      var ol = el("ol", {"class":"route"});
+      ST.forEach(function(s, i){
+        if(s.welt !== w) return;
+        var b = Z.stationen[s.id], offen = istOffen(i);
+        var li = el("li");
+        var k = el("button", {type:"button", "class":"knoten" + (offen ? "" : " zu") + (b.sterne ? " geschafft" : ""),
+          "data-station": s.id});
+        if(!offen) k.disabled = true;
+        k.appendChild(el("span", {"class":"nr"}, offen ? String(i + 1) : "🔒"));
+        k.appendChild(el("span", {"class":"name"}, s.titel));
+        k.appendChild(el("span", {"class":"spiel"}, s.spielname));
+        var info = el("span", {"class":"info"});
+        info.appendChild(sterneSpan(b.sterne));
+        var nr = 0; b.fragen.forEach(function(x){ if(x) nr++; });
+        if(b.gespielt) info.appendChild(document.createTextNode(" · Fragen " + nr + "/" + s.fragen.length));
+        k.appendChild(info);
+        k.setAttribute("aria-label", "Station " + (i + 1) + ": " + s.titel + (offen ? ", " + b.sterne + " von 3 Sternen" : ", noch gesperrt"));
+        k.addEventListener("click", function(){ stationOeffnen(s.id); });
+        li.appendChild(k);
+        ol.appendChild(li);
+      });
+      welt.appendChild(ol);
+      var ex = (DATEN.expertenauftraege || []).filter(function(e){ return e.welt === w; })[0];
+      if(ex){
+        var sonder = el("div", {"class":"sonder"});
+        var eb = el("button", {type:"button"});
+        var off = expertOffen(w);
+        eb.appendChild(el("b", null, (off ? "" : "🔒 ") + "Expertenauftrag: " + ex.titel));
+        eb.appendChild(el("span", null, off ? "Anforderungsbereich III, mit Musterlösung und Kriterien" : "öffnet sich, wenn du jede Station dieser Welt gespielt hast"));
+        eb.disabled = !off;
+        eb.addEventListener("click", function(){ expertOeffnen(w); });
+        sonder.appendChild(eb);
+        welt.appendChild(sonder);
+      }
+      box.appendChild(welt);
+    });
+    var ab = document.getElementById("bAbiStart");
+    ab.disabled = !abiOffen();
+    document.getElementById("abiInfo").textContent = abiOffen()
+      ? "Neun Fragen quer durch beide Welten." + (Z.abi.beste !== null ? " Bisher bestes Ergebnis: " + Z.abi.beste + " von " + ST.length + "." : "")
+      : "Öffnet sich, wenn du in jeder Station mindestens einen Stern hast.";
+    var ao = document.getElementById("bAlleOffen");
+    ao.setAttribute("aria-pressed", Z.alleOffen ? "true" : "false");
+    ao.textContent = Z.alleOffen ? "Alle Stationen sind offen" : "Alle Stationen öffnen";
+  }
+  document.getElementById("bAlleOffen").addEventListener("click", function(){
+    Z.alleOffen = !Z.alleOffen;
+    sichern();
+    karteZeichnen();
+  });
+  document.getElementById("bAbiStart").addEventListener("click", function(){ zeige("vAbi"); });
+
+  /* ---------- Fragen-Engine (Multiple Choice und Zahleneingabe) ---------- */
+  // Baut eine Frage in box. fertig(richtig) wird genau einmal nach der ersten Antwort gerufen.
+  var fragenZaehler = 0;
+  function frageBauen(box, f, fertig){
+    var nr = ++fragenZaehler;
+    var a = el("div", {"class":"aufgabe", "data-typ": f.typ});
+    a.appendChild(el("span", {"class":"ab"}, "Anforderungsbereich " + (f.afb || "II")));
+    a.appendChild(el("div", {"class":"frage"}, f.frage));
+    var rueck = el("div", {"class":"rueck"});
+    var erledigt = false;
+    function abschliessen(ok){
+      if(erledigt) return;
+      erledigt = true;
+      if(fertig) fertig(ok);
+    }
+    if(f.typ === "mc"){
+      var opts = el("div", {"class":"optionen", role:"radiogroup"});
+      f.optionen.forEach(function(o, i){
+        var lab = el("label", {"class":"opt"});
+        var inp = el("input", {type:"radio", name:"frage" + nr, value:String(i), "data-i":String(i)});
+        lab.appendChild(inp);
+        lab.appendChild(el("span", null, o));
+        inp.addEventListener("change", function(){
+          if(erledigt) return;
+          var ok = (i === f.richtig);
+          opts.querySelectorAll(".opt").forEach(function(l, j){
+            l.classList.add("gesperrt");
+            l.querySelector("input").disabled = true;
+            if(j === f.richtig) l.classList.add("richtig");
+          });
+          if(!ok) lab.classList.add("falsch");
+          rueck.className = "rueck zeig " + (ok ? "ok" : "nein");
+          rueck.textContent = (ok ? "Richtig. " : "Nicht ganz. ") + (f.feedback[i] || "");
+          abschliessen(ok);
+        });
+        opts.appendChild(lab);
+      });
+      a.appendChild(opts);
+    } else {
+      var zeile = el("div", {"class":"eingabe"});
+      var inp = el("input", {type:"text", inputmode:"decimal", "aria-label":"Deine Antwort als Zahl"});
+      var sel = el("select", {"aria-label":"Einheit"});
+      var einheiten = [f.einheit].concat(Object.keys(f.einheiten_alternativ || {}));
+      einheiten.forEach(function(e){ sel.appendChild(el("option", {value:e}, e)); });
+      var bp = el("button", {type:"button", "class":"primaer"}, "Prüfen");
+      zeile.appendChild(inp); zeile.appendChild(sel); zeile.appendChild(bp);
+      a.appendChild(zeile);
+      var weg = el("ol", {"class":"loesungsweg"});
+      weg.hidden = true;
+      (f.loesungsweg || []).forEach(function(s){ weg.appendChild(el("li", null, s)); });
+      function pruefen(){
+        if(erledigt) return;
+        var w = leseZahl(inp.value);
+        if(isNaN(w)){
+          rueck.className = "rueck zeig info";
+          rueck.textContent = "Gib eine Zahl ein, zum Beispiel 2,5 oder 3,2e-4.";
+          return;
+        }
+        var faktor = (sel.value === f.einheit) ? 1 : f.einheiten_alternativ[sel.value];
+        var umg = w * faktor;
+        var ok = Math.abs(umg - f.loesung) <= Math.abs(f.loesung) * (f.toleranz_rel || 0.02);
+        inp.disabled = true; sel.disabled = true; bp.disabled = true;
+        rueck.className = "rueck zeig " + (ok ? "ok" : "nein");
+        rueck.textContent = ok
+          ? "Richtig: " + fmtSig(f.loesung, 3) + " " + f.einheit + "."
+          : "Nicht ganz. Richtig ist " + fmtSig(f.loesung, 3) + " " + f.einheit + ". " + (f.feedback_falsch || "");
+        weg.hidden = false;
+        abschliessen(ok);
+      }
+      bp.addEventListener("click", pruefen);
+      inp.addEventListener("keydown", function(ev){ if(ev.key === "Enter") pruefen(); });
+      a.appendChild(rueck);
+      a.appendChild(weg);
+      box.appendChild(a);
+      return a;
+    }
+    a.appendChild(rueck);
+    box.appendChild(a);
+    return a;
+  }
+
+  /* ---------- Station ---------- */
+  var cv = document.getElementById("cSpiel"), ctx = cv.getContext("2d");
+  var rW = document.getElementById("rWert"), tW = document.getElementById("tWert");
+  var S = null; // laufende Runde
+
+  function stationIndex(id){
+    for(var i = 0; i < ST.length; i++) if(ST[i].id === id) return i;
+    return -1;
+  }
+  function stationOeffnen(id, varIdx){
+    var i = stationIndex(id);
+    if(i < 0) return;
+    var s = ST[i], b = Z.stationen[id];
+    var vi = (typeof varIdx === "number") ? varIdx : b.variante;
+    S = {s:s, i:i, vi:vi, v:s.varianten[vi], versuch:0, hilfen:0, ende:false, laeuft:false,
+      gewonnen:false, sterne:0, vorhersage:null, fragenOffen:s.fragen.length, sim:SIMS[s.id]};
+    document.getElementById("stTitel").textContent = "Station " + (i + 1) + ": " + s.titel;
+    document.getElementById("stWelt").textContent = "Welt " + s.welt;
+    document.getElementById("stVariante").textContent = "Variante " + (vi + 1) + " von " + s.varianten.length;
+    document.getElementById("stGeschichte").textContent = s.geschichte;
+    document.getElementById("stSpielname").textContent = s.spielname;
+    document.getElementById("stAuftrag").textContent = s.auftrag;
+    var geg = document.getElementById("stGegeben");
+    geg.textContent = "";
+    S.v.anzeige.forEach(function(t){ geg.appendChild(el("span", null, t)); });
+
+    // Regler
+    var r = s.regler;
+    rW.min = r.min; rW.max = r.max; rW.step = r.schritt;
+    var start = r.min + (r.max - r.min) * 0.5;
+    start = Math.round((start - r.min) / r.schritt) * r.schritt + r.min;
+    rW.value = start;
+    document.getElementById("lWert").textContent = "Dein Wert für " + r.symbol + " in " + r.einheit;
+    document.getElementById("eWert").textContent = r.einheit;
+    tW.value = fmt(start, nachkomma(r.schritt));
+    tW.disabled = false; rW.disabled = false;
+
+    // Vorhersage (nur wo vorgesehen)
+    var vh = document.getElementById("stVorhersage");
+    vh.textContent = "";
+    vh.hidden = !s.vorhersage;
+    if(s.vorhersage){
+      vh.appendChild(el("p", {"class":"versuche", style:"margin:0 0 6px"}, "Erst vorhersagen, dann ziehen:"));
+      frageBauen(vh, s.vorhersage, function(ok){ S.vorhersage = ok; });
+    }
+
+    // Hilfen
+    var hk = document.getElementById("stHilfeKnoepfe"), ht = document.getElementById("stHilfeTexte");
+    hk.textContent = ""; ht.textContent = "";
+    var NAMEN = ["Hilfe 1: Ansatz", "Hilfe 2: Formel", "Hilfe 3: Rechnung"];
+    s.hilfen.forEach(function(h, j){
+      var kb = el("button", {type:"button", "data-hilfe":String(j)}, NAMEN[j] || ("Hilfe " + (j + 1)));
+      if(j > 0) kb.disabled = true;
+      kb.title = "Kostet einen möglichen Stern";
+      kb.addEventListener("click", function(){
+        if(kb.dataset.offen) return;
+        kb.dataset.offen = "1";
+        kb.disabled = true;
+        if(!S.ende) S.hilfen++;
+        ht.appendChild(el("div", {"class":"hilfe-text"}, h));
+        var n = hk.querySelector('[data-hilfe="' + (j + 1) + '"]');
+        if(n) n.disabled = false;
+        rundenAnzeige();
+      });
+      hk.appendChild(kb);
+    });
+
+    document.getElementById("stRueck").className = "rueck";
+    document.getElementById("stEnde").hidden = true;
+    document.getElementById("phaseFragen").hidden = true;
+    document.getElementById("phaseSpiel").hidden = false;
+    document.getElementById("stAbschluss").hidden = true;
+    document.getElementById("bLos").disabled = false;
+    if(S.sim && S.sim.vorbereiten) S.sim.vorbereiten(S.v);
+    rundenAnzeige();
+    zeige("vStation");
+    zeichneRuhe();
+  }
+
+  function moeglicheSterne(){
+    return Math.max(1, Math.min(3 - S.hilfen, 3 - S.versuch));
+  }
+  function rundenAnzeige(){
+    var rest = 3 - S.versuch;
+    document.getElementById("stVersuche").textContent = "●".repeat(Math.max(0, rest)) + "○".repeat(Math.min(3, S.versuch));
+    var m = document.getElementById("stMoeglich");
+    m.textContent = "";
+    m.appendChild(sterneSpan(S.ende ? S.sterne : moeglicheSterne()));
+  }
+  function aktuellerWert(){
+    return leseZahl(tW.value);
+  }
+  function anzeigeSetzen(paare){
+    var a = document.getElementById("stAnzeige");
+    a.textContent = "";
+    (paare || []).forEach(function(p){
+      var d = el("div", null, p[0]);
+      d.appendChild(el("span", null, p[1]));
+      a.appendChild(d);
+    });
+  }
+  function zeichneRuhe(){
+    if(!S || !S.sim) return;
+    var w = aktuellerWert();
+    if(isNaN(w)) w = parseFloat(rW.value);
+    S.sim.zeichne(ctx, S.v, w, null);
+    anzeigeSetzen(S.sim.anzeige ? S.sim.anzeige(S.v, w, null) : []);
+  }
+  rW.addEventListener("input", function(){
+    if(!S) return;
+    tW.value = fmt(parseFloat(rW.value), nachkomma(S.s.regler.schritt));
+    zeichneRuhe();
+  });
+  tW.addEventListener("input", function(){
+    if(!S) return;
+    var w = leseZahl(tW.value);
+    if(!isNaN(w)) rW.value = Math.min(S.s.regler.max, Math.max(S.s.regler.min, w));
+    zeichneRuhe();
+  });
+  tW.addEventListener("keydown", function(ev){ if(ev.key === "Enter") los(); });
+
+  function istTreffer(v, w){
+    var eps = 1e-9 * Math.max(1, Math.abs(v.loesung));
+    return w >= v.treffer_min - eps && w <= v.treffer_max + eps;
+  }
+
+  function los(){
+    if(!S || S.laeuft || S.ende) return;
+    var rueck = document.getElementById("stRueck");
+    if(S.s.vorhersage && S.vorhersage === null){
+      rueck.className = "rueck zeig info";
+      rueck.textContent = "Beantworte zuerst die Vorhersage oben, dann geht es los.";
+      return;
+    }
+    var w = aktuellerWert(), r = S.s.regler;
+    if(isNaN(w) || w < r.min || w > r.max){
+      rueck.className = "rueck zeig info";
+      rueck.textContent = "Gib einen Wert zwischen " + fmt(r.min, nachkomma(r.schritt)) + " und " + fmt(r.max, nachkomma(r.schritt)) + " " + r.einheit + " ein.";
+      return;
+    }
+    S.versuch++;
+    var treffer = istTreffer(S.v, w);
+    var urteil = S.sim.urteil(S.v, w, treffer);
+    S.laeuft = true;
+    document.getElementById("bLos").disabled = true;
+    rW.disabled = true; tW.disabled = true;
+    rueck.className = "rueck";
+    rundenAnzeige();
+    var dauer = S.sim.dauer || 2.5;
+    if(spielTest.schnell){ S.sim.zeichne(ctx, S.v, w, 1); fertig(); return; }
+    var t0 = null;
+    function bild(ts){
+      if(t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0) / 1000 / dauer);
+      S.sim.zeichne(ctx, S.v, w, p);
+      anzeigeSetzen(S.sim.anzeige ? S.sim.anzeige(S.v, w, p) : []);
+      if(p < 1) laufendeAnimation = requestAnimationFrame(bild);
+      else { laufendeAnimation = null; fertig(); }
+    }
+    laufendeAnimation = requestAnimationFrame(bild);
+
+    function fertig(){
+      S.laeuft = false;
+      anzeigeSetzen(S.sim.anzeige ? S.sim.anzeige(S.v, w, 1) : []);
+      var b = Z.stationen[S.s.id];
+      if(S.versuch === 1) b.gespielt++;
+      if(treffer){
+        S.gewonnen = true;
+        S.sterne = Math.max(1, Math.min(3 - S.hilfen, 4 - S.versuch));
+        b.gewonnen = true;
+        b.sterne = Math.max(b.sterne, S.sterne);
+        rundeEnde(true, urteil);
+      } else if(S.versuch >= 3){
+        rundeEnde(false, urteil);
+      } else {
+        rueck.className = "rueck zeig nein";
+        rueck.textContent = urteil + " Noch " + (3 - S.versuch) + (3 - S.versuch === 1 ? " Versuch." : " Versuche.");
+        document.getElementById("bLos").disabled = false;
+        rW.disabled = false; tW.disabled = false;
+      }
+      sichern();
+    }
+  }
+  document.getElementById("bLos").addEventListener("click", los);
+
+  function rundeEnde(gewonnen, urteil){
+    S.ende = true;
+    var b = Z.stationen[S.s.id];
+    b.variante = (S.vi + 1) % S.s.varianten.length;
+    var rueck = document.getElementById("stRueck");
+    rueck.className = "rueck zeig " + (gewonnen ? "ok" : "nein");
+    rueck.textContent = urteil;
+    var ban = document.getElementById("stBanner");
+    ban.className = "ergebnisbanner" + (gewonnen ? "" : " nein");
+    ban.textContent = "";
+    ban.appendChild(el("b", null, gewonnen ? "Treffer!" : "Drei Versuche verbraucht."));
+    ban.appendChild(sterneSpan(gewonnen ? S.sterne : 0));
+    ban.appendChild(el("span", null, gewonnen
+      ? (S.sterne === 3 ? "Perfekt, ohne Hilfe im ersten Versuch." : "Für drei Sterne: ohne Hilfe im ersten Versuch treffen.")
+      : "Schau dir die Musterlösung an und spiel danach eine neue Variante."));
+    var ml = document.getElementById("stRechnung");
+    ml.textContent = "";
+    S.v.rechnung.forEach(function(t){ ml.appendChild(el("li", null, t)); });
+    document.getElementById("stMuster").hidden = false;
+    document.getElementById("stEnde").hidden = false;
+    // Hilfen bleiben lesbar, kosten aber nichts mehr
+    document.querySelectorAll("#stHilfeKnoepfe button").forEach(function(k){ if(!k.dataset.offen) k.disabled = false; });
+    rundenAnzeige();
+  }
+
+  document.getElementById("bZuFragen").addEventListener("click", fragenZeigen);
+  document.getElementById("bNeueVariante").addEventListener("click", function(){ stationOeffnen(S.s.id); });
+  document.getElementById("bNochmal").addEventListener("click", function(){ stationOeffnen(S.s.id); });
+  document.getElementById("bStationFertig").addEventListener("click", function(){ zeige("vKarte"); });
+
+  function fragenZeigen(){
+    document.getElementById("phaseSpiel").hidden = true;
+    var ph = document.getElementById("phaseFragen");
+    ph.hidden = false;
+    var box = document.getElementById("stFragen");
+    box.textContent = "";
+    var b = Z.stationen[S.s.id];
+    S.fragenOffen = S.s.fragen.length;
+    S.s.fragen.forEach(function(f, j){
+      frageBauen(box, f, function(ok){
+        b.beantwortet[j] = true;
+        if(ok) b.fragen[j] = true;
+        S.fragenOffen--;
+        if(S.fragenOffen === 0) document.getElementById("stAbschluss").hidden = false;
+        sichern();
+      });
+    });
+    if(!spielTest.schnell) ph.scrollIntoView({block:"start"});
+  }
+
+  /* ---------- Abiprüfung ---------- */
+  var ABI = null, abiTimer = null;
+  var ABI_ZEIT = 15 * 60;
+  function abiVorbereiten(){
+    if(ABI && ABI.laeuft) return;
+    document.getElementById("abiStart").hidden = false;
+    document.getElementById("abiLauf").hidden = true;
+    document.getElementById("abiEnde").hidden = true;
+  }
+  function abiUhrStopp(){
+    if(abiTimer){ clearInterval(abiTimer); abiTimer = null; }
+    if(ABI) ABI.laeuft = false;
+  }
+  function abiStarten(){
+    ABI = {nr:0, richtig:0, laeuft:true, mitZeit: document.getElementById("cAbiZeit").checked, rest:ABI_ZEIT};
+    document.getElementById("abiStart").hidden = true;
+    document.getElementById("abiEnde").hidden = true;
+    document.getElementById("abiLauf").hidden = false;
+    var uhr = document.getElementById("abiUhr");
+    uhr.textContent = "";
+    if(ABI.mitZeit){
+      uhrZeigen();
+      abiTimer = setInterval(function(){
+        ABI.rest--;
+        uhrZeigen();
+        if(ABI.rest <= 0) abiEnde(true);
+      }, 1000);
+    }
+    abiFrage();
+  }
+  function uhrZeigen(){
+    var r = Math.max(0, ABI.rest);
+    document.getElementById("abiUhr").textContent = "⏱ " + Math.floor(r / 60) + ":" + String(r % 60).padStart(2, "0");
+  }
+  function abiFrage(){
+    var box = document.getElementById("abiFrage");
+    box.textContent = "";
+    var s = ST[ABI.nr];
+    document.getElementById("abiZaehler").textContent = "Frage " + (ABI.nr + 1) + " von " + ST.length + " · " + s.titel;
+    document.getElementById("abiBalken").style.width = (100 * ABI.nr / ST.length) + "%";
+    var weiter = document.getElementById("bAbiWeiter");
+    weiter.disabled = true;
+    weiter.textContent = (ABI.nr + 1 < ST.length) ? "Nächste Frage" : "Prüfung abgeben";
+    frageBauen(box, s.abifrage, function(ok){
+      if(ok) ABI.richtig++;
+      weiter.disabled = false;
+    });
+  }
+  document.getElementById("bAbiWeiter").addEventListener("click", function(){
+    ABI.nr++;
+    if(ABI.nr >= ST.length) abiEnde(false);
+    else abiFrage();
+  });
+  function abiEnde(zeitAus){
+    abiUhrStopp();
+    document.getElementById("abiBalken").style.width = "100%";
+    document.getElementById("abiLauf").hidden = true;
+    document.getElementById("abiEnde").hidden = false;
+    Z.abi.versuche++;
+    if(Z.abi.beste === null || ABI.richtig > Z.abi.beste) Z.abi.beste = ABI.richtig;
+    sichern();
+    var n = ST.length, r = ABI.richtig;
+    var ban = document.getElementById("abiBanner");
+    ban.className = "ergebnisbanner" + (r >= Math.ceil(n * 2 / 3) ? "" : " nein");
+    ban.textContent = "";
+    ban.appendChild(el("b", null, (zeitAus ? "Zeit abgelaufen. " : "") + r + " von " + n + " richtig."));
+    ban.appendChild(el("span", null, r === n ? "Bestanden mit Auszeichnung: Der Endgegner ist besiegt."
+      : r >= Math.ceil(n * 2 / 3) ? "Bestanden. Die falschen Themen findest du auf der Karte wieder."
+      : "Noch nicht bestanden. Wiederhole die Stationen, bei denen du unsicher warst, und versuch es erneut."));
+  }
+  document.getElementById("bAbiLos").addEventListener("click", abiStarten);
+  document.getElementById("bAbiNochmal").addEventListener("click", function(){ abiVorbereiten(); });
+
+  /* ---------- Expertenaufträge ---------- */
+  var EX = null;
+  function expertOeffnen(welt){
+    var e = (DATEN.expertenauftraege || []).filter(function(x){ return x.welt === welt; })[0];
+    if(!e) return;
+    EX = {e:e, z:Z.experten[welt]};
+    document.getElementById("hExperte").textContent = "Expertenauftrag Welt " + welt + ": " + e.titel;
+    document.getElementById("exAuftrag").textContent = e.auftrag;
+    var ta = document.getElementById("exText");
+    ta.value = EX.z.text;
+    document.getElementById("exHinweis").className = "rueck info";
+    document.getElementById("exMuster").textContent = e.musterloesung;
+    var kb = document.getElementById("exKriterien");
+    kb.textContent = "";
+    e.kriterien.forEach(function(k, i){
+      var lab = el("label");
+      var cb = el("input", {type:"checkbox"});
+      cb.checked = !!EX.z.haken[i];
+      cb.addEventListener("change", function(){ EX.z.haken[i] = cb.checked; sichern(); });
+      lab.appendChild(cb);
+      lab.appendChild(el("span", null, k));
+      kb.appendChild(lab);
+    });
+    document.getElementById("exLoesung").hidden = !EX.z.gezeigt;
+    zeige("vExperte");
+  }
+  var exTimer = null;
+  document.getElementById("exText").addEventListener("input", function(){
+    if(!EX) return;
+    EX.z.text = this.value;
+    clearTimeout(exTimer);
+    exTimer = setTimeout(sichern, 300);
+  });
+  document.getElementById("bExMuster").addEventListener("click", function(){
+    if(!EX) return;
+    var h = document.getElementById("exHinweis");
+    if(EX.z.text.trim().length < 80 && !EX.z.gezeigt){
+      h.className = "rueck zeig info";
+      h.textContent = "Schreib zuerst deine eigene Antwort, mindestens zwei, drei Sätze. Erst dann lohnt der Vergleich.";
+      return;
+    }
+    h.className = "rueck info";
+    EX.z.gezeigt = true;
+    sichern();
+    document.getElementById("exLoesung").hidden = false;
+  });
+
+  /* ---------- Formelbuch ---------- */
+  function formelbuchZeichnen(){
+    var box = document.getElementById("fbInhalt");
+    box.textContent = "";
+    [1, 2].forEach(function(w){
+      box.appendChild(el("h3", null, "Welt " + w + ": " + WELTNAMEN[w]));
+      var g = el("div", {"class":"formelkarten"});
+      ST.forEach(function(s, i){
+        if(s.welt !== w) return;
+        var frei = Z.stationen[s.id].sterne >= 1;
+        if(!frei){
+          var zu = el("div", {"class":"formelkarte zu"});
+          zu.appendChild(el("h3", null, "🔒 " + s.titel));
+          zu.appendChild(el("p", null, "Hol einen Stern in Station " + (i + 1) + ", dann siehst du hier " + s.formelkarten.length + " Formelkarten."));
+          g.appendChild(zu);
+          return;
+        }
+        s.formelkarten.forEach(function(f){
+          var k = el("div", {"class":"formelkarte"});
+          k.appendChild(el("h3", null, s.titel));
+          k.appendChild(el("div", {"class":"m block", "data-tex":f.tex, "data-plain":f.plain}));
+          k.appendChild(el("p", null, f.text));
+          g.appendChild(k);
+        });
+      });
+      box.appendChild(g);
+    });
+    formelnRendern();
+  }
+
+  /* ---------- Ergebnis, Export, Druck, Löschen ---------- */
+  function ergebnisZeichnen(){
+    var t = document.getElementById("erTabelle");
+    t.textContent = "";
+    var kopf = el("tr");
+    ["Station", "Sterne", "Bossfragen", "Gespielt"].forEach(function(h){ kopf.appendChild(el("th", null, h)); });
+    t.appendChild(kopf);
+    ST.forEach(function(s, i){
+      var b = Z.stationen[s.id], tr = el("tr");
+      var n = 0; b.fragen.forEach(function(x){ if(x) n++; });
+      tr.appendChild(el("td", null, (i + 1) + ". " + s.titel));
+      var td = el("td"); td.appendChild(sterneSpan(b.sterne)); tr.appendChild(td);
+      tr.appendChild(el("td", null, n + " von " + s.fragen.length));
+      tr.appendChild(el("td", null, b.gespielt ? b.gespielt + "-mal" : "noch nicht"));
+      t.appendChild(tr);
+    });
+    var bl = bilanz();
+    document.getElementById("erSumme").textContent = "Sterne: " + summeSterne() + " von " + (ST.length * 3)
+      + ". Aufgaben richtig: " + bl.richtig + " von " + bl.gesamt
+      + ". Abiprüfung: " + (Z.abi.beste === null ? "noch nicht geschrieben" : "bestes Ergebnis " + Z.abi.beste + " von " + ST.length) + ".";
+  }
+  function exportText(){
+    var z = ["Feldläufer – Lernspiel Physik LK Q1", "Stand: " + new Date().toLocaleString("de-DE"), ""];
+    ST.forEach(function(s, i){
+      var b = Z.stationen[s.id], n = 0;
+      b.fragen.forEach(function(x){ if(x) n++; });
+      z.push((i + 1) + ". " + s.titel + ": " + sterneText(b.sterne) + " · Bossfragen " + n + "/" + s.fragen.length);
+    });
+    z.push("");
+    z.push("Sterne gesamt: " + summeSterne() + " von " + (ST.length * 3));
+    z.push("Abiprüfung: " + (Z.abi.beste === null ? "noch nicht geschrieben" : Z.abi.beste + " von " + ST.length));
+    return z.join("\n");
+  }
+  document.getElementById("bExport").addEventListener("click", function(){
+    var text = exportText(), info = document.getElementById("exportInfo");
+    function gezeigt(ok){
+      info.className = "rueck zeig " + (ok ? "ok" : "info");
+      info.textContent = ok ? "Ergebnis in die Zwischenablage kopiert. Du kannst es jetzt einfügen." : "Kopieren ging nicht automatisch. Markiere den Text unten und kopiere ihn selbst.";
+      if(!ok){
+        var pre = el("pre", {style:"white-space:pre-wrap;margin:8px 0 0"}, text);
+        info.appendChild(pre);
+      }
+    }
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(function(){ gezeigt(true); }, function(){ gezeigt(false); });
+        return;
+      }
+    }catch(e){}
+    gezeigt(false);
+  });
+  document.getElementById("bDrucken").addEventListener("click", function(){ ergebnisZeichnen(); window.print(); });
+  window.addEventListener("beforeprint", ergebnisZeichnen);
+  document.getElementById("bStandLoeschen").addEventListener("click", function(){
+    if(!window.confirm("Den gespeicherten Spielstand auf diesem Gerät löschen?")) return;
+    SPEICHER.loeschen();
+    location.reload();
+  });
+
+  /* ---------- Testhaken für werkzeug/spielcheck.py ---------- */
+  spielTest.daten = DATEN;
+  spielTest.oeffne = function(id, vi){ stationOeffnen(id, vi); };
+  spielTest.setzeWert = function(w){
+    tW.value = fmt(w, Math.max(nachkomma(S.s.regler.schritt), 6)).replace(/0+$/, "").replace(/,$/, "");
+    tW.dispatchEvent(new Event("input"));
+  };
+  spielTest.vorhersage = function(i){
+    var r = document.querySelector('#stVorhersage input[data-i="' + i + '"]');
+    if(r){ r.checked = true; r.dispatchEvent(new Event("change")); }
+  };
+  spielTest.los = los;
+  spielTest.runde = function(){ return S ? {versuch:S.versuch, ende:S.ende, gewonnen:S.gewonnen, sterne:S.sterne, laeuft:S.laeuft} : null; };
+  spielTest.urteil = function(id, vi, w){ var s = ST[stationIndex(id)], v = s.varianten[vi]; return {treffer:istTreffer(v, w), text:SIMS[id].urteil(v, w, istTreffer(v, w))}; };
+  spielTest.zustand = function(){ return JSON.parse(JSON.stringify(Z)); };
+  spielTest.zeige = zeige;
+
+  kopfAktualisieren();
+  zeige("vKarte");
+  window.scrollTo(0, 0);
+})();
+</script>
+</body>
+</html>
