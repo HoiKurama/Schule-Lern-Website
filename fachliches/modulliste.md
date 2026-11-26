@@ -34,7 +34,7 @@ arbeiten nie am selben Modul. Nach bestandener Prüfung wird auf `fertig` gesetz
 | `mathe-q1-vektoren-grundlagen.html` | Vektorbegriff, Rechnen, lineare Unabhängigkeit | **fertig** | Durchgang 4 |
 | `mathe-q1-geraden-ebenen.html` | Parameter-, Normalen- und Koordinatenform | **fertig** | Durchgang 4 |
 | `mathe-q1-lagebeziehungen.html` | Gerade/Gerade, Gerade/Ebene, Ebene/Ebene | **fertig** | Durchgang 4 |
-| `mathe-q1-abstaende-winkel.html` | Skalarprodukt, Lotfußpunkt, Hessesche Normalform | offen | – |
+| `mathe-q1-abstaende-winkel.html` | Skalarprodukt, Lotfußpunkt, Hessesche Normalform | **fertig** | Durchgang 5 |
 
 ## Informatik LK Q1 — Daten und ihre Strukturierung · Algorithmen
 

@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Abstände und Winkel – Mathematik LK Q1</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+<style>
+:root{
+  --akzent:#0d7a52;
+  --akzent-hell:#e7f6ef;
+  --akzent-rand:#b5e0cd;
+  --text:#0f2135;
+  --grau:#5b6b7f;
+  --linie:#dbe3ec;
+  --flaeche:#f6f8fb;
+  --gruen:#0d7a52;
+  --gruen-hell:#e7f6ef;
+  --rot:#b42318;
+  --rot-hell:#fdeceb;
+  --gelb:#8a6100;
+  --gelb-hell:#fdf5e2;
+  --radius:10px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  color:var(--text);
+  background:#fff;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px 100px}
+
+/* ---------- Kopf ---------- */
+header.kopf{
+  background:linear-gradient(160deg,#0b5c3e,#0d7a52);
+  color:#fff;padding:34px 0 30px;margin-bottom:34px;
+}
+header.kopf .wrap{padding-bottom:0}
+.fachzeile{font-size:13px;letter-spacing:.09em;text-transform:uppercase;opacity:.8;margin-bottom:6px}
+header.kopf h1{margin:0 0 14px;font-size:clamp(26px,4.4vw,36px);line-height:1.2;letter-spacing:-.02em}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.startlink{display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;padding:5px 14px;
+  border-radius:999px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.14);
+  color:#fff;font-size:14px;font-weight:600;text-decoration:none}
+.startlink:hover{background:rgba(255,255,255,.26)}
+.startlink:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);
+  border-radius:999px;padding:4px 12px;font-size:13px}
+
+/* ---------- Abschnitte ---------- */
+section{margin:0 0 46px;scroll-margin-top:16px}
+.stufe{display:flex;align-items:center;gap:11px;margin:0 0 14px}
+.stufe .nr{
+  flex:0 0 auto;width:27px;height:27px;border-radius:50%;
+  background:var(--akzent);color:#fff;font-size:14px;font-weight:600;
+  display:grid;place-items:center
+}
+.stufe h2{margin:0;font-size:21px;letter-spacing:-.01em}
+h3{font-size:17px;margin:26px 0 8px}
+p{margin:0 0 14px}
+ul,ol{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+
+.karte{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 16px;background:#fff}
+.hinweis{background:var(--akzent-hell);border:1px solid var(--akzent-rand);border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.merksatz{border-left:4px solid var(--akzent);background:var(--flaeche);padding:14px 18px;border-radius:0 var(--radius) var(--radius) 0;margin:0 0 16px}
+.merksatz b{display:block;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--akzent);margin-bottom:5px}
+
+details{border:1px solid var(--linie);border-radius:var(--radius);padding:0 16px;margin:0 0 14px;background:var(--flaeche)}
+details[open]{padding-bottom:6px}
+summary{cursor:pointer;padding:12px 0;font-weight:600;font-size:15px;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"▸ ";color:var(--akzent);display:inline-block;transition:transform .15s}
+details[open] summary::before{content:"▾ "}
+
+/* ---------- Formeln ---------- */
+.m{white-space:nowrap;display:inline-block;max-width:100%;overflow-x:auto;overflow-y:hidden;vertical-align:bottom}
+.m.block{display:block;text-align:center;margin:18px 0;font-size:19px;white-space:normal;
+  overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.no-katex .m{font-family:"DejaVu Sans","Segoe UI Symbol",serif;font-style:italic}
+
+/* ---------- Simulation ---------- */
+.sim{border:1px solid var(--linie);border-radius:var(--radius);overflow:hidden;margin-bottom:16px}
+.sim canvas{display:block;width:100%;height:auto;background:#fff}
+.sim .trenner{border-top:1px solid var(--linie)}
+.steuer{background:var(--flaeche);border-top:1px solid var(--linie);padding:14px 16px}
+.regler{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:12px}
+.regler label{display:block;font-size:13px;color:var(--grau);margin-bottom:4px}
+.regler label b{color:var(--text);font-variant-numeric:tabular-nums}
+.regler input[type=range]{width:100%;accent-color:var(--akzent)}
+.knopfleiste{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{
+  font:inherit;font-size:14px;padding:8px 15px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--linie);background:#fff;color:var(--text);transition:.12s
+}
+button:hover{border-color:var(--akzent);color:var(--akzent)}
+button.primaer{background:var(--akzent);border-color:var(--akzent);color:#fff}
+button.primaer:hover{background:#0b6845;color:#fff}
+.anzeige{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;
+  background:#fff;border-top:1px solid var(--linie);padding:12px 16px
+}
+.anzeige div{font-size:13px;color:var(--grau)}
+.anzeige span{display:block;font-size:19px;color:var(--text);font-variant-numeric:tabular-nums;font-weight:600}
+.auftrag{background:var(--gelb-hell);border:1px solid #f0dfae;border-radius:var(--radius);padding:14px 18px;margin:0 0 16px}
+.auftrag b{color:var(--gelb)}
+
+/* ---------- Aufgaben ---------- */
+.aufgabe{border:1px solid var(--linie);border-radius:var(--radius);padding:18px 20px;margin:0 0 18px}
+.ab{display:inline-block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;
+  background:var(--flaeche);border:1px solid var(--linie);border-radius:999px;
+  padding:3px 10px;color:var(--grau);margin-bottom:9px}
+.frage{font-weight:600;margin-bottom:12px}
+.optionen{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opt{
+  display:flex;gap:10px;align-items:flex-start;border:1px solid var(--linie);
+  border-radius:8px;padding:10px 13px;cursor:pointer;transition:.12s;background:#fff
+}
+.opt:hover{border-color:var(--akzent);background:var(--akzent-hell)}
+.opt.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.opt.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.opt input{margin-top:4px;accent-color:var(--akzent)}
+.rueck{border-radius:8px;padding:11px 14px;margin-top:10px;font-size:15px;display:none}
+.rueck.zeig{display:block}
+.rueck.ok{background:var(--gruen-hell);border:1px solid #b5e0cd;color:#0b5c3e}
+.rueck.nein{background:var(--rot-hell);border:1px solid #f3c6c2;color:#8c1c14}
+.eingabe{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.eingabe input[type=text],.eingabe input[type=number]{
+  font:inherit;padding:8px 11px;border:1px solid var(--linie);border-radius:8px;width:130px
+}
+.eingabe select{font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px}
+textarea{
+  font:inherit;width:100%;min-height:96px;padding:11px 13px;
+  border:1px solid var(--linie);border-radius:8px;resize:vertical
+}
+.hilfen{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.hilfe-text{
+  display:none;margin-top:10px;background:var(--flaeche);border-left:3px solid var(--akzent);
+  border-radius:0 8px 8px 0;padding:11px 15px;font-size:15px
+}
+.hilfe-text.zeig{display:block}
+.zuordnung{display:grid;gap:12px}
+.zeile{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+  border:1px solid var(--linie);border-radius:8px;padding:11px 14px}
+.zeile.richtig{border-color:var(--gruen);background:var(--gruen-hell)}
+.zeile.falsch{border-color:var(--rot);background:var(--rot-hell)}
+.diagramme{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.diagramme figure{margin:0;border:1px solid var(--linie);border-radius:8px;padding:10px;text-align:center}
+.diagramme figcaption{font-size:13px;color:var(--grau);margin-top:4px}
+.diagramme svg{width:100%;height:auto}
+
+/* ---------- Selbstcheck ---------- */
+.check{display:flex;flex-direction:column;gap:9px}
+.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--gruen);width:17px;height:17px}
+.tabelle{overflow-x:auto;margin-bottom:14px}
+.tabelle table{margin-bottom:0;min-width:min(420px,100%)}
+table{border-collapse:collapse;width:100%;font-size:15px;margin-bottom:14px}
+th,td{border:1px solid var(--linie);padding:8px 11px;text-align:left}
+th{background:var(--flaeche);font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--grau)}
+
+.lehrer{border:1px dashed #c3b28a;background:#fdfaf2}
+.lehrer summary{color:#7a5c12}
+
+footer{border-top:1px solid var(--linie);padding-top:18px;font-size:13px;color:var(--grau)}
+
+/* ---------- Formelleiste ---------- */
+.formelleiste{font-size:14px;line-height:1.5;background:#fff}
+/* Nur Farben animieren: ein Übergang auf der geerbten visibility ließe die Knöpfe beim Öffnen
+   der Schublade kurz unsichtbar und damit unfokussierbar */
+.formelleiste button{transition:background-color .12s,color .12s,border-color .12s}
+.fl-kopf{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px}
+.fl-kopf h2{margin:0;font-size:15px;letter-spacing:.01em}
+.fl-zu{display:none;width:44px;height:44px;padding:0;border-radius:50%;font-size:24px;line-height:1}
+/* Formeln nie in Großbuchstaben setzen, auch nicht in Tabellenköpfen (sonst wird f(x) zu F(X)) */
+.m{text-transform:none}
+.fl-gruppe{margin:0 0 12px}
+.fl-gruppe h3{margin:0 0 4px;font-size:13px;letter-spacing:.01em;color:var(--grau)}
+.fl-gruppe.aktiv h3{color:var(--akzent)}
+.fl-liste{list-style:none;margin:0;padding:0}
+.fl-eintrag{margin:0 0 2px;padding:0 0 0 9px;border-left:3px solid transparent;border-radius:0 8px 8px 0;transition:background .15s,border-color .15s}
+.fl-eintrag.aktiv{border-left-color:var(--akzent);background:var(--akzent-hell)}
+.fl-zeile{display:flex;align-items:center;gap:4px;min-height:44px}
+/* Lange Formeln brechen am Gleichheits- oder Rechenzeichen um, statt abgeschnitten zu werden */
+.fl-zeile .m{flex:1 1 auto;min-width:0;font-size:15px;white-space:normal;overflow:visible}
+.fs-formel .m{white-space:normal;overflow:visible}
+.fl-info{flex:0 0 auto;width:44px;height:44px;padding:0;border:none;border-radius:50%;background:none;color:var(--akzent);font-size:21px;line-height:1}
+.fl-info:hover,.fl-info[aria-expanded="true"]{background:var(--akzent-hell)}
+.fl-erk{padding:0 8px 6px 0;font-size:13.5px}
+.fl-erk p{margin:0 0 6px}
+.fl-zeichen{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 10px;margin:2px 0 8px}
+.fl-zeichen dt{text-align:right}
+.fl-zeichen dd{margin:0}
+.fl-einheit{display:block;color:var(--grau);font-size:12.5px}
+.fl-link{display:inline-flex;align-items:center;min-height:44px;color:var(--akzent);font-weight:600;text-decoration:none}
+.fl-link:hover{text-decoration:underline}
+.fl-knopf{display:none}
+.fl-ziel{outline:3px solid var(--akzent-rand);outline-offset:4px;border-radius:6px}
+.formelsammlung,.druck-loesung,.schreiblinien{display:none}
+.schreiblinien span{display:block;height:8mm;border-bottom:1px solid #9aa5b1}
+.druck-loesung{margin:8px 0 0;padding:4px 10px;border-left:3px solid #000;font-size:10.5pt}
+.formelsammlung{border-top:2px solid #000;margin-top:28px;padding-top:10px}
+.formelsammlung h2{margin:0 0 6px;font-size:15pt}
+.fs-gruppe h3{margin:12px 0 4px;font-size:11.5pt}
+.fs-zeile{display:grid;grid-template-columns:minmax(0,36%) minmax(0,1fr);gap:4px 14px;padding:5px 0;border-bottom:1px solid #c8d0da;break-inside:avoid;page-break-inside:avoid}
+.fs-zeichen{font-size:10pt;line-height:1.45}
+.fs-zeichen span.fs-z{display:block}
+
+@media (min-width:1100px){
+  .seite{display:grid;grid-template-columns:minmax(0,1fr) 290px;column-gap:28px;max-width:1218px;margin:0 auto;padding:0 20px}
+  .seite > .wrap{max-width:none;margin:0;padding:0 0 100px}
+  header.kopf .wrap{max-width:1218px;padding-right:338px}
+  .formelleiste{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow-y:auto;overscroll-behavior:contain;
+    border:1px solid var(--linie);border-radius:var(--radius);padding:12px 10px 6px 14px;margin-bottom:24px}
+}
+@media (max-width:1099.98px){
+  .fl-knopf{display:flex;align-items:center;gap:7px;position:fixed;right:16px;bottom:16px;z-index:30;
+    min-height:48px;padding:10px 18px;border-radius:999px;box-shadow:0 4px 14px rgba(15,33,53,.25)}
+  .fl-knopf span{font-size:18px;line-height:1}
+  .formelleiste{position:fixed;top:0;right:0;bottom:0;z-index:50;width:min(400px,calc(100vw - 32px));
+    overflow-y:auto;overscroll-behavior:contain;padding:10px 10px 24px 16px;border-left:1px solid var(--linie);
+    box-shadow:-6px 0 24px rgba(15,33,53,.18);transform:translateX(100%);visibility:hidden;
+    transition:transform .22s ease,visibility 0s linear .22s}
+  .formelleiste.offen{transform:none;visibility:visible;transition:transform .22s ease}
+  .fl-zu{display:inline-flex;align-items:center;justify-content:center}
+  .fl-schleier{position:fixed;top:0;right:0;bottom:0;left:0;z-index:45;background:rgba(15,33,53,.35)}
+}
+@media (prefers-reduced-motion:reduce){
+  .formelleiste,.formelleiste.offen,.fl-eintrag{transition:none}
+}
+
+/* ---------- Druck ---------- */
+/* Ohne Klasse am <body> (Strg+P) und mit .druck-loesungen: Aufgaben mit allen Hilfen und Lösungen.
+   Mit .druck-arbeitsblatt: Aufgaben mit Schreiblinien, ohne Hilfen, Lösungen und Eingabefelder. */
+@media print{
+  header.kopf{background:none;color:#000;border-bottom:2px solid #000}
+  .chip{border-color:#999;color:#000;background:none}
+  .steuer,.knopfleiste,.hilfen,.lehrer,.startlink,.speicherhinweis{display:none !important}
+  details{border:none;background:none;padding:0}
+  details[open] > summary{font-weight:700}
+  details:not([open]) > *:not(summary){display:none}
+  .hilfe-text{display:block !important}
+  .aufgabe,.karte,.sim,.merksatz,.hinweis,.auftrag{break-inside:avoid;page-break-inside:avoid}
+  body{font-size:11.5pt}
+  /* Papier scrollt nicht: lange Formeln umbrechen, hohe Brüche nicht beschneiden */
+  .m{white-space:normal;overflow:visible}
+  .m.block .katex-display > .katex{white-space:normal}
+  a[href^="http"]::after{content:" (" attr(href) ")";font-size:9pt}
+  /* Ohne Übergänge: sonst hält das Druckbild einen Zwischenstand der Bildschirmstile fest */
+  *,*::before,*::after{transition:none !important;animation:none !important}
+
+  .formelleiste,.fl-knopf,.fl-schleier,.druck-wahl,#exportInfo{display:none !important}
+  .seite{display:block}
+  .formelsammlung{display:block;break-before:page;page-break-before:always;border-top:none;margin-top:0}
+  .stufe .nr{background:none;color:#000;border:1.5px solid #000}
+  .stufe,h3{break-after:avoid;page-break-after:avoid}
+  .karte:has(.aufgabe){break-inside:auto;page-break-inside:auto}
+
+  /* Eingabefelder und Bearbeitungsstand gehören nicht aufs Papier */
+  .rueck,.eingabe,textarea,.zeile select,.opt input,.check input{display:none !important}
+  .opt.richtig,.opt.falsch{border-color:var(--linie);background:#fff}
+  .zeile.richtig,.zeile.falsch{border-color:var(--linie);background:none}
+  .opt::before,.check label::before{content:"";flex:0 0 auto;width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000}
+  .opt::before{border-radius:50%}
+  .zeile::after{content:"";min-width:4.5em;height:1.3em;border-bottom:1px solid #000}
+
+  /* Lösungen: richtige Auswahl markiert, Zuordnung ausgefüllt */
+  .druck-loesung{display:block}
+  .opt.druck-richtig{border:2px solid #000;font-weight:600}
+  .opt.druck-richtig::before{content:"✓";width:auto;height:auto;margin-top:0;border:none;font-weight:700}
+  .zeile[data-loesung]::after{content:"Lösung: " attr(data-loesung);min-width:0;height:auto;border:none;font-weight:700}
+
+  /* Arbeitsblatt */
+  body.druck-arbeitsblatt .hilfe-text,
+  body.druck-arbeitsblatt .druck-loesung,
+  body.druck-arbeitsblatt .nur-loesung{display:none !important}
+  body.druck-arbeitsblatt .opt.druck-richtig{border:1px solid var(--linie);font-weight:inherit}
+  body.druck-arbeitsblatt .opt.druck-richtig::before{content:"";width:.8em;height:.8em;margin-top:.38em;border:1.5px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .zeile[data-loesung]::after{content:"";min-width:4.5em;height:1.3em;border:none;border-bottom:1px solid #000;font-weight:inherit}
+  body.druck-arbeitsblatt .schreiblinien{display:block;margin:4px 0 2px}
+}
+</style>
+</head>
+<body>
+
+<header class="kopf">
+  <div class="wrap">
+    <a class="startlink" href="../index.html">← Zur Übersicht</a>
+    <div class="fachzeile">Mathematik · Qualifikationsphase 1 · Leistungskurs</div>
+    <h1>Abstände und Winkel</h1>
+    <div class="meta">
+      <span class="chip">Inhaltsfeld: Analytische Geometrie und Lineare Algebra</span>
+      <span class="chip">Kernlehrplan NRW, GOSt</span>
+      <span class="chip">ca. 120 Minuten</span>
+    </div>
+  </div>
+</header>
+
+<div class="seite">
+<div class="wrap">
+
+<!-- =============== 1 EINSTIEG =============== -->
+<section id="einstieg">
+  <div class="stufe"><div class="nr">1</div><h2>Einstieg</h2></div>
+
+  <p>Die Drohne aus den letzten beiden Modulen startet wieder bei <span class="m" data-tex="S(0\,|\,0\,|\,10)" data-plain="S(0|0|10)"></span>, eine Längeneinheit ist 1 m. Das Garagendach liegt in der Ebene <span class="m" data-tex="E\colon\ {-2}x_2 + 5x_3 = 15" data-plain="E: −2x₂ + 5x₃ = 15"></span>. Senkrecht unter der Drohne liegt der Dachpunkt <span class="m" data-tex="(0\,|\,0\,|\,3)" data-plain="(0|0|3)"></span>, die Drohne ist also 7 m höher als dieser Punkt. Trotzdem ist sie dem Dach näher als 7 m. Das Dach ist geneigt, und zur schrägen Fläche hin gibt es einen kürzeren Weg.</p>
+
+  <p>Wie weit ist die Drohne wirklich vom Dach entfernt, und in welche Richtung zeigt die kürzeste Verbindung? Und wenn die Drohne landet: Unter welchem Winkel trifft ihre Flugbahn auf die Dachfläche? Beides hängt am Skalarprodukt, das du bisher nur als Test auf „senkrecht“ benutzt hast.</p>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Vorwissen prüfen</h3>
+    <p style="color:var(--grau);font-size:15px">Drei Fragen aus der Sekundarstufe I, der EF und dem Modul „Vektoren“. Wenn du hier hängst, lohnt sich ein Blick zurück, bevor du weitermachst.</p>
+
+    <div class="aufgabe" data-mc="vw1" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Welcher Satz gilt in jedem Dreieck und enthält den Satz des Pythagoras als Sonderfall?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw1"><span>der Kosinussatz</span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw1"><span>der Sinussatz</span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw1"><span>der Satz des Thales</span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw2" style="border:none;padding:0;margin-bottom:20px">
+      <div class="frage">Wie lang ist der Vektor <span class="m" data-tex="\begin{pmatrix}2\\-1\\2\end{pmatrix}" data-plain="(2|−1|2)"></span>?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw2"><span><span class="m" data-tex="\sqrt{3}" data-plain="√3"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw2"><span><span class="m" data-tex="3" data-plain="3"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw2"><span><span class="m" data-tex="9" data-plain="9"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+
+    <div class="aufgabe" data-mc="vw3" style="border:none;padding:0">
+      <div class="frage">Eine Gerade in der <span class="m" data-tex="xy" data-plain="xy"></span>-Ebene hat die Steigung <span class="m" data-tex="m = 1" data-plain="m = 1"></span>. Welchen Winkel schließt sie mit der <span class="m" data-tex="x" data-plain="x"></span>-Achse ein?</div>
+      <div class="optionen">
+        <label class="opt" data-i="0"><input type="radio" name="vw3"><span><span class="m" data-tex="1^\circ" data-plain="1°"></span></span></label>
+        <label class="opt" data-i="1"><input type="radio" name="vw3"><span><span class="m" data-tex="57{,}3^\circ" data-plain="57,3°"></span></span></label>
+        <label class="opt" data-i="2"><input type="radio" name="vw3"><span><span class="m" data-tex="45^\circ" data-plain="45°"></span></span></label>
+      </div>
+      <div class="rueck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 2 SKALARPRODUKT UND WINKEL =============== -->
+<section id="winkel">
+  <div class="stufe"><div class="nr">2</div><h2>Skalarprodukt und Winkel</h2></div>
+
+  <h3>Vom Rechenausdruck zur Geometrie</h3>
+  <p>Aus dem Modul „Geraden und Ebenen“ kennst du das Skalarprodukt als Rechenvorschrift <span class="m" data-tex="\vec{a}\circ\vec{b} = a_1b_1 + a_2b_2 + a_3b_3" data-plain="a→∘b→ = a₁b₁ + a₂b₂ + a₃b₃"></span>. Du weißt auch: <span class="m" data-tex="\vec{a}\circ\vec{b} = 0" data-plain="a→∘b→ = 0"></span> genau dann, wenn die beiden Vektoren senkrecht aufeinander stehen. Das ist ein Sonderfall. Allgemein misst das Skalarprodukt, wie weit zwei Vektoren in dieselbe Richtung zeigen:</p>
+
+  <div class="m block" id="f-skalargeo" data-tex="\vec{a}\circ\vec{b} = |\vec{a}|\cdot|\vec{b}|\cdot\cos\varphi" data-plain="a→∘b→ = |a→|·|b→|·cos φ"></div>
+
+  <p>Dabei ist <span class="m" data-tex="\varphi" data-plain="φ"></span> der Winkel zwischen den beiden Pfeilen, wenn du sie am selben Punkt ansetzt. Er liegt zwischen <span class="m" data-tex="0^\circ" data-plain="0°"></span> und <span class="m" data-tex="180^\circ" data-plain="180°"></span>.</p>
+
+  <details>
+    <summary>Warum gilt a∘b = |a|·|b|·cos φ?</summary>
+    <figure style="margin:16px 0;text-align:center"><svg viewBox="0 0 380 210" style="max-width:420px;width:100%" role="img" aria-label="Zwei Vektoren a und b am selben Punkt angesetzt, der Verbindungsvektor a minus b und der Winkel phi"><line x1="50.0" y1="180.0" x2="314.4" y2="72.3" stroke="#0d7a52" stroke-width="2.5"/><polygon points="320.0,70.0 309.0,69.6 312.4,77.9" fill="#0d7a52"/><line x1="50.0" y1="180.0" x2="224.0" y2="175.2" stroke="#1d4ed8" stroke-width="2.5"/><polygon points="230.0,175.0 219.9,170.8 220.1,179.8" fill="#1d4ed8"/><line x1="230.0" y1="175.0" x2="316.1" y2="74.6" stroke="#c2410c" stroke-width="2"/><polygon points="320.0,70.0 310.1,74.7 316.9,80.5" fill="#c2410c"/><path d="M110.0,178.3 A60,60 0 0 0 105.6,157.4" fill="none" stroke="#5b6b7f" stroke-width="1.8"/><text x="185.0" y="110.0" fill="#0d7a52" font-size="15" font-weight="600" text-anchor="middle" font-style="italic">a→</text><text x="150.0" y="200.0" fill="#1d4ed8" font-size="15" font-weight="600" text-anchor="middle" font-style="italic">b→</text><text x="300.0" y="135.0" fill="#c2410c" font-size="15" font-weight="600" text-anchor="start" font-style="italic">a→ − b→</text><text x="125.0" y="168.0" fill="#5b6b7f" font-size="15" font-weight="600" text-anchor="middle" font-style="italic">φ</text></svg><figcaption style="font-size:14px;color:var(--grau);margin-top:6px">Die Pfeile a→, b→ und a→ − b→ bilden ein Dreieck. Der Winkel am gemeinsamen Anfangspunkt ist φ.</figcaption></figure>
+    <p>Setze <span class="m" data-tex="\vec{a}" data-plain="a→"></span> und <span class="m" data-tex="\vec{b}" data-plain="b→"></span> am selben Punkt an. Der Vektor von der Spitze von <span class="m" data-tex="\vec{b}" data-plain="b→"></span> zur Spitze von <span class="m" data-tex="\vec{a}" data-plain="a→"></span> ist <span class="m" data-tex="\vec{a} - \vec{b}" data-plain="a→ − b→"></span>. Die drei Pfeile bilden ein Dreieck mit den Seitenlängen <span class="m" data-tex="|\vec{a}|" data-plain="|a→|"></span>, <span class="m" data-tex="|\vec{b}|" data-plain="|b→|"></span> und <span class="m" data-tex="|\vec{a} - \vec{b}|" data-plain="|a→ − b→|"></span>. Der Winkel zwischen <span class="m" data-tex="\vec{a}" data-plain="a→"></span> und <span class="m" data-tex="\vec{b}" data-plain="b→"></span> ist <span class="m" data-tex="\varphi" data-plain="φ"></span>.</p>
+    <p><b>1. Kosinussatz</b> in diesem Dreieck:</p>
+    <div class="m block" data-tex="|\vec{a} - \vec{b}|^2 = |\vec{a}|^2 + |\vec{b}|^2 - 2\cdot|\vec{a}|\cdot|\vec{b}|\cdot\cos\varphi" data-plain="|a→ − b→|² = |a→|² + |b→|² − 2·|a→|·|b→|·cos φ"></div>
+    <p><b>2. In Koordinaten</b> (so im Modul „Geraden und Ebenen“ gezeigt):</p>
+    <div class="m block" data-tex="|\vec{a} - \vec{b}|^2 = (a_1 - b_1)^2 + (a_2 - b_2)^2 + (a_3 - b_3)^2 = |\vec{a}|^2 + |\vec{b}|^2 - 2\cdot\vec{a}\circ\vec{b}" data-plain="|a→ − b→|² = (a₁ − b₁)² + (a₂ − b₂)² + (a₃ − b₃)² = |a→|² + |b→|² − 2·a→∘b→"></div>
+    <p><b>3. Gleichsetzen.</b> Beide Zeilen beschreiben dieselbe Länge. Auf beiden Seiten steht <span class="m" data-tex="|\vec{a}|^2 + |\vec{b}|^2" data-plain="|a→|² + |b→|²"></span>, das fällt weg. Es bleibt <span class="m" data-tex="-2\cdot\vec{a}\circ\vec{b} = -2\cdot|\vec{a}|\cdot|\vec{b}|\cdot\cos\varphi" data-plain="−2·a→∘b→ = −2·|a→|·|b→|·cos φ"></span>, also <span class="m" data-tex="\vec{a}\circ\vec{b} = |\vec{a}|\cdot|\vec{b}|\cdot\cos\varphi" data-plain="a→∘b→ = |a→|·|b→|·cos φ"></span>.</p>
+    <p>Für <span class="m" data-tex="\varphi = 90^\circ" data-plain="φ = 90°"></span> ist <span class="m" data-tex="\cos\varphi = 0" data-plain="cos φ = 0"></span>, und du erhältst das bekannte Orthogonalitätskriterium zurück.</p>
+  </details>
+
+  <h3>Winkel berechnen</h3>
+  <p>Löst du nach dem Kosinus auf, bekommst du den Winkel aus Koordinaten:</p>
+  <div class="m block" id="f-winkelvek" data-tex="\cos\varphi = \dfrac{\vec{a}\circ\vec{b}}{|\vec{a}|\cdot|\vec{b}|}" data-plain="cos φ = (a→∘b→) / (|a→|·|b→|)"></div>
+
+  <p><b>Beispiel 1.</b> <span class="m" data-tex="\vec{a} = \begin{pmatrix}1\\1\\0\end{pmatrix},\ \vec{b} = \begin{pmatrix}1\\0\\1\end{pmatrix}" data-plain="a→ = (1|1|0), b→ = (1|0|1)"></span>. Hier ist <span class="m" data-tex="\vec{a}\circ\vec{b} = 1" data-plain="a→∘b→ = 1"></span> und <span class="m" data-tex="|\vec{a}| = |\vec{b}| = \sqrt{2}" data-plain="|a→| = |b→| = √2"></span>. Also <span class="m" data-tex="\cos\varphi = \tfrac{1}{2}" data-plain="cos φ = 1/2"></span> und <span class="m" data-tex="\varphi = 60^\circ" data-plain="φ = 60°"></span>.</p>
+  <p><b>Beispiel 2.</b> <span class="m" data-tex="\vec{a} = \begin{pmatrix}1\\2\\2\end{pmatrix},\ \vec{b} = \begin{pmatrix}-2\\1\\-2\end{pmatrix}" data-plain="a→ = (1|2|2), b→ = (−2|1|−2)"></span>. Jetzt ist <span class="m" data-tex="\vec{a}\circ\vec{b} = -2 + 2 - 4 = -4" data-plain="a→∘b→ = −2 + 2 − 4 = −4"></span>, beide Längen sind 3. Damit <span class="m" data-tex="\cos\varphi = -\tfrac{4}{9} \approx -0{,}4444" data-plain="cos φ = −4/9 ≈ −0,4444"></span> und <span class="m" data-tex="\varphi \approx 116{,}39^\circ" data-plain="φ ≈ 116,39°"></span>.</p>
+
+  <p>Die Längen im Nenner sind positiv. Das Vorzeichen von <span class="m" data-tex="\cos\varphi" data-plain="cos φ"></span> ist deshalb das Vorzeichen des Skalarprodukts: Bei <span class="m" data-tex="\vec{a}\circ\vec{b} > 0" data-plain="a→∘b→ > 0"></span> ist der Winkel spitz, bei <span class="m" data-tex="\vec{a}\circ\vec{b} < 0" data-plain="a→∘b→ < 0"></span> stumpf, bei <span class="m" data-tex="\vec{a}\circ\vec{b} = 0" data-plain="a→∘b→ = 0"></span> ein rechter.</p>
+
+  <div class="merksatz">
+    <b>Merksatz</b>
+    Das Skalarprodukt ist groß und positiv, wenn zwei Vektoren fast in dieselbe Richtung zeigen, null bei senkrechten und negativ bei Vektoren, die gegeneinander zeigen. Den Winkel liefert es erst, wenn du durch beide Längen teilst.
+  </div>
+
+  <h3>Schnittwinkel zweier Geraden</h3>
+  <p>Zwei sich schneidende Geraden bilden vier Winkel, je zwei gleich große. Als Schnittwinkel gilt der kleinere, also ein Winkel zwischen <span class="m" data-tex="0^\circ" data-plain="0°"></span> und <span class="m" data-tex="90^\circ" data-plain="90°"></span>. Der Winkel zwischen den Richtungsvektoren kann aber stumpf sein, denn statt <span class="m" data-tex="\vec{u}" data-plain="u→"></span> taugt genauso <span class="m" data-tex="-\vec{u}" data-plain="−u→"></span> als Richtungsvektor. Der Betrag im Zähler sorgt dafür, dass immer der spitze Winkel herauskommt:</p>
+  <div class="m block" id="f-schnittgg" data-tex="\cos\alpha = \dfrac{|\vec{u}\circ\vec{v}|}{|\vec{u}|\cdot|\vec{v}|}" data-plain="cos α = |u→∘v→| / (|u→|·|v→|)"></div>
+  <p>Haben zwei Geraden die Richtungen aus Beispiel 2, ist <span class="m" data-tex="\cos\alpha = \tfrac{4}{9}" data-plain="cos α = 4/9"></span> und der Schnittwinkel <span class="m" data-tex="\alpha \approx 63{,}61^\circ = 180^\circ - 116{,}39^\circ" data-plain="α ≈ 63,61° = 180° − 116,39°"></span>.</p>
+
+  <h3>Gerade und Ebene</h3>
+  <p>Der Winkel zwischen einer Geraden <span class="m" data-tex="g" data-plain="g"></span> und einer Ebene <span class="m" data-tex="E" data-plain="E"></span> ist der Winkel zwischen <span class="m" data-tex="g" data-plain="g"></span> und ihrem senkrechten Schatten in <span class="m" data-tex="E" data-plain="E"></span>. Den Schatten musst du nicht ausrechnen, der Normalenvektor genügt. Weil <span class="m" data-tex="\vec{n}" data-plain="n→"></span> senkrecht auf <span class="m" data-tex="E" data-plain="E"></span> steht, schließen <span class="m" data-tex="\vec{u}" data-plain="u→"></span> und <span class="m" data-tex="\vec{n}" data-plain="n→"></span> den Winkel <span class="m" data-tex="90^\circ - \alpha" data-plain="90° − α"></span> ein. Zeigt <span class="m" data-tex="\vec{n}" data-plain="n→"></span> zur anderen Seite, sind es <span class="m" data-tex="90^\circ + \alpha" data-plain="90° + α"></span>; der Betrag fängt das ab. Wegen <span class="m" data-tex="\cos(90^\circ - \alpha) = \sin\alpha" data-plain="cos(90° − α) = sin α"></span> gilt</p>
+  <div class="m block" id="f-schnittge" data-tex="\sin\alpha = \dfrac{|\vec{n}\circ\vec{u}|}{|\vec{n}|\cdot|\vec{u}|}" data-plain="sin α = |n→∘u→| / (|n→|·|u→|)"></div>
+  <figure style="margin:16px 0;text-align:center"><svg viewBox="0 0 380 230" style="max-width:420px;width:100%" role="img" aria-label="Querschnitt: Ebene E als Linie, Gerade g schneidet sie unter dem Winkel alpha, der Normalenvektor n schließt mit g den Winkel 90 Grad minus alpha ein"><line x1="20" y1="150" x2="360" y2="150" stroke="#94a3b8" stroke-width="3"/><line x1="84.0" y1="210.2" x2="301.1" y2="58.2" stroke="#c2410c" stroke-width="2.5"/><line x1="170.0" y1="150.0" x2="170.0" y2="41.0" stroke="#1d4ed8" stroke-width="2.5"/><polygon points="170.0,35.0 165.5,45.0 174.5,45.0" fill="#1d4ed8"/><polyline points="158,150 158,138 170,138" fill="none" stroke="#5b6b7f" stroke-width="1.3"/><path d="M232.0,150.0 A62,62 0 0 0 220.8,114.4" fill="none" stroke="#0d7a52" stroke-width="2"/><path d="M204.4,125.9 A42,42 0 0 0 170.0,108.0" fill="none" stroke="#7c3aed" stroke-width="2"/><text x="245.0" y="143.0" fill="#0d7a52" font-size="15" font-weight="600" text-anchor="middle" font-style="italic">α</text><text x="178.0" y="80.0" fill="#7c3aed" font-size="14" font-weight="600" text-anchor="start" font-style="italic">90° − α</text><text x="345.0" y="142.0" fill="#94a3b8" font-size="15" font-weight="600" text-anchor="end" font-style="italic">E</text><text x="297.1" y="50.2" fill="#c2410c" font-size="15" font-weight="600" text-anchor="middle" font-style="italic">g</text><text x="156.0" y="45.0" fill="#1d4ed8" font-size="15" font-weight="600" text-anchor="end" font-style="italic">n→</text><text x="250.0" y="185.0" fill="#5b6b7f" font-size="13" font-weight="400" text-anchor="middle">Schatten von g in E</text><line x1="170" y1="156" x2="330" y2="156" stroke="#0d7a52" stroke-width="1.5" stroke-dasharray="5 4"/></svg><figcaption style="font-size:14px;color:var(--grau);margin-top:6px">Schnitt senkrecht zu E durch die Gerade g: α liegt zwischen g und ihrem Schatten in E, zwischen g und n→ liegt 90° − α.</figcaption></figure>
+  <p><b>Beispiel 3.</b> <span class="m" data-tex="E\colon\ 2x_1 + x_2 + 2x_3 = 6" data-plain="E: 2x₁ + x₂ + 2x₃ = 6"></span> und eine Gerade mit <span class="m" data-tex="\vec{u} = \begin{pmatrix}1\\2\\2\end{pmatrix}" data-plain="u→ = (1|2|2)"></span>. Es ist <span class="m" data-tex="\vec{n}\circ\vec{u} = 2 + 2 + 4 = 8" data-plain="n→∘u→ = 2 + 2 + 4 = 8"></span> und <span class="m" data-tex="|\vec{n}| = |\vec{u}| = 3" data-plain="|n→| = |u→| = 3"></span>. Also <span class="m" data-tex="\sin\alpha = \tfrac{8}{9} \approx 0{,}8889" data-plain="sin α = 8/9 ≈ 0,8889"></span> und <span class="m" data-tex="\alpha \approx 62{,}73^\circ" data-plain="α ≈ 62,73°"></span>.</p>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> Wer aus Gewohnheit den Kosinus nimmt, rechnet mit denselben Zahlen und bekommt ein glaubwürdiges Ergebnis, im Beispiel <span class="m" data-tex="27{,}27^\circ" data-plain="27,27°"></span>. Das ist aber der Winkel zwischen <span class="m" data-tex="g" data-plain="g"></span> und dem Normalenvektor, also <span class="m" data-tex="90^\circ - \alpha" data-plain="90° − α"></span>. Kontrolle: Steht <span class="m" data-tex="g" data-plain="g"></span> senkrecht auf <span class="m" data-tex="E" data-plain="E"></span>, ist <span class="m" data-tex="\vec{u}" data-plain="u→"></span> ein Vielfaches von <span class="m" data-tex="\vec{n}" data-plain="n→"></span>. Dann muss <span class="m" data-tex="90^\circ" data-plain="90°"></span> herauskommen, und genau das liefert der Sinus.
+  </div>
+
+  <h3>Zwei Ebenen</h3>
+  <p>Zwei sich schneidende Ebenen sind genauso gegeneinander geneigt wie ihre Normalenvektoren. Der Schnittwinkel ist wieder der spitze:</p>
+  <div class="m block" id="f-schnittee" data-tex="\cos\alpha = \dfrac{|\vec{n}_1\circ\vec{n}_2|}{|\vec{n}_1|\cdot|\vec{n}_2|}" data-plain="cos α = |n→₁∘n→₂| / (|n→₁|·|n→₂|)"></div>
+  <p><b>Beispiel 4.</b> <span class="m" data-tex="E_1\colon\ 2x_1 + x_2 + 2x_3 = 6" data-plain="E₁: 2x₁ + x₂ + 2x₃ = 6"></span> und <span class="m" data-tex="E_2\colon\ x_1 - x_2 = 0" data-plain="E₂: x₁ − x₂ = 0"></span>. Es ist <span class="m" data-tex="\vec{n}_1\circ\vec{n}_2 = 2 - 1 + 0 = 1" data-plain="n→₁∘n→₂ = 2 − 1 + 0 = 1"></span>, <span class="m" data-tex="|\vec{n}_1| = 3" data-plain="|n→₁| = 3"></span>, <span class="m" data-tex="|\vec{n}_2| = \sqrt{2}" data-plain="|n→₂| = √2"></span>. Also <span class="m" data-tex="\cos\alpha = \tfrac{1}{3\sqrt{2}} \approx 0{,}2357" data-plain="cos α = 1/(3√2) ≈ 0,2357"></span> und <span class="m" data-tex="\alpha \approx 76{,}37^\circ" data-plain="α ≈ 76,37°"></span>.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Winkel zwischen</th><th>du brauchst</th><th>Formel mit</th><th>Winkelbereich</th></tr>
+    <tr><td>zwei Vektoren</td><td><span class="m" data-tex="\vec{a},\ \vec{b}" data-plain="a→, b→"></span></td><td>Kosinus, ohne Betrag</td><td><span class="m" data-tex="0^\circ" data-plain="0°"></span> bis <span class="m" data-tex="180^\circ" data-plain="180°"></span></td></tr>
+    <tr><td>zwei Geraden</td><td><span class="m" data-tex="\vec{u},\ \vec{v}" data-plain="u→, v→"></span></td><td>Kosinus, mit Betrag</td><td><span class="m" data-tex="0^\circ" data-plain="0°"></span> bis <span class="m" data-tex="90^\circ" data-plain="90°"></span></td></tr>
+    <tr><td>Gerade und Ebene</td><td><span class="m" data-tex="\vec{u},\ \vec{n}" data-plain="u→, n→"></span></td><td>Sinus, mit Betrag</td><td><span class="m" data-tex="0^\circ" data-plain="0°"></span> bis <span class="m" data-tex="90^\circ" data-plain="90°"></span></td></tr>
+    <tr><td>zwei Ebenen</td><td><span class="m" data-tex="\vec{n}_1,\ \vec{n}_2" data-plain="n→₁, n→₂"></span></td><td>Kosinus, mit Betrag</td><td><span class="m" data-tex="0^\circ" data-plain="0°"></span> bis <span class="m" data-tex="90^\circ" data-plain="90°"></span></td></tr>
+  </table>
+  </div>
+</section>
+
+<!-- =============== 3 ABSTÄNDE =============== -->
+<section id="abstaende">
+  <div class="stufe"><div class="nr">3</div><h2>Abstände</h2></div>
+
+  <h3>Was Abstand heißt</h3>
+  <p>Der Abstand eines Punktes <span class="m" data-tex="Q" data-plain="Q"></span> von einer Ebene <span class="m" data-tex="E" data-plain="E"></span> ist die kürzeste Entfernung von <span class="m" data-tex="Q" data-plain="Q"></span> zu irgendeinem Punkt von <span class="m" data-tex="E" data-plain="E"></span>. Diese kürzeste Verbindung steht senkrecht auf <span class="m" data-tex="E" data-plain="E"></span>. Der Punkt <span class="m" data-tex="F" data-plain="F"></span>, in dem sie die Ebene trifft, heißt <b>Lotfußpunkt</b>, die Strecke <span class="m" data-tex="QF" data-plain="QF"></span> heißt <b>Lot</b>.</p>
+  <p>Warum gerade das Lot? Ist <span class="m" data-tex="R" data-plain="R"></span> irgendein anderer Punkt von <span class="m" data-tex="E" data-plain="E"></span>, dann ist das Dreieck <span class="m" data-tex="QFR" data-plain="QFR"></span> bei <span class="m" data-tex="F" data-plain="F"></span> rechtwinklig. Nach Pythagoras ist <span class="m" data-tex="|QR|^2 = |QF|^2 + |FR|^2 > |QF|^2" data-plain="|QR|² = |QF|² + |FR|² > |QF|²"></span>. Jeder andere Weg ist länger.</p>
+  <figure style="margin:16px 0;text-align:center"><svg viewBox="0 0 380 230" style="max-width:420px;width:100%" role="img" aria-label="Seitenansicht: geneigte Ebene E, Punkt Q darüber, Lot von Q auf E mit Fußpunkt F, gestrichelt der längere Weg senkrecht nach unten und der Weg zu einem anderen Punkt R"><line x1="30" y1="205" x2="350" y2="77" stroke="#94a3b8" stroke-width="3"/><line x1="135" y1="40" x2="135.0" y2="163.0" stroke="#7c3aed" stroke-width="2" stroke-dasharray="6 5"/><line x1="135" y1="40" x2="288.8" y2="101.5" stroke="#5b6b7f" stroke-width="1.5" stroke-dasharray="3 4"/><line x1="135" y1="40" x2="177.4" y2="146.0" stroke="#0d7a52" stroke-width="3"/><polyline points="173.3,135.8 183.5,131.7 187.6,141.9" fill="none" stroke="#5b6b7f" stroke-width="1.3"/><circle cx="135" cy="40" r="5" fill="#0f2135"/><circle cx="177.4" cy="146.0" r="4.5" fill="#0d7a52"/><circle cx="135.0" cy="163.0" r="4" fill="#fff" stroke="#7c3aed" stroke-width="2"/><circle cx="288.8" cy="101.5" r="4" fill="#5b6b7f"/><text x="125.0" y="32.0" fill="#0f2135" font-size="15" font-weight="600" text-anchor="end" font-style="italic">Q</text><text x="189.4" y="166.0" fill="#0d7a52" font-size="15" font-weight="600" text-anchor="start" font-style="italic">F</text><text x="292.8" y="123.5" fill="#5b6b7f" font-size="15" font-weight="600" text-anchor="start" font-style="italic">R</text><text x="344.0" y="101.0" fill="#94a3b8" font-size="15" font-weight="600" text-anchor="end" font-style="italic">E</text><text x="127.0" y="111.5" fill="#7c3aed" font-size="12" font-weight="400" text-anchor="end">senkrecht darunter</text><text x="166.2" y="93.0" fill="#0d7a52" font-size="13" font-weight="600" text-anchor="start">Lot</text></svg><figcaption style="font-size:14px;color:var(--grau);margin-top:6px">Das Lot QF steht senkrecht auf E und ist kürzer als jeder andere Weg, auch als der Weg senkrecht nach unten.</figcaption></figure>
+
+  <div class="hinweis">
+    <strong>Häufiger Fehler.</strong> Der Abstand ist weder der Höhenunterschied in <span class="m" data-tex="x_3" data-plain="x₃"></span>-Richtung noch die Entfernung zum Stützpunkt der Ebene. Bei der Drohne aus dem Einstieg liegt der Dachpunkt senkrecht darunter 7 m tiefer, der Abstand zum Dach beträgt aber nur <span class="m" data-tex="\tfrac{35}{\sqrt{29}}\,\mathrm{m} \approx 6{,}50\,\mathrm{m}" data-plain="35/√29 m ≈ 6,50 m"></span>. Der Höhenunterschied stimmt nur bei waagerechten Ebenen der Form <span class="m" data-tex="x_3 = c" data-plain="x₃ = c"></span>, weil dort das Lot senkrecht nach unten zeigt.
+  </div>
+
+  <h3>Verfahren 1: Lotfußpunkt</h3>
+  <p>Du stellst eine Gerade durch <span class="m" data-tex="Q" data-plain="Q"></span> auf, deren Richtung der Normalenvektor ist, die <b>Lotgerade</b>:</p>
+  <div class="m block" id="f-lotgerade" data-tex="\vec{x} = \vec{q} + t\cdot\vec{n}" data-plain="x→ = q→ + t·n→"></div>
+  <p>Ihr Schnittpunkt mit <span class="m" data-tex="E" data-plain="E"></span> ist der Lotfußpunkt <span class="m" data-tex="F" data-plain="F"></span>. Der Abstand ist dann <span class="m" data-tex="d(Q,E) = |QF|" data-plain="d(Q,E) = |QF|"></span>.</p>
+  <p><b>Beispiel 5.</b> <span class="m" data-tex="Q(3\,|\,3\,|\,3)" data-plain="Q(3|3|3)"></span> und <span class="m" data-tex="E\colon\ 2x_1 + x_2 + 2x_3 = 6" data-plain="E: 2x₁ + x₂ + 2x₃ = 6"></span>. Die Lotgerade ist <span class="m" data-tex="\vec{x} = \begin{pmatrix}3\\3\\3\end{pmatrix} + t\cdot\begin{pmatrix}2\\1\\2\end{pmatrix}" data-plain="x→ = (3|3|3) + t·(2|1|2)"></span>. Einsetzen in <span class="m" data-tex="E" data-plain="E"></span>: <span class="m" data-tex="2(3 + 2t) + (3 + t) + 2(3 + 2t) = 6" data-plain="2(3 + 2t) + (3 + t) + 2(3 + 2t) = 6"></span>, also <span class="m" data-tex="15 + 9t = 6" data-plain="15 + 9t = 6"></span> und <span class="m" data-tex="t = -1" data-plain="t = −1"></span>. Damit ist <span class="m" data-tex="F(1\,|\,2\,|\,1)" data-plain="F(1|2|1)"></span> und <span class="m" data-tex="|QF| = \left|\begin{pmatrix}-2\\-1\\-2\end{pmatrix}\right| = 3" data-plain="|QF| = |(−2|−1|−2)| = 3"></span>. Der Abstand beträgt 3 LE.</p>
+
+  <h3>Verfahren 2: Hessesche Normalform</h3>
+  <p>Das Lotfußpunktverfahren lässt sich ein für alle Mal allgemein durchrechnen. Für eine Ebene in Koordinatenform <span class="m" data-tex="\vec{n}\circ\vec{x} = d" data-plain="n→∘x→ = d"></span> ergibt sich:</p>
+  <div class="m block" id="f-hnf" data-tex="d(Q,E) = \dfrac{|\vec{n}\circ\vec{q} - d|}{|\vec{n}|}" data-plain="d(Q,E) = |n→∘q→ − d| / |n→|"></div>
+  <p>Im Beispiel 5 ist <span class="m" data-tex="\vec{n}\circ\vec{q} = 6 + 3 + 6 = 15" data-plain="n→∘q→ = 6 + 3 + 6 = 15"></span>, also <span class="m" data-tex="d(Q,E) = \tfrac{|15 - 6|}{3} = 3" data-plain="d(Q,E) = |15 − 6| / 3 = 3"></span>. Achte auf die beiden Bedeutungen von <span class="m" data-tex="d" data-plain="d"></span>: In <span class="m" data-tex="d(Q,E)" data-plain="d(Q,E)"></span> ist es der Name des Abstands, im Zähler die rechte Seite der Koordinatenform.</p>
+
+  <details>
+    <summary>Woher kommt die Formel?</summary>
+    <p>Setze die Lotgerade <span class="m" data-tex="\vec{x} = \vec{q} + t\cdot\vec{n}" data-plain="x→ = q→ + t·n→"></span> in <span class="m" data-tex="\vec{n}\circ\vec{x} = d" data-plain="n→∘x→ = d"></span> ein: <span class="m" data-tex="\vec{n}\circ\vec{q} + t\cdot\vec{n}\circ\vec{n} = d" data-plain="n→∘q→ + t·n→∘n→ = d"></span>. Wegen <span class="m" data-tex="\vec{n}\circ\vec{n} = |\vec{n}|^2" data-plain="n→∘n→ = |n→|²"></span> folgt</p>
+    <div class="m block" data-tex="t = \dfrac{d - \vec{n}\circ\vec{q}}{|\vec{n}|^2}" data-plain="t = (d − n→∘q→) / |n→|²"></div>
+    <p>Der Lotfußpunkt ist <span class="m" data-tex="\vec{f} = \vec{q} + t\cdot\vec{n}" data-plain="f→ = q→ + t·n→"></span>, die Lotstrecke ist also der Vektor <span class="m" data-tex="t\cdot\vec{n}" data-plain="t·n→"></span>. Seine Länge ist</p>
+    <div class="m block" data-tex="|t|\cdot|\vec{n}| = \dfrac{|d - \vec{n}\circ\vec{q}|}{|\vec{n}|^2}\cdot|\vec{n}| = \dfrac{|\vec{n}\circ\vec{q} - d|}{|\vec{n}|}" data-plain="|t|·|n→| = |d − n→∘q→| / |n→|² · |n→| = |n→∘q→ − d| / |n→|"></div>
+    <p>Den Namen hat die Formel von dem Mathematiker Otto Hesse. Teilst du die Koordinatengleichung durch <span class="m" data-tex="|\vec{n}|" data-plain="|n→|"></span>, steht links ein Normalenvektor der Länge 1. Diese Form der Ebenengleichung heißt <b>Hessesche Normalform</b>. Setzt du einen Punkt ein, liefert sie direkt seinen Abstand, mit Vorzeichen.</p>
+  </details>
+
+  <p><b>Das Vorzeichen ohne Betrag.</b> Lässt du die Betragsstriche weg, verrät das Vorzeichen von <span class="m" data-tex="\vec{n}\circ\vec{q} - d" data-plain="n→∘q→ − d"></span>, auf welcher Seite von <span class="m" data-tex="E" data-plain="E"></span> der Punkt liegt: positiv auf der Seite, in die <span class="m" data-tex="\vec{n}" data-plain="n→"></span> zeigt, negativ auf der anderen. Zwei Punkte liegen genau dann auf derselben Seite, wenn ihre Werte dasselbe Vorzeichen haben.</p>
+
+  <div class="merksatz">
+    <b>Merksatz</b>
+    Abstand heißt kürzeste Verbindung, und die kürzeste Verbindung ist immer das Lot. Die Hessesche Normalform ist kein neuer Gedanke, sondern das Lotfußpunktverfahren, einmal allgemein ausgerechnet.
+  </div>
+
+  <h3>Abstand eines Punktes von einer Geraden</h3>
+  <p>Auch hier führt das Lot zum Abstand. Der Lotfußpunkt <span class="m" data-tex="F" data-plain="F"></span> mit <span class="m" data-tex="\vec{f} = \vec{p} + r\cdot\vec{u}" data-plain="f→ = p→ + r·u→"></span> liegt auf <span class="m" data-tex="g" data-plain="g"></span>, und <span class="m" data-tex="\overrightarrow{QF}" data-plain="QF→"></span> steht senkrecht auf der Richtung <span class="m" data-tex="\vec{u}" data-plain="u→"></span>. Diese eine Bedingung legt <span class="m" data-tex="r" data-plain="r"></span> fest:</p>
+  <div class="m block" id="f-lotfussg" data-tex="(\vec{p} + r\cdot\vec{u} - \vec{q})\circ\vec{u} = 0" data-plain="(p→ + r·u→ − q→)∘u→ = 0"></div>
+  <p><b>Beispiel 6.</b> <span class="m" data-tex="g\colon\ \vec{x} = \begin{pmatrix}1\\0\\2\end{pmatrix} + r\cdot\begin{pmatrix}2\\1\\-2\end{pmatrix}" data-plain="g: x→ = (1|0|2) + r·(2|1|−2)"></span> und <span class="m" data-tex="Q(4\,|\,3\,|\,2)" data-plain="Q(4|3|2)"></span>. Es ist <span class="m" data-tex="\vec{f} - \vec{q} = \begin{pmatrix}2r - 3\\r - 3\\-2r\end{pmatrix}" data-plain="f→ − q→ = (2r − 3 | r − 3 | −2r)"></span>. Die Bedingung lautet <span class="m" data-tex="2(2r - 3) + (r - 3) - 2\cdot({-2r}) = 9r - 9 = 0" data-plain="2(2r − 3) + (r − 3) − 2·(−2r) = 9r − 9 = 0"></span>, also <span class="m" data-tex="r = 1" data-plain="r = 1"></span> und <span class="m" data-tex="F(3\,|\,1\,|\,0)" data-plain="F(3|1|0)"></span>. Der Abstand ist <span class="m" data-tex="d(Q,g) = \left|\begin{pmatrix}-1\\-2\\-2\end{pmatrix}\right| = 3" data-plain="d(Q,g) = |(−1|−2|−2)| = 3"></span> LE.</p>
+  <p>Eine Hesse-Formel gibt es dafür im Raum nicht, denn eine Gerade im Raum hat keinen einzelnen Normalenvektor. Gleichwertig ist eine Hilfsebene durch <span class="m" data-tex="Q" data-plain="Q"></span> mit <span class="m" data-tex="\vec{u}" data-plain="u→"></span> als Normalenvektor. Ihr Schnittpunkt mit <span class="m" data-tex="g" data-plain="g"></span> ist derselbe Fußpunkt <span class="m" data-tex="F" data-plain="F"></span>.</p>
+
+  <h3>Parallele Objekte</h3>
+  <p>Ist eine Gerade parallel zu einer Ebene oder sind zwei Ebenen parallel, haben alle Punkte denselben Abstand. Du nimmst einen beliebigen Punkt, etwa den Stützpunkt, und rechnest Punkt–Ebene. Zwei parallele Geraden behandelst du als Punkt–Gerade.</p>
+
+  <h3>Windschiefe Geraden</h3>
+  <p>Zwei windschiefe Geraden <span class="m" data-tex="g\colon\ \vec{x} = \vec{p} + r\cdot\vec{u}" data-plain="g: x→ = p→ + r·u→"></span> und <span class="m" data-tex="h\colon\ \vec{x} = \vec{q} + s\cdot\vec{v}" data-plain="h: x→ = q→ + s·v→"></span> haben eine kürzeste Verbindung, die auf beiden senkrecht steht. Du musst sie nicht direkt suchen:</p>
+  <ol>
+    <li>Bestimme einen Vektor <span class="m" data-tex="\vec{n}" data-plain="n→"></span>, der auf beiden Richtungen senkrecht steht: <span class="m" data-tex="\vec{n}\circ\vec{u} = 0" data-plain="n→∘u→ = 0"></span> und <span class="m" data-tex="\vec{n}\circ\vec{v} = 0" data-plain="n→∘v→ = 0"></span>, eine Koordinate frei wählen.</li>
+    <li>Die Ebene <span class="m" data-tex="H" data-plain="H"></span> durch den Stützpunkt <span class="m" data-tex="P" data-plain="P"></span> von <span class="m" data-tex="g" data-plain="g"></span> mit Normalenvektor <span class="m" data-tex="\vec{n}" data-plain="n→"></span> enthält <span class="m" data-tex="g" data-plain="g"></span> und ist parallel zu <span class="m" data-tex="h" data-plain="h"></span>. Jeder Punkt von <span class="m" data-tex="h" data-plain="h"></span> hat denselben Abstand zu <span class="m" data-tex="H" data-plain="H"></span>, also auch ihr Stützpunkt <span class="m" data-tex="Q" data-plain="Q"></span>.</li>
+    <li>Den Abstand von <span class="m" data-tex="Q" data-plain="Q"></span> zu <span class="m" data-tex="H" data-plain="H"></span> liefert die Hessesche Normalform:</li>
+  </ol>
+  <div class="m block" id="f-windschief" data-tex="d(g,h) = \dfrac{|\vec{n}\circ(\vec{q} - \vec{p})|}{|\vec{n}|}" data-plain="d(g,h) = |n→∘(q→ − p→)| / |n→|"></div>
+  <p>Warum ist das der kürzeste Abstand? <span class="m" data-tex="g" data-plain="g"></span> liegt in <span class="m" data-tex="H" data-plain="H"></span>, und <span class="m" data-tex="h" data-plain="h"></span> liegt in der dazu parallelen Ebene durch <span class="m" data-tex="Q" data-plain="Q"></span>. Jede Verbindungsstrecke von einem Punkt auf <span class="m" data-tex="g" data-plain="g"></span> zu einem Punkt auf <span class="m" data-tex="h" data-plain="h"></span> verbindet also zwei parallele Ebenen und ist mindestens so lang wie deren Abstand. Das gemeinsame Lot der beiden Geraden steht auf beiden Ebenen senkrecht und hat genau diese Länge.</p>
+  <p><b>Beispiel 7.</b> <span class="m" data-tex="g\colon\ \vec{x} = \begin{pmatrix}1\\0\\2\end{pmatrix} + r\cdot\begin{pmatrix}1\\0\\-1\end{pmatrix}" data-plain="g: x→ = (1|0|2) + r·(1|0|−1)"></span> und <span class="m" data-tex="h\colon\ \vec{x} = \begin{pmatrix}3\\5\\2\end{pmatrix} + s\cdot\begin{pmatrix}1\\-2\\0\end{pmatrix}" data-plain="h: x→ = (3|5|2) + s·(1|−2|0)"></span>. Aus <span class="m" data-tex="\vec{n}\circ\vec{u} = n_1 - n_3 = 0" data-plain="n→∘u→ = n₁ − n₃ = 0"></span> und <span class="m" data-tex="\vec{n}\circ\vec{v} = n_1 - 2n_2 = 0" data-plain="n→∘v→ = n₁ − 2n₂ = 0"></span> folgt mit <span class="m" data-tex="n_1 = 2" data-plain="n₁ = 2"></span>: <span class="m" data-tex="\vec{n} = \begin{pmatrix}2\\1\\2\end{pmatrix}" data-plain="n→ = (2|1|2)"></span>, <span class="m" data-tex="|\vec{n}| = 3" data-plain="|n→| = 3"></span>. Mit <span class="m" data-tex="\vec{q} - \vec{p} = \begin{pmatrix}2\\5\\0\end{pmatrix}" data-plain="q→ − p→ = (2|5|0)"></span> ist <span class="m" data-tex="\vec{n}\circ(\vec{q} - \vec{p}) = 4 + 5 + 0 = 9" data-plain="n→∘(q→ − p→) = 4 + 5 + 0 = 9"></span>, also <span class="m" data-tex="d(g,h) = \tfrac{9}{3} = 3" data-plain="d(g,h) = 9/3 = 3"></span> LE.</p>
+
+  <div class="tabelle">
+  <table>
+    <tr><th>Abstand</th><th>Weg</th></tr>
+    <tr><td>Punkt–Ebene</td><td>Hessesche Normalform oder Lotfußpunkt</td></tr>
+    <tr><td>Punkt–Gerade</td><td>Lotfußpunkt über <span class="m" data-tex="(\vec{f} - \vec{q})\circ\vec{u} = 0" data-plain="(f→ − q→)∘u→ = 0"></span> oder Hilfsebene</td></tr>
+    <tr><td>Gerade–Ebene oder Ebene–Ebene, parallel</td><td>ein Punkt, dann Punkt–Ebene</td></tr>
+    <tr><td>zwei parallele Geraden</td><td>ein Punkt, dann Punkt–Gerade</td></tr>
+    <tr><td>zwei windschiefe Geraden</td><td><span class="m" data-tex="\vec{n}\perp\vec{u}" data-plain="n→ ⊥ u→"></span> und <span class="m" data-tex="\vec{n}\perp\vec{v}" data-plain="n→ ⊥ v→"></span>, dann Hilfsebene und Hesse</td></tr>
+    <tr><td>Objekte mit gemeinsamem Punkt</td><td>Abstand 0</td></tr>
+  </table>
+  </div>
+</section>
+
+<!-- =============== 4 SIMULATION =============== -->
+<section id="simulation">
+  <div class="stufe"><div class="nr">4</div><h2>Ein Punkt wandert an einer Ebene vorbei</h2></div>
+
+  <p>Oben siehst du die Ebene <span class="m" data-tex="E\colon\ x_1 + 2x_2 + 2x_3 = 6" data-plain="E: x₁ + 2x₂ + 2x₃ = 6"></span> im Schrägbild, darin orange eine Gerade <span class="m" data-tex="g" data-plain="g"></span>. Der schwarze Punkt <span class="m" data-tex="P" data-plain="P"></span> läuft auf <span class="m" data-tex="g" data-plain="g"></span>. Der Regler <span class="m" data-tex="s" data-plain="s"></span> ist der Weg, den <span class="m" data-tex="P" data-plain="P"></span> vom Startpunkt aus auf <span class="m" data-tex="g" data-plain="g"></span> zurückgelegt hat, gemessen in LE. Grün eingezeichnet ist das Lot von <span class="m" data-tex="P" data-plain="P"></span> auf <span class="m" data-tex="E" data-plain="E"></span> mit dem Fußpunkt <span class="m" data-tex="F" data-plain="F"></span>. Auf Wunsch erscheint violett der Weg von <span class="m" data-tex="P" data-plain="P"></span> in <span class="m" data-tex="x_3" data-plain="x₃"></span>-Richtung bis zur Ebene, je nach Lage nach unten oder nach oben. Unten entsteht das Diagramm „Abstand über Weg“: Bei jeder Reglerstellung kommt ein Punkt hinzu. Das Schrägbild verzerrt Längen, verlass dich deshalb auf die Zahlen und das Diagramm.</p>
+
+  <div class="auftrag">
+    <b>Beobachtungsauftrag</b><br>
+    Wähle Datensatz 1 und lass <span class="m" data-tex="P" data-plain="P"></span> mit „Weg abfahren“ einmal die ganze Gerade entlanglaufen. Achte auf die Form des Graphen und darauf, wo <span class="m" data-tex="P" data-plain="P"></span> die Ebene durchstößt. Schalte dann „Weg in x₃-Richtung zeigen“ ein und vergleiche die beiden Graphen. Wiederhole das mit Datensatz 3 und lies jeweils ab, um wie viel der Abstand zunimmt, wenn <span class="m" data-tex="P" data-plain="P"></span> eine Längeneinheit weiterläuft. Vergleiche diesen Wert mit dem angezeigten Winkel <span class="m" data-tex="\alpha" data-plain="α"></span>. Schreibe einen Satz: „Läuft P eine LE auf g weiter, ändert sich der Abstand um …“
+  </div>
+
+  <div class="sim">
+    <canvas id="cvA" width="1000" height="620" role="img" aria-label="Schrägbild der Ebene E mit der Geraden g, dem Punkt P und dem Lot auf E"></canvas>
+    <div style="padding:10px 16px 12px;font-size:14px;line-height:1.75;color:var(--grau)">
+      <b style="color:#5b8def">Hellblau:</b> Ausschnitt der Ebene E. <b style="color:#c2410c">Orange:</b> Gerade g. Schwarzer Punkt: P.
+      <b style="color:#0d7a52">Grün:</b> Lot von P auf E mit Fußpunkt F. <b style="color:#7c3aed">Violett gestrichelt:</b> Weg in x₃-Richtung bis zur Ebene.
+    </div>
+    <div class="trenner"></div>
+    <canvas id="cvD" width="1000" height="280" role="img" aria-label="Diagramm: Abstand des Punktes P von der Ebene über dem Weg s"></canvas>
+
+    <div class="anzeige">
+      <div>Weg s<span id="aS">–</span></div>
+      <div>Punkt P<span id="aP">–</span></div>
+      <div>n∘P − d<span id="aW">–</span></div>
+      <div>Abstand d(P,E)<span id="aD">–</span></div>
+      <div>Lotfußpunkt F<span id="aF">–</span></div>
+      <div>Weg zu E in x₃-Richtung<span id="aH">–</span></div>
+      <div>Winkel α zwischen g und E<span id="aPhi">–</span></div>
+    </div>
+
+    <div class="steuer">
+      <div class="regler">
+        <div>
+          <label for="sDaten">Datensatz</label>
+          <select id="sDaten" style="width:100%;font:inherit;padding:8px 10px;border:1px solid var(--linie);border-radius:8px;background:#fff">
+            <option value="0">Datensatz 1</option>
+            <option value="1">Datensatz 2</option>
+            <option value="2">Datensatz 3</option>
+          </select>
+        </div>
+        <div>
+          <label for="rS">Weg s <b><span id="lS">0,00</span> LE</b></label>
+          <input type="range" id="rS" min="0" max="6" step="0.25" value="0">
+        </div>
+      </div>
+      <div class="knopfleiste">
+        <button class="primaer" id="bFahrt">▶ Weg abfahren</button>
+        <button id="bSpur">Spur löschen</button>
+        <label style="font-size:14px;display:flex;align-items:center;gap:7px;margin-left:6px">
+          <input type="checkbox" id="cHoehe" style="accent-color:var(--akzent);width:16px;height:16px">
+          Weg in x₃-Richtung zeigen
+        </label>
+      </div>
+      <p id="simHinweis" aria-live="polite" style="margin:10px 0 0;font-size:14px;color:var(--grau)"></p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim1">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Wie verläuft in Datensatz 1 der Graph des Abstands <span class="m" data-tex="d(P,E)" data-plain="d(P,E)"></span> über dem Weg <span class="m" data-tex="s" data-plain="s"></span>?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim1"><span>Er fällt bis <span class="m" data-tex="s = 3" data-plain="s = 3"></span> auf null und bleibt dann null, weil <span class="m" data-tex="P" data-plain="P"></span> danach auf der anderen Seite der Ebene liegt.</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim1"><span>Er fällt linear bis auf null bei <span class="m" data-tex="s = 3" data-plain="s = 3"></span> und steigt danach linear wieder an; bei <span class="m" data-tex="s = 3" data-plain="s = 3"></span> hat er einen Knick.</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim1"><span>Er hat bei <span class="m" data-tex="s = 3" data-plain="s = 3"></span> ein glattes, parabelförmiges Minimum.</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+
+  <div class="aufgabe" data-mc="sim2">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Datensatz 1 hat <span class="m" data-tex="\alpha \approx 26{,}39^\circ" data-plain="α ≈ 26,39°"></span>, Datensatz 3 hat <span class="m" data-tex="\alpha = 90^\circ" data-plain="α = 90°"></span>. Um wie viel ändert sich der Abstand, wenn <span class="m" data-tex="P" data-plain="P"></span> eine Längeneinheit auf <span class="m" data-tex="g" data-plain="g"></span> weiterläuft?</div>
+    <div class="optionen">
+      <label class="opt" data-i="0"><input type="radio" name="sim2"><span>um <span class="m" data-tex="\cos\alpha" data-plain="cos α"></span>, also in Datensatz 1 um etwa 0,90 LE und in Datensatz 3 gar nicht</span></label>
+      <label class="opt" data-i="1"><input type="radio" name="sim2"><span>um <span class="m" data-tex="\tan\alpha" data-plain="tan α"></span>, also in Datensatz 1 um etwa 0,50 LE und in Datensatz 3 unbegrenzt</span></label>
+      <label class="opt" data-i="2"><input type="radio" name="sim2"><span>um <span class="m" data-tex="\sin\alpha" data-plain="sin α"></span>, also in Datensatz 1 um etwa 0,44 LE und in Datensatz 3 um 1 LE</span></label>
+    </div>
+    <div class="rueck"></div>
+  </div>
+</section>
+
+<!-- =============== 5 ÜBUNGEN =============== -->
+<section id="uebungen">
+  <div class="stufe"><div class="nr">5</div><h2>Übungen</h2></div>
+
+  <div class="aufgabe" data-num="a1">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Berechne den Winkel zwischen <span class="m" data-tex="\vec{a} = \begin{pmatrix}3\\0\\4\end{pmatrix}" data-plain="a→ = (3|0|4)"></span> und <span class="m" data-tex="\vec{b} = \begin{pmatrix}2\\2\\1\end{pmatrix}" data-plain="b→ = (2|2|1)"></span>. Gib das Ergebnis in Grad auf zwei Nachkommastellen an.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Du brauchst drei Zahlen: das Skalarprodukt und die beiden Längen.</div>
+    <div class="hilfe-text" data-stufe="2">Berechne <span class="m" data-tex="\cos\varphi = \dfrac{\vec{a}\circ\vec{b}}{|\vec{a}|\cdot|\vec{b}|}" data-plain="cos φ = (a→∘b→) / (|a→|·|b→|)"></span> und danach <span class="m" data-tex="\varphi" data-plain="φ"></span> mit der Umkehrfunktion des Kosinus. Der Taschenrechner muss auf Grad (DEG) stehen.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\vec{a}\circ\vec{b} = 3\cdot 2 + 0\cdot 2 + 4\cdot 1 = 10" data-plain="a→∘b→ = 3·2 + 0·2 + 4·1 = 10"></span>, <span class="m" data-tex="|\vec{a}| = \sqrt{9 + 0 + 16} = 5" data-plain="|a→| = √(9 + 0 + 16) = 5"></span>, <span class="m" data-tex="|\vec{b}| = \sqrt{4 + 4 + 1} = 3" data-plain="|b→| = √(4 + 4 + 1) = 3"></span>. Also <span class="m" data-tex="\cos\varphi = \tfrac{10}{15} = \tfrac{2}{3} \approx 0{,}6667" data-plain="cos φ = 10/15 = 2/3 ≈ 0,6667"></span> und <span class="m" data-tex="\varphi = \cos^{-1}\!\left(\tfrac{2}{3}\right) \approx 48{,}19^\circ" data-plain="φ = cos⁻¹(2/3) ≈ 48,19°"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a2">
+    <span class="ab">Anforderungsbereich I</span>
+    <div class="frage">Berechne den Abstand des Punktes <span class="m" data-tex="Q(5\,|\,{-1}\,|\,4)" data-plain="Q(5|−1|4)"></span> von der Ebene <span class="m" data-tex="E\colon\ 2x_1 - x_2 + 2x_3 = 4" data-plain="E: 2x₁ − x₂ + 2x₃ = 4"></span>.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Den Lotfußpunkt musst du hier nicht ausrechnen.</div>
+    <div class="hilfe-text" data-stufe="2">Setze in <span class="m" data-tex="d(Q,E) = \dfrac{|\vec{n}\circ\vec{q} - d|}{|\vec{n}|}" data-plain="d(Q,E) = |n→∘q→ − d| / |n→|"></span> ein, mit <span class="m" data-tex="\vec{n} = \begin{pmatrix}2\\-1\\2\end{pmatrix}" data-plain="n→ = (2|−1|2)"></span> und <span class="m" data-tex="d = 4" data-plain="d = 4"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\vec{n}\circ\vec{q} = 2\cdot 5 + ({-1})\cdot({-1}) + 2\cdot 4 = 10 + 1 + 8 = 19" data-plain="n→∘q→ = 2·5 + (−1)·(−1) + 2·4 = 10 + 1 + 8 = 19"></span>, also <span class="m" data-tex="\vec{n}\circ\vec{q} - d = 15" data-plain="n→∘q→ − d = 15"></span>. Mit <span class="m" data-tex="|\vec{n}| = \sqrt{4 + 1 + 4} = 3" data-plain="|n→| = √(4 + 1 + 4) = 3"></span> folgt <span class="m" data-tex="d(Q,E) = \tfrac{15}{3} = 5" data-plain="d(Q,E) = 15/3 = 5"></span> LE.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a3">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Ordne jeder Situation die Skizze zu, die das passende mathematische Modell zeigt.</div>
+    <div class="diagramme"><figure><svg viewBox="0 0 160 90"><line x1="15" y1="75" x2="145" y2="20" stroke="#c2410c" stroke-width="2.5"/><line x1="20" y1="20" x2="140" y2="75" stroke="#1d4ed8" stroke-width="2.5"/><path d="M100.2,56.6 A22,22 0 0 0 100.5,38.8" fill="none" stroke="#0d7a52" stroke-width="2"/></svg><figcaption>A</figcaption></figure><figure><svg viewBox="0 0 160 90"><polygon points="15,72 115,72 148,44 48,44" fill="#e7f6ef" stroke="#94a3b8" stroke-width="1.5"/><line x1="100" y1="8" x2="82" y2="58" stroke="#c2410c" stroke-width="2.5"/><line x1="82" y1="58" x2="128" y2="58" stroke="#0d7a52" stroke-width="1.5" stroke-dasharray="4 3"/><line x1="82" y1="58" x2="75.9" y2="75" stroke="#c2410c" stroke-width="2.5" stroke-dasharray="3 3"/><path d="M100.0,58.0 A18,18 0 0 0 88.1,41.1" fill="none" stroke="#0d7a52" stroke-width="2"/></svg><figcaption>B</figcaption></figure><figure><svg viewBox="0 0 160 90"><polygon points="15,78 105,78 145,58 55,58" fill="#e7f6ef" stroke="#94a3b8" stroke-width="1.5"/><polygon points="15,78 105,78 120,20 30,20" fill="rgba(29,78,216,0.10)" stroke="#1d4ed8" stroke-width="1.5"/><line x1="15" y1="78" x2="105" y2="78" stroke="#5b6b7f" stroke-width="2.5"/><path d="M126.5,67.3 A24,24 0 0 0 111.0,54.8" fill="none" stroke="#0d7a52" stroke-width="2"/></svg><figcaption>C</figcaption></figure><figure><svg viewBox="0 0 160 90"><polygon points="15,75 115,75 148,48 48,48" fill="#e7f6ef" stroke="#94a3b8" stroke-width="1.5"/><line x1="82" y1="12" x2="82" y2="62" stroke="#0d7a52" stroke-width="2.5"/><polyline points="82,54 90,54 90,62" fill="none" stroke="#5b6b7f" stroke-width="1.2"/><circle cx="82" cy="12" r="4" fill="#0f2135"/><circle cx="82" cy="62" r="3.5" fill="#0d7a52"/></svg><figcaption>D</figcaption></figure></div>
+    <div class="zuordnung">
+      <div class="zeile" data-loesung="B"><span>Eine Solaranlage soll wissen, unter welchem Winkel das Sonnenlicht auf die Modulfläche fällt.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="D"><span>Ein Dachdecker will wissen, wie weit die Spitze eines Antennenmasts von der schrägen Dachfläche entfernt ist.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="A"><span>Zwei Kondensstreifen kreuzen sich am Himmel in einem Punkt. Gesucht ist der Winkel, unter dem sie sich treffen.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      <div class="zeile" data-loesung="C"><span>Eine Rampe ist gegenüber dem Hallenboden geneigt. Gesucht ist ihr Neigungswinkel.</span>
+        <select><option value="">…</option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+    </div>
+    <div class="knopfleiste" style="margin-top:12px"><button class="primaer" data-check="zuordnung">Prüfen</button></div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Übersetze jedes Ding in ein Objekt: Strahl oder Streifen wird zur Geraden, eine Fläche zur Ebene, eine Spitze zum Punkt.</div>
+    <div class="hilfe-text" data-stufe="2">Zähle in jeder Skizze, was zu sehen ist: Wie viele Geraden, wie viele Flächen, gibt es einen einzelnen Punkt? Zähle dasselbe in jeder Situation und vergleiche.</div>
+    <div class="hilfe-text" data-stufe="3">Sonnenlicht ist eine Richtung, die Modulfläche eine Ebene: B. Die Mastspitze ist ein Punkt, das Dach eine Ebene, gesucht ist ein Abstand: D. Zwei Kondensstreifen sind zwei Geraden mit Schnittpunkt: A. Rampe und Boden sind zwei Ebenen: C.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a4">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die Drohne aus dem Einstieg landet auf dem Garagendach <span class="m" data-tex="E\colon\ {-2}x_2 + 5x_3 = 15" data-plain="E: −2x₂ + 5x₃ = 15"></span>. Im Landeanflug bewegt sie sich in Richtung <span class="m" data-tex="\vec{u} = \begin{pmatrix}4\\0\\-3\end{pmatrix}" data-plain="u→ = (4|0|−3)"></span>. Berechne den Winkel, unter dem ihre Flugbahn auf die Dachfläche trifft.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Gesucht ist der Winkel zwischen einer Geraden und einer Ebene, nicht zwischen zwei Vektoren.</div>
+    <div class="hilfe-text" data-stufe="2">Berechne <span class="m" data-tex="\sin\alpha = \dfrac{|\vec{n}\circ\vec{u}|}{|\vec{n}|\cdot|\vec{u}|}" data-plain="sin α = |n→∘u→| / (|n→|·|u→|)"></span> mit dem Normalenvektor <span class="m" data-tex="\vec{n} = \begin{pmatrix}0\\-2\\5\end{pmatrix}" data-plain="n→ = (0|−2|5)"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\vec{n}\circ\vec{u} = 0\cdot 4 + ({-2})\cdot 0 + 5\cdot({-3}) = -15" data-plain="n→∘u→ = 0·4 + (−2)·0 + 5·(−3) = −15"></span>, also <span class="m" data-tex="|\vec{n}\circ\vec{u}| = 15" data-plain="|n→∘u→| = 15"></span>. <span class="m" data-tex="|\vec{n}| = \sqrt{0 + 4 + 25} = \sqrt{29} \approx 5{,}385" data-plain="|n→| = √(0 + 4 + 25) = √29 ≈ 5,385"></span>, <span class="m" data-tex="|\vec{u}| = \sqrt{16 + 0 + 9} = 5" data-plain="|u→| = √(16 + 0 + 9) = 5"></span>. Damit <span class="m" data-tex="\sin\alpha = \tfrac{15}{5\sqrt{29}} = \tfrac{3}{\sqrt{29}} \approx 0{,}5571" data-plain="sin α = 15/(5·√29) = 3/√29 ≈ 0,5571"></span> und <span class="m" data-tex="\alpha \approx 33{,}85^\circ" data-plain="α ≈ 33,85°"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a5">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Berechne den Abstand des Punktes <span class="m" data-tex="Q(8\,|\,7\,|\,0)" data-plain="Q(8|7|0)"></span> von der Geraden <span class="m" data-tex="g\colon\ \vec{x} = \begin{pmatrix}2\\1\\0\end{pmatrix} + r\cdot\begin{pmatrix}1\\2\\2\end{pmatrix}" data-plain="g: x→ = (2|1|0) + r·(1|2|2)"></span>.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Der Punkt auf g, der Q am nächsten liegt, ist der Lotfußpunkt.</div>
+    <div class="hilfe-text" data-stufe="2">Setze <span class="m" data-tex="\vec{f} = \vec{p} + r\cdot\vec{u}" data-plain="f→ = p→ + r·u→"></span> an und bestimme <span class="m" data-tex="r" data-plain="r"></span> aus <span class="m" data-tex="(\vec{p} + r\cdot\vec{u} - \vec{q})\circ\vec{u} = 0" data-plain="(p→ + r·u→ − q→)∘u→ = 0"></span>. Der Abstand ist dann <span class="m" data-tex="|QF|" data-plain="|QF|"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\vec{f} - \vec{q} = \begin{pmatrix}r - 6\\2r - 6\\2r\end{pmatrix}" data-plain="f→ − q→ = (r − 6 | 2r − 6 | 2r)"></span>. Bedingung: <span class="m" data-tex="(r - 6) + 2(2r - 6) + 2\cdot 2r = 9r - 18 = 0" data-plain="(r − 6) + 2(2r − 6) + 2·2r = 9r − 18 = 0"></span>, also <span class="m" data-tex="r = 2" data-plain="r = 2"></span> und <span class="m" data-tex="F(4\,|\,5\,|\,4)" data-plain="F(4|5|4)"></span>. Dann <span class="m" data-tex="\vec{f} - \vec{q} = \begin{pmatrix}-4\\-2\\4\end{pmatrix}" data-plain="f→ − q→ = (−4|−2|4)"></span> und <span class="m" data-tex="|QF| = \sqrt{16 + 4 + 16} = 6" data-plain="|QF| = √(16 + 4 + 16) = 6"></span> LE.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a6">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Die Geraden <span class="m" data-tex="g\colon\ \vec{x} = \begin{pmatrix}0\\0\\1\end{pmatrix} + r\cdot\begin{pmatrix}1\\2\\0\end{pmatrix}" data-plain="g: x→ = (0|0|1) + r·(1|2|0)"></span> und <span class="m" data-tex="h\colon\ \vec{x} = \begin{pmatrix}5\\0\\2\end{pmatrix} + s\cdot\begin{pmatrix}0\\2\\1\end{pmatrix}" data-plain="h: x→ = (5|0|2) + s·(0|2|1)"></span> sind windschief. Berechne ihren Abstand.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Du brauchst einen Vektor, der auf beiden Richtungsvektoren senkrecht steht.</div>
+    <div class="hilfe-text" data-stufe="2">Löse <span class="m" data-tex="\vec{n}\circ\vec{u} = 0" data-plain="n→∘u→ = 0"></span> und <span class="m" data-tex="\vec{n}\circ\vec{v} = 0" data-plain="n→∘v→ = 0"></span>, wobei du eine Koordinate frei wählst. Dann ist <span class="m" data-tex="d(g,h) = \dfrac{|\vec{n}\circ(\vec{q} - \vec{p})|}{|\vec{n}|}" data-plain="d(g,h) = |n→∘(q→ − p→)| / |n→|"></span>.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="n_1 + 2n_2 = 0" data-plain="n₁ + 2n₂ = 0"></span> und <span class="m" data-tex="2n_2 + n_3 = 0" data-plain="2n₂ + n₃ = 0"></span>. Mit <span class="m" data-tex="n_2 = -1" data-plain="n₂ = −1"></span> folgt <span class="m" data-tex="n_1 = 2" data-plain="n₁ = 2"></span> und <span class="m" data-tex="n_3 = 2" data-plain="n₃ = 2"></span>, also <span class="m" data-tex="\vec{n} = \begin{pmatrix}2\\-1\\2\end{pmatrix}" data-plain="n→ = (2|−1|2)"></span> und <span class="m" data-tex="|\vec{n}| = 3" data-plain="|n→| = 3"></span>. Mit <span class="m" data-tex="\vec{q} - \vec{p} = \begin{pmatrix}5\\0\\1\end{pmatrix}" data-plain="q→ − p→ = (5|0|1)"></span> ist <span class="m" data-tex="\vec{n}\circ(\vec{q} - \vec{p}) = 10 + 0 + 2 = 12" data-plain="n→∘(q→ − p→) = 10 + 0 + 2 = 12"></span> und <span class="m" data-tex="d(g,h) = \tfrac{12}{3} = 4" data-plain="d(g,h) = 12/3 = 4"></span> LE.</div>
+  </div>
+
+    <div class="aufgabe" data-num="a7">
+    <span class="ab">Anforderungsbereich II</span>
+    <div class="frage">Der Punkt <span class="m" data-tex="Q_a(a\,|\,1\,|\,2)" data-plain="Q_a(a|1|2)"></span> soll von der Ebene <span class="m" data-tex="E\colon\ 2x_1 - x_2 + 2x_3 = 4" data-plain="E: 2x₁ − x₂ + 2x₃ = 4"></span> den Abstand 3 LE haben. Es gibt zwei passende Werte für <span class="m" data-tex="a" data-plain="a"></span>. Bestimme beide und gib den größeren ein.</div>
+    <div class="eingabe">
+      <input type="number" step="any" placeholder="Zahlenwert">
+      <select>
+        <option value="">Einheit…</option>
+        <option value="ohne Einheit">ohne Einheit</option>
+        <option value="LE">LE</option>
+        <option value="LE²">LE²</option>
+        <option value="°">°</option>
+      </select>
+      <button class="primaer">Prüfen</button>
+    </div>
+    <div class="rueck"></div>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Diesmal kennst du den Abstand und suchst den Punkt. Rechne trotzdem mit der Formel für den Abstand, nur rückwärts.</div>
+    <div class="hilfe-text" data-stufe="2">Setze <span class="m" data-tex="\vec{q} = \begin{pmatrix}a\\1\\2\end{pmatrix}" data-plain="q→ = (a|1|2)"></span> in die Hessesche Normalform ein und setze das Ergebnis gleich 3. Eine Gleichung mit Betrag hat zwei Fälle.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\vec{n}\circ\vec{q} - d = 2a - 1 + 4 - 4 = 2a - 1" data-plain="n→∘q→ − d = 2a − 1 + 4 − 4 = 2a − 1"></span> und <span class="m" data-tex="|\vec{n}| = 3" data-plain="|n→| = 3"></span>. Also <span class="m" data-tex="\tfrac{|2a - 1|}{3} = 3" data-plain="|2a − 1| / 3 = 3"></span>, das heißt <span class="m" data-tex="|2a - 1| = 9" data-plain="|2a − 1| = 9"></span>. Fall 1: <span class="m" data-tex="2a - 1 = 9" data-plain="2a − 1 = 9"></span>, also <span class="m" data-tex="a = 5" data-plain="a = 5"></span>. Fall 2: <span class="m" data-tex="2a - 1 = -9" data-plain="2a − 1 = −9"></span>, also <span class="m" data-tex="a = -4" data-plain="a = −4"></span>. Die Punkte <span class="m" data-tex="Q_5(5\,|\,1\,|\,2)" data-plain="Q₅(5|1|2)"></span> und <span class="m" data-tex="Q_{-4}({-4}\,|\,1\,|\,2)" data-plain="Q₋₄(−4|1|2)"></span> liegen auf verschiedenen Seiten von <span class="m" data-tex="E" data-plain="E"></span>: Der Wert <span class="m" data-tex="\vec{n}\circ\vec{q} - d" data-plain="n→∘q→ − d"></span> ist einmal <span class="m" data-tex="9" data-plain="9"></span> und einmal <span class="m" data-tex="-9" data-plain="−9"></span>. Der größere Wert ist <span class="m" data-tex="a = 5" data-plain="a = 5"></span>.</div>
+  </div>
+
+  <div class="aufgabe" data-num="a8">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Lena soll den Abstand der parallelen Ebenen <span class="m" data-tex="E_1\colon\ 2x_1 + x_2 + 2x_3 = 6" data-plain="E₁: 2x₁ + x₂ + 2x₃ = 6"></span> und <span class="m" data-tex="E_2\colon\ 4x_1 + 2x_2 + 4x_3 = 30" data-plain="E₂: 4x₁ + 2x₂ + 4x₃ = 30"></span> bestimmen. Sie schreibt: „Die Ebenen sind parallel, also ist der Abstand die Differenz der rechten Seiten: 30 − 6 = 24.“ Beurteile Lenas Vorgehen und bestimme den richtigen Abstand.</div>
+    <textarea placeholder="Deine Beurteilung…"></textarea>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Multipliziere in Gedanken eine der Gleichungen mit 10. Die Ebene bleibt dieselbe. Was passiert mit Lenas Differenz?</div>
+    <div class="hilfe-text" data-stufe="2">Bring beide Gleichungen auf denselben Normalenvektor und teile die Differenz der rechten Seiten durch dessen Länge. Oder wähle einen Punkt aus <span class="m" data-tex="E_1" data-plain="E₁"></span> und berechne seinen Abstand zu <span class="m" data-tex="E_2" data-plain="E₂"></span> mit der Hesseschen Normalform.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="E_2" data-plain="E₂"></span> durch 2 geteilt: <span class="m" data-tex="2x_1 + x_2 + 2x_3 = 15" data-plain="2x₁ + x₂ + 2x₃ = 15"></span>, also derselbe Normalenvektor <span class="m" data-tex="\vec{n} = \begin{pmatrix}2\\1\\2\end{pmatrix}" data-plain="n→ = (2|1|2)"></span> wie bei <span class="m" data-tex="E_1" data-plain="E₁"></span>. Differenz der rechten Seiten <span class="m" data-tex="15 - 6 = 9" data-plain="15 − 6 = 9"></span>, <span class="m" data-tex="|\vec{n}| = 3" data-plain="|n→| = 3"></span>, Abstand <span class="m" data-tex="\tfrac{9}{3} = 3" data-plain="9/3 = 3"></span> LE. Kontrolle: <span class="m" data-tex="(3\,|\,0\,|\,0)" data-plain="(3|0|0)"></span> liegt in <span class="m" data-tex="E_1" data-plain="E₁"></span>, und <span class="m" data-tex="\tfrac{|4\cdot 3 - 30|}{6} = \tfrac{18}{6} = 3" data-plain="|4·3 − 30| / 6 = 18/6 = 3"></span>.</div>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a8">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Lenas Idee hat einen richtigen Kern, ihre Rechnung ist aber an zwei Stellen falsch. Richtig ist: Bei parallelen Ebenen haben alle Punkte denselben Abstand, und dieser hängt mit dem Unterschied der rechten Seiten zusammen.</p>
+      <p>Falsch ist erstens, dass sie die Gleichungen nicht auf denselben Normalenvektor gebracht hat. <span class="m" data-tex="E_2" data-plain="E₂"></span> hat den doppelten Normalenvektor. Erst nach dem Teilen durch 2 lautet <span class="m" data-tex="E_2\colon\ 2x_1 + x_2 + 2x_3 = 15" data-plain="E₂: 2x₁ + x₂ + 2x₃ = 15"></span>, und die Differenz ist 9, nicht 24. Falsch ist zweitens, dass eine Differenz der rechten Seiten noch keine Länge ist. Eine Koordinatengleichung darf man mit jeder Zahl multiplizieren, ohne dass sich die Ebene ändert. Eine Differenz, die sich dabei mitverändert, kann kein Abstand sein. Erst die Division durch <span class="m" data-tex="|\vec{n}| = 3" data-plain="|n→| = 3"></span> macht daraus die Länge 3 LE. Die Hessesche Normalform am Punkt <span class="m" data-tex="(3\,|\,0\,|\,0)" data-plain="(3|0|0)"></span> aus <span class="m" data-tex="E_1" data-plain="E₁"></span> bestätigt 3 LE.</p>
+      <p>Urteil: Lenas Ergebnis ist achtmal zu groß. Ihr Ansatz taugt nur, wenn beide Gleichungen denselben Normalenvektor haben und die Differenz anschließend durch dessen Länge geteilt wird.</p>
+      <p><strong>Bewertungskriterien.</strong> richtiger Kern erkannt (Abstand paralleler Ebenen konstant, Differenz der rechten Seiten) · unterschiedlicher Normalenvektor bemerkt und E₂ umgeformt · begründet, warum die Differenz ohne Division durch |n→| keine Länge ist · Abstand 3 LE berechnet · klares Urteil formuliert</p>
+    </div>
+  </div>
+
+  <div class="aufgabe" data-num="a9">
+    <span class="ab">Anforderungsbereich III</span>
+    <div class="frage">Tim behauptet: „Den Abstand zweier windschiefer Geraden g und h bekomme ich einfacher: Ich nehme den Stützpunkt Q von h und berechne seinen Abstand zu g.“ Prüfe die Behauptung an den Geraden aus Aufgabe a6, <span class="m" data-tex="g\colon\ \vec{x} = \begin{pmatrix}0\\0\\1\end{pmatrix} + r\cdot\begin{pmatrix}1\\2\\0\end{pmatrix}" data-plain="g: x→ = (0|0|1) + r·(1|2|0)"></span> und <span class="m" data-tex="h\colon\ \vec{x} = \begin{pmatrix}5\\0\\2\end{pmatrix} + s\cdot\begin{pmatrix}0\\2\\1\end{pmatrix}" data-plain="h: x→ = (5|0|2) + s·(0|2|1)"></span>, und beurteile Tims Verfahren allgemein.</div>
+    <textarea placeholder="Deine Beurteilung…"></textarea>
+    <div class="hilfen">
+      <button data-hilfe="1">Tipp</button>
+      <button data-hilfe="2">Ansatz</button>
+      <button data-hilfe="3">Lösungsweg</button>
+    </div>
+    <div class="hilfe-text" data-stufe="1">Der Stützpunkt von h ist ein Punkt unter vielen. Ist er der Punkt von h, der g am nächsten kommt?</div>
+    <div class="hilfe-text" data-stufe="2">Bestimme den Abstand von <span class="m" data-tex="Q(5\,|\,0\,|\,2)" data-plain="Q(5|0|2)"></span> zu <span class="m" data-tex="g" data-plain="g"></span> über den Lotfußpunkt und vergleiche mit dem Ergebnis 4 LE aus a6. Überlege dann, wann beide Werte übereinstimmen.</div>
+    <div class="hilfe-text" data-stufe="3"><span class="m" data-tex="\vec{f} - \vec{q} = \begin{pmatrix}r - 5\\2r\\-1\end{pmatrix}" data-plain="f→ − q→ = (r − 5 | 2r | −1)"></span>. Bedingung: <span class="m" data-tex="(r - 5) + 4r = 5r - 5 = 0" data-plain="(r − 5) + 4r = 5r − 5 = 0"></span>, also <span class="m" data-tex="r = 1" data-plain="r = 1"></span> und <span class="m" data-tex="F(1\,|\,2\,|\,1)" data-plain="F(1|2|1)"></span>. Dann <span class="m" data-tex="|QF| = \left|\begin{pmatrix}-4\\2\\-1\end{pmatrix}\right| = \sqrt{21} \approx 4{,}58" data-plain="|QF| = |(−4|2|−1)| = √21 ≈ 4,58"></span> LE. Der Abstand der Geraden ist aber 4 LE.</div>
+    <div class="knopfleiste" style="margin-top:10px"><button data-loesung="a9">Musterlösung anzeigen</button></div>
+    <div class="hilfe-text" data-stufe="9">
+      <p><strong>Erwartete Argumentation.</strong> Tims Verfahren ist im Allgemeinen falsch. Am Beispiel ergibt sich <span class="m" data-tex="\sqrt{21} \approx 4{,}58" data-plain="√21 ≈ 4,58"></span> LE, der Abstand der Geraden beträgt aber 4 LE.</p>
+      <p>Der Grund: Der Abstand zweier Geraden ist die kürzeste Entfernung zwischen irgendeinem Punkt von <span class="m" data-tex="g" data-plain="g"></span> und irgendeinem Punkt von <span class="m" data-tex="h" data-plain="h"></span>. Tim legt den Punkt auf <span class="m" data-tex="h" data-plain="h"></span> willkürlich fest und sucht nur noch auf <span class="m" data-tex="g" data-plain="g"></span> den nächsten Punkt. Er minimiert also nur über eine der beiden Geraden. Sein Wert ist deshalb immer mindestens so groß wie der wahre Abstand. Gleich sind beide nur, wenn der Stützpunkt zufällig ein Fußpunkt des gemeinsamen Lots ist. Das gemeinsame Lot steht auf beiden Geraden senkrecht, Tims Strecke nur auf <span class="m" data-tex="g" data-plain="g"></span>: <span class="m" data-tex="\begin{pmatrix}-4\\2\\-1\end{pmatrix}\circ\begin{pmatrix}0\\2\\1\end{pmatrix} = 3 \neq 0" data-plain="(−4|2|−1)∘(0|2|1) = 3 ≠ 0"></span>.</p>
+      <p>Urteil: Tims Abkürzung liefert nur eine obere Schranke für den Abstand. Richtig ist das Verfahren mit einem Vektor, der auf beiden Richtungen senkrecht steht.</p>
+      <p><strong>Bewertungskriterien.</strong> Abstand von Q zu g richtig berechnet (√21 ≈ 4,58 LE) · Vergleich mit 4 LE, Wert als zu groß erkannt · allgemeine Begründung (nur über eine Gerade minimiert, Punkt auf h willkürlich) · Bedingung für Gleichheit genannt (Strecke steht auch auf v→ senkrecht) · klares Urteil formuliert</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== 6 ABSCHLUSS =============== -->
+<section id="abschluss">
+  <div class="stufe"><div class="nr">6</div><h2>Zusammenfassung und Selbstcheck</h2></div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Das Wichtigste in vier Sätzen</h3>
+    <ul>
+      <li>Das Skalarprodukt verbindet Rechnen und Geometrie: <span class="m" data-tex="\vec{a}\circ\vec{b} = |\vec{a}|\cdot|\vec{b}|\cdot\cos\varphi" data-plain="a→∘b→ = |a→|·|b→|·cos φ"></span>. Sein Vorzeichen zeigt, ob der Winkel spitz, recht oder stumpf ist.</li>
+      <li>Schnittwinkel liegen zwischen <span class="m" data-tex="0^\circ" data-plain="0°"></span> und <span class="m" data-tex="90^\circ" data-plain="90°"></span>. Bei Gerade und Ebene gehört der Sinus dazu, weil der Normalenvektor den Winkel zu <span class="m" data-tex="90^\circ" data-plain="90°"></span> ergänzt.</li>
+      <li>Abstand heißt kürzeste Verbindung, und die steht senkrecht: Das Lot führt immer zum Abstand.</li>
+      <li>Die Hessesche Normalform ist das Lotfußpunktverfahren in einer Formel. Abstände zu Geraden und zwischen windschiefen Geraden führst du auf Lotfußpunkt oder Hilfsebene zurück.</li>
+    </ul>
+  </div>
+
+  <div class="hinweis">
+    <strong>Blick aufs Zentralabitur.</strong> In Abituraufgaben zur analytischen Geometrie stecken Winkel und Abstände fast immer in einem Sachkontext: Dachflächen, Flugbahnen, Lichtstrahlen, Pyramiden. Typisch ist die Folge: Ebene aufstellen, Abstand eines Punktes oder einen Winkel bestimmen, das Ergebnis im Kontext deuten. Oft kommt eine Begründungsaufgabe dazu, etwa warum ein Verfahren den kürzesten Abstand liefert. Schreib bei Winkeln immer dazu, welchen Winkel du berechnest, und bei Abständen, welches Verfahren du nutzt.
+  </div>
+
+  <div class="karte">
+    <h3 style="margin-top:0">Ich kann …</h3>
+    <div class="check">
+      <label><input type="checkbox"><span>… das Skalarprodukt geometrisch deuten und mit dem Kosinussatz begründen, warum <span class="m" data-tex="\vec{a}\circ\vec{b} = |\vec{a}|\cdot|\vec{b}|\cdot\cos\varphi" data-plain="a→∘b→ = |a→|·|b→|·cos φ"></span> gilt.</span></label>
+      <label><input type="checkbox"><span>… Winkel zwischen Vektoren und Schnittwinkel zwischen Geraden und Ebenen berechnen und weiß, wann Sinus und wann Betrag nötig sind.</span></label>
+      <label><input type="checkbox"><span>… den Lotfußpunkt eines Punktes auf einer Ebene und auf einer Geraden bestimmen.</span></label>
+      <label><input type="checkbox"><span>… den Abstand eines Punktes von einer Ebene mit der Hesseschen Normalform berechnen und die Formel herleiten.</span></label>
+      <label><input type="checkbox"><span>… den Abstand windschiefer Geraden bestimmen und begründen, warum das Verfahren den kürzesten Abstand liefert.</span></label>
+      <label><input type="checkbox"><span>… Winkel und Abstände in Sachsituationen einsetzen und Lösungswege anderer beurteilen.</span></label>
+    </div>
+  </div>
+
+  <div class="knopfleiste">
+    <button class="primaer" id="bExport">Ergebnis als Text kopieren</button>
+    <button type="button" data-druck="arbeitsblatt">Arbeitsblatt drucken</button>
+    <button type="button" data-druck="loesungen">Mit Lösungen drucken</button>
+  </div>
+  <p class="druck-wahl" style="font-size:14px;color:var(--grau);margin:10px 0 0">Das Arbeitsblatt enthält alle Aufgaben mit Schreiblinien, aber keine Hilfen und Lösungen. „Mit Lösungen drucken“ gibt zusätzlich alle Hilfestufen, Musterlösungen und die richtigen Antworten aus. Der Lehrerteil wird in beiden Fällen nicht gedruckt, die Formelsammlung steht jeweils am Ende.</p>
+  <p id="exportInfo" style="font-size:14px;color:var(--gruen);margin-top:10px"></p>
+
+  <details class="lehrer">
+    <summary>Didaktische Hinweise (Lehrkraft)</summary>
+    <p><strong>Einordnung.</strong> Inhaltsfeld „Analytische Geometrie und Lineare Algebra“, Q1 LK. Letzter Baustein der Q1-Geometrie nach Vektoren, Geraden und Ebenen sowie Lagebeziehungen. Vorausgesetzt werden das Skalarprodukt in Koordinaten mit dem Orthogonalitätskriterium (Modul „Geraden und Ebenen“) und der Schnitt von Gerade und Ebene (Modul „Lagebeziehungen“).</p>
+    <p><strong>Kompetenzen.</strong> Argumentieren: Herleitungen des Skalarprodukts und der Hesseschen Normalform, Begründung des kürzesten Abstands, Bewertungsaufgaben a8 und a9. Modellieren: Drohnenkontext, Landeanflug (a4), Zuordnung von Sachsituationen zu Modellen (a3). Problemlösen: Umkehraufgabe a7 mit zwei Lösungen. Werkzeuge nutzen: Simulation mit Diagramm, das sich aufbaut.</p>
+    <p><strong>Zeitbedarf.</strong> Einstieg 10 Minuten, Skalarprodukt und Winkel 30 Minuten, Abstände einschließlich windschiefer Geraden 35 Minuten, Simulation 15 Minuten, Übungen 25 Minuten, Abschluss 5 Minuten, zusammen etwa 120 Minuten.</p>
+    <p><strong>Typische Fehler.</strong> (1) Kosinus statt Sinus bei Gerade und Ebene. Bei Beispiel 3 anhalten und gemeinsam prüfen, dass eine senkrechte Gerade 90° ergeben muss. (2) Betrag beim Schnittwinkel vergessen, stumpfe Winkel als Schnittwinkel angegeben. (3) Höhenunterschied in x₃-Richtung oder Entfernung zum Stützpunkt als Abstand. Beim Drohnenbeispiel anhalten und 7 m gegen 6,50 m an einer Skizze vergleichen; die Simulation zeigt beide Graphen nebeneinander. (4) Division durch |n→| vergessen. Hier hilft das Argument, dass eine Koordinatengleichung beliebig skaliert werden darf. (5) Bei windschiefen Geraden nur über einen Punkt minimiert, aufgegriffen in Aufgabe a9. (6) Bei Umkehraufgaben nur eine Lösung angegeben, weil der Betrag nicht in zwei Fälle aufgelöst wurde. a7 nennt deshalb ausdrücklich zwei Werte, prüft aber nur den größeren: Im Unterricht nachfragen, ob beide Fälle gerechnet wurden.</p>
+    <p><strong>Differenzierung.</strong> Schnellere bestimmen in Beispiel 7 zusätzlich die Fußpunkte des gemeinsamen Lots: zwei Bedingungen für zwei Parameter, Ergebnis L₁(3|0|0) auf g und L₂(5|1|2) auf h. Langsamere bearbeiten zuerst a1, a2 und a4 und nutzen das Lotfußpunktverfahren statt der Formel, bis die Herleitung verstanden ist.</p>
+    <p><strong>Experimentbezug.</strong> Mit einem schräg gestellten Brett als Ebene, einem Zollstock und einer Schnur lässt sich zeigen, dass der kürzeste Weg von einer Punktmarke zur Fläche senkrecht auf ihr steht und kürzer ist als der Weg senkrecht nach unten. Für Winkel: die Neigung einer Rampe mit einer Winkelmesser-App messen und mit der Rechnung über die Normalenvektoren vergleichen.</p>
+  </details>
+
+  <footer>
+    Mathematik LK Q1 · Abstände und Winkel · erstellt für den Unterricht nach dem Kernlehrplan NRW für die gymnasiale Oberstufe.
+  </footer>
+</section>
+
+<!-- Formelsammlung: nur im Druck sichtbar, wird aus formelDaten erzeugt -->
+<div class="formelsammlung" id="formelsammlung"></div>
+
+</div>
+
+<!-- =============== FORMELLEISTE =============== -->
+<aside class="formelleiste" id="formelleiste" aria-labelledby="fl-titel">
+  <div class="fl-kopf">
+    <h2 id="fl-titel">Formeln dieses Moduls</h2>
+    <button type="button" class="fl-zu" aria-label="Formelleiste schließen">×</button>
+  </div>
+  <div class="fl-inhalt"></div>
+</aside>
+</div>
+
+<button type="button" class="fl-knopf primaer" aria-controls="formelleiste" aria-expanded="false"><span aria-hidden="true">Σ</span> Formeln</button>
+<div class="fl-schleier" hidden></div>
+
+<script>
+/* ============ Formeln rendern (mit Fallback) ============ */
+function formelnRendern(){
+  var ok = (typeof katex !== "undefined");
+  if(!ok) document.body.classList.add("no-katex");
+  document.querySelectorAll(".m").forEach(function(el){
+    if(el.dataset.fertig) return;
+    var tex = el.getAttribute("data-tex"), plain = el.getAttribute("data-plain") || tex;
+    if(ok){
+      try{ katex.render(tex, el, {throwOnError:false, displayMode: el.classList.contains("block")}); }
+      catch(e){ el.textContent = plain; }
+    } else { el.textContent = plain; }
+    el.dataset.fertig = "1";
+  });
+}
+window.addEventListener("load", formelnRendern);
+setTimeout(formelnRendern, 1500);
+
+/* ============ Formelleiste: Daten (modulspezifisch) ============ */
+// Vertrag in vorlage/bausteine.md, Abschnitt 10. abschnitt = id der <section>, ziel = id der
+// Formel im Text. tex setzt KaTeX, plain ist der Klartext ohne Netz. Alle Texte ohne HTML.
+var formelDaten = [
+  {abschnitt:"winkel", titel:"Skalarprodukt und Winkel", formeln:[
+    {id:"skalargeo", ziel:"f-skalargeo", tex:"\\vec{a}\\circ\\vec{b} = |\\vec{a}|\\cdot|\\vec{b}|\\cdot\\cos\\varphi", plain:"a→∘b→ = |a→|·|b→|·cos φ",
+     zeichen:[
+       {tex:"\\vec{a},\\ \\vec{b}", plain:"a→, b→", text:"zwei Vektoren, am selben Punkt angesetzt"},
+       {tex:"|\\vec{a}|,\\ |\\vec{b}|", plain:"|a→|, |b→|", text:"Längen (Beträge) der Vektoren"},
+       {tex:"\\varphi", plain:"φ", text:"Winkel zwischen den beiden Pfeilen"}],
+     gilt:"Für alle Vektoren ungleich dem Nullvektor, im Raum und in der Ebene. φ liegt zwischen 0° und 180°.",
+     fehler:"Das Skalarprodukt als Vektor aufschreiben. Es ist eine Zahl: Aus zwei Vektoren wird ein Skalar."},
+    {id:"winkelvek", ziel:"f-winkelvek", tex:"\\cos\\varphi = \\dfrac{\\vec{a}\\circ\\vec{b}}{|\\vec{a}|\\cdot|\\vec{b}|}", plain:"cos φ = (a→∘b→) / (|a→|·|b→|)",
+     zeichen:[
+       {tex:"\\varphi", plain:"φ", text:"Winkel zwischen a→ und b→"},
+       {tex:"\\vec{a}\\circ\\vec{b}", plain:"a→∘b→", text:"Skalarprodukt, a₁b₁ + a₂b₂ + a₃b₃"},
+       {tex:"|\\vec{a}|\\cdot|\\vec{b}|", plain:"|a→|·|b→|", text:"Produkt der beiden Längen"}],
+     gilt:"Für den Winkel zwischen zwei Vektoren. Im Zähler steht kein Betrag, deshalb sind auch stumpfe Winkel möglich.",
+     fehler:"Nur durch eine der beiden Längen teilen. Dann ist der Quotient kein Kosinus mehr und kann sogar größer als 1 werden."},
+    {id:"schnittgg", ziel:"f-schnittgg", tex:"\\cos\\alpha = \\dfrac{|\\vec{u}\\circ\\vec{v}|}{|\\vec{u}|\\cdot|\\vec{v}|}", plain:"cos α = |u→∘v→| / (|u→|·|v→|)",
+     zeichen:[
+       {tex:"\\alpha", plain:"α", text:"Schnittwinkel der beiden Geraden"},
+       {tex:"\\vec{u},\\ \\vec{v}", plain:"u→, v→", text:"Richtungsvektoren der beiden Geraden"}],
+     gilt:"Für zwei Geraden, die sich schneiden. Der Schnittwinkel liegt zwischen 0° und 90°.",
+     fehler:"Den Betrag im Zähler weglassen und einen stumpfen Winkel als Schnittwinkel angeben. Der Richtungsvektor könnte genauso gut −u→ sein."},
+    {id:"schnittge", ziel:"f-schnittge", tex:"\\sin\\alpha = \\dfrac{|\\vec{n}\\circ\\vec{u}|}{|\\vec{n}|\\cdot|\\vec{u}|}", plain:"sin α = |n→∘u→| / (|n→|·|u→|)",
+     zeichen:[
+       {tex:"\\alpha", plain:"α", text:"Winkel zwischen Gerade und Ebene"},
+       {tex:"\\vec{n}", plain:"n→", text:"Normalenvektor der Ebene"},
+       {tex:"\\vec{u}", plain:"u→", text:"Richtungsvektor der Geraden"}],
+     gilt:"Für eine Gerade, die die Ebene schneidet. α liegt zwischen 0° und 90°. Ist die Gerade parallel zur Ebene, ergibt sich 0°.",
+     fehler:"Den Kosinus nehmen. Damit berechnest du den Winkel zwischen Gerade und Normalenvektor, der α zu 90° ergänzt."},
+    {id:"schnittee", ziel:"f-schnittee", tex:"\\cos\\alpha = \\dfrac{|\\vec{n}_1\\circ\\vec{n}_2|}{|\\vec{n}_1|\\cdot|\\vec{n}_2|}", plain:"cos α = |n→₁∘n→₂| / (|n→₁|·|n→₂|)",
+     zeichen:[
+       {tex:"\\alpha", plain:"α", text:"Schnittwinkel der beiden Ebenen"},
+       {tex:"\\vec{n}_1,\\ \\vec{n}_2", plain:"n→₁, n→₂", text:"Normalenvektoren der beiden Ebenen"}],
+     gilt:"Für zwei Ebenen, die sich schneiden. Der Schnittwinkel liegt zwischen 0° und 90°.",
+     fehler:"Spannvektoren statt Normalenvektoren nehmen. Der Winkel zwischen zwei beliebigen Spannvektoren hat mit der Neigung der Ebenen nichts zu tun."}
+  ]},
+  {abschnitt:"abstaende", titel:"Abstände", formeln:[
+    {id:"lotgerade", ziel:"f-lotgerade", tex:"\\vec{x} = \\vec{q} + t\\cdot\\vec{n}", plain:"x→ = q→ + t·n→",
+     zeichen:[
+       {tex:"\\vec{q}", plain:"q→", text:"Ortsvektor des Punktes Q"},
+       {tex:"\\vec{n}", plain:"n→", text:"Normalenvektor der Ebene, Richtung des Lots"},
+       {tex:"t", plain:"t", text:"Parameter"}],
+     gilt:"Gerade durch Q, die senkrecht auf der Ebene steht. Ihr Schnittpunkt mit der Ebene ist der Lotfußpunkt F.",
+     fehler:"Einen Spannvektor der Ebene als Richtung nehmen. Dann läuft die Gerade parallel zur Ebene, statt senkrecht auf sie zu."},
+    {id:"hnf", ziel:"f-hnf", tex:"d(Q,E) = \\dfrac{|\\vec{n}\\circ\\vec{q} - d|}{|\\vec{n}|}", plain:"d(Q,E) = |n→∘q→ − d| / |n→|",
+     zeichen:[
+       {tex:"d(Q,E)", plain:"d(Q,E)", text:"Abstand des Punktes Q von der Ebene E"},
+       {tex:"\\vec{n}", plain:"n→", text:"Normalenvektor aus der Koordinatenform n→∘x→ = d"},
+       {tex:"\\vec{q}", plain:"q→", text:"Ortsvektor von Q"},
+       {tex:"d", plain:"d", text:"rechte Seite der Koordinatenform"}],
+     gilt:"Für jeden Punkt und jede Ebene in Koordinatenform. Für Punkte der Ebene ergibt sich 0.",
+     fehler:"Den Zähler nicht durch |n→| teilen. Die Koordinatengleichung darf man mit jeder Zahl multiplizieren, der Zähler allein ist deshalb keine Länge."},
+    {id:"lotfussg", ziel:"f-lotfussg", tex:"(\\vec{p} + r\\cdot\\vec{u} - \\vec{q})\\circ\\vec{u} = 0", plain:"(p→ + r·u→ − q→)∘u→ = 0",
+     zeichen:[
+       {tex:"\\vec{p}", plain:"p→", text:"Stützvektor der Geraden g"},
+       {tex:"\\vec{u}", plain:"u→", text:"Richtungsvektor von g"},
+       {tex:"\\vec{q}", plain:"q→", text:"Ortsvektor des Punktes Q"},
+       {tex:"r", plain:"r", text:"Parameter des Lotfußpunkts F"}],
+     gilt:"Bestimmt den Lotfußpunkt F mit f→ = p→ + r·u→ von Q auf g. Der Abstand ist dann d(Q,g) = |QF|.",
+     fehler:"Die Entfernung von Q zum Stützpunkt der Geraden als Abstand nehmen. Der Stützpunkt ist nur zufällig der nächste Punkt."},
+    {id:"windschief", ziel:"f-windschief", tex:"d(g,h) = \\dfrac{|\\vec{n}\\circ(\\vec{q} - \\vec{p})|}{|\\vec{n}|}", plain:"d(g,h) = |n→∘(q→ − p→)| / |n→|",
+     zeichen:[
+       {tex:"d(g,h)", plain:"d(g,h)", text:"Abstand der windschiefen Geraden g und h"},
+       {tex:"\\vec{n}", plain:"n→", text:"Vektor, der auf beiden Richtungsvektoren senkrecht steht"},
+       {tex:"\\vec{p},\\ \\vec{q}", plain:"p→, q→", text:"Stützvektoren von g und h"}],
+     gilt:"Für windschiefe Geraden g: x→ = p→ + r·u→ und h: x→ = q→ + s·v→ mit n→∘u→ = 0 und n→∘v→ = 0.",
+     fehler:"Für n→ nur einen Vektor senkrecht zu u→ nehmen. Er muss auf beiden Richtungsvektoren senkrecht stehen."}
+  ]}
+];
+
+/* ============ Formelleiste: Aufbau und Bedienung (generisch) ============ */
+(function(){
+  // Ein Fehler hier darf die übrigen Bausteine (Aufgaben, Druck, Simulation) nicht mitreißen
+  try{ aufbauen(); } catch(e){ console.error("Formelleiste nicht aufgebaut: " + e.message); }
+
+  function aufbauen(){
+    var leiste = document.getElementById("formelleiste");
+    if(!leiste && typeof formelDaten === "undefined") return;
+    var inhalt = leiste && leiste.querySelector(".fl-inhalt"), zu = leiste && leiste.querySelector(".fl-zu");
+    var knopf = document.querySelector(".fl-knopf"), schleier = document.querySelector(".fl-schleier");
+    var sammlung = document.getElementById("formelsammlung");
+    if(!inhalt || !zu || !knopf || !schleier || typeof formelDaten === "undefined")
+      throw new Error("Markup oder formelDaten unvollständig (siehe vorlage/baustein-formelleiste.md)");
+    var breit = window.matchMedia("(min-width:1100px)");
+    var ruhig = window.matchMedia("(prefers-reduced-motion:reduce)");
+    var LESESTELLE = 0.4;   // Anteil der Fensterhöhe, an dem gerade gelesen wird
+    var eintraege = [], gruppen = [], aktiv = null;
+
+    function el(tag, klasse, text){
+      var e = document.createElement(tag);
+      if(klasse) e.className = klasse;
+      if(text != null) e.textContent = text;
+      return e;
+    }
+    function formel(tex, plain){
+      var s = el("span", "m");
+      s.setAttribute("data-tex", tex);
+      s.setAttribute("data-plain", plain);
+      return s;
+    }
+    function kopfzeile(g){
+      var sec = document.getElementById(g.abschnitt), nr = sec && sec.querySelector(".stufe .nr");
+      return (nr ? nr.textContent.trim() + " · " : "") + g.titel;
+    }
+    // Klartextformeln wie "Φ = B · A" nicht am Gleichheits- oder Malzeichen umbrechen
+    function fest(text){ return String(text).replace(/ ([=·]) /g, " $1 "); }
+    function absatz(marke, text){
+      var p = el("p");
+      p.appendChild(el("b", null, marke + " "));
+      p.appendChild(document.createTextNode(fest(text)));
+      return p;
+    }
+
+    // Leiste aufbauen
+    formelDaten.forEach(function(g){
+      var gruppe = el("div", "fl-gruppe"), liste = el("ul", "fl-liste");
+      gruppe.setAttribute("data-abschnitt", g.abschnitt);
+      gruppe.appendChild(el("h3", null, kopfzeile(g)));
+      g.formeln.forEach(function(f){
+        var li = el("li", "fl-eintrag"), zeile = el("div", "fl-zeile");
+        li.setAttribute("data-formel", f.id);
+        zeile.appendChild(formel(f.tex, f.plain));
+        var info = el("button", "fl-info", "ⓘ");
+        info.type = "button";
+        info.setAttribute("aria-expanded", "false");
+        info.setAttribute("aria-controls", "fl-erk-" + f.id);
+        info.setAttribute("aria-label", "Erklärung zu " + f.plain);
+        zeile.appendChild(info);
+        li.appendChild(zeile);
+
+        var erk = el("div", "fl-erk"), dl = el("dl", "fl-zeichen");
+        erk.id = "fl-erk-" + f.id;
+        erk.hidden = true;
+        f.zeichen.forEach(function(z){
+          var dt = el("dt"), dd = el("dd", null, fest(z.text));
+          dt.appendChild(formel(z.tex, z.plain));
+          if(z.einheit) dd.appendChild(el("span", "fl-einheit", "Einheit: " + z.einheit));
+          dl.appendChild(dt);
+          dl.appendChild(dd);
+        });
+        erk.appendChild(dl);
+        erk.appendChild(absatz("Gültigkeit:", f.gilt));
+        erk.appendChild(absatz("Typischer Fehler:", f.fehler));
+        var link = el("a", "fl-link", "↗ im Text");
+        link.href = "#" + f.ziel;
+        erk.appendChild(link);
+        li.appendChild(erk);
+        liste.appendChild(li);
+
+        info.addEventListener("click", function(){
+          var auf = erk.hidden;
+          erk.hidden = !auf;
+          info.setAttribute("aria-expanded", auf ? "true" : "false");
+        });
+        link.addEventListener("click", function(ev){ springen(f.ziel, ev); });
+        eintraege.push({li:li, abschnitt:g.abschnitt, ziel:document.getElementById(f.ziel)});
+      });
+      gruppe.appendChild(liste);
+      inhalt.appendChild(gruppe);
+      gruppen.push(gruppe);
+    });
+
+    // Formelsammlung für den Druck
+    if(sammlung){
+      sammlung.appendChild(el("h2", null, "Formelsammlung"));
+      formelDaten.forEach(function(g){
+        var gr = el("div", "fs-gruppe");
+        gr.appendChild(el("h3", null, kopfzeile(g)));
+        g.formeln.forEach(function(f){
+          var z = el("div", "fs-zeile"), links = el("div", "fs-formel"), rechts = el("div", "fs-zeichen");
+          links.appendChild(formel(f.tex, f.plain));
+          f.zeichen.forEach(function(s){
+            var z1 = el("span", "fs-z");
+            z1.appendChild(formel(s.tex, s.plain));
+            z1.appendChild(document.createTextNode(" " + fest(s.text) + (s.einheit ? " (" + s.einheit + ")" : "")));
+            rechts.appendChild(z1);
+          });
+          z.appendChild(links);
+          z.appendChild(rechts);
+          gr.appendChild(z);
+        });
+        sammlung.appendChild(gr);
+      });
+    }
+
+    // Sprung zur Stelle im Text; zugeklappte Herleitungen werden dafür geöffnet. Das Ziel landet
+    // knapp über der Lesestelle, damit die Hervorhebung genau diese Formel markiert.
+    function springen(id, ev){
+      var ziel = document.getElementById(id);
+      if(!ziel) return;
+      if(ev) ev.preventDefault();
+      for(var d = ziel.closest("details"); d; d = d.parentElement ? d.parentElement.closest("details") : null) d.open = true;
+      if(!breit.matches) schliessen(false);
+      window.scrollTo({top: window.scrollY + ziel.getBoundingClientRect().top - LESESTELLE * window.innerHeight + 8,
+                       behavior: ruhig.matches ? "auto" : "smooth"});
+      if(!ziel.hasAttribute("tabindex")) ziel.setAttribute("tabindex", "-1");
+      ziel.focus({preventScroll: true});
+      ziel.classList.add("fl-ziel");
+      setTimeout(function(){ ziel.classList.remove("fl-ziel"); }, 1800);
+    }
+
+    // Schublade unter 1100 px
+    var geoeffnet = 0;
+    function oeffnen(){
+      geoeffnet = Date.now();
+      leiste.classList.add("offen");
+      leiste.setAttribute("role", "dialog");
+      leiste.setAttribute("aria-modal", "true");
+      schleier.hidden = false;
+      knopf.setAttribute("aria-expanded", "true");
+      zu.focus();
+      aktivSichtbar();
+    }
+    function schliessen(fokusZurueck){
+      if(!leiste.classList.contains("offen")) return;
+      leiste.classList.remove("offen");
+      leiste.removeAttribute("role");
+      leiste.removeAttribute("aria-modal");
+      schleier.hidden = true;
+      knopf.setAttribute("aria-expanded", "false");
+      if(fokusZurueck) knopf.focus();
+    }
+    knopf.addEventListener("click", function(){
+      if(leiste.classList.contains("offen")) schliessen(true); else oeffnen();
+    });
+    zu.addEventListener("click", function(){ schliessen(true); });
+    // Ein Doppelklick auf den Knopf trifft mit dem zweiten Klick den Schleier: nicht gleich wieder schließen
+    schleier.addEventListener("click", function(){ if(Date.now() - geoeffnet > 400) schliessen(true); });
+    document.addEventListener("keydown", function(ev){
+      if(!leiste.classList.contains("offen")) return;
+      if(ev.key === "Escape"){ schliessen(true); return; }
+      if(ev.key !== "Tab") return;
+      // Tabulator bleibt in der offenen Schublade, auch wenn der Fokus gerade außerhalb liegt
+      var f = [].filter.call(leiste.querySelectorAll("button, a[href]"), function(e){ return e.getClientRects().length > 0; });
+      if(!f.length) return;
+      var a = document.activeElement;
+      if(!leiste.contains(a)){ (ev.shiftKey ? f[f.length - 1] : f[0]).focus(); ev.preventDefault(); }
+      else if(ev.shiftKey && a === f[0]){ f[f.length - 1].focus(); ev.preventDefault(); }
+      else if(!ev.shiftKey && a === f[f.length - 1]){ f[0].focus(); ev.preventDefault(); }
+    });
+    // Wechsel auf Desktopbreite: Schublade wird zur Leiste, der Fokus bleibt in ihr statt auf dem body
+    function wechsel(){
+      if(!breit.matches || !leiste.classList.contains("offen")) return;
+      schliessen(false);
+      var i = leiste.querySelector(".fl-info");
+      if(i) i.focus();
+    }
+    if(breit.addEventListener) breit.addEventListener("change", wechsel); else breit.addListener(wechsel);
+
+    // Hervorhebung der Formel an der Lesestelle (LESESTELLE, oben am Skript: 40 % der Fensterhöhe)
+    function oben(ziel){
+      var d = ziel.closest("details:not([open])");
+      return (d || ziel).getBoundingClientRect().top;
+    }
+    function aktivSichtbar(){
+      if(!aktiv || leiste.scrollHeight <= leiste.clientHeight) return;
+      var r = aktiv.li.getBoundingClientRect(), b = leiste.getBoundingClientRect();
+      if(r.top < b.top + 48) leiste.scrollTop -= b.top + 48 - r.top;
+      else if(r.bottom > b.bottom - 8) leiste.scrollTop += r.bottom - b.bottom + 8;
+    }
+    var abschnitte = [].slice.call(document.querySelectorAll(".wrap > section[id]")), geplant = false;
+    function aktualisieren(){
+      geplant = false;
+      var linie = window.innerHeight * LESESTELLE, sec = null, neu = null, bestOben = -Infinity, erstOben = Infinity, erst = null;
+      abschnitte.forEach(function(s){ if(s.getBoundingClientRect().top <= linie) sec = s; });
+      eintraege.forEach(function(e){
+        if(!sec || e.abschnitt !== sec.id || !e.ziel) return;
+        var t = oben(e.ziel);
+        if(t <= linie && t > bestOben){ bestOben = t; neu = e; }
+        if(t < erstOben){ erstOben = t; erst = e; }
+      });
+      if(!neu) neu = erst;
+      eintraege.forEach(function(e){ e.li.classList.toggle("aktiv", e === neu); });
+      gruppen.forEach(function(g){ g.classList.toggle("aktiv", !!sec && g.getAttribute("data-abschnitt") === sec.id); });
+      if(neu !== aktiv){ aktiv = neu; aktivSichtbar(); }
+    }
+    function planen(){ if(!geplant){ geplant = true; requestAnimationFrame(aktualisieren); } }
+    if("IntersectionObserver" in window){
+      var io = new IntersectionObserver(planen, {rootMargin: "0px 0px -60% 0px"});
+      abschnitte.forEach(function(s){ io.observe(s); });
+      // Ein Ziel in einer zugeklappten Herleitung hat keine eigene Box: dann zählt das details-Element
+      eintraege.forEach(function(e){
+        if(!e.ziel) return;
+        io.observe(e.ziel);
+        var d = e.ziel.closest("details");
+        if(d) io.observe(d);
+      });
+      // Sprünge (Bild ab, Anker) können ein Ziel über die Beobachtungszone hinwegtragen
+      if("onscrollend" in window) window.addEventListener("scrollend", planen);
+      else window.addEventListener("scroll", planen, {passive: true});
+      window.addEventListener("resize", planen);
+      document.addEventListener("toggle", planen, true);
+    }
+    planen();
+  }
+})();
+
+/* ============ Multiple Choice ============ */
+var mcDaten = {
+  vw1:{r:0, fb:[
+    "Richtig. Der Kosinussatz c² = a² + b² − 2ab·cos γ wird für γ = 90° zum Satz des Pythagoras, weil cos 90° = 0 ist. Mit ihm leitest du gleich das Skalarprodukt her.",
+    "Der Sinussatz verknüpft Seiten mit den gegenüberliegenden Winkeln (a : sin α = b : sin β). Er enthält kein Quadrat einer Seite und wird deshalb bei 90° nicht zum Pythagoras.",
+    "Der Satz des Thales sagt nur, wann ein Winkel ein rechter ist: wenn die Ecke auf dem Halbkreis über der Gegenseite liegt. Über Seitenlängen sagt er nichts aus."
+  ]},
+  vw2:{r:1, fb:[
+    "Du hast die Koordinaten addiert, statt sie zu quadrieren: 2 − 1 + 2 = 3. Die Länge kommt aus dem Pythagoras im Raum, also aus der Summe der Quadrate.",
+    "Richtig. √(2² + (−1)² + 2²) = √9 = 3. Vektoren mit glatter Länge wie dieser kommen in den Beispielen oft vor.",
+    "9 ist die Summe der Quadrate. Die Wurzel fehlt noch: Die Länge ist √9."
+  ]},
+  vw3:{r:2, fb:[
+    "Steigung und Winkel sind nicht dasselbe. Die Steigung ist der Tangens des Winkels: tan α = m.",
+    "57,3° ist der Winkel 1 im Bogenmaß. Du hast m als Winkel gelesen. Die Steigung ist aber der Tangens des Winkels, nicht der Winkel selbst.",
+    "Richtig. Aus tan α = 1 folgt α = 45°: Pro Schritt nach rechts geht es einen Schritt nach oben."
+  ]},
+  sim1:{r:1, fb:[
+    "Auf der anderen Seite ist P genauso weit von der Ebene entfernt wie vorher. Nur der Wert n∘P − d wechselt bei s = 3 das Vorzeichen, hier von negativ zu positiv. Der Abstand ist sein Betrag und wächst deshalb wieder. Schau auf die Anzeige n∘P − d.",
+    "Richtig. n∘P − d ändert sich linear mit s, weil P linear von s abhängt. Der Abstand ist |n∘P − d| / 3, und der Betrag klappt den negativen Teil nach oben. So entsteht ein V mit Knick im Durchstoßpunkt.",
+    "Glatt und gerundet ist der Abstand zu einem festen Punkt, weil dort eine Wurzel aus einem quadratischen Term entsteht. Der Abstand zu einer Ebene ist der Betrag eines linearen Ausdrucks. Sieh dir die Spur bei s = 3 genau an: Dort ist eine Spitze."
+  ]},
+  sim2:{r:2, fb:[
+    "In Datensatz 3 läuft P genau auf dem Lot, der Abstand ändert sich dort also am stärksten und nicht gar nicht. cos α beschreibt, wie weit P dabei parallel zur Ebene vorankommt (Ankathete). Die Abstandsänderung ist die Gegenkathete.",
+    "Der Tangens wäre richtig, wenn s waagerecht gemessen würde wie bei einem Funktionsgraphen. s ist aber der Weg entlang g, also die schräge Seite des Dreiecks. In Datensatz 3 liest du ab: pro LE genau 1 LE, nicht unbegrenzt viel.",
+    "Richtig. Weg auf g, Lot und Strecke in E bilden ein rechtwinkliges Dreieck. Der Weg ist die Hypotenuse, die Abstandsänderung die Gegenkathete zum Winkel α. Abgelesen: Von s = 3 bis s = 4,5 steigt der Abstand in Datensatz 1 um 0,67 LE, das sind 0,44 LE pro LE."
+  ]}
+};
+
+document.querySelectorAll("[data-mc]").forEach(function(box){
+  var key = box.getAttribute("data-mc"), d = mcDaten[key];
+  var rueck = box.querySelector(".rueck");
+  box.querySelectorAll(".opt").forEach(function(opt){
+    opt.addEventListener("click", function(){
+      var i = parseInt(opt.getAttribute("data-i"), 10);
+      box.querySelectorAll(".opt").forEach(function(o){ o.classList.remove("richtig","falsch"); });
+      opt.classList.add(i === d.r ? "richtig" : "falsch");
+      rueck.className = "rueck zeig " + (i === d.r ? "ok" : "nein");
+      rueck.textContent = d.fb[i];
+      ergebnisse[key] = (i === d.r);
+    });
+  });
+});
+
+/* ============ Zahleneingaben ============ */
+var numDaten = {
+  a1:{wert:48.19, einheit:"°", tol:0.03,
+      ok:"Richtig. cos φ = 10/(5·3) = 2/3, also φ ≈ 48,19°.",
+      falschEinheit:"Der Zahlenwert passt, aber ein Winkel wird in Grad angegeben.",
+      nah:"Knapp daneben. Rechne mit cos φ = 2/3 ungerundet weiter, eine früh gerundete Zwischenzahl verschiebt den Winkel. Hast du 41,81° erhalten, hast du den Sinus benutzt: Für den Winkel zwischen zwei Vektoren gilt cos φ = a→∘b→ / (|a→|·|b→|).",
+      weit:"Das passt nicht. Steht der Taschenrechner auf Bogenmaß? Hast du durch beide Längen geteilt? Die Hilfen führen dich Schritt für Schritt."},
+  a2:{wert:5, einheit:"LE", tol:0.01,
+      ok:"Richtig. |19 − 4| / 3 = 5 LE.",
+      falschEinheit:"Der Zahlenwert passt. Ein Abstand ist eine Länge, die Einheit ist LE.",
+      nah:"Fast. Achte auf das Vorzeichen: Bei −x₂ und q₂ = −1 ergibt sich (−1)·(−1) = +1. Mit −1 kommst du auf |17 − 4| / 3 ≈ 4,33.",
+      weit:"Hast du durch |n→| geteilt? Ohne Division erhältst du 15. Der Abstand ist |n→∘q→ − d| geteilt durch die Länge des Normalenvektors."},
+  a4:{wert:33.85, einheit:"°", tol:0.05,
+      ok:"Richtig. sin α = 15/(5·√29) ≈ 0,5571, also α ≈ 33,85°.",
+      falschEinheit:"Der Zahlenwert passt, aber ein Winkel wird in Grad angegeben.",
+      nah:"Prüfe zwei Dinge. Ist dein Winkel negativ, fehlt der Betrag von n→∘u→: Ein Schnittwinkel liegt zwischen 0° und 90°. Hast du 56,15° erhalten, hast du den Kosinus benutzt. Das ist der Winkel zwischen Flugbahn und Normalenvektor, zur Dachfläche gehört der Sinus.",
+      weit:"Prüfe den Normalenvektor: Er besteht aus den Koeffizienten der Koordinatengleichung, also (0|−2|5). Und nimm den Betrag von n→∘u→."},
+  a5:{wert:6, einheit:"LE", tol:0.01,
+      ok:"Richtig. r = 2, F(4|5|4), |QF| = 6 LE.",
+      falschEinheit:"Der Zahlenwert passt, die Einheit eines Abstands ist LE.",
+      nah:"Du hast vermutlich die Entfernung zum Stützpunkt (2|1|0) berechnet, das sind √72 ≈ 8,49 LE. Der Stützpunkt ist aber nicht der nächste Punkt der Geraden. Bestimme zuerst den Lotfußpunkt.",
+      weit:"Stelle f→ − q→ in Abhängigkeit von r auf und setze das Skalarprodukt mit u→ gleich null. Die Hilfen zeigen den Weg."},
+  a6:{wert:4, einheit:"LE", tol:0.01,
+      ok:"Richtig. n→ = (2|−1|2), |12| / 3 = 4 LE.",
+      falschEinheit:"Der Zahlenwert passt, die Einheit eines Abstands ist LE.",
+      nah:"Fast. Hast du durch |n→| = 3 geteilt? Oder du hast den Abstand von (5|0|2) zu g bestimmt (≈ 4,58 LE). Das ist nicht der kürzeste Abstand der beiden Geraden.",
+      weit:"Kontrolliere n→: Es muss mit (1|2|0) und mit (0|2|1) das Skalarprodukt 0 ergeben. Teile am Ende durch |n→|. Die Hilfen zeigen den Weg."},
+  a7:{wert:5, einheit:"ohne Einheit", tol:0.01,
+      ok:"Richtig. |2a − 1| / 3 = 3 ergibt a = 5 oder a = −4, der größere Wert ist 5.",
+      falschEinheit:"Der Zahlenwert passt. Gefragt ist nur die Koordinate a, also eine Zahl ohne Einheit.",
+      nah:"Fast. Hast du −4 eingegeben, ist das die zweite Lösung, gefragt ist die größere. Sonst prüfe den Zähler: n→∘q→ − d = 2a − 1 + 4 − 4 = 2a − 1. Ohne Abzug von d erhältst du a = 3.",
+      weit:"Hast du durch |n→| = 3 geteilt? Ohne Division wird aus |2a − 1| = 3 der Wert a = 2. Die Hilfen zeigen den Weg."}
+};
+
+document.querySelectorAll("[data-num]").forEach(function(box){
+  var key = box.getAttribute("data-num"), d = numDaten[key];
+  if(!d) return;
+  var inp = box.querySelector("input[type=number]"),
+      sel = box.querySelector("select"),
+      btn = box.querySelector(".eingabe button"),
+      rueck = box.querySelector(".rueck");
+  btn.addEventListener("click", function(){
+    var v = parseFloat(String(inp.value).replace(",", ".")), e = sel.value;
+    if(isNaN(v) || !e){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Bitte Zahlenwert und Einheit angeben.";
+      return;
+    }
+    // Die Alternativeinheit wird genauso streng geprüft wie die Haupteinheit. Setzt die Aufgabe
+    // in alt eine eigene tol, gilt die; sonst wird die Toleranz mit demselben Faktor umgerechnet
+    // wie der Sollwert. Das eps fängt ab, dass ein Wert genau auf der Toleranzgrenze an der
+    // Fließkommadarstellung scheitert (25,80 − 25,75 ergibt binär 0,050000000000000710).
+    var eps = 1e-9;
+    var altTol = d.alt
+      ? (d.alt.tol != null ? d.alt.tol
+         : (d.wert !== 0 ? Math.abs(d.tol * d.alt.wert / d.wert) : d.tol))
+      : 0;
+    var trefferHaupt = Math.abs(v - d.wert) <= d.tol * (1 + eps);
+    var trefferAlt = d.alt && Math.abs(v - d.alt.wert) <= altTol * (1 + eps);
+    var richtig = (trefferHaupt && e === d.einheit) || (trefferAlt && e === d.alt.einheit);
+    if(richtig){
+      rueck.className = "rueck zeig ok"; rueck.textContent = d.ok; ergebnisse[key] = true;
+    } else if(trefferHaupt || trefferAlt){
+      rueck.className = "rueck zeig nein"; rueck.textContent = d.falschEinheit; ergebnisse[key] = false;
+    } else {
+      // Der Vergleich muss sich auf die Einheit beziehen, in der geantwortet wurde. Sonst
+      // bekommt jemand, der in der Alternativeinheit knapp danebenliegt, einen Faktor von
+      // rund 1000 und damit den "weit daneben"-Text - die Ablehnung waere richtig, die
+      // Begruendung aber falsch.
+      var bezug = (d.alt && e === d.alt.einheit) ? d.alt.wert : d.wert;
+      var faktor = bezug !== 0 ? Math.abs(v / bezug) : 0;
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = (faktor > 0.5 && faktor < 2) ? d.nah : d.weit;
+      ergebnisse[key] = false;
+    }
+  });
+});
+
+/* ============ Gestuftes Hilfesystem ============ */
+document.querySelectorAll("[data-hilfe]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe"), stufe = btn.getAttribute("data-hilfe");
+    var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+    if(t) t.classList.toggle("zeig");
+  });
+});
+document.querySelectorAll("[data-loesung]").forEach(function(btn){
+  btn.addEventListener("click", function(){
+    var box = btn.closest(".aufgabe");
+    var t = box.querySelector('.hilfe-text[data-stufe="9"]');
+    if(t){
+      t.classList.toggle("zeig");
+      btn.textContent = t.classList.contains("zeig") ? "Musterlösung ausblenden" : "Musterlösung anzeigen";
+      formelnRendern();
+    }
+  });
+});
+
+/* ============ Zuordnungsaufgabe ============ */
+var btnZuo = document.querySelector('[data-check="zuordnung"]');
+if(btnZuo){
+  btnZuo.addEventListener("click", function(){
+    var box = btnZuo.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+    var zeilen = box.querySelectorAll(".zeile"), n = 0, offen = 0;
+    zeilen.forEach(function(z){
+      var sel = z.querySelector("select");
+      z.classList.remove("richtig","falsch");
+      if(!sel.value){ offen++; return; }
+      if(sel.value === z.getAttribute("data-loesung")){ z.classList.add("richtig"); n++; }
+      else z.classList.add("falsch");
+    });
+    if(offen){
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = "Es fehlen noch " + offen + " Zuordnungen.";
+      return;
+    }
+    ergebnisse.a3 = (n === zeilen.length);
+    if(n === zeilen.length){
+      rueck.className = "rueck zeig ok";
+      rueck.textContent = "Alle vier richtig. Entscheidend war jeweils, welche Objekte vorkommen: zwei Geraden (A), Gerade und Ebene (B), zwei Ebenen (C), Punkt und Ebene (D).";
+    } else {
+      rueck.className = "rueck zeig nein";
+      rueck.textContent = n + " von " + zeilen.length + " richtig. Frage dich bei jeder Situation zuerst: Welche Objekte kommen vor, ein Punkt, eine Richtung (Gerade) oder eine Fläche (Ebene)? Ein Lichtstrahl ist eine Richtung, eine Dachfläche oder ein Boden eine Ebene.";
+    }
+  });
+}
+
+/* ============ Druck mit oder ohne Lösungen (generisch) ============ */
+(function(){
+  // Richtige Antworten der Auswahlaufgaben für den Lösungsdruck vorbereiten. Auf dem Bildschirm
+  // und im Arbeitsblatt bleiben .druck-loesung und .druck-richtig unsichtbar (siehe CSS).
+  document.querySelectorAll("[data-mc]").forEach(function(box){
+    var d = mcDaten[box.getAttribute("data-mc")], opts = box.querySelector(".optionen");
+    if(!d || !opts) return;
+    var opt = box.querySelector('.opt[data-i="' + d.r + '"]');
+    if(opt) opt.classList.add("druck-richtig");
+    var z = document.createElement("div");
+    z.className = "druck-loesung";
+    // "Richtig." am Anfang entfällt; ein danach klein beginnendes Wort wird großgeschrieben
+    var text = String(d.fb[d.r]).replace(/^(Richtig|Genau|Stimmt)\b[.,!:;]?\s*/, "");
+    if(/^[a-zäöü]{2,}\b/.test(text)) text = text.charAt(0).toUpperCase() + text.slice(1);
+    z.textContent = "Lösung: " + text;
+    opts.insertAdjacentElement("afterend", z);
+  });
+  // Schreiblinien unter jeder Aufgabe mit Eingabefeld; Anzahl über data-linien änderbar
+  document.querySelectorAll(".aufgabe").forEach(function(box){
+    var feld = box.querySelector("textarea") || box.querySelector(".eingabe");
+    if(!feld) return;
+    var n = parseInt(box.getAttribute("data-linien"), 10) || (feld.tagName === "TEXTAREA" ? 10 : 6);
+    var l = document.createElement("div");
+    l.className = "schreiblinien";
+    l.setAttribute("aria-hidden", "true");
+    for(var i = 0; i < n; i++) l.appendChild(document.createElement("span"));
+    feld.insertAdjacentElement("afterend", l);
+  });
+  var modi = ["druck-arbeitsblatt", "druck-loesungen"];
+  function aufraeumen(){ modi.forEach(function(k){ document.body.classList.remove(k); }); }
+  document.querySelectorAll("[data-druck]").forEach(function(b){
+    b.addEventListener("click", function(){
+      aufraeumen();
+      document.body.classList.add("druck-" + b.getAttribute("data-druck"));
+      window.print();
+    });
+  });
+  window.addEventListener("afterprint", aufraeumen);
+})();
+
+/* ============ Simulation: Punkt wandert an einer Ebene vorbei ============ */
+(function(){
+  var cv = document.getElementById("cvA"), ctx = cv.getContext("2d");
+  var cd = document.getElementById("cvD"), dtx = cd.getContext("2d");
+  var $ = function(id){ return document.getElementById(id); };
+  var W = cv.width, H = cv.height, WD = cd.width, HD = cd.height;
+
+  // Ebene E: n∘x = d mit n = (1|2|2), d = 6, |n| = 3. n erscheint im Schrägbild schräg, nicht senkrecht.
+  var N = [1, 2, 2], D = 6, NB = 3;
+  // Ausschnitt der Ebene: Rechteck in x1 und x2 um alle Punkte P und F des Datensatzes, je Datensatz neu
+  var X1 = [-1, 3], X2 = [-1, 5];
+  // Datensätze: Startpunkt Q0 (s = 0) und Richtungsvektor u mit |u| = 3; P(s) = Q0 + s·u/3, s ist der Weg in LE
+  var DATEN = [
+    {q:[0, 2, -1], u:[2, -1, 2]},   // schneidet E bei s = 3 in (2|1|1), α ≈ 26,39°
+    {q:[0, 3, 3],  u:[2, -2, 1]},   // parallel zu E, Abstand 2
+    {q:[1, -1, -1], u:[1, 2, 2]}    // senkrecht zu E, schneidet bei s = 3 in (2|1|1)
+  ];
+  var SMAX = 6;
+
+  // Schrägbild wie im Unterricht: x2 nach rechts, x3 nach oben, x1 nach links unten (halbe Kästchendiagonale).
+  // U = Pixel pro Längeneinheit, OX/OY = Bildort des Ursprungs; feste Ansicht für alle Datensätze.
+  var U = 46, OX = 500, OY = 270;
+  var farbG = "#c2410c", farbLot = "#0d7a52", farbH = "#7c3aed", farbP = "#0f2135", farbT = "#5b6b7f";
+  var farbEbene = "rgba(29,78,216,0.10)", farbRand = "#93c5fd", farbLinie = "#bfdbfe", farbS = "#8a6100";
+
+  var ds = 0, s = 0, hoehe = false, laeuft = false, tAlt = 0;
+  var spurD = {}, spurH = {};
+
+  function fmt(z, n){ var t = z.toFixed(n); if(/^-0[,.]?0*$/.test(t)) t = t.slice(1); return t.replace(".", ",").replace("-", "−"); }
+  function vek(v){ return "(" + v.map(function(c){ return fmt(c, 2); }).join(" | ") + ")"; }
+  function skalar(a, b){ return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+  function laenge(a){ return Math.sqrt(skalar(a, a)); }
+
+  /* ---------- Rechnung ---------- */
+  function punktP(sw){ var g = DATEN[ds]; return [0, 1, 2].map(function(i){ return g.q[i] + sw * g.u[i] / 3; }); }
+  function wert(p){ return skalar(N, p) - D; }                       // n∘P − d mit Vorzeichen
+  function abstand(p){ return Math.abs(wert(p)) / NB; }              // Hessesche Normalform
+  function fusspunkt(p){ var w = wert(p) / (NB * NB); return [0, 1, 2].map(function(i){ return p[i] - w * N[i]; }); }
+  function hoeheX3(p){ return Math.abs(wert(p)) / N[2]; }           // senkrechter Weg in x3-Richtung bis E
+  function ebeneX3(x1, x2){ return (D - N[0] * x1 - N[1] * x2) / N[2]; }
+  function winkel(){ var u = DATEN[ds].u; return Math.asin(Math.abs(skalar(N, u)) / (NB * laenge(u))) * 180 / Math.PI; }
+
+  /* ---------- Ansicht: Ebenenausschnitt, Gerade, Lotfußpunkte und Ursprung passen ins Bild ---------- */
+  function ansicht(){
+    var pts = [[0, 0, 0]], a1 = 1e9, b1 = -1e9, a2 = 1e9, b2 = -1e9, k, p, f;
+    for(k = 0; k <= SMAX; k += 0.5){
+      p = punktP(k); f = fusspunkt(p);
+      [p, f].forEach(function(z){ a1 = Math.min(a1, z[0]); b1 = Math.max(b1, z[0]); a2 = Math.min(a2, z[1]); b2 = Math.max(b2, z[1]); });
+    }
+    X1 = [Math.floor(a1 * 4) / 4 - 0.25, Math.ceil(b1 * 4) / 4 + 0.25];
+    X2 = [Math.floor(a2 * 4) / 4 - 0.25, Math.ceil(b2 * 4) / 4 + 0.25];
+    [X1[0], X1[1]].forEach(function(a){ [X2[0], X2[1]].forEach(function(b){ pts.push([a, b, ebeneX3(a, b)]); }); });
+    [-0.5, SMAX + 0.5].forEach(function(sw){ pts.push(punktP(sw)); });
+    var amin = 1e9, amax = -1e9, bmin = 1e9, bmax = -1e9;
+    pts.forEach(function(z){
+      var a = z[1] - 0.5 * z[0], b = z[2] - 0.5 * z[0];
+      amin = Math.min(amin, a); amax = Math.max(amax, a); bmin = Math.min(bmin, b); bmax = Math.max(bmax, b);
+    });
+    var rand = 28;
+    U = Math.min(80, (W - 2 * rand) / Math.max(amax - amin, 1), (H - 2 * rand) / Math.max(bmax - bmin, 1));
+    OX = W / 2 - U * (amin + amax) / 2;
+    OY = H / 2 + U * (bmin + bmax) / 2;
+  }
+
+  /* ---------- Zeichenhilfen ---------- */
+  function P3(v){ return [OX + U * (v[1] - 0.5 * v[0]), OY - U * (v[2] - 0.5 * v[0])]; }
+  function strecke(c, p, r, farbe, breite, strich){
+    c.strokeStyle = farbe; c.lineWidth = breite; c.setLineDash(strich || []);
+    c.beginPath(); c.moveTo(p[0], p[1]); c.lineTo(r[0], r[1]); c.stroke(); c.setLineDash([]);
+  }
+  function pfeil(c, p, r, farbe, breite, kopf){
+    var dx = r[0] - p[0], dy = r[1] - p[1], l = Math.sqrt(dx * dx + dy * dy);
+    if(l < 2) return;
+    var ux = dx / l, uy = dy / l, k = Math.min(kopf, l * 0.6);
+    c.strokeStyle = farbe; c.lineWidth = breite; c.beginPath();
+    c.moveTo(p[0], p[1]); c.lineTo(r[0] - ux * k * 0.6, r[1] - uy * k * 0.6); c.stroke();
+    c.fillStyle = farbe; c.beginPath(); c.moveTo(r[0], r[1]);
+    c.lineTo(r[0] - ux * k + uy * k * 0.45, r[1] - uy * k - ux * k * 0.45);
+    c.lineTo(r[0] - ux * k - uy * k * 0.45, r[1] - uy * k + ux * k * 0.45);
+    c.closePath(); c.fill();
+  }
+  function punkt(c, p, rad, fuell, rand){
+    c.fillStyle = fuell; c.strokeStyle = rand; c.lineWidth = 2;
+    c.beginPath(); c.arc(p[0], p[1], rad, 0, 2 * Math.PI); c.fill(); c.stroke();
+  }
+  function text(c, t, x, y, ausr, farbe, font){
+    c.fillStyle = farbe || farbT; c.font = font || "14px sans-serif";
+    c.textAlign = ausr || "left"; c.textBaseline = "alphabetic"; c.fillText(t, x, y);
+  }
+
+  /* ---------- Schrägbild ---------- */
+  function drin(q){ return q[0] > 30 && q[0] < W - 40 && q[1] > 26 && q[1] < H - 26; }
+  function achse(ri, name, lp, ln){
+    // Achse nur so lang zeichnen, dass Spitze und Beschriftung im Bild bleiben
+    while(lp > 1 && !drin(P3([(lp + 0.45) * ri[0], (lp + 0.45) * ri[1], (lp + 0.45) * ri[2]]))) lp -= 0.5;
+    while(ln > 0.5 && !drin(P3([-ln * ri[0], -ln * ri[1], -ln * ri[2]]))) ln -= 0.5;
+    var a = P3([-ln * ri[0], -ln * ri[1], -ln * ri[2]]), b = P3([lp * ri[0], lp * ri[1], lp * ri[2]]);
+    strecke(ctx, a, b, farbT, 1.4);
+    pfeil(ctx, P3([(lp - 0.4) * ri[0], (lp - 0.4) * ri[1], (lp - 0.4) * ri[2]]), P3([(lp + 0.3) * ri[0], (lp + 0.3) * ri[1], (lp + 0.3) * ri[2]]), farbT, 1.4, 10);
+    for(var t = -Math.floor(ln); t <= Math.floor(lp); t++){
+      if(t === 0) continue;
+      var m = P3([t * ri[0], t * ri[1], t * ri[2]]);
+      strecke(ctx, [m[0] - 3, m[1]], [m[0] + 3, m[1]], farbT, 1);
+      strecke(ctx, [m[0], m[1] - 3], [m[0], m[1] + 3], farbT, 1);
+    }
+    var e = P3([(lp + 0.45) * ri[0], (lp + 0.45) * ri[1], (lp + 0.45) * ri[2]]);
+    text(ctx, name, e[0] + 6, e[1] + (ri[2] === 1 ? 4 : 16), "left", farbT, "600 15px sans-serif");
+  }
+
+  function zeichne(){
+    var g = DATEN[ds], i;
+    ctx.clearRect(0, 0, W, H); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, W, H);
+    achse([1, 0, 0], "x₁", 5, 2); achse([0, 1, 0], "x₂", 6.5, 2); achse([0, 0, 1], "x₃", 6.5, 2.5);
+
+    // Ebenenausschnitt mit Gitterlinien im Abstand 1
+    var c = [[X1[0], X2[0]], [X1[1], X2[0]], [X1[1], X2[1]], [X1[0], X2[1]]].map(function(z){ return P3([z[0], z[1], ebeneX3(z[0], z[1])]); });
+    ctx.fillStyle = farbEbene; ctx.beginPath(); ctx.moveTo(c[0][0], c[0][1]);
+    for(i = 1; i < 4; i++) ctx.lineTo(c[i][0], c[i][1]);
+    ctx.closePath(); ctx.fill();
+    for(i = Math.ceil(X1[0]); i <= Math.floor(X1[1]); i++) strecke(ctx, P3([i, X2[0], ebeneX3(i, X2[0])]), P3([i, X2[1], ebeneX3(i, X2[1])]), farbLinie, 1);
+    for(i = Math.ceil(X2[0]); i <= Math.floor(X2[1]); i++) strecke(ctx, P3([X1[0], i, ebeneX3(X1[0], i)]), P3([X1[1], i, ebeneX3(X1[1], i)]), farbLinie, 1);
+    for(i = 0; i < 4; i++) strecke(ctx, c[i], c[(i + 1) % 4], farbRand, 1.6);
+    text(ctx, "E", c[2][0] + 8, c[2][1] + 4, "left", "#5b8def", "700 17px sans-serif");
+
+    // Gerade g
+    var g0 = P3(punktP(-0.5)), g1 = P3(punktP(SMAX + 0.5));
+    strecke(ctx, g0, g1, farbG, 3);
+    pfeil(ctx, P3(punktP(SMAX)), g1, farbG, 3, 14);
+    text(ctx, "g", g1[0] + 10, g1[1] - 6, "left", farbG, "700 17px sans-serif");
+    punkt(ctx, P3(punktP(0)), 4, farbT, "#fff");
+
+    // Punkt P, Lot und senkrechter Weg
+    var p = punktP(s), f = fusspunkt(p), pp = P3(p), pf = P3(f);
+    if(hoehe){
+      var unten = P3([p[0], p[1], ebeneX3(p[0], p[1])]);
+      strecke(ctx, pp, unten, farbH, 2, [6, 5]);
+      punkt(ctx, unten, 4, "#fff", farbH);
+    }
+    if(abstand(p) > 1e-9){
+      strecke(ctx, pp, pf, farbLot, 4);
+      punkt(ctx, pf, 5, farbLot, "#fff");
+      text(ctx, "F", pf[0] + 9, pf[1] + 18, "left", farbLot, "700 16px sans-serif");
+    } else {
+      // P liegt in E: Raute als Durchstoßpunkt
+      ctx.fillStyle = farbS; ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.beginPath();
+      ctx.moveTo(pp[0], pp[1] - 12); ctx.lineTo(pp[0] + 12, pp[1]); ctx.lineTo(pp[0], pp[1] + 12); ctx.lineTo(pp[0] - 12, pp[1]);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+    }
+    punkt(ctx, pp, 7, farbP, "#fff");
+    text(ctx, "P", pp[0] - 12, pp[1] - 10, "right", farbP, "700 17px sans-serif");
+  }
+
+  /* ---------- Diagramm: Abstand über Weg ---------- */
+  var DL = 70, DR = 30, DO = 24, DU = 46, YMAX = 5;
+  function dx(sw){ return DL + (WD - DL - DR) * sw / SMAX; }
+  function dy(v){ return HD - DU - (HD - DU - DO) * v / YMAX; }
+  function spurPunkte(sp, farbe, rad){
+    Object.keys(sp).forEach(function(k){
+      dtx.fillStyle = farbe; dtx.beginPath(); dtx.arc(dx(sp[k][0]), dy(sp[k][1]), rad, 0, 2 * Math.PI); dtx.fill();
+    });
+  }
+  function diagramm(){
+    var i;
+    dtx.clearRect(0, 0, WD, HD); dtx.fillStyle = "#fff"; dtx.fillRect(0, 0, WD, HD);
+    for(i = 1; i <= YMAX; i++) strecke(dtx, [DL, dy(i)], [WD - DR, dy(i)], "#eef2f7", 1);
+    for(i = 1; i <= SMAX; i++) strecke(dtx, [dx(i), DO], [dx(i), HD - DU], "#eef2f7", 1);
+    strecke(dtx, [DL, HD - DU], [WD - DR + 8, HD - DU], farbT, 1.4);
+    strecke(dtx, [DL, HD - DU], [DL, DO - 8], farbT, 1.4);
+    for(i = 0; i <= SMAX; i++) text(dtx, String(i), dx(i), HD - DU + 18, "center", farbT, "12px sans-serif");
+    for(i = 1; i <= YMAX; i++) text(dtx, String(i), DL - 8, dy(i) + 4, "right", farbT, "12px sans-serif");
+    text(dtx, "Weg s in LE", WD - DR, HD - 8, "right", farbT, "13px sans-serif");
+    text(dtx, "LE", DL - 8, DO - 10, "right", farbT, "13px sans-serif");
+    text(dtx, "● Abstand d(P,E)", DL + 12, DO + 6, "left", farbLot, "600 13px sans-serif");
+    if(hoehe) text(dtx, "● Weg zu E in x₃-Richtung", DL + 160, DO + 6, "left", farbH, "600 13px sans-serif");
+    if(hoehe) spurPunkte(spurH, farbH, 3);
+    spurPunkte(spurD, farbLot, 3.5);
+    // aktueller Punkt
+    var p = punktP(s);
+    strecke(dtx, [dx(s), DO], [dx(s), HD - DU], "rgba(15,33,53,0.25)", 1, [4, 4]);
+    punkt(dtx, [dx(s), dy(abstand(p))], 6, farbLot, "#fff");
+    if(hoehe) punkt(dtx, [dx(s), dy(hoeheX3(p))], 5, farbH, "#fff");
+  }
+
+  /* ---------- Anzeigen ---------- */
+  function merken(){
+    var p = punktP(s), k = s.toFixed(2);
+    spurD[k] = [s, abstand(p)];
+    spurH[k] = [s, hoeheX3(p)];
+  }
+  function anzeigen(){
+    var p = punktP(s), w = wert(p);
+    $("lS").textContent = fmt(s, 2);
+    $("aS").textContent = fmt(s, 2) + " LE";
+    $("aP").textContent = vek(p);
+    $("aW").textContent = fmt(w, 2);
+    $("aD").textContent = fmt(abstand(p), 2) + " LE";
+    $("aF").textContent = vek(fusspunkt(p));
+    $("aH").textContent = fmt(hoeheX3(p), 2) + " LE";
+    $("aPhi").textContent = fmt(winkel(), 2) + "°";
+    $("simHinweis").textContent = Math.abs(w) < 1e-9 ? "P liegt in der Ebene E: Abstand 0." : "";
+  }
+  function alles(){ merken(); zeichne(); diagramm(); anzeigen(); }
+
+  /* ---------- Bedienung ---------- */
+  function stopp(){ laeuft = false; $("bFahrt").textContent = "▶ Weg abfahren"; }
+  function schritt(t){
+    if(!laeuft) return;
+    var dt = Math.min(0.05, (t - tAlt) / 1000); tAlt = t;
+    s = Math.min(SMAX, s + dt * SMAX / 4);          // ganzer Weg in etwa 4 Sekunden
+    $("rS").value = s;
+    alles();
+    if(s >= SMAX) stopp(); else requestAnimationFrame(schritt);
+  }
+  $("bFahrt").addEventListener("click", function(){
+    if(laeuft){ stopp(); return; }
+    if(s >= SMAX) s = 0;
+    laeuft = true; $("bFahrt").textContent = "❚❚ Anhalten";
+    tAlt = performance.now();
+    requestAnimationFrame(schritt);
+  });
+  $("rS").addEventListener("input", function(){ stopp(); s = parseFloat(this.value); alles(); });
+  $("sDaten").addEventListener("change", function(){
+    stopp(); ds = parseInt(this.value, 10); s = 0; $("rS").value = 0; spurD = {}; spurH = {}; ansicht(); alles();
+  });
+  $("bSpur").addEventListener("click", function(){ spurD = {}; spurH = {}; alles(); });
+  $("cHoehe").addEventListener("change", function(){ hoehe = this.checked; alles(); });
+
+  ansicht();
+  alles();
+})();
+
+/* ============ Ergebnis-Export ============ */
+var ergebnisse = window.ergebnisse || {};
+window.ergebnisse = ergebnisse;
+
+document.getElementById("bExport").addEventListener("click", function(){
+  var namen = {
+    vw1:"Vorwissen 1", vw2:"Vorwissen 2", vw3:"Vorwissen 3",
+    sim1:"Simulation 1", sim2:"Simulation 2",
+    a1:"Aufgabe 1 (Winkel zwischen Vektoren)", a2:"Aufgabe 2 (Abstand Punkt–Ebene)", a3:"Aufgabe 3 (Welcher Rechenweg passt?)",
+    a4:"Aufgabe 4 (Landeanflug)", a5:"Aufgabe 5 (Abstand Punkt–Gerade)", a6:"Aufgabe 6 (Windschiefe Geraden)",
+    a7:"Aufgabe 7 (Punkt mit gegebenem Abstand)"
+  };
+  var zeilen = ["Abstände und Winkel – Mathematik LK Q1", new Date().toLocaleString("de-DE"), ""];
+  var richtig = 0, gesamt = 0;
+  Object.keys(namen).forEach(function(k){
+    if(k in ergebnisse){
+      gesamt++; if(ergebnisse[k]) richtig++;
+      zeilen.push(namen[k] + ": " + (ergebnisse[k] ? "richtig" : "noch nicht richtig"));
+    } else {
+      zeilen.push(namen[k] + ": nicht bearbeitet");
+    }
+  });
+  zeilen.push("", "Bearbeitet: " + gesamt + " Aufgaben, davon " + richtig + " richtig.", "");
+
+  var offen = [];
+  document.querySelectorAll("#uebungen textarea").forEach(function(ta, i){
+    if(ta.value.trim()) offen.push("Offene Aufgabe " + (i + 1) + ":\n" + ta.value.trim());
+  });
+  if(offen.length) zeilen.push(offen.join("\n\n"));
+
+  var check = [];
+  document.querySelectorAll(".check input:checked").forEach(function(c){
+    check.push("– " + c.parentElement.textContent.trim());
+  });
+  if(check.length) zeilen.push("", "Selbsteinschätzung:", check.join("\n"));
+
+  var text = zeilen.join("\n");
+  var info = document.getElementById("exportInfo");
+  function fallbackKopie(){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); info.textContent = "In die Zwischenablage kopiert."; }
+    catch(e){ info.textContent = "Kopieren nicht möglich – bitte den Text manuell markieren."; }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      info.textContent = "In die Zwischenablage kopiert.";
+    }).catch(fallbackKopie);
+  } else fallbackKopie();
+});
+
+/* ============ Bearbeitungsstand im Browser speichern (generisch) ============ */
+// Der Stand liegt nur in diesem Browser auf diesem Gerät, ein Schlüssel pro Moduldatei. Beim
+// Laden werden die Klicks nachgespielt, damit die Aufgaben-Engine Rückmeldung und ergebnisse
+// selbst wieder aufbaut – nichts davon wird hier doppelt programmiert.
+(function(){
+  var PREFIX = "q1lernen:";
+  var schluessel = PREFIX + (decodeURIComponent(location.pathname.split("/").pop()) || "modul");
+  var speicher = null;
+  try{
+    speicher = window.localStorage;
+    speicher.setItem(PREFIX + "probe", "1");
+    speicher.removeItem(PREFIX + "probe");
+  }catch(e){ speicher = null; }
+
+  function alle(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+  var mcBoxen = alle("[data-mc]"), zuoKnoepfe = alle("[data-check]");
+  // data-num tragen auch Zuordnungs- und Textaufgaben als Kennung; gezählt wird nur die Zahleneingabe
+  var numBoxen = alle("[data-num]").filter(function(b){ return b.querySelector("input[type=number]"); });
+  var aufgaben = alle(".aufgabe"), texte = alle("textarea"), haken = alle(".check input[type=checkbox]");
+  // Ändert sich der Aufbau des Moduls, passt ein alter Stand nicht mehr und wird verworfen.
+  var bauplan = [mcBoxen.length, numBoxen.length, zuoKnoepfe.length, aufgaben.length,
+                 texte.length, haken.length].join("-");
+  var stumm = true, geloescht = false, timer = null;
+
+  function zustand(){
+    var z = {bauplan: bauplan, zeit: Date.now(), mc: [], num: [], zuo: [], hilfen: [], texte: [], haken: []};
+    mcBoxen.forEach(function(box){
+      var opt = box.querySelector(".opt.richtig, .opt.falsch");
+      z.mc.push(opt ? opt.getAttribute("data-i") : null);
+    });
+    numBoxen.forEach(function(box){
+      var inp = box.querySelector("input[type=number]"), sel = box.querySelector("select"),
+          rueck = box.querySelector(".rueck");
+      z.num.push({w: inp ? inp.value : "", e: sel ? sel.value : "",
+                  p: !!(rueck && rueck.classList.contains("zeig"))});
+    });
+    zuoKnoepfe.forEach(function(btn){
+      var box = btn.closest(".aufgabe"), rueck = box.querySelector(".rueck");
+      z.zuo.push({werte: Array.prototype.map.call(box.querySelectorAll(".zeile select"),
+                   function(s){ return s.value; }),
+                  p: !!(rueck && rueck.classList.contains("zeig"))});
+    });
+    aufgaben.forEach(function(box, ai){
+      box.querySelectorAll(".hilfe-text.zeig").forEach(function(t){
+        z.hilfen.push(ai + ":" + t.getAttribute("data-stufe"));
+      });
+    });
+    texte.forEach(function(t){ z.texte.push(t.value); });
+    haken.forEach(function(h){ z.haken.push(h.checked); });
+
+    // Kurzbilanz für die Übersichtsseite
+    var ergebnisse = window.ergebnisse || {}, bearbeitet = 0, richtig = 0;
+    mcBoxen.concat(numBoxen).forEach(function(box){
+      var k = box.getAttribute("data-mc") || box.getAttribute("data-num");
+      if(k in ergebnisse){ bearbeitet++; if(ergebnisse[k]) richtig++; }
+    });
+    zuoKnoepfe.forEach(function(btn){
+      var zeilen = btn.closest(".aufgabe").querySelectorAll(".zeile");
+      var r = 0, f = 0;
+      zeilen.forEach(function(zl){
+        if(zl.classList.contains("richtig")) r++;
+        else if(zl.classList.contains("falsch")) f++;
+      });
+      if(zeilen.length && r + f === zeilen.length){ bearbeitet++; if(r === zeilen.length) richtig++; }
+    });
+    z.bilanz = {gesamt: mcBoxen.length + numBoxen.length + zuoKnoepfe.length,
+                bearbeitet: bearbeitet, richtig: richtig};
+    return z;
+  }
+
+  function sichern(){
+    if(!speicher || stumm || geloescht) return;
+    try{ speicher.setItem(schluessel, JSON.stringify(zustand())); }catch(e){}
+  }
+  function bald(){
+    if(stumm || geloescht) return;
+    clearTimeout(timer);
+    timer = setTimeout(sichern, 250);
+  }
+
+  function wiederherstellen(z){
+    texte.forEach(function(t, i){ if(typeof z.texte[i] === "string") t.value = z.texte[i]; });
+    haken.forEach(function(h, i){ h.checked = z.haken[i] === true; });
+    numBoxen.forEach(function(box, i){
+      var s = z.num[i]; if(!s) return;
+      var inp = box.querySelector("input[type=number]"), sel = box.querySelector("select"),
+          btn = box.querySelector(".eingabe button");
+      if(inp) inp.value = s.w;
+      if(sel) sel.value = s.e;
+      if(s.p && btn) btn.click();
+    });
+    zuoKnoepfe.forEach(function(btn, i){
+      var s = z.zuo[i]; if(!s) return;
+      btn.closest(".aufgabe").querySelectorAll(".zeile select").forEach(function(sel, j){
+        if(typeof s.werte[j] === "string") sel.value = s.werte[j];
+      });
+      if(s.p) btn.click();
+    });
+    mcBoxen.forEach(function(box, i){
+      if(z.mc[i] == null) return;
+      var opt = box.querySelector('.opt[data-i="' + z.mc[i] + '"]');
+      if(opt) opt.click();
+    });
+    z.hilfen.forEach(function(eintrag){
+      var teile = String(eintrag).split(":"), box = aufgaben[+teile[0]], stufe = teile[1];
+      if(!box) return;
+      var t = box.querySelector('.hilfe-text[data-stufe="' + stufe + '"]');
+      if(!t || t.classList.contains("zeig")) return;
+      var btn = stufe === "9" ? box.querySelector("button[data-loesung]")
+                              : box.querySelector('[data-hilfe="' + stufe + '"]');
+      if(btn) btn.click();
+    });
+  }
+
+  // Hinweis und Löschknopf neben dem Export
+  var bExport = document.getElementById("bExport");
+  var hinweis = document.createElement("p");
+  hinweis.className = "speicherhinweis";
+  hinweis.style.cssText = "font-size:14px;color:var(--grau);margin:10px 0 0";
+  if(speicher){
+    hinweis.textContent = "Dein Bearbeitungsstand wird automatisch gespeichert, und zwar nur in diesem Browser auf diesem Gerät. " +
+      "Arbeitest du an einem gemeinsam genutzten Rechner, lösche ihn am Ende.";
+    var bLoeschen = document.createElement("button");
+    bLoeschen.type = "button";
+    bLoeschen.id = "bStandLoeschen";
+    bLoeschen.textContent = "Gespeicherten Stand löschen";
+    bLoeschen.addEventListener("click", function(){
+      if(!window.confirm("Deinen gespeicherten Stand für dieses Modul löschen? Die Seite wird danach neu geladen.")) return;
+      geloescht = true;
+      clearTimeout(timer);
+      try{ speicher.removeItem(schluessel); }catch(e){}
+      location.reload();
+    });
+    if(bExport) bExport.parentNode.appendChild(bLoeschen);
+  } else {
+    hinweis.textContent = "Dieser Browser erlaubt kein Speichern. Lädst du die Seite neu, ist dein Bearbeitungsstand weg.";
+  }
+  if(bExport){
+    var leiste = bExport.parentNode;
+    leiste.parentNode.insertBefore(hinweis, leiste.nextSibling);
+  }
+
+  if(speicher){
+    var alt = null;
+    try{ alt = JSON.parse(speicher.getItem(schluessel)); }catch(e){ alt = null; }
+    if(alt && alt.bauplan === bauplan){
+      try{ wiederherstellen(alt); }catch(e){}
+    }
+    stumm = false;
+    document.addEventListener("click", bald);
+    document.addEventListener("input", bald);
+    document.addEventListener("change", bald);
+    window.addEventListener("pagehide", function(){ clearTimeout(timer); sichern(); });
+  }
+})();
+</script>
+</body>
+</html>

@@ -30,6 +30,19 @@ gekostet. Ergänzungen kommen hier dazu, nicht in eine Übergabenotiz.
 - Die Formelleiste zeigt keine Formel, nach der eine Vorwissens- oder Simulationsfrage fragt.
 - Umschaltknöpfe mit `aria-pressed` brauchen eine eigene CSS-Regel für den aktiven Zustand.
 
+## Zahleneingaben und Schrägbild (Durchgang 5)
+- Der nah-Bereich der Zahlen-Engine vergleicht den **Betrag** des Faktors Eingabe/Sollwert. Ein
+  negativer Wert mit richtigem Betrag (Betrag vergessen) und eine zweite Lösung derselben Gleichung
+  landen deshalb im nah-Bereich. Der nah-Text muss diese Fälle mit abdecken, sonst stellt er eine
+  falsche Diagnose.
+- Toleranzen gegen sinnvolle Zwischenrundungen nachrechnen, nicht schätzen
+  (cos⁻¹(0,667) = 48,16°, nicht 48,17°).
+- Im Schrägbild (x₂ − x₁/2 | x₃ − x₁/2) erscheint jeder Vektor mit v₂ = v₁/2 senkrecht und jeder mit
+  v₃ = v₁/2 waagerecht. Ein Normalenvektor wie (2|1|2) steht dann senkrecht im Bild, Lot und
+  „senkrecht nach unten“ fallen optisch zusammen. Simulationsdaten vorher daraufhin prüfen.
+- Wird in der Simulation von „oben“ oder „unten“ gesprochen, für jeden Datensatz nachsehen, auf
+  welcher Seite der Punkt wirklich startet.
+
 ## Was nur ein Mensch oder Prüfer findet
 - literaler Tabulator in `data-tex` (KaTeX läuft mit `throwOnError:false` und meldet nichts)
 - Fußzeile oder Texte des Referenzmoduls, die im neuen Modul stehen geblieben sind
